@@ -9,7 +9,7 @@ dependencies:
 id: mainpagecontent
 theme: westminster
 region: content
-weight: -5
+weight: -1
 provider: null
 plugin: system_main_block
 settings:
