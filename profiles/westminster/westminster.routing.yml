@@ -1,0 +1,7 @@
+westminster.destination_schedule:
+  path: '/schedule'
+  defaults:
+    _content: '\Drupal\example\Controller\ExampleMenuController::getContent'
+    _title_callback: '\Drupal\example\Controller\ExampleMenuController::getTitle'
+  requirements:
+    _permission: 'view content'
