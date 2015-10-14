@@ -1,13 +1,13 @@
-uuid: ce02e4f5-b9d8-4584-bd00-d89f76f0179a
+uuid: 188714ca-a9ca-4ae1-a306-6ec4da3ac4b5
 langcode: en
 status: true
 dependencies:
   theme:
-    - classy
-id: classy_page_title
-theme: classy
-region: content
-weight: -50
+    - westminster
+id: pagetitle
+theme: westminster
+region: top
+weight: -5
 provider: null
 plugin: page_title_block
 settings:
