@@ -10,8 +10,6 @@ dependencies:
   - breakpoint
   - color
   - config
-  - contextual
-  - contact
   - menu_link_content
   - datetime
   - block_content
@@ -26,10 +24,12 @@ dependencies:
   - dblog
   - field_ui
   - file
-  - rdf
   - views
   - views_ui
   - automated_cron
+  - rest
+  - composer_manager
+  - s3fs
 themes:
   - westminster
   - adminlte
