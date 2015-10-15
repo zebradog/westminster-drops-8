@@ -1,0 +1,16 @@
+uuid: e36d0d31-deda-4bdc-9b43-672c238b9ff9
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.scheduled_content
+  module:
+    - user
+id: node.scheduled_content.default
+targetEntityType: node
+bundle: scheduled_content
+mode: default
+content:
+  links:
+    weight: 100
+hidden: {  }

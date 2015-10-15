@@ -1,0 +1,17 @@
+uuid: a49c80cc-247f-4a56-a507-7f9da0529a20
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - node.type.external_content
+  module:
+    - user
+id: node.external_content.teaser
+targetEntityType: node
+bundle: external_content
+mode: teaser
+content:
+  links:
+    weight: 100
+hidden: {  }

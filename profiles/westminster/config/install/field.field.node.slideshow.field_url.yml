@@ -1,0 +1,23 @@
+uuid: a61c06c9-f77e-4ad2-b81d-29dc6f4bf65e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_url
+    - node.type.slideshow
+  module:
+    - link
+id: node.slideshow.field_url
+field_name: field_url
+entity_type: node
+bundle: slideshow
+label: URL
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 16
+  title: 0
+field_type: link

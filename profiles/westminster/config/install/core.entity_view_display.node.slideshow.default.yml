@@ -1,0 +1,39 @@
+uuid: c801bf40-fb72-4410-a140-649b19976f27
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.slideshow.field_images
+    - field.field.node.slideshow.field_url
+    - node.type.slideshow
+  module:
+    - image
+    - link
+    - user
+id: node.slideshow.default
+targetEntityType: node
+bundle: slideshow
+mode: default
+content:
+  field_images:
+    weight: 102
+    label: above
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+  field_url:
+    weight: 101
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+  links:
+    weight: 100
+hidden: {  }

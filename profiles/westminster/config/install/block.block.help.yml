@@ -9,7 +9,7 @@ dependencies:
 id: help
 theme: westminster
 region: content
-weight: -5
+weight: -4
 provider: null
 plugin: help_block
 settings:

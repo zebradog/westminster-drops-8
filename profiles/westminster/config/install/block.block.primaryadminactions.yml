@@ -1,20 +1,18 @@
-uuid: 69d82365-9609-422b-a400-f66a49563033
+uuid: d8b265eb-ae63-4456-835b-91d660c0288b
 langcode: en
 status: true
 dependencies:
   theme:
     - westminster
-id: tabs
+id: primaryadminactions
 theme: westminster
 region: content
-weight: -3
+weight: -2
 provider: null
-plugin: local_tasks_block
+plugin: local_actions_block
 settings:
-  id: local_tasks_block
-  label: Tabs
+  id: local_actions_block
+  label: 'Primary admin actions'
   provider: core
   label_display: '0'
-  primary: true
-  secondary: true
 visibility: {  }
