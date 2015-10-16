@@ -3,9 +3,9 @@ langcode: en
 status: true
 dependencies:
   theme:
-    - westminster
+    - westminster_theme
 id: pagetitle
-theme: westminster
+theme: westminster_theme
 region: top
 weight: -5
 provider: null

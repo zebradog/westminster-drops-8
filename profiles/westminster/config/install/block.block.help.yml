@@ -5,9 +5,9 @@ dependencies:
   module:
     - help
   theme:
-    - westminster
+    - westminster_theme
 id: help
-theme: westminster
+theme: westminster_theme
 region: content
 weight: -4
 provider: null

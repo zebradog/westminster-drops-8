@@ -5,9 +5,9 @@ dependencies:
   module:
     - system
   theme:
-    - westminster
+    - westminster_theme
 id: poweredbydrupal
-theme: westminster
+theme: westminster_theme
 region: footer
 weight: -5
 provider: null

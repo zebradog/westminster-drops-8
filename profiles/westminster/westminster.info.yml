@@ -31,6 +31,6 @@ dependencies:
   - composer_manager
   - s3fs
 themes:
-  - westminster
+  - westminster_theme
   - adminlte
   - classy

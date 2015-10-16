@@ -5,9 +5,9 @@ dependencies:
   module:
     - system
   theme:
-    - westminster
+    - westminster_theme
 id: sitebranding
-theme: westminster
+theme: westminster_theme
 region: brand
 weight: -5
 provider: null

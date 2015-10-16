@@ -5,9 +5,9 @@ dependencies:
   module:
     - system
   theme:
-    - westminster
+    - westminster_theme
 id: mainpagecontent
-theme: westminster
+theme: westminster_theme
 region: content
 weight: -1
 provider: null

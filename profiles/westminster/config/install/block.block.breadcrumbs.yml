@@ -5,9 +5,9 @@ dependencies:
   module:
     - system
   theme:
-    - westminster
+    - westminster_theme
 id: breadcrumbs
-theme: westminster
+theme: westminster_theme
 region: top
 weight: -5
 provider: null

@@ -7,9 +7,9 @@ dependencies:
   module:
     - system
   theme:
-    - westminster
+    - westminster_theme
 id: mainnavigation
-theme: westminster
+theme: westminster_theme
 region: sidebar
 weight: -4
 provider: null
