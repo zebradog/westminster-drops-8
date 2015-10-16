@@ -11,4 +11,4 @@ schedule:
       lib/fullcalendar/fullcalendar.print.css: { media: print }
   dependencies:
     - core/jquery
-    - adminlte/base
+    - yorkshire/base

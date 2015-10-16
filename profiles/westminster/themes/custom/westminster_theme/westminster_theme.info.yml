@@ -1,6 +1,6 @@
 name: Westminster
-description: 'Drupal 8 admin theme based on AdminLTE by Almaseed Studio'
-base theme: adminlte
+description: 'Theme for Westminster Content Management System.'
+base theme: yorkshire
 package: Custom
 type: theme
 version: 1.0.0

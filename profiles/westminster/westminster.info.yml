@@ -32,5 +32,5 @@ dependencies:
   - s3fs
 themes:
   - westminster_theme
-  - adminlte
+  - yorkshire
   - classy
