@@ -5,3 +5,17 @@ westminster.destination_schedule:
     _title_callback: '\Drupal\example\Controller\ExampleMenuController::getTitle'
   requirements:
     _permission: 'view content'
+westminster.destination_content:
+  path: '/content'
+  defaults:
+    _content: '\Drupal\example\Controller\ExampleMenuController::getContent'
+    _title_callback: '\Drupal\example\Controller\ExampleMenuController::getTitle'
+  requirements:
+    _permission: 'view content'
+westminster.destination_users:
+  path: '/users'
+  defaults:
+    _content: '\Drupal\example\Controller\ExampleMenuController::getContent'
+    _title_callback: '\Drupal\example\Controller\ExampleMenuController::getTitle'
+  requirements:
+    _permission: 'view content'
