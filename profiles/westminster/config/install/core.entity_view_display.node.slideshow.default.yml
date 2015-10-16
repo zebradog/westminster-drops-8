@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.slideshow.field_color
     - field.field.node.slideshow.field_images
     - field.field.node.slideshow.field_url
     - node.type.slideshow
@@ -15,6 +16,13 @@ targetEntityType: node
 bundle: slideshow
 mode: default
 content:
+  field_color:
+    weight: 103
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
   field_images:
     weight: 102
     label: above

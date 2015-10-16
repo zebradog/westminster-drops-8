@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.slideshow.field_color
     - field.field.node.slideshow.field_images
     - field.field.node.slideshow.field_url
     - node.type.slideshow
@@ -20,6 +21,13 @@ content:
     weight: 10
     settings: {  }
     third_party_settings: {  }
+  field_color:
+    weight: 33
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
   field_images:
     weight: 32
     settings:
