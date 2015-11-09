@@ -1,0 +1,21 @@
+uuid: 5015e436-e22b-4240-8f01-1dbb7cf6273d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_start_date
+    - node.type.scheduled_content
+  module:
+    - datetime
+id: node.scheduled_content.field_start_date
+field_name: field_start_date
+entity_type: node
+bundle: scheduled_content
+label: 'Start Date'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

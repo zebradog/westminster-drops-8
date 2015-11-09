@@ -55,28 +55,15 @@
     <div class="col-md-3">
       <div class="box box-solid">
         <div class="box-header with-border">
-          <h4 class="box-title">Draggable Events</h4>
+          <h4 class="box-title">Draggable Scenarios</h4>
         </div>
         <div class="box-body">
-          <!-- the events -->
-          <div id="external-events">
-            <div class="external-event bg-green">Lunch</div>
-            <div class="external-event bg-yellow">Go home</div>
-            <div class="external-event bg-aqua">Do homework</div>
-            <div class="external-event bg-light-blue">Work on UI design</div>
-            <div class="external-event bg-red">Sleep tight</div>
-            <div class="checkbox">
-              <label for="drop-remove">
-                <input type="checkbox" id="drop-remove">
-                remove after drop
-              </label>
-            </div>
-          </div>
-        </div><!-- /.box-body -->
+          <div id="scenarios"></div>
+        </div>
       </div><!-- /. box -->
-      <div class="box box-solid">
+      <div class="box box-solid" id="new-scenario-box">
         <div class="box-header with-border">
-          <h3 class="box-title">Create Event</h3>
+          <h3 class="box-title">Create External Event</h3>
         </div>
         <div class="box-body">
           <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
@@ -98,9 +85,9 @@
             </ul>
           </div><!-- /btn-group -->
           <div class="input-group">
-            <input id="new-event" type="text" class="form-control" placeholder="Event Title">
+            <input id="new-scenario-url" type="text" class="form-control" placeholder="Event URL">
             <div class="input-group-btn">
-              <button id="add-new-event" type="button" class="btn btn-primary btn-flat">Add</button>
+              <button id="add-new-scenario" type="button" class="btn btn-primary btn-flat ladda-button">Add</button>
             </div><!-- /btn-group -->
           </div><!-- /input-group -->
         </div>
@@ -115,4 +102,45 @@
       </div><!-- /. box -->
     </div><!-- /.col -->
   </div><!-- /.row -->
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" id="scenario-schedule" data-nid>
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Schedule Content</h4>
+        </div>
+          <form id="event-modal-form" class="modal-body form-horizontal">
+            <input id="event-title" type="text" name="title" class="hidden"></input>
+            <input id="event-nid" type="text" name="nid" class="hidden"></input>
+            <input id="event-scenario-nid" type="text" name="scenario" class="hidden"></input>
+            <div class="form-group"><!-- From Date -->
+              <label class="col-sm-2">From</label>
+              <div class="col-sm-5">
+                <input class="date-clear form-control form-text datepicker date-popup-init" type="date" id="sDate" name="start-date" size="20" maxlength="30"></input>
+              </div>
+              <div class="col-sm-5">
+                <input class="date-clear form-control form-text clockpicker date-popup-init" type="time" id="sTime" name="start-time" size="15" maxlength="10"></input>
+              </div>
+            </div><!-- End From Date -->
+            <div class="form-group"><!-- To Date -->
+              <label class="col-sm-2">To</label>
+              <div class="col-sm-5" title="">
+                <input class="date-clear form-control form-text datepicker date-popup-init" type="date" id="eDate" name="end-date" size="20" maxlength="30"></input>
+              </div>
+              <div class="col-sm-5" title="">
+                <input class="date-clear form-control form-text clockpicker date-popup-init" type="time" id="eTime" name="end-time" size="15" maxlength="10"></input>
+              </div>
+            </div><!-- End To Date -->
+            <p id="edit-error" style="color:red;"></p>
+          </form>
+          <div class="modal-footer">
+            <button class="btn btn-primary ladda-button form-submit" data-style="expand-left" id="edit-submit" name="op" value="Save" type="button"><span class="ladda-label">Save</span></button>
+            <button class="btn btn-danger ladda-button form-submit" data-style="expand-left" id="edit-remove" name="op" value="Remove" type="button"><span class="ladda-label">Remove</span></button>
+            <button class="btn btn-default" id="edit-cancel" name="op" value="Cancel" type="button" data-dismiss="modal"><span class="ladda-label">Cancel</span></button>
+          </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
 {% endblock %}

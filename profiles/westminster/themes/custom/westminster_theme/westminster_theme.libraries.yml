@@ -4,11 +4,15 @@ schedule:
     lib/jquery-ui.min.js: {}
     lib/fullcalendar/lib/moment.min.js: {}
     lib/fullcalendar/fullcalendar.min.js: {}
+    lib/spin.min.js: {}
+    lib/ladda.min.js: {}
     js/schedule.js: {}
   css:
     theme:
       lib/fullcalendar/fullcalendar.min.css: {}
       lib/fullcalendar/fullcalendar.print.css: { media: print }
+      lib/datepicker.min.css: {}
+      lib/ladda.min.css: {}
   dependencies:
     - core/jquery
     - yorkshire/base

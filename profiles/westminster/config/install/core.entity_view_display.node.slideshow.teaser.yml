@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
+    - field.field.node.slideshow.field_color
     - field.field.node.slideshow.field_images
     - field.field.node.slideshow.field_url
     - node.type.slideshow
@@ -17,5 +18,6 @@ content:
   links:
     weight: 100
 hidden:
+  field_color: true
   field_images: true
   field_url: true

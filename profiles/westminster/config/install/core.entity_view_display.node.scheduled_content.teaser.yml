@@ -4,6 +4,9 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
+    - field.field.node.scheduled_content.field_content
+    - field.field.node.scheduled_content.field_end_date
+    - field.field.node.scheduled_content.field_start_date
     - node.type.scheduled_content
   module:
     - user
@@ -14,4 +17,7 @@ mode: teaser
 content:
   links:
     weight: 100
-hidden: {  }
+hidden:
+  field_content: true
+  field_end_date: true
+  field_start_date: true

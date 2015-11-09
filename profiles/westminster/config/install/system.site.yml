@@ -3,3 +3,8 @@ page:
   404: ''
   front: /user/login
 admin_compact_mode: false
+uuid: 945d51fb-b396-4a01-bd02-2da0bb9d6001
+name: 'Testminster Master'
+langcode: en
+default_langcode: en
+mail: matt.schuh@zebradog.com

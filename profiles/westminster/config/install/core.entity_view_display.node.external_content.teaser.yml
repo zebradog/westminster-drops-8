@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
+    - field.field.node.external_content.field_color
     - field.field.node.external_content.field_url
     - node.type.external_content
   module:
@@ -16,4 +17,5 @@ content:
   links:
     weight: 100
 hidden:
+  field_color: true
   field_url: true

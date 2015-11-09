@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - node.type.external_content
+    - node.type.scheduled_content
     - node.type.slideshow
   module:
     - node
@@ -260,7 +261,9 @@ display:
           admin_label: ''
           operator: in
           value:
+            all: all
             external_content: external_content
+            scheduled_content: scheduled_content
             slideshow: slideshow
           group: 1
           exposed: false

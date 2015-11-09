@@ -3,8 +3,12 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.scheduled_content.field_content
+    - field.field.node.scheduled_content.field_end_date
+    - field.field.node.scheduled_content.field_start_date
     - node.type.scheduled_content
   module:
+    - datetime
     - path
 id: node.scheduled_content.default
 targetEntityType: node
@@ -16,6 +20,24 @@ content:
     weight: 10
     settings: {  }
     third_party_settings: {  }
+  field_content:
+    weight: 33
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+  field_end_date:
+    weight: 32
+    settings: {  }
+    third_party_settings: {  }
+    type: datetime_default
+  field_start_date:
+    weight: 31
+    settings: {  }
+    third_party_settings: {  }
+    type: datetime_default
   path:
     type: path
     weight: 30
