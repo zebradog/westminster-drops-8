@@ -190,8 +190,10 @@ $(function() {
         var textColor = getHighVisFontColor(color);
         scenarioString += '<div class="external-event draggable-scenario" style="background-color:' + color + ';border-color:' + color + ';color:' + textColor + ';" data-title="' + r.title + '" data-url="' + r.url + '" data-nid="' + r.nid + '" data-color="' + color + '">' + r.title + '</div>';
       });
-      $scenarios.prepend(scenarioString);
-      ini_events($('#scenarios').find('div.draggable-scenario'));
+      if(scenarioString){
+        $scenarios.removeClass('hidden').prepend(scenarioString).parent().parent().removeClass('hidden');
+        ini_events($('#scenarios').find('div.draggable-scenario'));
+      }
     }).fail(function(data){
       console.error(data);
     });
