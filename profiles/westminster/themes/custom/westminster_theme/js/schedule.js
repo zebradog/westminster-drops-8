@@ -4,7 +4,6 @@ $(function() {
   var FORM_DATE_FORMAT_MOMENT = "YYYY-MM-DD";
   var FORM_TIME_FORMAT_MOMENT = "HH:mm";
   var CMS_DATE_FORMAT = "YYYY-MM-DDTHH:mm:ss";
-  var BASEPATH = "http://localhost/westminster-drops-8-master/";
   var HEX_VALS = {
     '0': 0,
     '1': 1,
@@ -30,8 +29,8 @@ $(function() {
     'f': 15
   };
 
-  var SCENARIOS_CMS = "http://localhost/westminster-drops-8-master/rest/schedule/events?";
-  var CALENDAR_CMS = "http://localhost/westminster-drops-8-master/rest/schedule/calendar";
+  var SCENARIOS_CMS = BASE_PATH+"rest/schedule/events?";
+  var CALENDAR_CMS = BASE_PATH+"rest/schedule/calendar";
   var COLORS = [
     "aqua",
     "blue",
@@ -67,7 +66,7 @@ $(function() {
    function getToken(refresh) {
      if (!token || refresh) {
        token = $.ajax({
-         url: BASEPATH + 'rest/session/token',
+         url: BASE_PATH + 'rest/session/token',
          dataType: 'text',
          async: false,
          error: function(data) {
@@ -178,7 +177,7 @@ $(function() {
         $('#calendar').fullCalendar('renderEvent', eventObj, true);
       });
     }).fail(function(data){
-      console.log(data);
+      console.error(data);
     });
   }
   function populateScenarios() {
@@ -194,7 +193,7 @@ $(function() {
       $scenarios.prepend(scenarioString);
       ini_events($('#scenarios').find('div.draggable-scenario'));
     }).fail(function(data){
-      console.log(data);
+      console.error(data);
     });
   }
 
@@ -261,7 +260,7 @@ $(function() {
     var eid = $myModal.data('orig-event-id');
     $.ajax({
       method: "POST",
-      url: BASEPATH + "entity/node",
+      url: BASE_PATH + "entity/node",
       data: JSON.stringify(formData),
       headers: {
         "Accept": "application/json",
@@ -282,7 +281,7 @@ $(function() {
   function updateExistingEvent(formData, l) {
     $.ajax({
       method: "PATCH",
-      url: BASEPATH + "node/" + formData.nid[0].value,
+      url: BASE_PATH + "node/" + formData.nid[0].value,
       data: JSON.stringify(formData),
       headers: {
         "Accept": "application/json",
@@ -308,7 +307,7 @@ $(function() {
       var formData = createFormData(e);
       $.ajax({
         method: "DELETE",
-        url: BASEPATH + "node/" + formData.nid[0].value,
+        url: BASE_PATH + "node/" + formData.nid[0].value,
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/hal+json",
@@ -360,7 +359,7 @@ $(function() {
     var formData = {
       "_links":{
         "type":{
-          "href":"http://localhost/westminster-drops-8-master/rest/type/node/scheduled_content"
+          "href":BASE_PATH+"rest/type/node/scheduled_content"
         }
       },
       "title":[
@@ -369,7 +368,7 @@ $(function() {
         }
       ]
     };
-    formData['field_content'] = [{'target_id': e.scenarioNid, 'url': BASEPATH + 'node/' + e.scenarioNid}];
+    formData['field_content'] = [{'target_id': e.scenarioNid, 'url': BASE_PATH + 'node/' + e.scenarioNid}];
     formData['field_start_date'] = [{'value':moment.utc(e.start).format(CMS_DATE_FORMAT)}];
     formData['field_end_date'] = [{'value':moment.utc(e.end).format(CMS_DATE_FORMAT)}];
     if(e.nid) formData['nid'] = [{'value':e.nid}];
@@ -387,7 +386,7 @@ $(function() {
     var formData = {
       "_links":{
         "type":{
-          "href":"http://localhost/westminster-drops-8-master/rest/type/node/" + type
+          "href":BASE_PATH+"rest/type/node/" + type
         }
       },
       "title":[
@@ -406,7 +405,7 @@ $(function() {
     l.start();
     $.ajax({
       method: "POST",
-      url: BASEPATH + "entity/node",
+      url: BASE_PATH + "entity/node",
       data: JSON.stringify(formData),
       headers: {
         "Accept": "application/json",
@@ -414,9 +413,9 @@ $(function() {
         "X-CSRF-Token": getToken()
       },
       success: function(data, status, xhr) {
-        console.log(data);
+        /*console.log(data);
         console.log(status);
-        console.log(xhr);
+        console.log(xhr);*/
       },
       error: function(data) {
         alert("Encountered an error while trying to save:\n" + data.status + ": " + data.statusText + " Invalid URL");

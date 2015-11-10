@@ -51,6 +51,9 @@
 {% extends "page.html.twig" %}
 {% block my_content %}
   {{ attach_library('westminster_theme/schedule') }}
+  <script type="text/javascript">
+  var BASE_PATH = "{{base_path}}";
+  </script>
   <div class="row">
     <div class="col-md-3">
       <div class="box box-solid">
