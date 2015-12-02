@@ -28,8 +28,6 @@ dependencies:
   - views_ui
   - automated_cron
   - rest
-  - composer_manager
-  - s3fs
 themes:
   - westminster_theme
   - yorkshire
