@@ -8,23 +8,31 @@ resources:
     GET:
       supported_formats:
         - hal_json
+        - json
       supported_auth:
         - basic_auth
+        - cookie
     POST:
       supported_formats:
         - hal_json
+        - json
       supported_auth:
         - basic_auth
+        - cookie
     PATCH:
       supported_formats:
         - hal_json
+        - json
       supported_auth:
         - basic_auth
+        - cookie
     DELETE:
       supported_formats:
         - hal_json
+        - json
       supported_auth:
         - basic_auth
+        - cookie
 
 # Multiple formats and multiple authentication providers can be defined for a
 # resource:
