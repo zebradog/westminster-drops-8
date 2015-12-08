@@ -6,14 +6,14 @@ westminster.destination_schedule:
   requirements:
     _permission: 'view content'
 westminster.destination_content:
-  path: '/content'
+  path: '/admin/content'
   defaults:
     _content: '\Drupal\example\Controller\ExampleMenuController::getContent'
     _title_callback: '\Drupal\example\Controller\ExampleMenuController::getTitle'
   requirements:
     _permission: 'view content'
 westminster.destination_users:
-  path: '/users'
+  path: '/admin/people'
   defaults:
     _content: '\Drupal\example\Controller\ExampleMenuController::getContent'
     _title_callback: '\Drupal\example\Controller\ExampleMenuController::getTitle'

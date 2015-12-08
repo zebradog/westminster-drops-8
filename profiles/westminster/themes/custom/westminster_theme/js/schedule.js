@@ -1,5 +1,4 @@
 $(function() {
-
   var DEFAULT_VIEW = "agendaWeek";
   var FORM_DATE_FORMAT_MOMENT = "YYYY-MM-DD";
   var FORM_TIME_FORMAT_MOMENT = "HH:mm";
@@ -372,8 +371,8 @@ $(function() {
       ]
     };
     formData['field_content'] = [{'target_id': e.scenarioNid, 'url': BASE_PATH + 'node/' + e.scenarioNid}];
-    formData['field_start_date'] = [{'value':moment.utc(e.start).format(CMS_DATE_FORMAT)}];
-    formData['field_end_date'] = [{'value':moment.utc(e.end).format(CMS_DATE_FORMAT)}];
+    formData['field_start_date'] = [{'value':e.start.format(CMS_DATE_FORMAT)}];
+    formData['field_end_date'] = [{'value':e.end.format(CMS_DATE_FORMAT)}];
     if(e.nid) formData['nid'] = [{'value':e.nid}];
     return formData;
   }
@@ -433,8 +432,8 @@ $(function() {
   /* Fills the event param with the date values in the modal popup.
    -----------------------------------------------------------------*/
   function updateEventValues(e, callback) {
-    e.start = moment($('#sDate').val() + ' ' + $('#sTime').val());
-    e.end = moment($('#eDate').val() + ' ' + $('#eTime').val());
+    e.start = moment($('#sDate').val() + ' ' + $('#sTime').val() + ' UTC');
+    e.end = moment($('#eDate').val() + ' ' + $('#eTime').val() + ' UTC');
     if(callback) callback(e);
   }
 
@@ -503,6 +502,7 @@ $(function() {
       week: 'week',
       day: 'day'
     },
+    timezone: 'UTC',
     slotDuration: '00:15:00',
     defaultView: DEFAULT_VIEW,
     editable: true,

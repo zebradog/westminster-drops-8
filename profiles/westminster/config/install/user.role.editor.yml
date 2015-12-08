@@ -1,0 +1,11 @@
+uuid: 10e77525-91fe-4b22-994f-794ed017ba62
+langcode: en
+status: true
+dependencies: {  }
+id: editor
+label: Editor
+weight: 4
+is_admin: null
+permissions:
+  - 'access content overview'
+  - 'view own unpublished content'
