@@ -13,3 +13,6 @@ regions:
   bottom: Bottom
   sidebar: Sidebar
   footer: Footer
+features:
+  - favicon
+  - logo
