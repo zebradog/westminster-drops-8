@@ -282,7 +282,8 @@ class RestExport extends PathPluginBase implements ResponseDisplayPluginInterfac
    */
   public static function buildResponse($view_id, $display_id, array $args = []) {
     $build = static::buildBasicRenderable($view_id, $display_id, $args);
-
+    $build['#cache']['contexts'][] = "url.query_args:callback";
+    
     /** @var \Drupal\Core\Render\RendererInterface $renderer */
     $renderer = \Drupal::service('renderer');
 
