@@ -9,6 +9,7 @@ namespace Drupal\rest\Plugin\views\display;
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheableResponse;
+use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\RouteProviderInterface;
@@ -151,7 +152,7 @@ class RestExport extends PathPluginBase implements ResponseDisplayPluginInterfac
    * {@inheritdoc}
    */
   public function usesExposed() {
-    return FALSE;
+    return TRUE;
   }
 
   /**
@@ -281,13 +282,20 @@ class RestExport extends PathPluginBase implements ResponseDisplayPluginInterfac
    */
   public static function buildResponse($view_id, $display_id, array $args = []) {
     $build = static::buildBasicRenderable($view_id, $display_id, $args);
-
+    $build['#cache']['contexts'][] = "url.query_args:callback";
+    
     /** @var \Drupal\Core\Render\RendererInterface $renderer */
     $renderer = \Drupal::service('renderer');
 
     $output = $renderer->renderRoot($build);
 
-    $response = new CacheableResponse($output, 200);
+    if (isset($build['#jsonp_callback'])) {
+      $response = new CacheableJsonResponse($output, 200);
+      $response->setCallback($build['#jsonp_callback']);
+    }
+    else {
+      $response = new CacheableResponse($output, 200);
+    }
     $cache_metadata = CacheableMetadata::createFromRenderArray($build);
     $response->addCacheableDependency($cache_metadata);
 
@@ -314,7 +322,16 @@ class RestExport extends PathPluginBase implements ResponseDisplayPluginInterfac
       return $this->view->style_plugin->render();
     });
 
-    $this->view->element['#content_type'] = $this->getMimeType();
+    // Allow for JSONP response.
+    $callback = $this->view->getRequest()->get('jsonp') ?: $this->view->getRequest()->get('callback');
+    if ($callback) {
+      $this->view->element['#content_type'] = 'text/javascript';
+      $this->view->element['#jsonp_callback'] = $callback;
+    }
+    else {
+      $this->view->element['#content_type'] = $this->getMimeType();
+    }
+
     $this->view->element['#cache_properties'][] = '#content_type';
 
     // Encode and wrap the output in a pre tag if this is for a live preview.
