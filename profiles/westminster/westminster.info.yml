@@ -28,6 +28,8 @@ dependencies:
   - views_ui
   - automated_cron
   - rest
+  - hal
+  - basic_auth
 themes:
   - westminster_theme
   - yorkshire
