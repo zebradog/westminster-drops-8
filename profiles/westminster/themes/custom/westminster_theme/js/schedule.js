@@ -432,8 +432,8 @@ $(function() {
   /* Fills the event param with the date values in the modal popup.
    -----------------------------------------------------------------*/
   function updateEventValues(e, callback) {
-    e.start = moment($('#sDate').val() + ' ' + $('#sTime').val() + ' ' + TIMEZONE);
-    e.end = moment($('#eDate').val() + ' ' + $('#eTime').val() + ' ' + TIMEZONE);
+    e.start = moment($('#sDate').val() + ' ' + $('#sTime').val() + ' UTC');
+    e.end = moment($('#eDate').val() + ' ' + $('#eTime').val() + ' UTC');
     if(callback) callback(e);
   }
 
@@ -502,7 +502,7 @@ $(function() {
       week: 'week',
       day: 'day'
     },
-    timezone: TIMEZONE,
+    timezone: 'UTC',
     slotDuration: '00:15:00',
     defaultView: DEFAULT_VIEW,
     editable: true,
