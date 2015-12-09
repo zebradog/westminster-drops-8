@@ -1,3 +1,11 @@
+base:
+  version: 1.x
+  css:
+    theme:
+      css/style.css: {}
+  dependencies:
+    - yorkshire/base
+
 schedule:
   version: 1.x
   js:
