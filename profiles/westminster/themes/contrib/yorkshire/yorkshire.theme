@@ -85,3 +85,20 @@ function yorkshire_preprocess_breadcrumb(&$variables){
       }
    }
 }
+
+function yorkshire_preprocess_menu_local_action(&$variables) {
+  $link = $variables['element']['#link'];
+  $link += array('localized_options' => array());
+  $link['localized_options']['attributes']['class'][] = 'btn';
+  $link['localized_options']['attributes']['class'][] = 'btn-block';
+  $link['localized_options']['attributes']['class'][] = 'btn-primary';
+  $link['localized_options']['attributes']['class'][] = 'fa';
+  $link['localized_options']['attributes']['class'][] = 'fa-plus';
+  
+  $variables['link'] = array(
+    '#type' => 'link',
+    '#title' => ' '.$link['title'],
+    '#options' => $link['localized_options'],
+    '#url' => $link['url'],
+  );
+}
