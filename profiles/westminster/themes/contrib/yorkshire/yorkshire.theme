@@ -85,3 +85,13 @@ function yorkshire_preprocess_breadcrumb(&$variables){
       }
    }
 }
+
+function yorkshire_theme_suggestions_region_alter(&$suggestions,&$variables) {
+  if($variables['elements']['#region'] == "content"){
+	$page_manager_page = \Drupal::routeMatch()->getRouteObject()->getDefault('page_manager_page');
+	if($page_manager_page){
+		$suggestions[] = 'region__page_manager_page';
+		$suggestions[] = 'region__page_'.$page_manager_page;
+	}
+  }
+}
