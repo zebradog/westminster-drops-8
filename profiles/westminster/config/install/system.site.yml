@@ -1,5 +1,5 @@
 page:
   403: /user/login
   404: ''
-  front: /user/login
+  front: /content
 admin_compact_mode: false
