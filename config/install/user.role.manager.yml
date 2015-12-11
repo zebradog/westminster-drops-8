@@ -1,0 +1,15 @@
+uuid: 77b29795-4541-44ff-8f59-890e5c871353
+langcode: en
+status: true
+dependencies: {  }
+id: manager
+label: Manager
+weight: 3
+is_admin: null
+permissions:
+  - 'administer account settings'
+  - 'administer permissions'
+  - 'administer users'
+  - 'access user profiles'
+  - 'access content overview'
+  - 'view own unpublished content'

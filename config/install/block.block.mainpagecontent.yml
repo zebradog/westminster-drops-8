@@ -1,0 +1,20 @@
+uuid: 265b2e19-4d7d-441f-ac53-832893d7a684
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - westminster_theme
+id: mainpagecontent
+theme: westminster_theme
+region: content
+weight: -1
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  provider: system
+  label_display: visible
+visibility: {  }

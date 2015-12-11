@@ -1,0 +1,23 @@
+uuid: 8dac7b8b-ad2e-466c-be04-4e32336145c7
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.slideshow.field_color
+    - field.field.node.slideshow.field_images
+    - field.field.node.slideshow.field_url
+    - node.type.slideshow
+  module:
+    - user
+id: node.slideshow.teaser
+targetEntityType: node
+bundle: slideshow
+mode: teaser
+content:
+  links:
+    weight: 100
+hidden:
+  field_color: true
+  field_images: true
+  field_url: true

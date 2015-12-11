@@ -1,0 +1,18 @@
+uuid: 188714ca-a9ca-4ae1-a306-6ec4da3ac4b5
+langcode: en
+status: true
+dependencies:
+  theme:
+    - westminster_theme
+id: pagetitle
+theme: westminster_theme
+region: top
+weight: -5
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  provider: core
+  label_display: '0'
+visibility: {  }

@@ -1,0 +1,18 @@
+uuid: d8b265eb-ae63-4456-835b-91d660c0288b
+langcode: en
+status: true
+dependencies:
+  theme:
+    - westminster_theme
+id: primaryadminactions
+theme: westminster_theme
+region: content
+weight: -2
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  provider: core
+  label_display: '0'
+visibility: {  }

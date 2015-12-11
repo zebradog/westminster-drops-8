@@ -1,0 +1,21 @@
+uuid: 37c11fbe-a55a-41d8-ae06-6c469fe762a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_color
+    - node.type.external_content
+id: node.external_content.field_color
+field_name: field_color
+entity_type: node
+bundle: external_content
+label: Color
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: '#39cccc'
+default_value_callback: ''
+settings: {  }
+field_type: string

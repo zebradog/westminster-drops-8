@@ -1,0 +1,20 @@
+name: Yorkshire
+description: 'Drupal 8 admin theme based on AdminLTE by Almaseed Studio'
+base theme: classy
+package: Custom
+type: theme
+version: 1.0.0
+core: 8.x
+libraries:
+  - yorkshire/base
+regions:
+  brand: Site Branding
+  header: Header
+  top: Top
+  content: Content
+  bottom: Bottom
+  sidebar: Sidebar
+  footer: Footer
+features:
+  - favicon
+  - logo

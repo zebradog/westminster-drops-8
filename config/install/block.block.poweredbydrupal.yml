@@ -1,0 +1,20 @@
+uuid: 0cf8e6d9-cf58-47bd-b903-03d03f9532f0
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - westminster_theme
+id: poweredbydrupal
+theme: westminster_theme
+region: footer
+weight: -5
+provider: null
+plugin: system_powered_by_block
+settings:
+  id: system_powered_by_block
+  label: 'Powered by Drupal'
+  provider: system
+  label_display: visible
+visibility: {  }

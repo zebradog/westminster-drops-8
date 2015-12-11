@@ -1,0 +1,24 @@
+uuid: 0b9f2fb5-a854-4803-a900-af2e269ec645
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.admin
+  module:
+    - system
+  theme:
+    - westminster_theme
+id: administration
+theme: westminster_theme
+region: sidebar
+weight: -3
+provider: null
+plugin: 'system_menu_block:admin'
+settings:
+  id: 'system_menu_block:admin'
+  label: Administration
+  provider: system
+  label_display: '0'
+  level: 1
+  depth: 0
+visibility: {  }

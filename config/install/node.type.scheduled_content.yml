@@ -1,0 +1,18 @@
+uuid: bc086bef-e70f-42f2-9705-5b3c6c8d4d55
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+name: 'Scheduled Content'
+type: scheduled_content
+description: ''
+help: ''
+new_revision: false
+preview_mode: 0
+display_submitted: false

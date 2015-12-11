@@ -1,0 +1,29 @@
+uuid: ff9dbe11-f6cd-4fb4-8505-5a74bc329a58
+langcode: en
+status: true
+dependencies: {  }
+id: authenticated
+label: 'Authenticated user'
+weight: 1
+is_admin: false
+permissions:
+  - 'access content'
+  - 'create external_content content'
+  - 'delete any external_content content'
+  - 'delete own external_content content'
+  - 'edit any external_content content'
+  - 'edit own external_content content'
+  - 'create scheduled_content content'
+  - 'delete any scheduled_content content'
+  - 'delete own scheduled_content content'
+  - 'edit any scheduled_content content'
+  - 'edit own scheduled_content content'
+  - 'create slideshow content'
+  - 'delete any slideshow content'
+  - 'delete own slideshow content'
+  - 'edit any slideshow content'
+  - 'edit own slideshow content'
+  - 'restful delete entity:node'
+  - 'restful get entity:node'
+  - 'restful patch entity:node'
+  - 'restful post entity:node'

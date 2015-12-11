@@ -1,0 +1,24 @@
+uuid: 83b4837a-2459-4981-a303-3b4eb41fac64
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.main
+  module:
+    - system
+  theme:
+    - westminster_theme
+id: mainnavigation
+theme: westminster_theme
+region: sidebar
+weight: -4
+provider: null
+plugin: 'system_menu_block:main'
+settings:
+  id: 'system_menu_block:main'
+  label: 'Main navigation'
+  provider: system
+  label_display: '0'
+  level: 1
+  depth: 0
+visibility: {  }

@@ -1,0 +1,21 @@
+uuid: 632fa228-e789-4f28-b524-3662dc51dbcf
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_color
+    - node.type.slideshow
+id: node.slideshow.field_color
+field_name: field_color
+entity_type: node
+bundle: slideshow
+label: Color
+description: ''
+required: true
+translatable: true
+default_value:
+  -
+    value: '#3c8dbc'
+default_value_callback: ''
+settings: {  }
+field_type: string

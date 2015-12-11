@@ -1,0 +1,36 @@
+name: Westminster
+type: profile
+description: 'Westminster Content Management System'
+core: 8.x
+distribution:
+  name: Westminster
+dependencies:
+  - node
+  - block
+  - breakpoint
+  - color
+  - config
+  - menu_link_content
+  - datetime
+  - block_content
+  - editor
+  - help
+  - image
+  - menu_ui
+  - options
+  - path
+  - page_cache
+  - dynamic_page_cache
+  - dblog
+  - field_ui
+  - file
+  - views
+  - views_ui
+  - automated_cron
+  - rest
+  - hal
+  - basic_auth
+themes:
+  - westminster_theme
+  - yorkshire
+  - classy

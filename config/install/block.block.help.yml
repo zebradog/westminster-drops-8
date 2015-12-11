@@ -1,0 +1,20 @@
+uuid: 6501fc08-0fbe-4f5f-a02a-423ac3613bab
+langcode: en
+status: true
+dependencies:
+  module:
+    - help
+  theme:
+    - westminster_theme
+id: help
+theme: westminster_theme
+region: content
+weight: -4
+provider: null
+plugin: help_block
+settings:
+  id: help_block
+  label: Help
+  provider: help
+  label_display: visible
+visibility: {  }
