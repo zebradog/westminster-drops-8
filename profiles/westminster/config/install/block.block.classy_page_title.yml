@@ -1,0 +1,18 @@
+uuid: ce02e4f5-b9d8-4584-bd00-d89f76f0179a
+langcode: en
+status: true
+dependencies:
+  theme:
+    - classy
+id: classy_page_title
+theme: classy
+region: content
+weight: -50
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  provider: core
+  label_display: '0'
+visibility: {  }

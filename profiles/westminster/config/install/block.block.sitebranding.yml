@@ -1,0 +1,23 @@
+uuid: 7ca9e047-f8c9-4cc7-b000-0f812cc8ecf9
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - westminster_theme
+id: sitebranding
+theme: westminster_theme
+region: brand
+weight: -5
+provider: null
+plugin: system_branding_block
+settings:
+  id: system_branding_block
+  label: 'Site branding'
+  provider: system
+  label_display: '0'
+  use_site_logo: true
+  use_site_name: true
+  use_site_slogan: false
+visibility: {  }

@@ -1,0 +1,12 @@
+westminster.content:
+  title: 'Content'
+  route_name: westminster.destination_content
+  menu_name: main
+westminster.schedule:
+  title: 'Schedule'
+  route_name: westminster.destination_schedule
+  menu_name: main
+westminster.users:
+  title: 'Users'
+  route_name: westminster.destination_users
+  menu_name: main

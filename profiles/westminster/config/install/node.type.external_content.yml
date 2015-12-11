@@ -1,0 +1,18 @@
+uuid: 4dacd409-a998-4c12-b400-ce5706b94ccf
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+name: 'External Content'
+type: external_content
+description: ''
+help: ''
+new_revision: false
+preview_mode: 0
+display_submitted: false

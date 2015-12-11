@@ -1,0 +1,4 @@
+<?php
+function westminster_theme_preprocess_page(&$variables) {
+  $variables['timezone'] = drupal_get_user_timezone();
+}
