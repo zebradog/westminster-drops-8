@@ -1,0 +1,23 @@
+uuid: a328e5e9-4ad9-4f05-a000-d29c6fb2e3b1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_button_color
+    - node.type.button
+  module:
+    - options
+id: node.button.field_button_color
+field_name: field_button_color
+entity_type: node
+bundle: button
+label: Color
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: primary
+default_value_callback: ''
+settings: {  }
+field_type: list_string

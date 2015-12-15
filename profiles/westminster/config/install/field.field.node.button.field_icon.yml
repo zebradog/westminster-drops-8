@@ -1,0 +1,19 @@
+uuid: e9c11be9-aece-4d2b-a10e-14fb89c4b4a2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_icon
+    - node.type.button
+id: node.button.field_icon
+field_name: field_icon
+entity_type: node
+bundle: button
+label: Icon
+description: 'Icon name as specified by https://fortawesome.github.io/Font-Awesome/icons/'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

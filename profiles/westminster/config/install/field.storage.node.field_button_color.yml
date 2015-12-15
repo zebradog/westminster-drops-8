@@ -1,0 +1,39 @@
+uuid: 43cc86d0-5889-40c9-9207-7f23d3ea83ac
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_button_color
+field_name: field_button_color
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: default
+      label: Default
+    -
+      value: primary
+      label: Primary
+    -
+      value: success
+      label: Success
+    -
+      value: info
+      label: Info
+    -
+      value: danger
+      label: Danger
+    -
+      value: warning
+      label: Warning
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
