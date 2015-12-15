@@ -64,7 +64,9 @@
  */
 #}
 <a href="{{node.field_url[0].url }}" class="btn {% if node.field_button_color.value %}btn-{{ node.field_button_color.value }}{% else %}btn-primary{% endif %}">
-  {% if node.field_icon.value %}
+  {% if node.field_button_icon.value %}
+    <i class="fa fa-{{ node.field_button_icon.value }}"></i>
+  {% elseif  node.field_icon.value %}
     <i class="fa fa-{{ node.field_icon.value }}"></i>
   {% endif %}
   {{ node.title.value }}
