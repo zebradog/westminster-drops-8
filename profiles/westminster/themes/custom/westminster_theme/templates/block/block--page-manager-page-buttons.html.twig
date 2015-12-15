@@ -26,11 +26,9 @@
  * @see template_preprocess_block()
  */
 #}
-<div class="row">
-  <div class="col-xs-12">
-    {% if label %}
-      <h4>{{label}}</h4>
-    {% endif %}
-    {% block content %}{{ content }}{% endblock %}
-  </div>
+<div class="page-manager-block-buttons">
+  {% if label %}
+    <h4>{{label}}</h4>
+  {% endif %}
+  {% block content %}{{ content }}{% endblock %}
 </div>

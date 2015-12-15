@@ -2,3 +2,6 @@
   display:none;
   visibility: hidden;
 }
+.page-manager-block-buttons{
+  padding:0 0 20px 0;
+}
