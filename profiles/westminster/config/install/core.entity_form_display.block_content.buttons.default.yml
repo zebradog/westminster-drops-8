@@ -1,0 +1,33 @@
+uuid: 14da528c-4557-4e2e-8947-71e4c788cbbe
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.buttons
+    - field.field.block_content.buttons.field_buttons
+  module:
+    - inline_entity_form
+id: block_content.buttons.default
+targetEntityType: block_content
+bundle: buttons
+mode: default
+content:
+  field_buttons:
+    weight: 2
+    settings:
+      override_labels: true
+      label_singular: Button
+      label_plural: Buttons
+      allow_new: true
+      match_operator: CONTAINS
+      allow_existing: false
+    third_party_settings: {  }
+    type: inline_entity_form_complex
+  info:
+    type: string_textfield
+    weight: 1
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden: {  }

@@ -1,0 +1,21 @@
+uuid: a0dc81b1-5246-4cbd-bb0d-132159ea957f
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.buttons
+    - field.field.block_content.buttons.field_buttons
+id: block_content.buttons.default
+targetEntityType: block_content
+bundle: buttons
+mode: default
+content:
+  field_buttons:
+    weight: 1
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_entity_view
+hidden: {  }

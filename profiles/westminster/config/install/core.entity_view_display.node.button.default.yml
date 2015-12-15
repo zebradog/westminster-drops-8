@@ -1,0 +1,29 @@
+uuid: 05ee2d56-6199-468b-b743-672449be93ed
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.button.field_url
+    - node.type.button
+  module:
+    - link
+    - user
+id: node.button.default
+targetEntityType: node
+bundle: button
+mode: default
+content:
+  field_url:
+    weight: 101
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+  links:
+    weight: 100
+hidden: {  }

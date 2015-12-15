@@ -1,0 +1,26 @@
+uuid: 69bf3db8-c357-4a44-bc45-6935bb5c3d1b
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.buttons
+    - field.storage.block_content.field_buttons
+    - node.type.button
+id: block_content.buttons.field_buttons
+field_name: field_buttons
+entity_type: block_content
+bundle: buttons
+label: Buttons
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      button: button
+    sort:
+      field: _none
+field_type: entity_reference
