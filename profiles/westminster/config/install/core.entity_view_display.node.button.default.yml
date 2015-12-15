@@ -3,16 +3,32 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.button.field_button_color
+    - field.field.node.button.field_icon
     - field.field.node.button.field_url
     - node.type.button
   module:
     - link
+    - options
     - user
 id: node.button.default
 targetEntityType: node
 bundle: button
 mode: default
 content:
+  field_button_color:
+    weight: 102
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+  field_icon:
+    weight: 103
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
   field_url:
     weight: 101
     label: above

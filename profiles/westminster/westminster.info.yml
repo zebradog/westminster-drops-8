@@ -30,6 +30,11 @@ dependencies:
   - rest
   - hal
   - basic_auth
+  - inline_entity_form
+  - page_manager
+  - focal_point
+  - contact
+  - formblock
 themes:
   - westminster_theme
   - yorkshire

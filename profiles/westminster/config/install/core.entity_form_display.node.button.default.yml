@@ -3,6 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.button.field_button_color
+    - field.field.node.button.field_icon
     - field.field.node.button.field_url
     - node.type.button
   module:
@@ -12,6 +14,18 @@ targetEntityType: node
 bundle: button
 mode: default
 content:
+  field_button_color:
+    weight: 32
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+  field_icon:
+    weight: 33
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
   field_url:
     weight: 31
     settings:
