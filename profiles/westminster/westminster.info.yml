@@ -36,6 +36,7 @@ dependencies:
   - contact
   - formblock
   - block_page_layout
+  - prepopulate
 themes:
   - westminster_theme
   - yorkshire
