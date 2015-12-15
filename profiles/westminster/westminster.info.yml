@@ -35,6 +35,7 @@ dependencies:
   - focal_point
   - contact
   - formblock
+  - block_page_layout
 themes:
   - westminster_theme
   - yorkshire
