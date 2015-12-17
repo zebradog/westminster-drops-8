@@ -1,0 +1,37 @@
+uuid: cdbd59da-7479-44e6-8500-b90e8cc6db2e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.login_redirect.field_role
+    - field.field.node.login_redirect.field_url
+    - node.type.login_redirect
+  module:
+    - link
+    - user
+id: node.login_redirect.default
+targetEntityType: node
+bundle: login_redirect
+mode: default
+content:
+  field_role:
+    weight: 101
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+  field_url:
+    weight: 102
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+  links:
+    weight: 100
+hidden: {  }

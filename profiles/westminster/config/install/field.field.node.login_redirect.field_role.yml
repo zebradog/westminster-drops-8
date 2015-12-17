@@ -1,0 +1,22 @@
+uuid: e6185102-0c7d-4782-8600-acb8baaebc1e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_role
+    - node.type.login_redirect
+id: node.login_redirect.field_role
+field_name: field_role
+entity_type: node
+bundle: login_redirect
+label: Role
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user_role'
+  handler_settings:
+    target_bundles: null
+field_type: entity_reference

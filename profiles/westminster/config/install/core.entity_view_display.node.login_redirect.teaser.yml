@@ -1,0 +1,17 @@
+uuid: 42d2c2e6-099d-4300-be3a-58aa8a7eab18
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - node.type.login_redirect
+  module:
+    - user
+id: node.login_redirect.teaser
+targetEntityType: node
+bundle: login_redirect
+mode: teaser
+content:
+  links:
+    weight: 100
+hidden: {  }

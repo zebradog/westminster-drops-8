@@ -1,0 +1,23 @@
+uuid: 0b081e9b-712e-4475-bf00-a969567fd70d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_url
+    - node.type.login_redirect
+  module:
+    - link
+id: node.login_redirect.field_url
+field_name: field_url
+entity_type: node
+bundle: login_redirect
+label: URL
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 1
+  title: 0
+field_type: link
