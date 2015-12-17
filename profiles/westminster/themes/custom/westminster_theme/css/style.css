@@ -12,3 +12,13 @@ body.path-node .nav-tabs {
   display: none;
   visibility: hidden;
 }
+.credits a{
+  margin:0 0 0 3px;
+}
+.credits a img{
+  margin:-2px 0 0 0;
+  opacity:0.85;
+}
+.credits a:hover img{
+  opacity:1.0;
+}
