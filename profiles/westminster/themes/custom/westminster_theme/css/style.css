@@ -8,7 +8,7 @@
 .page-manager-block-buttons .btn{
   margin: 0 2px 5px 0;
 }
-body.path-node .nav-tabs {
+body.path-node .nav-tabs, body.path-user .nav-tabs{
   display: none;
   visibility: hidden;
 }
