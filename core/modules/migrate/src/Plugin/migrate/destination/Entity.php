@@ -11,7 +11,7 @@ use Drupal\Component\Plugin\DependentPluginInterface;
 use Drupal\Core\Entity\DependencyTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\migrate\Entity\MigrationInterface;
+use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Row;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -112,7 +112,7 @@ abstract class Entity extends DestinationBase implements ContainerFactoryPluginI
    *   The entity we are importing into.
    */
   protected function getEntity(Row $row, array $old_destination_id_values) {
-    $entity_id = $old_destination_id_values ? reset($old_destination_id_values) : $this->getEntityId($row);
+    $entity_id = reset($old_destination_id_values) ?: $this->getEntityId($row);
     if (!empty($entity_id) && ($entity = $this->storage->load($entity_id))) {
       $this->updateEntity($entity, $row);
     }
