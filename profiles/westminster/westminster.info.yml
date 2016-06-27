@@ -37,6 +37,7 @@ dependencies:
   - formblock
   - block_page_layout
   - prepopulate
+  - crop
 themes:
   - westminster_theme
   - yorkshire
