@@ -153,7 +153,7 @@ class VariantRouteFilter implements RouteFilterInterface {
    *   TRUE if the route is valid, FALSE otherwise.
    */
   protected function checkPageVariantAccess($page_variant_id) {
-    /** @var \Drupal\page_manager\PageVariantInterface $page */
+    /** @var \Drupal\page_manager\PageVariantInterface $variant */
     $variant = $this->pageVariantStorage->load($page_variant_id);
 
     try {

@@ -46,7 +46,6 @@ class TestBlock extends BlockBase {
    * Example ajax callback.
    */
   public function exampleAjaxCallback($form, FormStateInterface $form_state) {
-
   }
 
 }

@@ -23,22 +23,22 @@ page_manager.page.*:
       sequence:
         - type: condition.plugin.[id]
           label: 'Access Condition'
-    static_context:
+    parameters:
       type: sequence
-      label: Static context list
+      label: Parameter context list
       sequence:
         - type: mapping
-          label: 'Static context'
+          label: Parameter context
           mapping:
+            machine_name:
+              type: string
+              label: 'Machine-readable name'
             label:
               type: label
               label: 'Label of the context'
             type:
               type: string
               label: 'Context type'
-            value:
-              type: string
-              label: 'Context value'
 
 page_manager.page_variant.*:
   type: config_entity
@@ -73,8 +73,22 @@ page_manager.page_variant.*:
     selection_logic:
       type: string
       label: 'Selection logic'
-    contexts:
-      type: mapping
+    static_context:
+      type: sequence
+      label: Static context list
+      sequence:
+        - type: mapping
+          label: 'Static context'
+          mapping:
+            label:
+              type: label
+              label: 'Label of the context'
+            type:
+              type: string
+              label: 'Context type'
+            value:
+              type: string
+              label: 'Context value'
 
 page_manager.block_plugin.*:
   type: block.settings.[id]

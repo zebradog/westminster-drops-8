@@ -13,8 +13,8 @@ use Drupal\Core\Entity\EntityAccessControlHandler;
 use Drupal\Core\Entity\EntityHandlerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Plugin\ContextAwarePluginInterface;
 use Drupal\Core\Plugin\Context\ContextHandlerInterface;
+use Drupal\Core\Plugin\ContextAwarePluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -74,8 +74,8 @@ class PageAccess extends EntityAccessControlHandler implements EntityHandlerInte
         return AccessResult::forbidden()->addCacheableDependency($entity);
       }
 
+      $contexts = $entity->getContexts();
       $conditions = $entity->getAccessConditions();
-      $contexts = $entity->getExecutable()->getContexts();
       foreach ($conditions as $condition) {
         if ($condition instanceof ContextAwarePluginInterface) {
           $this->contextHandler()->applyContextMapping($condition, $contexts);

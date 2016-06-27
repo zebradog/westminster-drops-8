@@ -196,6 +196,120 @@ class PluginManagerTest extends UnitTestCase {
   }
 
   /**
+   * Tests layout theme implementations.
+   *
+   * @covers ::alterThemeImplementations
+   */
+  public function testAlterThemeImplementations() {
+    /** @var LayoutPluginManager|\PHPUnit_Framework_MockObject_MockBuilder $layout_manager */
+    $layout_manager = $this->getMockBuilder('Drupal\layout_plugin\Plugin\Layout\LayoutPluginManager')
+      ->disableOriginalConstructor()
+      ->setMethods(['getDefinitions'])
+      ->getMock();
+
+    $layout_manager->method('getDefinitions')
+      ->willReturn([
+        'simple_layout' => [
+          'template' => 'simple-layout',
+          'theme' => 'simple_layout',
+        ],
+        'no_template_preprocess' => [
+          'template' => 'no-template-preprocess',
+          'theme' => 'no_template_preprocess',
+        ],
+        'only_template_preprocess' => [
+          'template' => 'only-template-preprocess',
+          'theme' => 'only_template_preprocess',
+        ],
+        // If the user registered the theme hook themselves, then we don't
+        // want to add our preprocess function (because we're not totally sure
+        // how it'll work).
+        'complex_layout' => [
+          'theme' => 'complex_layout',
+        ],
+      ]);
+
+    $theme_registry = [
+      'other_theme_hook' => [
+        'preprocess functions' => [
+          'template_preprocess_other_theme_hook'
+        ],
+      ],
+      'simple_layout' => [
+        'preprocess functions' => [
+          'template_preprocess',
+          'template_preprocess_simple_layout'
+        ],
+      ],
+      'simple_layout__suggestion_template' => [
+        'base hook' => 'simple_layout',
+        'preprocess functions' => [
+          'template_preprocess',
+          'template_preprocess_simple_layout'
+        ],
+      ],
+      // Make sure our alter still works if there is no 'template_preprocess'.
+      'no_template_preprocess' => [
+        'preprocess functions' => [
+          'template_preprocess_no_template_preprocess'
+        ],
+      ],
+      // Make sure our alter still works if there's only 'template_preprocess'.
+      'only_template_preprocess' => [
+        'preprocess functions' => [
+          'template_preprocess',
+        ],
+      ],
+      'complex_layout' => [
+        'preprocess functions' => [
+          'template_preprocess_complex_layout',
+        ],
+      ],
+    ];
+
+    $layout_manager->alterThemeImplementations($theme_registry);
+    $this->assertEquals([
+      'other_theme_hook' => [
+        'preprocess functions' => [
+          'template_preprocess_other_theme_hook'
+        ],
+      ],
+      'simple_layout' => [
+        'preprocess functions' => [
+          'template_preprocess',
+          '_layout_plugin_preprocess_layout',
+          'template_preprocess_simple_layout'
+        ],
+      ],
+      'simple_layout__suggestion_template' => [
+        'base hook' => 'simple_layout',
+        'preprocess functions' => [
+          'template_preprocess',
+          '_layout_plugin_preprocess_layout',
+          'template_preprocess_simple_layout'
+        ],
+      ],
+      'no_template_preprocess' => [
+        'preprocess functions' => [
+          '_layout_plugin_preprocess_layout',
+          'template_preprocess_no_template_preprocess'
+        ],
+      ],
+      'only_template_preprocess' => [
+        'preprocess functions' => [
+          'template_preprocess',
+          '_layout_plugin_preprocess_layout',
+        ],
+      ],
+      'complex_layout' => [
+        'preprocess functions' => [
+          'template_preprocess_complex_layout',
+        ],
+      ],
+    ], $theme_registry);
+  }
+
+  /**
    * Tests layout plugin library info.
    *
    * @covers ::getLibraryInfo

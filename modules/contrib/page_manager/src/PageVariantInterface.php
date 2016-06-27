@@ -30,6 +30,13 @@ interface PageVariantInterface extends ConfigEntityInterface, EntityWithPluginCo
   public function getVariantPluginId();
 
   /**
+   * Gets the page this variant is on.
+   *
+   * @return \Drupal\page_manager\PageInterface
+   */
+  public function getPage();
+
+  /**
    * Gets the values for all defined contexts.
    *
    * @return \Drupal\Core\Plugin\Context\ContextInterface[]
@@ -54,7 +61,7 @@ interface PageVariantInterface extends ConfigEntityInterface, EntityWithPluginCo
    */
   public function setWeight($weight);
 
-   /**
+  /**
    * Gets the selection condition collection.
    *
    * @return \Drupal\Core\Condition\ConditionInterface[]|\Drupal\Core\Condition\ConditionPluginCollection
@@ -99,5 +106,46 @@ interface PageVariantInterface extends ConfigEntityInterface, EntityWithPluginCo
    *   Either "and" or "or"; represents how the selection criteria are combined.
    */
   public function getSelectionLogic();
+
+  /**
+   * Returns the static context configurations for this page entity.
+   *
+   * @return array[]
+   *   An array of static context configurations.
+   */
+  public function getStaticContexts();
+
+  /**
+   * Retrieves a specific static context.
+   *
+   * @param string $name
+   *   The static context unique name.
+   *
+   * @return array
+   *   The configuration array of the static context
+   */
+  public function getStaticContext($name);
+
+  /**
+   * Adds/updates a given static context.
+   *
+   * @param string $name
+   *   The static context unique machine name.
+   * @param array $configuration
+   *   A new array of configuration for the static context.
+   *
+   * @return $this
+   */
+  public function setStaticContext($name, $configuration);
+
+  /**
+   * Removes a specific static context.
+   *
+   * @param string $name
+   *   The static context unique name.
+   *
+   * @return $this
+   */
+  public function removeStaticContext($name);
 
 }

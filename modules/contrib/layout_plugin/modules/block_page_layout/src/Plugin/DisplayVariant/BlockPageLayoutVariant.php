@@ -9,6 +9,8 @@ namespace Drupal\block_page_layout\Plugin\DisplayVariant;
 
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Uuid\UuidInterface;
+use Drupal\Core\Block\BlockManager;
+use Drupal\Core\Condition\ConditionManager;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\Context\ContextHandlerInterface;
@@ -63,13 +65,17 @@ class BlockPageLayoutVariant extends PageBlockDisplayVariant {
    *   The UUID generator.
    * @param \Drupal\Core\Utility\Token $token
    *   The token service.
+   * @param \Drupal\Core\Condition\ConditionManager $condition_manager
+   *   The condition manager.
+   * @param \Drupal\panels\Plugin\DisplayBuilder\DisplayBuilderManagerInterface $builder_manager
+   *   The display builder plugin manager.
    * @param \Drupal\layout_plugin\Plugin\Layout\LayoutPluginManagerInterface $layout_manager
    *   The layout plugin manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ContextHandlerInterface $context_handler, AccountInterface $account, UuidInterface $uuid_generator, Token $token, LayoutPluginManagerInterface $layout_manager) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $context_handler, $account, $uuid_generator, $token);
-
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ContextHandlerInterface $context_handler, AccountInterface $account, UuidInterface $uuid_generator, Token $token, BlockManager $block_manager, ConditionManager $condition_manager, LayoutPluginManagerInterface $layout_manager) {
     $this->layoutManager = $layout_manager;
+
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $context_handler, $account, $uuid_generator, $token, $block_manager, $condition_manager);
   }
 
   /**
@@ -84,6 +90,8 @@ class BlockPageLayoutVariant extends PageBlockDisplayVariant {
       $container->get('current_user'),
       $container->get('uuid'),
       $container->get('token'),
+      $container->get('plugin.manager.block'),
+      $container->get('plugin.manager.condition'),
       $container->get('plugin.manager.layout_plugin')
     );
   }

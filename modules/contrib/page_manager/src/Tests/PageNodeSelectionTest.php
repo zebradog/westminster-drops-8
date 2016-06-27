@@ -7,7 +7,7 @@
 
 namespace Drupal\page_manager\Tests;
 
-use Drupal\page_manager\Entity\Page;
+use Drupal\page_manager\Entity\PageVariant;
 use Drupal\simpletest\WebTestBase;
 
 /**
@@ -16,6 +16,8 @@ use Drupal\simpletest\WebTestBase;
  * @group page_manager
  */
 class PageNodeSelectionTest extends WebTestBase {
+
+  use PageTestHelperTrait;
 
   /**
    * {@inheritdoc}
@@ -55,11 +57,15 @@ class PageNodeSelectionTest extends WebTestBase {
 
     // Create a new variant to always return 404, the node_view page exists by
     // default.
-    $edit = [
+    $http_status_variant = PageVariant::create([
+      'variant' => 'http_status_code',
+      'label' => 'HTTP status code',
       'id' => 'http_status_code',
-      'variant_settings[status_code]' => 404,
-    ];
-    $this->drupalPostForm('admin/structure/page_manager/manage/node_view/add/http_status_code', $edit, 'Save');
+      'page' => 'node_view',
+    ]);
+    $http_status_variant->getVariantPlugin()->setConfiguration(['status_code' => 404]);
+    $http_status_variant->save();
+    $this->triggerRouterRebuild();
 
     $this->drupalGet('node/' . $node1->id());
     $this->assertResponse(404);
@@ -70,43 +76,38 @@ class PageNodeSelectionTest extends WebTestBase {
     $this->assertNoText($node2->label());
 
     // Add a new variant.
-    $this->drupalGet('admin/structure/page_manager/manage/node_view');
-    $this->clickLink('Add new variant');
-    $this->clickLink('Block page');
-    $edit = [
+    /** @var \Drupal\page_manager\PageVariantInterface $block_page_variant */
+    $block_page_variant = PageVariant::create([
+      'variant' => 'block_display',
       'id' => 'block_page_first',
       'label' => 'First',
-    ];
-    $this->drupalPostForm(NULL, $edit, 'Save');
-
-    // Add the entity view block.
-    $this->clickLink('Add new block');
-    $this->clickLink('Entity view (Content)');
-    $edit = [
+      'page' => 'node_view',
+    ]);
+    $block_page_plugin = $block_page_variant->getVariantPlugin();
+    $block_page_plugin->setConfiguration(['page_title' => '[node:title]']);
+    /** @var \Drupal\page_manager\Plugin\DisplayVariant\PageBlockDisplayVariant $block_page_plugin */
+    $block_page_plugin->addBlock([
+      'id' => 'entity_view:node',
+      'label' => 'Entity view (Content)',
+      'label_display' => FALSE,
+      'view_mode' => 'default',
       'region' => 'top',
-      'settings[label_display]' => FALSE,
-    ];
-    $this->drupalPostForm(NULL, $edit, 'Add block');
-
-    // Add a node bundle condition for articles.
-    $this->clickLink('Add new selection condition');
-    $this->clickLink('Node Bundle');
-    $edit = [
-      'condition[bundles][article]' => TRUE,
-    ];
-    $this->drupalPostForm(NULL, $edit, 'Add selection condition');
-
-    // Set the page title to the node title.
-    $edit = [
-      'variant_settings[page_title]' => '[node:title]',
-    ];
-    $this->drupalPostForm(NULL, $edit, 'Save');
-
-    // Set the weight of block_page.
-    $edit = [
-      'variants[block_page_first][weight]' => -10,
-    ];
-    $this->drupalPostForm(NULL, $edit, 'Save');
+      'context_mapping' => [
+        'entity' => 'node',
+      ],
+    ]);
+    $block_page_variant->addSelectionCondition([
+      'id' => 'node_type',
+      'bundles' => [
+        'article' => 'article',
+      ],
+      'context_mapping' => [
+        'node' => 'node',
+      ],
+    ]);
+    $block_page_variant->setWeight(-10);
+    $block_page_variant->save();
+    $this->triggerRouterRebuild();
 
     // The page node will 404, but the article node will display the variant.
     $this->drupalGet('node/' . $node1->id());

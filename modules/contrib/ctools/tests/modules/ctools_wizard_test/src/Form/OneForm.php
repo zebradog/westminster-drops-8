@@ -39,11 +39,16 @@ class OneForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $cached_values = $form_state->getTemporaryValue('wizard');
-    $form['one'] = array(
-      '#title' => t('One'),
+    $form['one'] = [
+      '#title' => $this->t('One'),
       '#type' => 'textfield',
       '#default_value' => !empty($cached_values['one']) ? $cached_values['one'] : '',
-    );
+    ];
+    $form['dynamic'] = [
+      '#title' => $this->t('Dynamic value'),
+      '#type' => 'item',
+      '#markup' => !empty($cached_values['dynamic']) ? $cached_values['dynamic'] : '',
+    ];
     return $form;
   }
 
@@ -64,6 +69,8 @@ class OneForm extends FormBase {
       $cached_values[$key] = $form_state->getValue($key);
     }
     $form_state->setTemporaryValue('wizard', $cached_values);
+
+    drupal_set_message($this->t('Dynamic value submitted: @value', ['@value' => $cached_values['dynamic']]));;
   }
 
 }

@@ -12,7 +12,7 @@ use Symfony\Cmf\Component\Routing\Enhancer\RouteEnhancerInterface;
 /**
  * Provides a trait to make a service a collector of route enhancers.
  *
- * @todo Move to Symfony CMF.
+ * @todo Move to Symfony CMF in https://github.com/symfony-cmf/Routing/pull/155.
  */
 trait RouteEnhancerCollectorTrait {
 

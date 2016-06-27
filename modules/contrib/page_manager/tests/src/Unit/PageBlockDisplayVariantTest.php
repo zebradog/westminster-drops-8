@@ -9,8 +9,11 @@ namespace Drupal\Tests\page_manager\Unit;
 
 use Drupal\Component\Uuid\UuidInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Block\BlockManager;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Cache\Context\CacheContextsManager;
+use Drupal\Core\Condition\ConditionManager;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\Context\ContextHandlerInterface;
 use Drupal\Core\Plugin\ContextAwarePluginInterface;
 use Drupal\Core\Form\FormState;
@@ -49,8 +52,11 @@ class PageBlockDisplayVariantTest extends UnitTestCase {
     $context_handler = $this->prophesize(ContextHandlerInterface::class);
     $uuid_generator = $this->prophesize(UuidInterface::class);
     $token = $this->prophesize(Token::class);
+    $block_manager = $this->prophesize(BlockManager::class);
+    $condition_manager = $this->prophesize(ConditionManager::class);
+    $module_handler = $this->prophesize(ModuleHandlerInterface::class);
 
-    $variant_plugin = new PageBlockDisplayVariant([], '', [], $context_handler->reveal(), $account->reveal(), $uuid_generator->reveal(), $token->reveal());
+    $variant_plugin = new PageBlockDisplayVariant([], '', [], $context_handler->reveal(), $account->reveal(), $uuid_generator->reveal(), $token->reveal(), $block_manager->reveal(), $condition_manager->reveal(), $module_handler->reveal());
 
     // Empty block.
     $expected_build = [
@@ -137,22 +143,27 @@ class PageBlockDisplayVariantTest extends UnitTestCase {
     $context_handler = $this->prophesize(ContextHandlerInterface::class);
     $context_handler->applyContextMapping($block2->reveal(), [])->shouldBeCalledTimes(1);
 
+    $module_handler = $this->prophesize(ModuleHandlerInterface::class);
+    $module_handler->alter();
     $uuid_generator = $this->prophesize(UuidInterface::class);
     $page_title = 'Page title';
     $token = $this->getMockBuilder(Token::class)
       ->disableOriginalConstructor()
       ->getMock();
+    $block_manager = $this->prophesize(BlockManager::class);
+    $condition_manager = $this->prophesize(ConditionManager::class);
     $variant_plugin = $this->getMockBuilder(PageBlockDisplayVariant::class)
-      ->setConstructorArgs([['page_title' => $page_title, 'uuid' => 'UUID'], 'test', [], $context_handler->reveal(), $account->reveal(), $uuid_generator->reveal(), $token])
-      ->setMethods(['getBlockCollection', 'renderPageTitle'])
+      ->setConstructorArgs([['page_title' => $page_title, 'uuid' => 'UUID'], 'test', [], $context_handler->reveal(), $account->reveal(), $uuid_generator->reveal(), $token, $block_manager->reveal(), $condition_manager->reveal(), $module_handler->reveal()])
+      ->setMethods(['renderPageTitle'])
       ->getMock();
+
+    $property = new \ReflectionProperty($variant_plugin, 'blockPluginCollection');
+    $property->setAccessible(TRUE);
+    $property->setValue($variant_plugin, $block_collection);
 
     $page = $this->prophesize(PageInterface::class);
     $page->id()->willReturn('page_id');
 
-    $variant_plugin->expects($this->once())
-      ->method('getBlockCollection')
-      ->willReturn($block_collection);
     $variant_plugin->expects($this->once())
       ->method('renderPageTitle')
       ->with($page_title)
@@ -205,8 +216,11 @@ class PageBlockDisplayVariantTest extends UnitTestCase {
     $context_handler = $this->prophesize(ContextHandlerInterface::class);
     $uuid_generator = $this->prophesize(UuidInterface::class);
     $token = $this->prophesize(Token::class);
+    $block_manager = $this->prophesize(BlockManager::class);
+    $condition_manager = $this->prophesize(ConditionManager::class);
+    $module_handler = $this->prophesize(ModuleHandlerInterface::class);
 
-    $variant_plugin = new PageBlockDisplayVariant([], '', [], $context_handler->reveal(), $account->reveal(), $uuid_generator->reveal(), $token->reveal());
+    $variant_plugin = new PageBlockDisplayVariant([], '', [], $context_handler->reveal(), $account->reveal(), $uuid_generator->reveal(), $token->reveal(), $block_manager->reveal(), $condition_manager->reveal(), $module_handler->reveal());
 
     $values = ['page_title' => "Go hang a salami, I'm a lasagna hog!"];
 

@@ -10,27 +10,27 @@ namespace Drupal\Tests\page_manager\Unit;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\TypedData\TypedDataManager;
 use Drupal\page_manager\Event\PageManagerContextEvent;
-use Drupal\page_manager\PageExecutable;
+use Drupal\page_manager\PageInterface;
 use Drupal\Tests\UnitTestCase;
 
 /**
- * @todo.
+ * Provides a base class for testing page context classes.
  */
 abstract class PageContextTestBase extends UnitTestCase {
 
   /**
    * The typed data manager.
    *
-   * @var \Drupal\Core\TypedData\TypedDataManager|\PHPUnit_Framework_MockObject_MockObject
+   * @var \Drupal\Core\TypedData\TypedDataManager|\Prophecy\Prophecy\ProphecyInterface
    */
   protected $typedDataManager;
 
   /**
-   * The executable for the page entity.
+   * The page entity.
    *
-   * @var \Drupal\page_manager\PageExecutable|\PHPUnit_Framework_MockObject_MockObject
+   * @var \Drupal\page_manager\PageInterface|\Prophecy\Prophecy\ProphecyInterface
    */
-  protected $executable;
+  protected $page;
 
   /**
    * The event.
@@ -52,12 +52,9 @@ abstract class PageContextTestBase extends UnitTestCase {
     $container->set('typed_data_manager', $this->typedDataManager->reveal());
     \Drupal::setContainer($container);
 
-    $this->executable = $this->getMockBuilder(PageExecutable::class)
-      ->disableOriginalConstructor()
-      ->setMethods(['getPage', 'addContext'])
-      ->getMock();
+    $this->page = $this->prophesize(PageInterface::class);
 
-    $this->event = new PageManagerContextEvent($this->executable);
+    $this->event = new PageManagerContextEvent($this->page->reveal());
   }
 
 }

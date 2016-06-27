@@ -65,7 +65,7 @@ class CurrentUserContext implements EventSubscriberInterface {
     $cacheability = new CacheableMetadata();
     $cacheability->setCacheContexts(['user']);
     $context->addCacheableDependency($cacheability);
-    $event->getPageExecutable()->addContext('current_user', $context);
+    $event->getPage()->addContext('current_user', $context);
   }
 
   /**

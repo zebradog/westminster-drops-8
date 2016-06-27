@@ -15,7 +15,6 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Plugin\Context\ContextHandlerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\page_manager\Entity\PageAccess;
-use Drupal\page_manager\PageExecutableInterface;
 use Drupal\page_manager\PageInterface;
 use Drupal\Tests\UnitTestCase;
 use Prophecy\Argument;
@@ -75,12 +74,9 @@ class PageAccessTest extends UnitTestCase {
    * @covers ::checkAccess
    */
   public function testAccessView() {
-    $executable = $this->prophesize(PageExecutableInterface::class);
-    $executable->getContexts()->willReturn([]);
-
     $page = $this->prophesize(PageInterface::class);
 
-    $page->getExecutable()->willReturn($executable->reveal());
+    $page->getContexts()->willReturn([]);
     $page->getAccessConditions()->willReturn([]);
     $page->getAccessLogic()->willReturn('and');
     $page->status()->willReturn(TRUE);

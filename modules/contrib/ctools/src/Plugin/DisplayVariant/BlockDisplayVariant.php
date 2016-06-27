@@ -8,8 +8,9 @@
 namespace Drupal\ctools\Plugin\DisplayVariant;
 
 use Drupal\Component\Uuid\UuidInterface;
+use Drupal\Core\Block\BlockManager;
 use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
-use Drupal\Core\Cache\RefinableCacheableDependencyTrait;
+use Drupal\Core\Condition\ConditionManager;
 use Drupal\Core\Display\VariantBase;
 use Drupal\Core\Display\ContextAwareVariantInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -20,18 +21,15 @@ use Drupal\Core\Utility\Token;
 use Drupal\ctools\Form\AjaxFormTrait;
 use Drupal\ctools\Plugin\BlockVariantInterface;
 use Drupal\ctools\Plugin\BlockVariantTrait;
-use Drupal\ctools\Plugin\ConditionVariantInterface;
-use Drupal\ctools\Plugin\ConditionVariantTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a base class for a display variant that simply contains blocks.
  */
-abstract class BlockDisplayVariant extends VariantBase implements ContextAwareVariantInterface, ConditionVariantInterface, ContainerFactoryPluginInterface, BlockVariantInterface, RefinableCacheableDependencyInterface {
+abstract class BlockDisplayVariant extends VariantBase implements ContextAwareVariantInterface, ContainerFactoryPluginInterface, BlockVariantInterface, RefinableCacheableDependencyInterface {
 
   use AjaxFormTrait;
   use BlockVariantTrait;
-  use ConditionVariantTrait;
 
   /**
    * The context handler.
@@ -87,14 +85,22 @@ abstract class BlockDisplayVariant extends VariantBase implements ContextAwareVa
    *   The UUID generator.
    * @param \Drupal\Core\Utility\Token $token
    *   The token service.
+   * @param \Drupal\Core\Block\BlockManager $block_manager
+   *   The block manager.
+   * @param \Drupal\Core\Condition\ConditionManager $condition_manager
+   *   The condition manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ContextHandlerInterface $context_handler, AccountInterface $account, UuidInterface $uuid_generator, Token $token) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ContextHandlerInterface $context_handler, AccountInterface $account, UuidInterface $uuid_generator, Token $token, BlockManager $block_manager, ConditionManager $condition_manager) {
+    // Inject dependencies as early as possible, so they can be used in
+    // configuration.
     $this->contextHandler = $context_handler;
     $this->account = $account;
     $this->uuidGenerator = $uuid_generator;
     $this->token = $token;
+    $this->blockManager = $block_manager;
+    $this->conditionManager = $condition_manager;
+
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**
@@ -108,16 +114,10 @@ abstract class BlockDisplayVariant extends VariantBase implements ContextAwareVa
       $container->get('context.handler'),
       $container->get('current_user'),
       $container->get('uuid'),
-      $container->get('token')
+      $container->get('token'),
+      $container->get('plugin.manager.block'),
+      $container->get('plugin.manager.condition')
     );
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function access(AccountInterface $account = NULL) {
-    // Delegate to the conditions.
-    return $this->determineSelectionAccess($this->getContexts());
   }
 
   /**
@@ -125,9 +125,7 @@ abstract class BlockDisplayVariant extends VariantBase implements ContextAwareVa
    */
   public function defaultConfiguration() {
     return parent::defaultConfiguration() + [
-      'blocks' => [],
-      'selection_conditions' => [],
-      'selection_logic' => 'and',
+      'blocks' => []
     ];
   }
 
@@ -138,9 +136,6 @@ abstract class BlockDisplayVariant extends VariantBase implements ContextAwareVa
     foreach ($this->getBlockCollection() as $instance) {
       $this->calculatePluginDependencies($instance);
     }
-    foreach ($this->getSelectionConditions() as $instance) {
-      $this->calculatePluginDependencies($instance);
-    }
     return $this->dependencies;
   }
 
@@ -149,7 +144,6 @@ abstract class BlockDisplayVariant extends VariantBase implements ContextAwareVa
    */
   public function getConfiguration() {
     return [
-      'selection_conditions' => $this->getSelectionConditions()->getConfiguration(),
       'blocks' => $this->getBlockCollection()->getConfiguration(),
     ] + parent::getConfiguration();
   }
@@ -157,8 +151,14 @@ abstract class BlockDisplayVariant extends VariantBase implements ContextAwareVa
   /**
    * {@inheritdoc}
    */
-  public function getSelectionLogic() {
-    return $this->configuration['selection_logic'];
+  public function setConfiguration(array $configuration) {
+    // preserve the uuid.
+    if ($this->configuration && !empty($this->configuration['uuid'])) {
+      $configuration['uuid'] = $this->configuration['uuid'];
+    }
+    parent::setConfiguration($configuration);
+    $this->getBlockCollection()->setConfiguration($this->configuration['blocks']);
+    return $this;
   }
 
   /**
@@ -194,13 +194,6 @@ abstract class BlockDisplayVariant extends VariantBase implements ContextAwareVa
   /**
    * {@inheritdoc}
    */
-  protected function getSelectionConfiguration() {
-    return $this->configuration['selection_conditions'];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   protected function getBlockConfig() {
     return $this->configuration['blocks'];
   }
@@ -210,6 +203,20 @@ abstract class BlockDisplayVariant extends VariantBase implements ContextAwareVa
    */
   protected function uuidGenerator() {
     return $this->uuidGenerator;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __sleep() {
+    $vars = parent::__sleep();
+
+    // Gathered contexts objects should not be serialized.
+    if (($key = array_search('contexts', $vars)) !== FALSE) {
+      unset($vars[$key]);
+    }
+
+    return $vars;
   }
 
 }

@@ -59,8 +59,8 @@ class RouteParamContext implements EventSubscriberInterface {
    */
   public function onPageContext(PageManagerContextEvent $event) {
     $request = $this->requestStack->getCurrentRequest();
-    $executable = $event->getPageExecutable();
-    $routes = $this->routeProvider->getRoutesByPattern($executable->getPage()->getPath())->all();
+    $page = $event->getPage();
+    $routes = $this->routeProvider->getRoutesByPattern($page->getPath())->all();
     $route = reset($routes);
 
     if ($route && $route_contexts = $route->getOption('parameters')) {
@@ -70,12 +70,12 @@ class RouteParamContext implements EventSubscriberInterface {
           continue;
         }
 
-        $context_name = $this->t('{@name} from route', ['@name' => $route_context_name]);
+        $parameter = $page->getParameter($route_context_name);
+        $context_name = $parameter['label'] ?: $this->t('{@name} from route', ['@name' => $route_context_name]);
         if ($request->attributes->has($route_context_name)) {
           $value = $request->attributes->get($route_context_name);
         }
         else {
-          // @todo Find a way to add in a fake value for configuration.
           $value = NULL;
         }
         $cacheability = new CacheableMetadata();
@@ -84,7 +84,7 @@ class RouteParamContext implements EventSubscriberInterface {
         $context = new Context(new ContextDefinition($route_context['type'], $context_name, FALSE), $value);
         $context->addCacheableDependency($cacheability);
 
-        $executable->addContext($route_context_name, $context);
+        $page->addContext($route_context_name, $context);
       }
     }
   }

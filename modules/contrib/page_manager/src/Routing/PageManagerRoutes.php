@@ -60,32 +60,33 @@ class PageManagerRoutes extends RouteSubscriberBase {
         continue;
       }
 
-      // Prepare the values that need to be altered for an existing page.
-      $parameters = [
-        'page_manager_page_variant' => [
-          'type' => 'entity:page_variant',
-        ],
-        'page_manager_page' => [
-          'type' => 'entity:page',
-        ],
-      ];
+      $parameters = [];
       $requirements = [];
-
       if ($route_name = $this->findPageRouteName($entity, $collection)) {
         $this->cacheTagsInvalidator->invalidateTags(["page_manager_route_name:$route_name"]);
 
         $collection_route = $collection->get($route_name);
         $path = $collection_route->getPath();
-        $parameters += $collection_route->getOption('parameters') ?: [];
-        $requirements += $collection_route->getRequirements();
+        $parameters = $collection_route->getOption('parameters') ?: [];
+        $requirements = $collection_route->getRequirements();
 
         $collection->remove($route_name);
       }
       else {
         $route_name = "page_manager.page_view_$entity_id";
         $path = $entity->getPath();
-        $requirements['_entity_access'] = 'page_manager_page.view';
       }
+
+      // Add in configured parameters.
+      foreach ($entity->getParameters() as $parameter_name => $parameter) {
+        if (!empty($parameter['type'])) {
+          $parameters[$parameter_name]['type'] = $parameter['type'];
+        }
+      }
+
+      $parameters['page_manager_page_variant']['type'] = 'entity:page_variant';
+      $parameters['page_manager_page']['type'] = 'entity:page';
+      $requirements['_page_access'] = 'page_manager_page.view';
 
       $page_id = $entity->id();
       $first = TRUE;

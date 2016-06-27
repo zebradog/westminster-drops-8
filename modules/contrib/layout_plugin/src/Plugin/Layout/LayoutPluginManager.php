@@ -168,10 +168,32 @@ class LayoutPluginManager extends DefaultPluginManager implements LayoutPluginMa
   public function alterThemeImplementations(array &$theme_registry) {
     $plugins = $this->getDefinitions();
 
+    // Find all the theme hooks which are for automatically registered templates
+    // (we ignore manually set theme hooks because we don't know how they were
+    // registered).
+    $layout_theme_hooks = [];
     foreach ($plugins as $id => $definition) {
       if (!empty($definition['template']) && !empty($definition['theme']) && isset($theme_registry[$definition['theme']])) {
-        $theme_registry[$definition['theme']]['preprocess functions'][] = '_layout_plugin_preprocess_layout';
-        array_unshift($theme_registry[$definition['theme']]['preprocess functions'], '_layout_plugin_preprocess_layout');
+        $layout_theme_hooks[] = $definition['theme'];
+      }
+    }
+
+    // Go through the theme registry looking for our theme hooks and any
+    // suggestions based on them.
+    foreach ($theme_registry as $theme_hook => &$info) {
+      if (in_array($theme_hook, $layout_theme_hooks) || (!empty($info['base hook']) && in_array($info['base hook'], $layout_theme_hooks))) {
+        // If 'template_preprocess' is included, we want to put our preprocess
+        // after to not mess up the expectation that 'template_process' always
+        // runs first.
+        if (($index = array_search('template_preprocess', $info['preprocess functions'])) !== FALSE) {
+          $index++;
+        }
+        else {
+          // Otherwise, put our preprocess function first.
+          $index = 0;
+        }
+
+        array_splice($info['preprocess functions'], $index, 0, '_layout_plugin_preprocess_layout');
       }
     }
   }

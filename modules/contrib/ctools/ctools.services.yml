@@ -12,16 +12,22 @@ services:
   ctools.wizard.factory:
     class: Drupal\ctools\Wizard\WizardFactory
     arguments: ['@form_builder', '@event_dispatcher']
+  ctools.paramconverter.tempstore:
+    class: Drupal\ctools\ParamConverter\TempstoreConverter
+    arguments: ['@user.shared_tempstore', '@entity_type.manager']
+    tags:
+      - { name: paramconverter }
   ctools.typed_data.resolver:
     class: Drupal\ctools\TypedDataResolver
     arguments: ['@typed_data_manager', '@string_translation']
+  ctools.access:
+    class: Drupal\ctools\Access\TempstoreAccess
+    arguments: ['@user.shared_tempstore']
     tags:
-      - { name: service_collector, tag: type_resolver, call: addTypeResolver }
-  ctools.default.type.resolver:
-      class: Drupal\ctools\TypeResolver\DefaultTypeResolver
-      tags:
-        - { name: type_resolver }
-  ctools.entity_reference.type.resolver:
-    class: Drupal\ctools\TypeResolver\EntityReferenceTypeResolver
-    tags:
-      - { name: type_resolver, priority: 10 }
+      - { name: access_check, applies_to: _ctools_access }
+  plugin.manager.ctools.relationship:
+    class: Drupal\ctools\Plugin\RelationshipManager
+    parent: default_plugin_manager
+  ctools.context_mapper:
+    class: Drupal\ctools\ContextMapper
+    arguments: ['@entity.repository']

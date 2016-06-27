@@ -68,10 +68,9 @@ class PageVariantAccess extends EntityAccessControlHandler implements EntityHand
    * {@inheritdoc}
    */
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account) {
+    /** @var \Drupal\page_manager\PageVariantInterface $entity */
     if ($operation === 'view') {
-      /** @var \Drupal\page_manager\PageVariantInterface $entity */
       $contexts = $entity->getContexts();
-
       $conditions = $entity->getSelectionConditions();
       foreach ($conditions as $condition) {
         if ($condition instanceof ContextAwarePluginInterface) {
@@ -81,7 +80,6 @@ class PageVariantAccess extends EntityAccessControlHandler implements EntityHand
       return AccessResult::allowedIf($this->resolveConditions($conditions, $entity->getSelectionLogic()));
     }
     return parent::checkAccess($entity, $operation, $account);
-
   }
 
 }

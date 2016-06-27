@@ -78,6 +78,12 @@ interface FormWizardInterface extends FormInterface {
    *   following keys:
    *   - title (string): Human-readable title of the step.
    *   - form (string): Fully-qualified class name of the form for this step.
+   *   - values (array): Optional array of cached values to override when on
+   *     this step.
+   *   - validate (array): Optional array of callables to be called when this
+   *     step is validated.
+   *   - submit (array): Optional array of callables to be called when this
+   *     step is submitted.
    */
   public function getOperations($cached_values);
 

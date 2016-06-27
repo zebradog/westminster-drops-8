@@ -6,8 +6,8 @@ package: Field types
 dependencies:
   - image
 
-# Information added by Drupal.org packaging script on 2015-10-27
-version: '8.x-1.0-alpha1'
+# Information added by Drupal.org packaging script on 2016-03-17
+version: '8.x-1.0-beta1'
 core: '8.x'
 project: 'image_url_formatter'
-datestamp: 1445948342
+datestamp: 1458189819

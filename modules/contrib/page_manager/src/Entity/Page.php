@@ -7,6 +7,9 @@
 
 namespace Drupal\page_manager\Entity;
 
+use Drupal\Component\Plugin\Context\ContextInterface;
+use Drupal\page_manager\Event\PageManagerContextEvent;
+use Drupal\page_manager\Event\PageManagerEvents;
 use Drupal\page_manager\PageInterface;
 use Drupal\Core\Condition\ConditionPluginCollection;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
@@ -21,12 +24,6 @@ use Drupal\page_manager\PageVariantInterface;
  *   label = @Translation("Page"),
  *   handlers = {
  *     "access" = "Drupal\page_manager\Entity\PageAccess",
- *     "list_builder" = "Drupal\page_manager\Entity\PageListBuilder",
- *     "form" = {
- *       "add" = "Drupal\page_manager\Form\PageAddForm",
- *       "edit" = "Drupal\page_manager\Form\PageEditForm",
- *       "delete" = "Drupal\page_manager\Form\PageDeleteForm",
- *     }
  *   },
  *   admin_permission = "administer pages",
  *   entity_keys = {
@@ -41,16 +38,8 @@ use Drupal\page_manager\PageVariantInterface;
  *     "path",
  *     "access_logic",
  *     "access_conditions",
- *     "static_context",
+ *     "parameters",
  *   },
- *   links = {
- *     "collection" = "/admin/structure/page_manager",
- *     "add-form" = "/admin/structure/page_manager/add",
- *     "edit-form" = "/admin/structure/page_manager/manage/{page}",
- *     "delete-form" = "/admin/structure/page_manager/manage/{page}/delete",
- *     "enable" = "/admin/structure/page_manager/manage/{page}/enable",
- *     "disable" = "/admin/structure/page_manager/manage/{page}/disable"
- *   }
  * )
  */
 class Page extends ConfigEntityBase implements PageInterface {
@@ -84,6 +73,13 @@ class Page extends ConfigEntityBase implements PageInterface {
   protected $variants;
 
   /**
+   * An array of collected contexts.
+   *
+   * @var \Drupal\Component\Plugin\Context\ContextInterface[]
+   */
+  protected $contexts = [];
+
+  /**
    * The configuration of access conditions.
    *
    * @var array
@@ -112,41 +108,17 @@ class Page extends ConfigEntityBase implements PageInterface {
   protected $use_admin_theme;
 
   /**
-   * Static context references.
+   * Parameter context configuration.
    *
-   * A list of arrays with the keys name, label, type and value.
+   * An associative array keyed by parameter name, which contains associative
+   * arrays with the following keys:
+   * - machine_name: Machine-readable context name.
+   * - label: Human-readable context name.
+   * - type: Context type.
    *
    * @var array[]
    */
-  protected $static_context = [];
-
-  /**
-   * Stores a reference to the executable version of this page.
-   *
-   * This is only used on runtime, and is not stored.
-   *
-   * @var \Drupal\page_manager\PageExecutable
-   */
-  protected $executable;
-
-  /**
-   * Returns a factory for page executables.
-   *
-   * @return \Drupal\page_manager\PageExecutableFactoryInterface
-   */
-  protected function executableFactory() {
-    return \Drupal::service('page_manager.executable_factory');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getExecutable() {
-    if (!isset($this->executable)) {
-      $this->executable = $this->executableFactory()->get($this);
-    }
-    return $this->executable;
-  }
+  protected $parameters = [];
 
   /**
    * {@inheritdoc}
@@ -160,13 +132,6 @@ class Page extends ConfigEntityBase implements PageInterface {
    */
   public function usesAdminTheme() {
     return isset($this->use_admin_theme) ? $this->use_admin_theme : strpos($this->getPath(), '/admin/') === 0;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function postCreate(EntityStorageInterface $storage) {
-    parent::postCreate($storage);
   }
 
   /**
@@ -257,16 +222,46 @@ class Page extends ConfigEntityBase implements PageInterface {
   /**
    * {@inheritdoc}
    */
-  public function getStaticContexts() {
-    return $this->static_context;
+  public function getParameters() {
+    return $this->parameters;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getStaticContext($name) {
-    if (isset($this->static_context[$name])) {
-      return $this->static_context[$name];
+  public function getParameter($name) {
+    if (!isset($this->parameters[$name])) {
+      $this->setParameter($name, '');
+    }
+    return $this->parameters[$name];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setParameter($name, $type, $label = '') {
+    $this->parameters[$name] = [
+      'machine_name' => $name,
+      'type' => $type,
+      'label' => $label,
+    ];
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function removeParameter($name) {
+    unset($this->parameters[$name]);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getParameterNames() {
+    if (preg_match_all('|\{(\w+)\}|', $this->getPath(), $matches)) {
+      return $matches[1];
     }
     return [];
   }
@@ -274,24 +269,41 @@ class Page extends ConfigEntityBase implements PageInterface {
   /**
    * {@inheritdoc}
    */
-  public function setStaticContext($name, $configuration) {
-    $this->static_context[$name] = $configuration;
+  public function preSave(EntityStorageInterface $storage) {
+    parent::preSave($storage);
+
+    $this->filterParameters();
+  }
+
+  /**
+   * Filters the parameters to remove any without a valid type.
+   *
+   * @return $this
+   */
+  protected function filterParameters() {
+    foreach ($this->getParameters() as $name => $parameter) {
+      if (empty($parameter['type'])) {
+        $this->removeParameter($name);
+      }
+    }
     return $this;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function removeStaticContext($name) {
-    unset($this->static_context[$name]);
-    return $this;
+  public function addContext($name, ContextInterface $value) {
+    $this->contexts[$name] = $value;
   }
 
   /**
    * {@inheritdoc}
    */
   public function getContexts() {
-    return $this->getExecutable()->getContexts();
+    if (!$this->contexts) {
+      $this->eventDispatcher()->dispatch(PageManagerEvents::PAGE_CONTEXT, new PageManagerContextEvent($this));
+    }
+    return $this->contexts;
   }
 
   /**
@@ -351,23 +363,35 @@ class Page extends ConfigEntityBase implements PageInterface {
   }
 
   /**
+   * Wraps the event dispatcher.
+   *
+   * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   *   The event dispatcher.
+   */
+  protected function eventDispatcher() {
+    return \Drupal::service('event_dispatcher');
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function __sleep() {
     $vars = parent::__sleep();
 
-    // Avoid serializing plugin collections and the page executable as they
-    // might contain references to a lot of objects including the container.
+    // Ensure any plugin collections are stored correctly before serializing.
+    // @todo Let https://www.drupal.org/node/2650588 handle this instead.
+    foreach ($this->getPluginCollections() as $plugin_config_key => $plugin_collection) {
+      $this->set($plugin_config_key, $plugin_collection->getConfiguration());
+    }
+
+    // Avoid serializing plugin collections and entities as they might contain
+    // references to a lot of objects including the container.
     $unset_vars = [
-      'variants' => NULL,
-      'accessConditionCollection' => 'access_variants',
-      'executable' => NULL,
+      'variants',
+      'accessConditionCollection',
     ];
-    foreach ($unset_vars as $unset_var => $configuration_key) {
-      if (!empty($this->$unset_var)) {
-        if ($configuration_key) {
-          $this->set($configuration_key, $this->$unset_var->getConfiguration());
-        }
+    foreach ($unset_vars as $unset_var) {
+      if (!empty($this->{$unset_var})) {
         unset($vars[array_search($unset_var, $vars)]);
       }
     }

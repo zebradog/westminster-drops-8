@@ -47,9 +47,7 @@ class CurrentUserContextTest extends PageContextTestBase {
         return $data_definition;
       });
 
-    $this->executable->expects($this->once())
-      ->method('addContext')
-      ->with('current_user', $this->isInstanceOf(Context::class));
+    $this->page->addContext('current_user', Argument::type(Context::class))->shouldBeCalled();
 
     $user_storage = $this->prophesize(EntityStorageInterface::class);
     $user_storage->load(1)->willReturn($user->reveal());

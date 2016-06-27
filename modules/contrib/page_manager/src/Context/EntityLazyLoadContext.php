@@ -11,6 +11,9 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Plugin\Context\Context;
 use Drupal\Core\Plugin\Context\ContextDefinitionInterface;
 
+/**
+ * @todo.
+ */
 class EntityLazyLoadContext extends Context {
 
   /**

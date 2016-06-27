@@ -230,7 +230,12 @@ abstract class FormWizardBase extends FormBase implements FormWizardInterface {
    * {@inheritdoc}
    */
   public function getFormId() {
-    $cached_values = $this->getTempstore()->get($this->getMachineName());
+    if (!$this->getMachineName() || !$this->getTempstore()->get($this->getMachineName())) {
+      $cached_values = $this->initValues();
+    }
+    else {
+      $cached_values = $this->getTempstore()->get($this->getMachineName());
+    }
     $operation = $this->getOperation($cached_values);
     /* @var $operation \Drupal\Core\Form\FormInterface */
     $operation = $this->classResolver->getInstanceFromDefinition($operation['form']);
@@ -247,6 +252,12 @@ abstract class FormWizardBase extends FormBase implements FormWizardInterface {
     $form = $this->customizeForm($form, $form_state);
     /* @var $formClass \Drupal\Core\Form\FormInterface */
     $formClass = $this->classResolver->getInstanceFromDefinition($operation['form']);
+    // Pass include any custom values for this operation.
+    if (!empty($operation['values'])) {
+      $cached_values = array_merge($cached_values, $operation['values']);
+      $form_state->setTemporaryValue('wizard', $cached_values);
+    }
+    // Build the form.
     $form = $formClass->buildForm($form, $form_state);
     if (isset($operation['title'])) {
       $form['#title'] = $operation['title'];
@@ -290,9 +301,12 @@ abstract class FormWizardBase extends FormBase implements FormWizardInterface {
   public function populateCachedValues(array &$form, FormStateInterface $form_state) {
     $cached_values = $this->getTempstore()->get($this->getMachineName());
     if (!$cached_values) {
-      $cached_values = $this->initValues();
+      $cached_values = $form_state->getTemporaryValue('wizard');
+      if (!$cached_values) {
+        $cached_values = $this->initValues();
+        $form_state->setTemporaryValue('wizard', $cached_values);
+      }
     }
-    $form_state->setTemporaryValue('wizard', $cached_values);
   }
 
   /**
@@ -344,6 +358,7 @@ abstract class FormWizardBase extends FormBase implements FormWizardInterface {
     $cached_values = $form_state->getTemporaryValue('wizard');
     $operations = $this->getOperations($cached_values);
     $step = $this->getStep($cached_values);
+    $operation = $operations[$step];
 
     $steps = array_keys($operations);
     // Slice to find the operations that occur before the current operation.
@@ -359,14 +374,23 @@ abstract class FormWizardBase extends FormBase implements FormWizardInterface {
         '#validate' => [
           '::populateCachedValues',
           [$form_object, 'validateForm'],
-          '::validateForm',
         ],
         '#submit' => [
           [$form_object, 'submitForm'],
-          '::submitForm',
         ],
       ],
     ];
+
+    // Add any submit or validate functions for the step and the global ones.
+    if (isset($operation['validate'])) {
+      $actions['submit']['#validate'] = array_merge($actions['submit']['#validate'], $operation['validate']);
+    }
+    $actions['submit']['#validate'][] = '::validateForm';
+    if (isset($operation['submit'])) {
+      $actions['submit']['#submit'] = array_merge($actions['submit']['#submit'], $operation['submit']);
+    }
+    $actions['submit']['#submit'][] = '::submitForm';
+
     if ($form_state->get('ajax')) {
       // Ajax submissions need to submit to the current step, not "next".
       $parameters = $this->getNextParameters($cached_values);

@@ -2,18 +2,26 @@
 
 /**
  * @file
- * Contains \Drupal\page_manager\Plugin\DisplayVariant\BlockDisplayVariant.
+ * Contains \Drupal\page_manager\Plugin\DisplayVariant\PageBlockDisplayVariant.
  */
 
 namespace Drupal\page_manager\Plugin\DisplayVariant;
 
+use Drupal\Component\Uuid\UuidInterface;
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Block\BlockManager;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Condition\ConditionManager;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\Context\ContextHandlerInterface;
 use Drupal\Core\Plugin\ContextAwarePluginInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Utility\Token;
 use Drupal\ctools\Plugin\DisplayVariant\BlockDisplayVariant;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a variant plugin that simply contains blocks.
@@ -24,6 +32,61 @@ use Drupal\ctools\Plugin\DisplayVariant\BlockDisplayVariant;
  * )
  */
 class PageBlockDisplayVariant extends BlockDisplayVariant {
+
+  /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * Constructs a new BlockDisplayVariant.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin ID for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Plugin\Context\ContextHandlerInterface $context_handler
+   *   The context handler.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The current user.
+   * @param \Drupal\Component\Uuid\UuidInterface $uuid_generator
+   *   The UUID generator.
+   * @param \Drupal\Core\Utility\Token $token
+   *   The token service.
+   * @param \Drupal\Core\Block\BlockManager $block_manager
+   *   The block manager.
+   * @param \Drupal\Core\Condition\ConditionManager $condition_manager
+   *   The condition manager.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ContextHandlerInterface $context_handler, AccountInterface $account, UuidInterface $uuid_generator, Token $token, BlockManager $block_manager, ConditionManager $condition_manager, ModuleHandlerInterface $module_handler) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $context_handler, $account, $uuid_generator, $token, $block_manager, $condition_manager);
+
+    $this->moduleHandler = $module_handler;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('context.handler'),
+      $container->get('current_user'),
+      $container->get('uuid'),
+      $container->get('token'),
+      $container->get('plugin.manager.block'),
+      $container->get('plugin.manager.condition'),
+      $container->get('module_handler')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -93,6 +156,9 @@ class PageBlockDisplayVariant extends BlockDisplayVariant {
         // the page, which the page must respect as well.
         $cacheability->addCacheableDependency($block);
 
+        // If an alter hook wants to modify the block contents, it can append
+        // another #pre_render hook.
+        $this->moduleHandler->alter(['block_view', 'block_view_' . $block->getBaseId()], $block_build, $block);
         $build[$region][$block_id] = $block_build;
       }
     }
@@ -159,7 +225,7 @@ class PageBlockDisplayVariant extends BlockDisplayVariant {
 
     $form['uuid'] = [
       '#type' => 'value',
-      '#value' => $this->configuration['uuid'] ? : $this->uuidGenerator->generate(),
+      '#value' => $this->configuration['uuid'] ?: $this->uuidGenerator->generate(),
     ];
 
     return $form;

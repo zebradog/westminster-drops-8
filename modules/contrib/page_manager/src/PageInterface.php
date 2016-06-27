@@ -7,6 +7,7 @@
 
 namespace Drupal\page_manager;
 
+use Drupal\Component\Plugin\Context\ContextInterface;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Entity\EntityWithPluginCollectionInterface;
 
@@ -22,13 +23,6 @@ interface PageInterface extends ConfigEntityInterface, EntityWithPluginCollectio
    *   Whether the page entity is enabled or not.
    */
   public function status();
-
-  /**
-   * Returns the executable instance for this page.
-   *
-   * @return \Drupal\page_manager\PageExecutableInterface
-   */
-  public function getExecutable();
 
   /**
    * Returns the path for the page entity.
@@ -134,52 +128,73 @@ interface PageInterface extends ConfigEntityInterface, EntityWithPluginCollectio
   public function getAccessLogic();
 
   /**
-   * Returns the static context configurations for this page entity.
+   * Returns the parameter context value objects for this page entity.
    *
    * @return array[]
-   *   An array of static context configurations.
+   *   An array of parameter context arrays, keyed by parameter name.
    */
-  public function getStaticContexts();
+  public function getParameters();
 
   /**
-   * Retrieves a specific static context.
+   * Retrieves a specific parameter context.
    *
    * @param string $name
-   *   The static context unique name.
+   *   The parameter context's unique name.
    *
    * @return array
-   *   The configuration array of the static context
+   *   The parameter context array.
    */
-  public function getStaticContext($name);
+  public function getParameter($name);
 
   /**
-   * Adds/updates a given static context.
+   * Adds/updates a given parameter context.
    *
    * @param string $name
-   *   The static context unique machine name.
-   * @param array $configuration
-   *   A new array of configuration for the static context.
+   *   The parameter context name.
+   * @param string $type
+   *   The parameter context type.
+   * @param string $label
+   *   (optional) The parameter context label.
    *
    * @return $this
    */
-  public function setStaticContext($name, $configuration);
+  public function setParameter($name, $type, $label = '');
 
   /**
-   * Removes a specific static context.
+   * Removes a specific parameter context.
    *
    * @param string $name
-   *   The static context unique name.
+   *   The parameter context's unique machine name.
    *
    * @return $this
    */
-  public function removeStaticContext($name);
+  public function removeParameter($name);
+
+  /**
+   * Gets the names of all parameters for this page.
+   *
+   * @return string[]
+   */
+  public function getParameterNames();
 
   /**
    * Gets the values for all defined contexts.
    *
-   * @return \Drupal\Component\Plugin\Context\ContextInterface[]
+   * @return \Drupal\Core\Plugin\Context\ContextInterface[]
    *   An array of set context values, keyed by context name.
    */
   public function getContexts();
+
+  /**
+   * Sets the context for a given name.
+   *
+   * @param string $name
+   *   The name of the context.
+   * @param \Drupal\Component\Plugin\Context\ContextInterface $value
+   *   The context to add.
+   *
+   * @return $this
+   */
+  public function addContext($name, ContextInterface $value);
 
 }

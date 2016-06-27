@@ -8,6 +8,8 @@
 namespace Drupal\Tests\ctools\Unit;
 
 use Drupal\Component\Uuid\UuidInterface;
+use Drupal\Core\Block\BlockManager;
+use Drupal\Core\Condition\ConditionManager;
 use Drupal\Core\Plugin\Context\ContextHandlerInterface;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Session\AccountInterface;
@@ -25,31 +27,6 @@ use Drupal\Tests\UnitTestCase;
 class BlockDisplayVariantTest extends UnitTestCase {
 
   /**
-   * Tests the access() method.
-   *
-   * @covers ::access
-   */
-  public function testAccess() {
-    $display_variant = $this->getMockBuilder(TestBlockDisplayVariant::class)
-      ->disableOriginalConstructor()
-      ->setMethods(['determineSelectionAccess'])
-      ->getMock();
-    $display_variant->expects($this->once())
-      ->method('determineSelectionAccess')
-      ->willReturn(FALSE);
-    $this->assertSame(FALSE, $display_variant->access());
-
-    $display_variant = $this->getMockBuilder(TestBlockDisplayVariant::class)
-      ->disableOriginalConstructor()
-      ->setMethods(['determineSelectionAccess'])
-      ->getMock();
-    $display_variant->expects($this->once())
-      ->method('determineSelectionAccess')
-      ->willReturn(TRUE);
-    $this->assertSame(TRUE, $display_variant->access());
-  }
-
-  /**
    * Tests the submitConfigurationForm() method.
    *
    * @covers ::submitConfigurationForm
@@ -61,8 +38,10 @@ class BlockDisplayVariantTest extends UnitTestCase {
     $context_handler = $this->prophesize(ContextHandlerInterface::class);
     $uuid_generator = $this->prophesize(UuidInterface::class);
     $token = $this->prophesize(Token::class);
+    $block_manager = $this->prophesize(BlockManager::class);
+    $condition_manager = $this->prophesize(ConditionManager::class);
 
-    $display_variant = new TestBlockDisplayVariant([], '', [], $context_handler->reveal(), $account->reveal(), $uuid_generator->reveal(), $token->reveal());
+    $display_variant = new TestBlockDisplayVariant([], '', [], $context_handler->reveal(), $account->reveal(), $uuid_generator->reveal(), $token->reveal(), $block_manager->reveal(), $condition_manager->reveal());
 
     $form = [];
     $form_state = (new FormState())->setValues($values);
