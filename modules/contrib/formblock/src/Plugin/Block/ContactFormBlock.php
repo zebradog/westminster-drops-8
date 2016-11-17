@@ -2,14 +2,12 @@
 
 namespace Drupal\formblock\Plugin\Block;
 
-use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Block\Annotation\Block;
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Annotation\Translation;
+use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Datetime\DateFormatter;
 use Drupal\Core\Entity\EntityFormBuilderInterface;
-use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Flood\FloodInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -34,9 +32,9 @@ class ContactFormBlock extends BlockBase implements ContainerFactoryPluginInterf
   /**
    * The entity manager.
    *
-   * @var \Drupal\Core\Entity\EntityManagerInterface.
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface.
    */
-  protected $entityManager;
+  protected $entityTypeManager;
 
   /**
    * The current user.
@@ -67,13 +65,6 @@ class ContactFormBlock extends BlockBase implements ContainerFactoryPluginInterf
   protected $flood;
 
   /**
-   * The contact_form that corresponds to this block.
-   *
-   * @var \Drupal\contact\Entity\ContactForm
-   */
-  protected $contactForm;
-
-  /**
    * The date formatter service.
    *
    * @var \Drupal\Core\Datetime\DateFormatter.
@@ -81,7 +72,7 @@ class ContactFormBlock extends BlockBase implements ContainerFactoryPluginInterf
   protected $dateFormatter;
 
   /**
-   * Constructs a new ContactFormBlock plugin
+   * Constructs a new ContactFormBlock plugin.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
@@ -89,7 +80,7 @@ class ContactFormBlock extends BlockBase implements ContainerFactoryPluginInterf
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityManagerInterface $entityManager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity manager.
    * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   The current user.
@@ -102,8 +93,8 @@ class ContactFormBlock extends BlockBase implements ContainerFactoryPluginInterf
    * @param \Drupal\Core\DateTime\DateFormatter $dateFormatter
    *   The date formatter service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityManagerInterface $entityManager, AccountInterface $currentUser, EntityFormBuilderInterface $entityFormBuilder, ConfigFactoryInterface $configFactory, FloodInterface $flood, DateFormatter $dateFormatter) {
-    $this->entityManager = $entityManager;
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entityTypeManager, AccountInterface $currentUser, EntityFormBuilderInterface $entityFormBuilder, ConfigFactoryInterface $configFactory, FloodInterface $flood, DateFormatter $dateFormatter) {
+    $this->entityTypeManager = $entityTypeManager;
     $this->currentUser = $currentUser;
     $this->entityFormBuilder = $entityFormBuilder;
     $this->configFactory = $configFactory;
@@ -113,7 +104,6 @@ class ContactFormBlock extends BlockBase implements ContainerFactoryPluginInterf
     // We have to do this after our injections since the parent constructor
     // calls defaultConfiguration() which depends on the configFactory service.
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->contactForm = $this->entityManager->getStorage('contact_form')->load($this->configuration['contact_form']);
   }
 
   /**
@@ -136,7 +126,7 @@ class ContactFormBlock extends BlockBase implements ContainerFactoryPluginInterf
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('entity.manager'),
+      $container->get('entity_type.manager'),
       $container->get('current_user'),
       $container->get('entity.form_builder'),
       $container->get('config.factory'),
@@ -149,30 +139,30 @@ class ContactFormBlock extends BlockBase implements ContainerFactoryPluginInterf
    * Overrides \Drupal\block\BlockBase::settings().
    */
   public function defaultConfiguration() {
-    return array(
+    return [
       'contact_form' => $this->configFactory->get('contact.settings')->get('default_form'),
-    );
+    ];
   }
 
   /**
    * Overrides \Drupal\block\BlockBase::blockForm().
    */
   public function blockForm($form, FormStateInterface $form_state) {
-    $categories = $this->entityManager->getStorage('contact_form')->loadMultiple();
+    $categories = $this->entityTypeManager->getStorage('contact_form')->loadMultiple();
 
-    $options = array();
+    $options = [];
     foreach ($categories as $category) {
       $options[$category->id()] = $category->label();
     }
 
-    $form['formblock_contact_form'] = array(
+    $form['formblock_contact_form'] = [
       '#type' => 'select',
       '#title' => $this->t('Category'),
       '#default_value' => $this->configuration['contact_form'],
       '#description' => $this->t('Select the category to show.'),
       '#options' => $options,
       '#required' => TRUE,
-    );
+    ];
 
     return $form;
   }
@@ -188,21 +178,21 @@ class ContactFormBlock extends BlockBase implements ContainerFactoryPluginInterf
    * Implements \Drupal\block\BlockBase::build().
    */
   public function build() {
-    $build = array();
+    $build = [];
 
     // Check if flood control has been activated for sending emails.
     if (!$this->currentUser->hasPermission('administer contact forms') && $message = $this->floodControl()) {
-      $build['message'] = array(
+      $build['message'] = [
         '#markup' => $message,
-      );
+      ];
       return $build;
     }
 
-    $message = $this->entityManager
+    $message = $this->entityTypeManager
       ->getStorage('contact_message')
-      ->create(array(
-        'contact_form' => $this->contactForm->id(),
-      ));
+      ->create([
+        'contact_form' => $this->getContactForm()->id(),
+      ]);
 
     $build['form'] = $this->entityFormBuilder->getForm($message);
 
@@ -210,29 +200,42 @@ class ContactFormBlock extends BlockBase implements ContainerFactoryPluginInterf
   }
 
   /**
-   * Implements \Drupal\block\BlockBase::blockAccess().
+   * {@inheritdoc}
    */
   public function blockAccess(AccountInterface $account) {
-    if ($this->contactForm->access('view', $account) && $account->hasPermission('access site-wide contact form')) {
-      return AccessResult::allowed();
-    }
-    return AccessResult::forbidden();
+    return AccessResult::allowedIf($this->getContactForm()->access('view', $account) && $account->hasPermission('access site-wide contact form'))
+      ->cachePerPermissions()
+      ->addCacheTags($this->getContactForm()->getCacheTags())
+      ->addCacheTags($this->configFactory->get('contact.settings')->getCacheTags());
   }
 
   /**
    * Returns the current status of flood control.
    *
-   * @return
+   * @return bool|string
+   *   False if flood control should not be enabled or an error message if
+   *   flood control is enabled.
    */
   protected function floodControl() {
     $limit = $this->configFactory->get('contact.settings')->get('flood.limit');
     $interval = $this->configFactory->get('contact.settings')->get('flood.interval');
     if (!$this->flood->isAllowed('contact', $limit, $interval)) {
-      return $this->t('You cannot send more than %limit messages in @interval. Try again later.', array(
+      return $this->t('You cannot send more than %limit messages in @interval. Try again later.', [
         '%limit' => $limit,
         '@interval' => $this->dateFormatter->formatInterval($interval),
-      ));
+      ]);
     }
     return FALSE;
   }
+
+  /**
+   * Return the contact form entity (type of contact form).
+   *
+   * @return \Drupal\contact\Entity\ContactForm
+   *   The contact form type.
+   */
+  private function getContactForm() {
+    return $this->entityTypeManager->getStorage('contact_form')->load($this->configuration['contact_form']);
+  }
+
 }

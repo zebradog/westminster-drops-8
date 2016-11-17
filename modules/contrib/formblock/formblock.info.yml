@@ -3,8 +3,8 @@ description: Enables the presentation of node creation forms in blocks. This is 
 # core: 8.x
 type: module
 
-# Information added by Drupal.org packaging script on 2015-03-16
-version: '8.x-1.0-beta7+2-dev'
+# Information added by Drupal.org packaging script on 2016-08-18
+version: '8.x-1.0-beta9'
 core: '8.x'
 project: 'formblock'
-datestamp: 1426549986
+datestamp: 1471552449

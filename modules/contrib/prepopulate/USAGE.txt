@@ -110,7 +110,9 @@ configured. Here are some examples.
 		
 	Node Reference:
 	
-		edit[field_nodereference][0][nid][nid]=[nid: #]
+		edit[field_nodereference]=1
+		
+    Note that in this example "1" is the ID of the referenced entity.
 
 Some Non-CCK examples:
 

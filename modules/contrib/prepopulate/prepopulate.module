@@ -20,10 +20,6 @@ function prepopulate_form_alter(&$form, FormStateInterface $form_state, $form_id
   if (!empty($form_state->rebuild_info)) {
     return;
   }
-  // Provide for accepting base64 encoded fields.
-  if (isset($_REQUEST['pp'])) {
-    parse_str(base64_decode($_REQUEST['pp']), $_REQUEST);
-  }
   if (isset($_REQUEST['edit'])) {
     $form['#after_build'][] = 'prepopulate_after_build';
   }
@@ -33,9 +29,6 @@ function prepopulate_form_alter(&$form, FormStateInterface $form_state, $form_id
  * An #after_build function to set the values prepopulated in the request.
  */
 function prepopulate_after_build($form) {
-  if (isset($_REQUEST['pp'])) {
-    parse_str(base64_decode($_REQUEST['pp']), $_REQUEST);
-  }
   if (isset($_REQUEST['edit'])) {
     $request = (array) $_REQUEST['edit'];
     $prepopulateController = new \Drupal\prepopulate\Controller\prepopulateController();

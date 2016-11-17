@@ -3,16 +3,13 @@
 namespace Drupal\formblock\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Block\Annotation\Block;
-use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Annotation\Translation;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\node\Entity\NodeType;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityFormBuilderInterface;
 
 /**
@@ -33,9 +30,9 @@ class NodeFormBlock extends BlockBase implements ContainerFactoryPluginInterface
   /**
    * The entity manager.
    *
-   * @var \Drupal\Core\Entity\EntityManagerInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityManager;
+  protected $entityTypeManager;
 
   /**
    * The entity form builder.
@@ -45,7 +42,7 @@ class NodeFormBlock extends BlockBase implements ContainerFactoryPluginInterface
   protected $entityFormBuilder;
 
   /**
-   * Constructs a new NodeFormBlock plugin
+   * Constructs a new NodeFormBlock plugin.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
@@ -53,16 +50,16 @@ class NodeFormBlock extends BlockBase implements ContainerFactoryPluginInterface
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityManagerInterface $entityManger
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity manager.
    * @param \Drupal\Core\Entity\EntityFormBuilderInterface $entityFormBuilder
    *   The entity form builder.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityManagerInterface $entityManager, EntityFormBuilderInterface $entityFormBuilder) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entityTypeManager, EntityFormBuilderInterface $entityFormBuilder) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->setConfiguration($configuration);
 
-    $this->entityManager = $entityManager;
+    $this->entityTypeManager = $entityTypeManager;
     $this->entityFormBuilder = $entityFormBuilder;
   }
 
@@ -74,7 +71,7 @@ class NodeFormBlock extends BlockBase implements ContainerFactoryPluginInterface
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('entity.manager'),
+      $container->get('entity_type.manager'),
       $container->get('entity.form_builder')
     );
   }
@@ -83,43 +80,47 @@ class NodeFormBlock extends BlockBase implements ContainerFactoryPluginInterface
    * Overrides \Drupal\block\BlockBase::settings().
    */
   public function defaultConfiguration() {
-    return array(
+    return [
       'type' => NULL,
       'show_help' => FALSE,
-    );
+    ];
   }
 
   /**
    * Overrides \Drupal\block\BlockBase::blockForm().
    */
   public function blockForm($form, FormStateInterface $form_state) {
-    $form['formblock_node_type'] = array(
+    $form['formblock_node_type'] = [
       '#title' => $this->t('Node type'),
       '#description' => $this->t('Select the node type whose form will be shown in the block.'),
       '#type' => 'select',
       '#required' => TRUE,
       '#options' => $this->getNodeTypes(),
       '#default_value' => $this->configuration['type'],
-    );
-    $form['formblock_show_help'] = array(
+    ];
+    $form['formblock_show_help'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Show submission guidelines'),
       '#default_value' => $this->configuration['show_help'],
       '#description' => $this->t('Enable this option to show the submission guidelines in the block above the form.'),
-    );
+    ];
 
     return $form;
   }
 
   /**
-   * Get an array of node types
+   * Get an array of node types.
    *
    * @return array
+   *   An array of node types keyed by machine name.
    */
   protected function getNodeTypes() {
-    return array_map(function ($bundle_info) {
-      return $bundle_info['label'];
-    }, $this->entityManager->getBundleInfo('node'));
+    $options = [];
+    $types = $this->entityTypeManager->getStorage('node_type')->loadMultiple();
+    foreach ($types as $type) {
+      $options[$type->id()] = $type->label();
+    }
+    return $options;
   }
 
   /**
@@ -134,17 +135,17 @@ class NodeFormBlock extends BlockBase implements ContainerFactoryPluginInterface
    * Implements \Drupal\block\BlockBase::build().
    */
   public function build() {
-    $build = array();
+    $build = [];
 
     $node_type = NodeType::load($this->configuration['type']);
 
     if ($this->configuration['show_help']) {
-      $build['help'] = array('#markup' => !empty($node_type->getHelp()) ? '<p>' . Xss::filterAdmin($node_type->getHelp()) . '</p>' : '');
+      $build['help'] = ['#markup' => !empty($node_type->getHelp()) ? '<p>' . Xss::filterAdmin($node_type->getHelp()) . '</p>' : ''];
     }
 
-    $node = $this->entityManager->getStorage('node')->create(array(
+    $node = $this->entityTypeManager->getStorage('node')->create([
       'type' => $node_type->id(),
-    ));
+    ]);
 
     $build['form'] = $this->entityFormBuilder->getForm($node);
 
@@ -152,13 +153,21 @@ class NodeFormBlock extends BlockBase implements ContainerFactoryPluginInterface
   }
 
   /**
-   * Implements \Drupal\block\BlockBase::blockAccess().
+   * {@inheritdoc}
    */
   public function blockAccess(AccountInterface $account) {
-    $access_control_handler = $this->entityManager->getAccessControlHandler('node');
-    if ($access_control_handler->createAccess($this->configuration['type'], $account)) {
-      return AccessResult::allowed();
-    }
-    return AccessResult::forbidden();
+    $access_control_handler = $this->entityTypeManager->getAccessControlHandler('node');
+
+    // NodeAccessControlHandler::createAccess() adds user.permissions
+    // as a cache context to the returned AccessResult.
+    /* @var $result \Drupal\Core\Access\AccessResult */
+    $result = $access_control_handler->createAccess($this->configuration['type'], $account, [], TRUE);
+
+    // Add the node type as a cache dependency.
+    $node_type = $node_type = NodeType::load($this->configuration['type']);
+    $result->addCacheTags($node_type->getCacheTags());
+
+    return $result;
   }
+
 }

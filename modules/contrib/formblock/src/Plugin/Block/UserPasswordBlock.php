@@ -3,8 +3,6 @@
 namespace Drupal\formblock\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Block\Annotation\Block;
-use Drupal\Core\Annotation\Translation;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
@@ -32,7 +30,7 @@ class UserPasswordBlock extends BlockBase implements ContainerFactoryPluginInter
   protected $formBuilder;
 
   /**
-   * Constructs a new UserPasswordBlock plugin
+   * Constructs a new UserPasswordBlock plugin.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
@@ -49,7 +47,7 @@ class UserPasswordBlock extends BlockBase implements ContainerFactoryPluginInter
   }
 
   /**
-   * {@inherticdoc}
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
@@ -64,10 +62,11 @@ class UserPasswordBlock extends BlockBase implements ContainerFactoryPluginInter
    * Implements \Drupal\block\BlockBase::build().
    */
   public function build() {
-    $build = array();
+    $build = [];
 
     $build['form'] = $this->formBuilder->getForm('Drupal\user\Form\UserPasswordForm');
 
     return $build;
   }
+
 }

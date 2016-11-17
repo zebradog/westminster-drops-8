@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\focal_point\Plugin\ImageEffect\FocalPointCropImageEffect.
- */
-
 namespace Drupal\focal_point\Plugin\ImageEffect;
 
 use Drupal\focal_point\FocalPointEffectBase;
@@ -23,8 +18,12 @@ class FocalPointCropImageEffect extends FocalPointEffectBase {
 
   /**
    * {@inheritdoc}
+   *
+   * @codeCoverageIgnore
    */
   public function applyEffect(ImageInterface $image) {
+    parent::applyEffect($image);
+
     return $this->applyCrop($image);
   }
 
