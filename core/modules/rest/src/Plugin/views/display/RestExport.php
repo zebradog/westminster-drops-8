@@ -4,6 +4,7 @@ namespace Drupal\rest\Plugin\views\display;
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheableResponse;
+use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
@@ -355,7 +356,16 @@ class RestExport extends PathPluginBase implements ResponseDisplayPluginInterfac
 
     // Setup an empty response so headers can be added as needed during views
     // rendering and processing.
-    $response = new CacheableResponse('', 200);
+
+    if (!empty($build['#jsonp_callback'])) {
+      $response = new CacheableJsonResponse('', 200);
+      $response->setCallback($build['#jsonp_callback']);
+
+      $build['#cache']['contexts'][] = 'url.query_args:callback';
+    } else {
+      $response = new CacheableResponse('', 200);
+    }
+
     $build['#response'] = $response;
 
     /** @var \Drupal\Core\Render\RendererInterface $renderer */
@@ -390,7 +400,13 @@ class RestExport extends PathPluginBase implements ResponseDisplayPluginInterfac
       return $this->view->style_plugin->render();
     });
 
-    $this->view->element['#content_type'] = $this->getMimeType();
+    if ($jsonpCallback = $this->view->getRequest()->get('callback')) {
+      $this->view->element['#content_type'] = 'text/javascript';
+      $this->view->element['#jsonp_callback'] = $jsonpCallback;
+    } else {
+      $this->view->element['#content_type'] = $this->getMimeType();
+    }
+
     $this->view->element['#cache_properties'][] = '#content_type';
 
     // Encode and wrap the output in a pre tag if this is for a live preview.
