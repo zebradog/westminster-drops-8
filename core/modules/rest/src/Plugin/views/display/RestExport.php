@@ -353,27 +353,20 @@ class RestExport extends PathPluginBase implements ResponseDisplayPluginInterfac
    */
   public static function buildResponse($view_id, $display_id, array $args = []) {
     $build = static::buildBasicRenderable($view_id, $display_id, $args);
+    $build['#cache']['contexts'][] = 'url.query_args:callback';
 
-    // Setup an empty response so headers can be added as needed during views
-    // rendering and processing.
+    $renderer = \Drupal::service('renderer');
+    $output = (string) $renderer->renderRoot($build);
 
     if (!empty($build['#jsonp_callback'])) {
-      $response = new CacheableJsonResponse('', 200);
-      $response->setCallback($build['#jsonp_callback']);
-
-      $build['#cache']['contexts'][] = 'url.query_args:callback';
+     $response = new CacheableJsonResponse($output, 200);
+     $response->setCallback($build['#jsonp_callback']);
     } else {
-      $response = new CacheableResponse('', 200);
+     $response = new CacheableResponse($output, 200);
     }
 
     $build['#response'] = $response;
 
-    /** @var \Drupal\Core\Render\RendererInterface $renderer */
-    $renderer = \Drupal::service('renderer');
-
-    $output = (string) $renderer->renderRoot($build);
-
-    $response->setContent($output);
     $cache_metadata = CacheableMetadata::createFromRenderArray($build);
     $response->addCacheableDependency($cache_metadata);
 
