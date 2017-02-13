@@ -22,3 +22,6 @@ body.path-node .nav-tabs, body.path-user .nav-tabs{
 .credits a:hover img{
   opacity:1.0;
 }
+.progress {
+  overflow: visible;
+}

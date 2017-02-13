@@ -1,0 +1,33 @@
+language: php
+
+php:
+  - 5.5
+  - 5.6
+  - 7.0
+  - hhvm
+
+matrix:
+  fast_finish: true
+
+install:
+  - composer self-update
+  - cd ..
+
+  - git clone --depth 1 --branch 8.0.x https://git.drupal.org/project/drupal.git
+  - git clone --depth 1 --branch 8.x-1.x https://git.drupal.org/project/composer_manager.git
+
+  - mv composer_manager drupal/modules/composer_manager
+  - mv drupal_flysystem drupal/modules/flysystem
+
+  - cd drupal
+
+  - php modules/composer_manager/scripts/init.php
+  - composer drupal-rebuild
+  - composer update --lock --prefer-source
+
+script:
+  - cd modules/flysystem
+  - ../../vendor/bin/phpunit
+
+notifications:
+  email: false

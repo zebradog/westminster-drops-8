@@ -1,0 +1,48 @@
+<?php
+
+use Drupal\flysystem\EditorFileReference;
+
+/**
+ * @file
+ * Provides access to various filesystem backends using Flysystem.
+ */
+
+/**
+ * Implements hook_cron().
+ */
+function flysystem_cron() {
+  Drupal::service('flysystem_factory')->ensure();
+}
+
+/**
+ * Implements hook_rebuild().
+ */
+function flysystem_rebuild() {
+  Drupal::service('flysystem_factory')->ensure();
+}
+
+/**
+ * Implements hook_file_download().
+ */
+function flysystem_file_download($uri) {
+  $schemes = Drupal::service('flysystem_factory')->getSchemes();
+  $scheme = Drupal::service('file_system')->uriScheme($uri);
+
+  if (!$scheme || !in_array($scheme, $schemes, TRUE)) {
+    return;
+  }
+
+  return [
+    'Content-Type' => Drupal::service('file.mime_type.guesser.extension')->guess($uri),
+    'Content-Length' => filesize($uri),
+  ];
+}
+
+/**
+ * Implements hook_filter_info_alter().
+ */
+function flysystem_filter_info_alter(array &$info) {
+  if (isset($info['editor_file_reference'])) {
+    $info['editor_file_reference']['class'] = EditorFileReference::class;
+  }
+}
