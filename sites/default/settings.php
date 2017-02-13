@@ -36,7 +36,7 @@ $databases['default']['default'] = array (
 );
 $settings['hash_salt'] = 'w1lS6DiwEdBAmbu_g44NGrx_IjjOKjOn4bzg-S2fEs2Rr4OkUCPY_WzAFsOTmU_bxy46TU6rWw';
 
-$schemes = [
+/*$schemes = [
   's3' => [
     'driver' => 's3',
     'config' => [
@@ -54,4 +54,4 @@ $schemes = [
   ],
 ];
 
-$settings['flysystem'] = $schemes;
+$settings['flysystem'] = $schemes;*/
