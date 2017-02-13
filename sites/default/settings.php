@@ -24,17 +24,8 @@ if (file_exists($local_settings)) {
   include $local_settings;
 }
 $settings['install_profile'] = 'westminster';
-$databases['default']['default'] = array (
-  'database' => 'westminster_drops_8',
-  'username' => 'root',
-  'password' => 'root',
-  'prefix' => '',
-  'host' => 'localhost',
-  'port' => '3306',
-  'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
-  'driver' => 'mysql',
-);
-$settings['hash_salt'] = 'w1lS6DiwEdBAmbu_g44NGrx_IjjOKjOn4bzg-S2fEs2Rr4OkUCPY_WzAFsOTmU_bxy46TU6rWw';
+
+$settings['hash_salt'] = 'Q2D3Z3MewEe81U79dQyJ_yz8dQpDN7NLRHc7lFvl7BuQSz4TNAYXfwK0i9h3qH3xgm-BESgwMg';
 
 /*$schemes = [
   's3' => [
