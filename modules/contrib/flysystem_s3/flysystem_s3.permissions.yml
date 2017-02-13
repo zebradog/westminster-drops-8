@@ -1,0 +1,2 @@
+use S3 CORS upload:
+  title: 'Upload files directly to S3 using CORS'

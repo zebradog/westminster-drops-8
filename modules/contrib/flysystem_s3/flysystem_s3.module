@@ -1,0 +1,10 @@
+<?php
+
+use Drupal\flysystem_s3\S3CorsManagedFileHelper;
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function flysystem_s3_element_info_alter(array &$types) {
+  S3CorsManagedFileHelper::alterInfo($types);
+}

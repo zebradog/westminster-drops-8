@@ -1,0 +1,21 @@
+{
+    "CORSRules": [
+        {
+            "AllowedOrigins": [
+                "https://example.com"
+            ],
+            "AllowedMethods": [
+                "GET",
+                "PUT",
+                "POST",
+                "DELETE"
+            ],
+            "AllowedHeaders": [
+                "Accept",
+                "Content-Type",
+                "Origin"
+            ],
+            "MaxAgeSeconds": 3000
+        }
+    ]
+}

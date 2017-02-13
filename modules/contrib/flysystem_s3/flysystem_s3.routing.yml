@@ -1,0 +1,7 @@
+flysystem_s3.cors:
+  path: '/flysystem-s3/cors-upload-sign'
+  defaults:
+    _controller: 'Drupal\flysystem_s3\Controller\S3CorsUploadAjaxController::signRequest'
+  requirements:
+    _permission: 'use S3 CORS upload'
+    _method: 'POST'
