@@ -50,5 +50,9 @@
       {{ page_bottom }}
     </div><!-- ./wrapper -->
     <js-bottom-placeholder token="{{ placeholder_token|raw }}">
+    <script>
+      $('.select2-init').select2();
+      $('span.select2').css('width', '100%');
+    </script>
   </body>
 </html>

@@ -19,7 +19,7 @@ function yorkshire_preprocess_page(&$variables) {
         $picture = file_create_url($file->getFileUri());
       }
     }
-  } 
+  }
   $variables['user'] = [];
   $variables['user']['uid'] =  $user->id();
   $variables['user']['name'] = $user->getUsername();
@@ -121,7 +121,7 @@ function yorkshire_theme_suggestions_block_alter(&$suggestions,&$variables) {
       $suggestions[] = 'block__page_manager_page_system_main';
       $suggestions[] = 'block__page_'.$page_manager_page.'_system_main';
     }
-  }else if(array_key_exists('elements',$variables) 
+  }else if(array_key_exists('elements',$variables)
   && array_key_exists('#cache',$variables['elements'])
   && array_key_exists('keys',$variables['elements']['#cache'])
   && in_array("page_manager_block_display",$variables['elements']['#cache']['keys'])){
@@ -131,4 +131,9 @@ function yorkshire_theme_suggestions_block_alter(&$suggestions,&$variables) {
       : $variables['elements']['#configuration']['id'];
     $suggestions[] = 'block__page_manager_page_'.$type;
   }
+}
+
+function yorkshire_preprocess_select(&$variables) {
+  // Prepping select2
+  array_push($variables['attributes']['class'], 'select2-init');
 }

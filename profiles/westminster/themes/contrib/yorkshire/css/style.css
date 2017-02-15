@@ -52,3 +52,12 @@ a.tabledrag-handle .handle {
     margin-top:20px;
   }
 }
+
+.dropbutton > li > input:not(.btn-primary),
+.action-list > li > input:not(.btn-primary) {
+  color: #428bca;
+}
+
+.ui-dialog .ui-dialog-title {
+  color: black;
+}
