@@ -10,8 +10,8 @@ dependencies:
   - image
   - crop (>=8.x-1.0-alpha2)
 
-# Information added by Drupal.org packaging script on 2016-09-01
-version: '8.x-1.0-beta3'
+# Information added by Drupal.org packaging script on 2016-11-21
+version: '8.x-1.0-beta4'
 core: '8.x'
 project: 'focal_point'
-datestamp: 1472695440
+datestamp: 1479749384
