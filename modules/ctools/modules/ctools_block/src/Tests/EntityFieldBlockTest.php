@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Contains \Drupal\ctools_block\Tests\EntityFieldBlockTest.
+ */
+
 namespace Drupal\ctools_block\Tests;
 
 use Drupal\simpletest\WebTestBase;
