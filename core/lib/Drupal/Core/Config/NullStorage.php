@@ -29,14 +29,14 @@ class NullStorage implements StorageInterface {
    * {@inheritdoc}
    */
   public function read($name) {
-    return [];
+    return array();
   }
 
   /**
    * {@inheritdoc}
    */
   public function readMultiple(array $names) {
-    return [];
+    return array();
   }
 
   /**
@@ -78,7 +78,7 @@ class NullStorage implements StorageInterface {
    * {@inheritdoc}
    */
   public function listAll($prefix = '') {
-    return [];
+    return array();
   }
 
   /**
@@ -99,7 +99,7 @@ class NullStorage implements StorageInterface {
    * {@inheritdoc}
    */
   public function getAllCollectionNames() {
-    return [];
+    return array();
   }
 
   /**

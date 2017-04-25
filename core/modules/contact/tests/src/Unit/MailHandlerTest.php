@@ -3,7 +3,6 @@
 namespace Drupal\Tests\contact\Unit;
 
 use Drupal\contact\MailHandler;
-use Drupal\contact\MailHandlerException;
 use Drupal\contact\MessageInterface;
 use Drupal\Core\Language\Language;
 use Drupal\Core\Session\AccountInterface;
@@ -81,7 +80,7 @@ class MailHandlerTest extends UnitTestCase {
 
     $string_translation = $this->getStringTranslationStub();
     $this->contactMailHandler = new MailHandler($this->mailManager, $this->languageManager, $this->logger, $string_translation, $this->entityManager);
-    $language = new Language(['id' => 'en']);
+    $language = new Language(array('id' => 'en'));
 
     $this->languageManager->expects($this->any())
       ->method('getDefaultLanguage')
@@ -94,6 +93,9 @@ class MailHandlerTest extends UnitTestCase {
 
   /**
    * Tests the children() method with an invalid key.
+   *
+   * @expectedException \Drupal\contact\MailHandlerException
+   * @expectedExceptionMessage Unable to determine message recipient
    *
    * @covers ::sendMailMessages
    */
@@ -119,7 +121,6 @@ class MailHandlerTest extends UnitTestCase {
     $sender->expects($this->once())
       ->method('isAnonymous')
       ->willReturn(FALSE);
-    $this->setExpectedException(MailHandlerException::class, 'Unable to determine message recipient');
     $this->contactMailHandler->sendMailMessages($message, $sender);
   }
 
@@ -155,76 +156,76 @@ class MailHandlerTest extends UnitTestCase {
    * Data provider for ::testSendMailMessages.
    */
   public function getSendMailMessages() {
-    $data = [];
-    $recipients = ['admin@drupal.org', 'user@drupal.org'];
-    $default_result = [
+    $data = array();
+    $recipients = array('admin@drupal.org', 'user@drupal.org');
+    $default_result = array(
       'module' => 'contact',
       'key' => '',
       'to' => implode(', ', $recipients),
       'langcode' => 'en',
-      'params' => [],
+      'params' => array(),
       'from' => 'anonymous@drupal.org',
-    ];
-    $results = [];
+    );
+    $results = array();
     $message = $this->getAnonymousMockMessage($recipients, '');
     $sender = $this->getMockSender();
-    $result = [
+    $result = array(
       'key' => 'page_mail',
-      'params' => [
+      'params' => array(
         'contact_message' => $message,
         'sender' => $sender,
         'contact_form' => $message->getContactForm(),
-      ],
-    ];
+      ),
+    );
     $results[] = $result + $default_result;
-    $data[] = [$message, $sender, $results];
+    $data[] = array($message, $sender, $results);
 
-    $results = [];
+    $results = array();
     $message = $this->getAnonymousMockMessage($recipients, 'reply');
     $sender = $this->getMockSender();
-    $result = [
+    $result = array(
       'key' => 'page_mail',
-      'params' => [
+      'params' => array(
         'contact_message' => $message,
         'sender' => $sender,
         'contact_form' => $message->getContactForm(),
-      ],
-    ];
+      ),
+    );
     $results[] = $result + $default_result;
     $result['key'] = 'page_autoreply';
     $result['to'] = 'anonymous@drupal.org';
     $result['from'] = NULL;
     $results[] = $result + $default_result;
-    $data[] = [$message, $sender, $results];
+    $data[] = array($message, $sender, $results);
 
-    $results = [];
+    $results = array();
     $message = $this->getAnonymousMockMessage($recipients, '', TRUE);
     $sender = $this->getMockSender();
-    $result = [
+    $result = array(
       'key' => 'page_mail',
-      'params' => [
+      'params' => array(
         'contact_message' => $message,
         'sender' => $sender,
         'contact_form' => $message->getContactForm(),
-      ],
-    ];
+      ),
+    );
     $results[] = $result + $default_result;
     $result['key'] = 'page_copy';
     $result['to'] = 'anonymous@drupal.org';
     $results[] = $result + $default_result;
-    $data[] = [$message, $sender, $results];
+    $data[] = array($message, $sender, $results);
 
-    $results = [];
+    $results = array();
     $message = $this->getAnonymousMockMessage($recipients, 'reply', TRUE);
     $sender = $this->getMockSender();
-    $result = [
+    $result = array(
       'key' => 'page_mail',
-      'params' => [
+      'params' => array(
         'contact_message' => $message,
         'sender' => $sender,
         'contact_form' => $message->getContactForm(),
-      ],
-    ];
+      ),
+    );
     $results[] = $result + $default_result;
     $result['key'] = 'page_copy';
     $result['to'] = 'anonymous@drupal.org';
@@ -232,48 +233,48 @@ class MailHandlerTest extends UnitTestCase {
     $result['key'] = 'page_autoreply';
     $result['from'] = NULL;
     $results[] = $result + $default_result;
-    $data[] = [$message, $sender, $results];
+    $data[] = array($message, $sender, $results);
 
     //For authenticated user.
-    $results = [];
+    $results = array();
     $message = $this->getAuthenticatedMockMessage();
     $sender = $this->getMockSender(FALSE, 'user@drupal.org');
-    $result = [
+    $result = array(
       'module' => 'contact',
       'key' => 'user_mail',
       'to' => 'user2@drupal.org',
       'langcode' => 'en',
-      'params' => [
+      'params' => array(
         'contact_message' => $message,
         'sender' => $sender,
         'recipient' => $message->getPersonalRecipient(),
-      ],
+      ),
       'from' => 'user@drupal.org',
-    ];
+    );
     $results[] = $result;
-    $data[] = [$message, $sender, $results];
+    $data[] = array($message, $sender, $results);
 
-    $results = [];
+    $results = array();
     $message = $this->getAuthenticatedMockMessage(TRUE);
     $sender = $this->getMockSender(FALSE, 'user@drupal.org');
-    $result = [
+    $result = array(
       'module' => 'contact',
       'key' => 'user_mail',
       'to' => 'user2@drupal.org',
       'langcode' => 'en',
-      'params' => [
+      'params' => array(
         'contact_message' => $message,
         'sender' => $sender,
         'recipient' => $message->getPersonalRecipient(),
-      ],
+      ),
       'from' => 'user@drupal.org',
-    ];
+    );
     $results[] = $result;
 
     $result['key'] = 'user_copy';
     $result['to'] = $result['from'];
     $results[] = $result;
-    $data[] = [$message, $sender, $results];
+    $data[] = array($message, $sender, $results);
 
     return $data;
   }

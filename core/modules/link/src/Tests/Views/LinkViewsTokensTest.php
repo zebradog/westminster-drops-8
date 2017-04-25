@@ -40,27 +40,27 @@ class LinkViewsTokensTest extends ViewTestBase {
    */
   protected function setUp() {
     parent::setUp();
-    ViewTestData::createTestViews(get_class($this), ['link_test_views']);
+    ViewTestData::createTestViews(get_class($this), array('link_test_views'));
 
     // Create Basic page node type.
-    $this->drupalCreateContentType([
+    $this->drupalCreateContentType(array(
       'type' => 'page',
       'name' => 'Basic page'
-    ]);
+    ));
 
     // Create a field.
-    FieldStorageConfig::create([
+    FieldStorageConfig::create(array(
       'field_name' => $this->fieldName,
       'type' => 'link',
       'entity_type' => 'node',
       'cardinality' => 1,
-    ])->save();
-    FieldConfig::create([
+    ))->save();
+    FieldConfig::create(array(
       'field_name' => $this->fieldName,
       'entity_type' => 'node',
       'bundle' => 'page',
       'label' => 'link field',
-    ])->save();
+    ))->save();
 
   }
 
@@ -72,7 +72,7 @@ class LinkViewsTokensTest extends ViewTestBase {
 
     // Add nodes with the URI's and titles.
     foreach ($uris as $uri => $title) {
-      $values = ['type' => 'page'];
+      $values = array('type' => 'page');
       $values[$this->fieldName][] = ['uri' => $uri, 'title' => $title, 'options' => ['attributes' => ['class' => 'test-link-class']]];
       $this->drupalCreateNode($values);
     }

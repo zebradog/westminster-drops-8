@@ -17,30 +17,30 @@ class FilterSettingsTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['filter'];
+  public static $modules = array('filter');
 
   /**
    * Tests explicit and implicit default settings for filters.
    */
-  public function testFilterDefaults() {
+  function testFilterDefaults() {
     $filter_info = $this->container->get('plugin.manager.filter')->getDefinitions();
 
     // Create text format using filter default settings.
-    $filter_defaults_format = FilterFormat::create([
+    $filter_defaults_format = FilterFormat::create(array(
       'format' => 'filter_defaults',
       'name' => 'Filter defaults',
-    ]);
+    ));
     $filter_defaults_format->save();
 
     // Verify that default weights defined in hook_filter_info() were applied.
-    $saved_settings = [];
+    $saved_settings = array();
     foreach ($filter_defaults_format->filters() as $name => $filter) {
       $expected_weight = $filter_info[$name]['weight'];
-      $this->assertEqual($filter->weight, $expected_weight, format_string('@name filter weight %saved equals %default', [
+      $this->assertEqual($filter->weight, $expected_weight, format_string('@name filter weight %saved equals %default', array(
         '@name' => $name,
         '%saved' => $filter->weight,
         '%default' => $expected_weight,
-      ]));
+      )));
       $saved_settings[$name]['weight'] = $expected_weight;
     }
 
@@ -51,11 +51,11 @@ class FilterSettingsTest extends KernelTestBase {
 
     // Verify that saved filter settings have not been changed.
     foreach ($filter_defaults_format->filters() as $name => $filter) {
-      $this->assertEqual($filter->weight, $saved_settings[$name]['weight'], format_string('@name filter weight %saved equals %previous', [
+      $this->assertEqual($filter->weight, $saved_settings[$name]['weight'], format_string('@name filter weight %saved equals %previous', array(
         '@name' => $name,
         '%saved' => $filter->weight,
         '%previous' => $saved_settings[$name]['weight'],
-      ]));
+      )));
     }
   }
 

@@ -60,36 +60,36 @@ class NumberTest extends UnitTestCase {
    * @see \Drupal\Tests\Component\Utility\Number::testValidStep
    */
   public static function providerTestValidStep() {
-    return [
+    return array(
       // Value and step equal.
-      [10.3, 10.3, TRUE],
+      array(10.3, 10.3, TRUE),
 
       // Valid integer steps.
-      [42, 21, TRUE],
-      [42, 3, TRUE],
+      array(42, 21, TRUE),
+      array(42, 3, TRUE),
 
       // Valid float steps.
-      [42, 10.5, TRUE],
-      [1, 1 / 3, TRUE],
-      [-100, 100 / 7, TRUE],
-      [1000, -10, TRUE],
+      array(42, 10.5, TRUE),
+      array(1, 1 / 3, TRUE),
+      array(-100, 100 / 7, TRUE),
+      array(1000, -10, TRUE),
 
       // Valid and very small float steps.
-      [1000.12345, 1e-10, TRUE],
-      [3.9999999999999, 1e-13, TRUE],
+      array(1000.12345, 1e-10, TRUE),
+      array(3.9999999999999, 1e-13, TRUE),
 
       // Invalid integer steps.
-      [100, 30, FALSE],
-      [-10, 4, FALSE],
+      array(100, 30, FALSE),
+      array(-10, 4, FALSE),
 
       // Invalid float steps.
-      [6, 5 / 7, FALSE],
-      [10.3, 10.25, FALSE],
+      array(6, 5 / 7, FALSE),
+      array(10.3, 10.25, FALSE),
 
       // Step mismatches very close to being valid.
-      [70 + 9e-7, 10 + 9e-7, FALSE],
-      [1936.5, 3e-8, FALSE],
-    ];
+      array(70 + 9e-7, 10 + 9e-7, FALSE),
+      array(1936.5, 3e-8, FALSE),
+    );
   }
 
   /**
@@ -98,22 +98,22 @@ class NumberTest extends UnitTestCase {
    * @see \Drupal\Test\Component\Utility\NumberTest::testValidStepOffset()
    */
   public static function providerTestValidStepOffset() {
-    return [
+    return array(
       // Try obvious fits.
-      [11.3, 10.3, 1, TRUE],
-      [100, 10, 50, TRUE],
-      [-100, 90 / 7, -10, TRUE],
-      [2 / 7 + 5 / 9, 1 / 7, 5 / 9, TRUE],
+      array(11.3, 10.3, 1, TRUE),
+      array(100, 10, 50, TRUE),
+      array(-100, 90 / 7, -10, TRUE),
+      array(2 / 7 + 5 / 9, 1 / 7, 5 / 9, TRUE),
 
       // Ensure a small offset is still invalid.
-      [10.3, 10.3, 0.0001, FALSE],
-      [1 / 5, 1 / 7, 1 / 11, FALSE],
+      array(10.3, 10.3, 0.0001, FALSE),
+      array(1 / 5, 1 / 7, 1 / 11, FALSE),
 
       // Try negative values and offsets.
-      [1000, 10, -5, FALSE],
-      [-10, 4, 0, FALSE],
-      [-10, 4, -4, FALSE],
-    ];
+      array(1000, 10, -5, FALSE),
+      array(-10, 4, 0, FALSE),
+      array(-10, 4, -4, FALSE),
+    );
   }
 
   /**
@@ -144,15 +144,15 @@ class NumberTest extends UnitTestCase {
    *     - The alphadecimal value.
    */
   public function providerTestConversions() {
-    return [
-      [0, '00'],
-      [1, '01'],
-      [10, '0a'],
-      [20, '0k'],
-      [35, '0z'],
-      [36, '110'],
-      [100, '12s'],
-    ];
+    return array(
+      array(0, '00'),
+      array(1, '01'),
+      array(10, '0a'),
+      array(20, '0k'),
+      array(35, '0z'),
+      array(36, '110'),
+      array(100, '12s'),
+    );
   }
 
 }

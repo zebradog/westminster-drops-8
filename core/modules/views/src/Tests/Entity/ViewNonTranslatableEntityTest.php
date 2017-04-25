@@ -18,12 +18,12 @@ class ViewNonTranslatableEntityTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  public static $modules = array(
     'entity_test',
     'content_translation',
     'language_test',
     'views_ui',
-  ];
+  );
 
   /**
    * Tests displaying a view of non-translatable entities.

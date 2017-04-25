@@ -21,61 +21,61 @@ class FormTestProgrammaticForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['textfield'] = [
+    $form['textfield'] = array(
       '#title' => 'Textfield',
       '#type' => 'textfield',
-    ];
+    );
 
-    $form['checkboxes'] = [
+    $form['checkboxes'] = array(
       '#title' => t('Checkboxes'),
       '#type' => 'checkboxes',
-      '#options' => [
+      '#options' => array(
         1 => 'First checkbox',
         2 => 'Second checkbox',
-      ],
+      ),
       // Both checkboxes are selected by default so that we can test the ability
       // of programmatic form submissions to uncheck them.
-      '#default_value' => [1, 2],
-    ];
+      '#default_value' => array(1, 2),
+    );
 
-    $form['field_to_validate'] = [
+    $form['field_to_validate'] = array(
       '#type' => 'radios',
       '#title' => 'Field to validate (in the case of limited validation)',
       '#description' => 'If the form is submitted by clicking the "Submit with limited validation" button, then validation can be limited based on the value of this radio button.',
-      '#options' => [
+      '#options' => array(
         'all' => 'Validate all fields',
         'textfield' => 'Validate the "Textfield" field',
         'field_to_validate' => 'Validate the "Field to validate" field',
-      ],
+      ),
       '#default_value' => 'all',
-    ];
+    );
 
-    $form['field_restricted'] = [
+    $form['field_restricted'] = array(
       '#type' => 'textfield',
       '#title' => 'Textfield (no access)',
       '#access' => FALSE,
-    ];
+    );
 
     // The main submit button for the form.
-    $form['submit'] = [
+    $form['submit'] = array(
       '#type' => 'submit',
       '#value' => 'Submit',
-    ];
+    );
     // A secondary submit button that allows validation to be limited based on
     // the value of the above radio selector.
-    $form['submit_limit_validation'] = [
+    $form['submit_limit_validation'] = array(
       '#type' => 'submit',
       '#value' => 'Submit with limited validation',
       // Use the same submit handler for this button as for the form itself.
       // (This must be set explicitly or otherwise the form API will ignore the
       // #limit_validation_errors property.)
-      '#submit' => ['::submitForm'],
-    ];
+      '#submit' => array('::submitForm'),
+    );
     $user_input = $form_state->getUserInput();
     if (!empty($user_input['field_to_validate']) && $user_input['field_to_validate'] != 'all') {
-      $form['submit_limit_validation']['#limit_validation_errors'] = [
-        [$user_input['field_to_validate']],
-      ];
+      $form['submit_limit_validation']['#limit_validation_errors'] = array(
+        array($user_input['field_to_validate']),
+      );
     }
 
     return $form;

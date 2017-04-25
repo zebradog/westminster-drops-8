@@ -34,7 +34,7 @@ function field_test_field_storage_config_update_forbid(FieldStorageConfigInterfa
  * Sample 'default value' callback.
  */
 function field_test_default_value(FieldableEntityInterface $entity, FieldDefinitionInterface $definition) {
-  return [['value' => 99]];
+  return array(array('value' => 99));
 }
 
 /**

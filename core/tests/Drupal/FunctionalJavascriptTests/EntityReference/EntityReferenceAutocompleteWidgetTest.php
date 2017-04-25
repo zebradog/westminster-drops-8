@@ -52,9 +52,9 @@ class EntityReferenceAutocompleteWidgetTest extends JavascriptTestBase {
     entity_get_form_display('node', 'page', 'default')
       ->setComponent($field_name, [
         'type' => 'entity_reference_autocomplete',
-        'settings' => [
+        'settings' => array(
           'match_operator' => 'CONTAINS',
-        ],
+        ),
       ])
       ->save();
 
@@ -78,9 +78,9 @@ class EntityReferenceAutocompleteWidgetTest extends JavascriptTestBase {
     entity_get_form_display('node', 'page', 'default')
       ->setComponent($field_name, [
         'type' => 'entity_reference_autocomplete',
-        'settings' => [
+        'settings' => array(
           'match_operator' => 'STARTS_WITH',
-        ],
+        ),
       ])
       ->save();
 

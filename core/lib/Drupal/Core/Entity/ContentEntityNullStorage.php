@@ -15,7 +15,7 @@ class ContentEntityNullStorage extends ContentEntityStorageBase {
    * {@inheritdoc}
    */
   public function loadMultiple(array $ids = NULL) {
-    return [];
+    return array();
   }
 
   /**
@@ -47,8 +47,8 @@ class ContentEntityNullStorage extends ContentEntityStorageBase {
   /**
    * {@inheritdoc}
    */
-  public function loadByProperties(array $values = []) {
-    return [];
+  public function loadByProperties(array $values = array()) {
+    return array();
   }
 
   /**
@@ -104,7 +104,7 @@ class ContentEntityNullStorage extends ContentEntityStorageBase {
    * {@inheritdoc}
    */
   protected function readFieldItemsToPurge(FieldDefinitionInterface $field_definition, $batch_size) {
-    return [];
+    return array();
   }
 
   /**

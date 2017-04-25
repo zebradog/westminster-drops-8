@@ -18,9 +18,9 @@ class ArgumentUserUIDTest extends CommentTestBase {
    *
    * @var array
    */
-  public static $testViews = ['test_comment_user_uid'];
+  public static $testViews = array('test_comment_user_uid');
 
-  public function testCommentUserUIDTest() {
+  function testCommentUserUIDTest() {
     // Add an additional comment which is not created by the user.
     $new_user = User::create(['name' => 'new user']);
     $new_user->save();
@@ -35,16 +35,16 @@ class ArgumentUserUIDTest extends CommentTestBase {
     $comment->save();
 
     $view = Views::getView('test_comment_user_uid');
-    $this->executeView($view, [$this->account->id()]);
-    $result_set = [
-      [
+    $this->executeView($view, array($this->account->id()));
+    $result_set = array(
+      array(
         'nid' => $this->nodeUserPosted->id(),
-      ],
-      [
+      ),
+      array(
         'nid' => $this->nodeUserCommented->id(),
-      ],
-    ];
-    $column_map = ['nid' => 'nid'];
+      ),
+    );
+    $column_map = array('nid' => 'nid');
     $this->assertIdenticalResultset($view, $result_set, $column_map);
   }
 

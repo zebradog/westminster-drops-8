@@ -66,8 +66,8 @@ class View extends AreaPluginBase {
   protected function defineOptions() {
     $options = parent::defineOptions();
 
-    $options['view_to_insert'] = ['default' => ''];
-    $options['inherit_arguments'] = ['default' => FALSE];
+    $options['view_to_insert'] = array('default' => '');
+    $options['inherit_arguments'] = array('default' => FALSE);
     return $options;
   }
 
@@ -79,22 +79,22 @@ class View extends AreaPluginBase {
 
     $view_display = $this->view->storage->id() . ':' . $this->view->current_display;
 
-    $options = ['' => $this->t('-Select-')];
+    $options = array('' => $this->t('-Select-'));
     $options += Views::getViewsAsOptions(FALSE, 'all', $view_display, FALSE, TRUE);
-    $form['view_to_insert'] = [
+    $form['view_to_insert'] = array(
       '#type' => 'select',
       '#title' => $this->t('View to insert'),
       '#default_value' => $this->options['view_to_insert'],
       '#description' => $this->t('The view to insert into this area.'),
       '#options' => $options,
-    ];
+    );
 
-    $form['inherit_arguments'] = [
+    $form['inherit_arguments'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Inherit contextual filters'),
       '#default_value' => $this->options['inherit_arguments'],
       '#description' => $this->t('If checked, this view will receive the same contextual filters as its parent.'),
-    ];
+    );
   }
 
   /**
@@ -107,7 +107,7 @@ class View extends AreaPluginBase {
       $view = $this->viewStorage->load($view_name)->getExecutable();
 
       if (empty($view) || !$view->access($display_id)) {
-        return [];
+        return array();
       }
       $view->setDisplay($display_id);
 
@@ -118,7 +118,7 @@ class View extends AreaPluginBase {
       // Check if the view is part of the parent views of this view
       $search = "$view_name:$display_id";
       if (in_array($search, $this->view->parent_views)) {
-        drupal_set_message(t("Recursion detected in view @view display @display.", ['@view' => $view_name, '@display' => $display_id]), 'error');
+        drupal_set_message(t("Recursion detected in view @view display @display.", array('@view' => $view_name, '@display' => $display_id)), 'error');
       }
       else {
         if (!empty($this->options['inherit_arguments']) && !empty($this->view->args)) {
@@ -131,7 +131,7 @@ class View extends AreaPluginBase {
         return $output;
       }
     }
-    return [];
+    return array();
   }
 
   /**

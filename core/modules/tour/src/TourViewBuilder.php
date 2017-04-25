@@ -13,35 +13,35 @@ class TourViewBuilder extends EntityViewBuilder {
   /**
    * {@inheritdoc}
    */
-  public function viewMultiple(array $entities = [], $view_mode = 'full', $langcode = NULL) {
+  public function viewMultiple(array $entities = array(), $view_mode = 'full', $langcode = NULL) {
     /** @var \Drupal\tour\TourInterface[] $entities */
-    $build = [];
+    $build = array();
     foreach ($entities as $entity_id => $entity) {
       $tips = $entity->getTips();
       $count = count($tips);
-      $list_items = [];
+      $list_items = array();
       foreach ($tips as $index => $tip) {
         if ($output = $tip->getOutput()) {
-          $attributes = [
-            'class' => [
+          $attributes = array(
+            'class' => array(
               'tip-module-' . Html::cleanCssIdentifier($entity->getModule()),
               'tip-type-' . Html::cleanCssIdentifier($tip->getPluginId()),
               'tip-' . Html::cleanCssIdentifier($tip->id()),
-            ],
-          ];
-          $list_items[] = [
+            ),
+          );
+          $list_items[] = array(
             'output' => $output,
-            'counter' => [
+            'counter' => array(
               '#type' => 'container',
-              '#attributes' => [
-                'class' => [
+              '#attributes' => array(
+                'class' => array(
                   'tour-progress',
-                ],
-              ],
-              '#children' => t('@tour_item of @total', ['@tour_item' => $index + 1, '@total' => $count]),
-            ],
+                ),
+              ),
+              '#children' => t('@tour_item of @total', array('@tour_item' => $index + 1, '@total' => $count)),
+            ),
             '#wrapper_attributes' => $tip->getAttributes() + $attributes,
-          ];
+          );
         }
       }
       // If there is at least one tour item, build the tour.
@@ -49,20 +49,20 @@ class TourViewBuilder extends EntityViewBuilder {
         end($list_items);
         $key = key($list_items);
         $list_items[$key]['#wrapper_attributes']['data-text'] = t('End tour');
-        $build[$entity_id] = [
+        $build[$entity_id] = array(
           '#theme' => 'item_list',
           '#items' => $list_items,
           '#list_type' => 'ol',
-          '#attributes' => [
+          '#attributes' => array(
             'id' => 'tour',
-            'class' => [
+            'class' => array(
               'hidden',
-            ],
-          ],
+            ),
+          ),
           '#cache' => [
             'tags' => $entity->getCacheTags(),
           ],
-        ];
+        );
       }
     }
     // If at least one tour was built, attach the tour library.

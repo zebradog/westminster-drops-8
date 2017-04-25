@@ -23,29 +23,29 @@ class StringTextfieldWidget extends WidgetBase {
    * {@inheritdoc}
    */
   public static function defaultSettings() {
-    return [
+    return array(
       'size' => 60,
       'placeholder' => '',
-    ] + parent::defaultSettings();
+    ) + parent::defaultSettings();
   }
 
   /**
    * {@inheritdoc}
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
-    $element['size'] = [
+    $element['size'] = array(
       '#type' => 'number',
       '#title' => t('Size of textfield'),
       '#default_value' => $this->getSetting('size'),
       '#required' => TRUE,
       '#min' => 1,
-    ];
-    $element['placeholder'] = [
+    );
+    $element['placeholder'] = array(
       '#type' => 'textfield',
       '#title' => t('Placeholder'),
       '#default_value' => $this->getSetting('placeholder'),
       '#description' => t('Text that will be shown inside the field until a value is entered. This hint is usually a sample value or a brief description of the expected format.'),
-    ];
+    );
     return $element;
   }
 
@@ -53,12 +53,12 @@ class StringTextfieldWidget extends WidgetBase {
    * {@inheritdoc}
    */
   public function settingsSummary() {
-    $summary = [];
+    $summary = array();
 
-    $summary[] = t('Textfield size: @size', ['@size' => $this->getSetting('size')]);
+    $summary[] = t('Textfield size: @size', array('@size' => $this->getSetting('size')));
     $placeholder = $this->getSetting('placeholder');
     if (!empty($placeholder)) {
-      $summary[] = t('Placeholder: @placeholder', ['@placeholder' => $placeholder]);
+      $summary[] = t('Placeholder: @placeholder', array('@placeholder' => $placeholder));
     }
 
     return $summary;
@@ -68,14 +68,14 @@ class StringTextfieldWidget extends WidgetBase {
    * {@inheritdoc}
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
-    $element['value'] = $element + [
+    $element['value'] = $element + array(
       '#type' => 'textfield',
       '#default_value' => isset($items[$delta]->value) ? $items[$delta]->value : NULL,
       '#size' => $this->getSetting('size'),
       '#placeholder' => $this->getSetting('placeholder'),
       '#maxlength' => $this->getFieldSetting('max_length'),
-      '#attributes' => ['class' => ['js-text-full', 'text-full']],
-    ];
+      '#attributes' => array('class' => array('js-text-full', 'text-full')),
+    );
 
     return $element;
   }

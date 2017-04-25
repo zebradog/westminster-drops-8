@@ -19,7 +19,7 @@ abstract class MenuLinkBase extends PluginBase implements MenuLinkInterface {
    *
    * @var array
    */
-  protected $overrideAllowed = [];
+  protected $overrideAllowed = array();
 
   /**
    * {@inheritdoc}
@@ -92,14 +92,14 @@ abstract class MenuLinkBase extends PluginBase implements MenuLinkInterface {
    * {@inheritdoc}
    */
   public function getOptions() {
-    return $this->pluginDefinition['options'] ?: [];
+    return $this->pluginDefinition['options'] ?: array();
   }
 
   /**
    * {@inheritdoc}
    */
   public function getMetaData() {
-    return $this->pluginDefinition['metadata'] ?: [];
+    return $this->pluginDefinition['metadata'] ?: array();
   }
 
   /**
@@ -113,7 +113,7 @@ abstract class MenuLinkBase extends PluginBase implements MenuLinkInterface {
    * {@inheritdoc}
    */
   public function getRouteParameters() {
-    return isset($this->pluginDefinition['route_parameters']) ? $this->pluginDefinition['route_parameters'] : [];
+    return isset($this->pluginDefinition['route_parameters']) ? $this->pluginDefinition['route_parameters'] : array();
   }
 
   /**

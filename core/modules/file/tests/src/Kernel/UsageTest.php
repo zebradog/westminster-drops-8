@@ -18,25 +18,25 @@ class UsageTest extends FileManagedUnitTestBase {
   /**
    * Tests \Drupal\file\FileUsage\DatabaseFileUsageBackend::listUsage().
    */
-  public function testGetUsage() {
+  function testGetUsage() {
     $file = $this->createFile();
     db_insert('file_usage')
-      ->fields([
+      ->fields(array(
         'fid' => $file->id(),
         'module' => 'testing',
         'type' => 'foo',
         'id' => 1,
         'count' => 1
-      ])
+      ))
       ->execute();
     db_insert('file_usage')
-      ->fields([
+      ->fields(array(
         'fid' => $file->id(),
         'module' => 'testing',
         'type' => 'bar',
         'id' => 2,
         'count' => 2
-      ])
+      ))
       ->execute();
 
     $usage = $this->container->get('file.usage')->listUsage($file);
@@ -51,7 +51,7 @@ class UsageTest extends FileManagedUnitTestBase {
   /**
    * Tests \Drupal\file\FileUsage\DatabaseFileUsageBackend::add().
    */
-  public function testAddUsage() {
+  function testAddUsage() {
     $file = $this->createFile();
     $file_usage = $this->container->get('file.usage');
     $file_usage->add($file, 'testing', 'foo', 1);
@@ -77,23 +77,23 @@ class UsageTest extends FileManagedUnitTestBase {
   /**
    * Tests \Drupal\file\FileUsage\DatabaseFileUsageBackend::delete().
    */
-  public function testRemoveUsage() {
+  function testRemoveUsage() {
     $file = $this->createFile();
     $file_usage = $this->container->get('file.usage');
     db_insert('file_usage')
-      ->fields([
+      ->fields(array(
         'fid' => $file->id(),
         'module' => 'testing',
         'type' => 'bar',
         'id' => 2,
         'count' => 3,
-      ])
+      ))
       ->execute();
 
     // Normal decrement.
     $file_usage->delete($file, 'testing', 'bar', 2);
     $count = db_select('file_usage', 'f')
-      ->fields('f', ['count'])
+      ->fields('f', array('count'))
       ->condition('f.fid', $file->id())
       ->execute()
       ->fetchField();
@@ -102,7 +102,7 @@ class UsageTest extends FileManagedUnitTestBase {
     // Multiple decrement and removal.
     $file_usage->delete($file, 'testing', 'bar', 2, 2);
     $count = db_select('file_usage', 'f')
-      ->fields('f', ['count'])
+      ->fields('f', array('count'))
       ->condition('f.fid', $file->id())
       ->execute()
       ->fetchField();
@@ -111,7 +111,7 @@ class UsageTest extends FileManagedUnitTestBase {
     // Non-existent decrement.
     $file_usage->delete($file, 'testing', 'bar', 2);
     $count = db_select('file_usage', 'f')
-      ->fields('f', ['count'])
+      ->fields('f', array('count'))
       ->condition('f.fid', $file->id())
       ->execute()
       ->fetchField();
@@ -124,14 +124,14 @@ class UsageTest extends FileManagedUnitTestBase {
    * We are using UPDATE statements because using the API would set the
    * timestamp.
    */
-  public function createTempFiles() {
+  function createTempFiles() {
     // Temporary file that is old.
     $temp_old = file_save_data('');
     db_update('file_managed')
-      ->fields([
+      ->fields(array(
         'status' => 0,
         'changed' => REQUEST_TIME - $this->config('system.file')->get('temporary_maximum_age') - 1,
-      ])
+      ))
       ->condition('fid', $temp_old->id())
       ->execute();
     $this->assertTrue(file_exists($temp_old->getFileUri()), 'Old temp file was created correctly.');
@@ -139,7 +139,7 @@ class UsageTest extends FileManagedUnitTestBase {
     // Temporary file that is new.
     $temp_new = file_save_data('');
     db_update('file_managed')
-      ->fields(['status' => 0])
+      ->fields(array('status' => 0))
       ->condition('fid', $temp_new->id())
       ->execute();
     $this->assertTrue(file_exists($temp_new->getFileUri()), 'New temp file was created correctly.');
@@ -147,7 +147,7 @@ class UsageTest extends FileManagedUnitTestBase {
     // Permanent file that is old.
     $perm_old = file_save_data('');
     db_update('file_managed')
-      ->fields(['changed' => REQUEST_TIME - $this->config('system.file')->get('temporary_maximum_age') - 1])
+      ->fields(array('changed' => REQUEST_TIME - $this->config('system.file')->get('temporary_maximum_age') - 1))
       ->condition('fid', $temp_old->id())
       ->execute();
     $this->assertTrue(file_exists($perm_old->getFileUri()), 'Old permanent file was created correctly.');
@@ -155,13 +155,13 @@ class UsageTest extends FileManagedUnitTestBase {
     // Permanent file that is new.
     $perm_new = file_save_data('');
     $this->assertTrue(file_exists($perm_new->getFileUri()), 'New permanent file was created correctly.');
-    return [$temp_old, $temp_new, $perm_old, $perm_new];
+    return array($temp_old, $temp_new, $perm_old, $perm_new);
   }
 
   /**
    * Ensure that temporary files are removed by default.
    */
-  public function testTempFileCleanupDefault() {
+  function testTempFileCleanupDefault() {
     list($temp_old, $temp_new, $perm_old, $perm_new) = $this->createTempFiles();
 
     // Run cron and then ensure that only the old, temp file was deleted.
@@ -175,7 +175,7 @@ class UsageTest extends FileManagedUnitTestBase {
   /**
    * Ensure that temporary files are kept as configured.
    */
-  public function testTempFileNoCleanup() {
+  function testTempFileNoCleanup() {
     list($temp_old, $temp_new, $perm_old, $perm_new) = $this->createTempFiles();
 
     // Set the max age to 0, meaning no temporary files will be deleted.
@@ -194,7 +194,7 @@ class UsageTest extends FileManagedUnitTestBase {
   /**
    * Ensure that temporary files are kept as configured.
    */
-  public function testTempFileCustomCleanup() {
+  function testTempFileCustomCleanup() {
     list($temp_old, $temp_new, $perm_old, $perm_new) = $this->createTempFiles();
 
     // Set the max age to older than default.

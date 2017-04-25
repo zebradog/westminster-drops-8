@@ -151,7 +151,7 @@ class RendererTest extends RendererTestBase {
     // Test #allowed_tags in combination with #markup and #pre_render.
     $data[] = [[
       '#markup' => 'foo',
-      '#allowed_tags' => ['script'],
+      '#allowed_tags' => array('script'),
       '#pre_render' => [function($elements) {
         $elements['#markup'] .= '<script>alert("bar");</script>';
         return $elements;
@@ -408,17 +408,17 @@ class RendererTest extends RendererTestBase {
     $first = $this->randomMachineName();
     $second = $this->randomMachineName();
     // The same array structure again, but with #sorted set to TRUE.
-    $elements = [
-      'second' => [
+    $elements = array(
+      'second' => array(
         '#weight' => 10,
         '#markup' => $second,
-      ],
-      'first' => [
+      ),
+      'first' => array(
         '#weight' => 0,
         '#markup' => $first,
-      ],
+      ),
       '#sorted' => TRUE,
-    ];
+    );
     $output = $this->renderer->renderRoot($elements);
 
     // The elements should appear in output in the same order as the array.
@@ -597,9 +597,9 @@ class RendererTest extends RendererTestBase {
    * @covers ::doRender
    */
   public function testRenderWithoutThemeArguments() {
-    $element = [
+    $element = array(
       '#theme' => 'common_test_foo',
-    ];
+    );
 
     $this->themeManager->expects($this->once())
       ->method('render')
@@ -615,11 +615,11 @@ class RendererTest extends RendererTestBase {
    * @covers ::doRender
    */
   public function testRenderWithThemeArguments() {
-    $element = [
+    $element = array(
       '#theme' => 'common_test_foo',
       '#foo' => $this->randomMachineName(),
       '#bar' => $this->randomMachineName(),
-    ];
+    );
 
     $this->themeManager->expects($this->once())
       ->method('render')

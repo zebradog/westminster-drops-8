@@ -16,21 +16,21 @@ class LocaleFileSystemFormTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = ['system'];
+  public static $modules = array('system');
 
   /**
    * {@inheritdoc}
    */
   protected function setUp(){
     parent::setUp();
-    $account = $this->drupalCreateUser(['administer site configuration']);
+    $account = $this->drupalCreateUser(array('administer site configuration'));
     $this->drupalLogin($account);
   }
 
   /**
    * Tests translation directory settings on the file settings form.
    */
-  public function testFileConfigurationPage() {
+  function testFileConfigurationPage() {
     // By default there should be no setting for the translation directory.
     $this->drupalGet('admin/config/media/file-system');
     $this->assertNoFieldByName('translation_path');
@@ -44,9 +44,9 @@ class LocaleFileSystemFormTest extends WebTestBase {
 
     // The setting should persist.
     $translation_path = $this->publicFilesDirectory . '/translations_changed';
-    $fields = [
+    $fields = array(
       'translation_path' => $translation_path
-    ];
+    );
     $this->drupalPostForm(NULL, $fields, t('Save configuration'));
     $this->drupalGet('admin/config/media/file-system');
     $this->assertFieldByName('translation_path', $translation_path);

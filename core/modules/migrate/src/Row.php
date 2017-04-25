@@ -15,21 +15,21 @@ class Row {
    *
    * @var array
    */
-  protected $source = [];
+  protected $source = array();
 
   /**
    * The source identifiers.
    *
    * @var array
    */
-  protected $sourceIds = [];
+  protected $sourceIds = array();
 
   /**
    * The destination values.
    *
    * @var array
    */
-  protected $destination = [];
+  protected $destination = array();
 
   /**
    * Level separator of destination and source properties.
@@ -41,11 +41,11 @@ class Row {
    *
    * @var array
    */
-  protected $idMap = [
+  protected $idMap = array(
     'original_hash' => '',
     'hash' => '',
     'source_row_status' => MigrateIdMapInterface::STATUS_NEEDS_UPDATE,
-  ];
+  );
 
   /**
    * Whether the source has been frozen already.

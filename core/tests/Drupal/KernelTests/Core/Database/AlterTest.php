@@ -13,7 +13,7 @@ class AlterTest extends DatabaseTestBase {
   /**
    * Tests that we can do basic alters.
    */
-  public function testSimpleAlter() {
+  function testSimpleAlter() {
     $query = db_select('test');
     $query->addField('test', 'name');
     $query->addField('test', 'age', 'age');
@@ -27,7 +27,7 @@ class AlterTest extends DatabaseTestBase {
   /**
    * Tests that we can alter the joins on a query.
    */
-  public function testAlterWithJoin() {
+  function testAlterWithJoin() {
     $query = db_select('test_task');
     $tid_field = $query->addField('test_task', 'tid');
     $task_field = $query->addField('test_task', 'task');
@@ -51,7 +51,7 @@ class AlterTest extends DatabaseTestBase {
   /**
    * Tests that we can alter a query's conditionals.
    */
-  public function testAlterChangeConditional() {
+  function testAlterChangeConditional() {
     $query = db_select('test_task');
     $tid_field = $query->addField('test_task', 'tid');
     $pid_field = $query->addField('test_task', 'pid');
@@ -76,7 +76,7 @@ class AlterTest extends DatabaseTestBase {
   /**
    * Tests that we can alter the fields of a query.
    */
-  public function testAlterChangeFields() {
+  function testAlterChangeFields() {
     $query = db_select('test');
     $name_field = $query->addField('test', 'name');
     $age_field = $query->addField('test', 'age', 'age');
@@ -91,7 +91,7 @@ class AlterTest extends DatabaseTestBase {
   /**
    * Tests that we can alter expressions in the query.
    */
-  public function testAlterExpression() {
+  function testAlterExpression() {
     $query = db_select('test');
     $name_field = $query->addField('test', 'name');
     $age_field = $query->addExpression("age*2", 'double_age');
@@ -111,7 +111,7 @@ class AlterTest extends DatabaseTestBase {
    *
    * This also tests hook_query_TAG_alter().
    */
-  public function testAlterRemoveRange() {
+  function testAlterRemoveRange() {
     $query = db_select('test');
     $query->addField('test', 'name');
     $query->addField('test', 'age', 'age');
@@ -126,7 +126,7 @@ class AlterTest extends DatabaseTestBase {
   /**
    * Tests that we can do basic alters on subqueries.
    */
-  public function testSimpleAlterSubquery() {
+  function testSimpleAlterSubquery() {
     // Create a sub-query with an alter tag.
     $subquery = db_select('test', 'p');
     $subquery->addField('p', 'name');

@@ -18,21 +18,21 @@ class CommentStringIdEntitiesTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  public static $modules = array(
     'comment',
     'user',
     'field',
     'field_ui',
     'entity_test',
     'text',
-  ];
+  );
 
   protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('comment');
-    $this->installSchema('comment', ['comment_entity_statistics']);
+    $this->installSchema('comment', array('comment_entity_statistics'));
     // Create the comment body field storage.
-    $this->installConfig(['field']);
+    $this->installConfig(array('field'));
   }
 
   /**
@@ -40,21 +40,21 @@ class CommentStringIdEntitiesTest extends KernelTestBase {
    */
   public function testCommentFieldNonStringId() {
     try {
-      $bundle = CommentType::create([
+      $bundle = CommentType::create(array(
         'id' => 'foo',
         'label' => 'foo',
         'description' => '',
         'target_entity_type_id' => 'entity_test_string_id',
-      ]);
+      ));
       $bundle->save();
-      $field_storage = FieldStorageConfig::create([
+      $field_storage = FieldStorageConfig::create(array(
         'field_name' => 'foo',
         'entity_type' => 'entity_test_string_id',
-        'settings' => [
+        'settings' => array(
           'comment_type' => 'entity_test_string_id',
-        ],
+        ),
         'type' => 'comment',
-      ]);
+      ));
       $field_storage->save();
       $this->fail('Did not throw an exception as expected.');
     }

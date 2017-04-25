@@ -43,7 +43,7 @@ class MockRouteProvider implements RouteProviderInterface {
    * {@inheritdoc}
    */
   public function getRouteByName($name) {
-    $routes = $this->getRoutesByNames([$name]);
+    $routes = $this->getRoutesByNames(array($name));
     if (empty($routes)) {
       throw new RouteNotFoundException(sprintf('Route "%s" does not exist.', $name));
     }
@@ -62,7 +62,7 @@ class MockRouteProvider implements RouteProviderInterface {
    * {@inheritdoc}
    */
   public function getRoutesByNames($names) {
-    $routes = [];
+    $routes = array();
     foreach ($names as $name) {
       $routes[] = $this->routes->get($name);
     }
@@ -88,7 +88,7 @@ class MockRouteProvider implements RouteProviderInterface {
    * {@inheritdoc}
    */
   public function reset() {
-    $this->routes = [];
+    $this->routes = array();
   }
 
 }

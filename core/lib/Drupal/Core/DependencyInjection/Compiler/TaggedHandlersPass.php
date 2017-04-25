@@ -77,7 +77,6 @@ class TaggedHandlersPass implements CompilerPassInterface {
   public function process(ContainerBuilder $container) {
     foreach ($container->findTaggedServiceIds('service_collector') as $consumer_id => $passes) {
       foreach ($passes as $pass) {
-        $interface = NULL;
         $tag = isset($pass['tag']) ? $pass['tag'] : $consumer_id;
         $method_name = isset($pass['call']) ? $pass['call'] : 'addHandler';
         $required = isset($pass['required']) ? $pass['required'] : FALSE;
@@ -108,17 +107,17 @@ class TaggedHandlersPass implements CompilerPassInterface {
         // Determine the ID.
 
         if (!isset($interface)) {
-          throw new LogicException(vsprintf("Service consumer '%s' class method %s::%s() has to type-hint an interface.", [
+          throw new LogicException(vsprintf("Service consumer '%s' class method %s::%s() has to type-hint an interface.", array(
             $consumer_id,
             $consumer->getClass(),
             $method_name,
-          ]));
+          )));
         }
         $interface = $interface->getName();
 
         // Find all tagged handlers.
-        $handlers = [];
-        $extra_arguments = [];
+        $handlers = array();
+        $extra_arguments = array();
         foreach ($container->findTaggedServiceIds($tag) as $id => $attributes) {
           // Validate the interface.
           $handler = $container->getDefinition($id);
@@ -143,7 +142,7 @@ class TaggedHandlersPass implements CompilerPassInterface {
         // Add a method call for each handler to the consumer service
         // definition.
         foreach ($handlers as $id => $priority) {
-          $arguments = [];
+          $arguments = array();
           $arguments[$interface_pos] = new Reference($id);
           if (isset($priority_pos)) {
             $arguments[$priority_pos] = $priority;

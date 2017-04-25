@@ -31,12 +31,12 @@ class UserAdminLanguageTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = ['user', 'language', 'language_test'];
+  public static $modules = array('user', 'language', 'language_test');
 
   protected function setUp() {
     parent::setUp();
     // User to add and remove language.
-    $this->adminUser = $this->drupalCreateUser(['administer languages', 'access administration pages']);
+    $this->adminUser = $this->drupalCreateUser(array('administer languages', 'access administration pages'));
     // User to check non-admin access.
     $this->regularUser = $this->drupalCreateUser();
   }
@@ -44,7 +44,7 @@ class UserAdminLanguageTest extends WebTestBase {
   /**
    * Tests that admin language is not configurable in single language sites.
    */
-  public function testUserAdminLanguageConfigurationNotAvailableWithOnlyOneLanguage() {
+  function testUserAdminLanguageConfigurationNotAvailableWithOnlyOneLanguage() {
     $this->drupalLogin($this->adminUser);
     $this->setLanguageNegotiation();
     $path = 'user/' . $this->adminUser->id() . '/edit';
@@ -56,7 +56,7 @@ class UserAdminLanguageTest extends WebTestBase {
   /**
    * Tests that admin language negotiation is configurable only if enabled.
    */
-  public function testUserAdminLanguageConfigurationAvailableWithAdminLanguageNegotiation() {
+  function testUserAdminLanguageConfigurationAvailableWithAdminLanguageNegotiation() {
     $this->drupalLogin($this->adminUser);
     $this->addCustomLanguage();
     $path = 'user/' . $this->adminUser->id() . '/edit';
@@ -83,7 +83,7 @@ class UserAdminLanguageTest extends WebTestBase {
    * have a setting for pages they cannot access, so they should not be able to
    * set a language for those pages.
    */
-  public function testUserAdminLanguageConfigurationAvailableIfAdminLanguageNegotiationIsEnabled() {
+  function testUserAdminLanguageConfigurationAvailableIfAdminLanguageNegotiationIsEnabled() {
     $this->drupalLogin($this->adminUser);
     // Adds a new language, because with only one language, setting won't show.
     $this->addCustomLanguage();
@@ -103,7 +103,7 @@ class UserAdminLanguageTest extends WebTestBase {
   /**
    * Tests the actual language negotiation.
    */
-  public function testActualNegotiation() {
+  function testActualNegotiation() {
     $this->drupalLogin($this->adminUser);
     $this->addCustomLanguage();
     $this->setLanguageNegotiation();
@@ -117,7 +117,7 @@ class UserAdminLanguageTest extends WebTestBase {
     $this->assertText('Language negotiation method: language-url');
 
     // Set a preferred language code for the user.
-    $edit = [];
+    $edit = array();
     $edit['preferred_admin_langcode'] = 'xx';
     $this->drupalPostForm($path, $edit, t('Save'));
 
@@ -137,7 +137,7 @@ class UserAdminLanguageTest extends WebTestBase {
     $this->assertText('Language negotiation method: language-user-admin');
 
     // Unset the preferred language code for the user.
-    $edit = [];
+    $edit = array();
     $edit['preferred_admin_langcode'] = '';
     $this->drupalPostForm($path, $edit, t('Save'));
     $this->drupalGet($path);
@@ -155,29 +155,29 @@ class UserAdminLanguageTest extends WebTestBase {
    * @param bool $admin_first
    *   Whether the admin negotiation should be first.
    */
-  public function setLanguageNegotiation($admin_first = FALSE) {
-    $edit = [
+  function setLanguageNegotiation($admin_first = FALSE) {
+    $edit = array(
       'language_interface[enabled][language-user-admin]' => TRUE,
       'language_interface[enabled][language-url]' => TRUE,
       'language_interface[weight][language-user-admin]' => ($admin_first ? -12 : -8),
       'language_interface[weight][language-url]' => -10,
-    ];
+    );
     $this->drupalPostForm('admin/config/regional/language/detection', $edit, t('Save settings'));
   }
 
   /**
    * Helper method for adding a custom language.
    */
-  public function addCustomLanguage() {
+  function addCustomLanguage() {
     $langcode = 'xx';
     // The English name for the language.
     $name = $this->randomMachineName(16);
-    $edit = [
+    $edit = array(
       'predefined_langcode' => 'custom',
       'langcode' => $langcode,
       'label' => $name,
       'direction' => LanguageInterface::DIRECTION_LTR,
-    ];
+    );
     $this->drupalPostForm('admin/config/regional/language/add', $edit, t('Add custom language'));
   }
 

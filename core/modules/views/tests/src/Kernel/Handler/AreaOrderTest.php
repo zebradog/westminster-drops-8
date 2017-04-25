@@ -2,7 +2,7 @@
 
 namespace Drupal\Tests\views\Kernel\Handler;
 
-use Drupal\simpletest\BlockCreationTrait;
+use Drupal\block\Entity\Block;
 use Drupal\Tests\views\Kernel\ViewsKernelTestBase;
 use Drupal\views\Views;
 
@@ -14,41 +14,41 @@ use Drupal\views\Views;
  */
 class AreaOrderTest extends ViewsKernelTestBase {
 
-  use BlockCreationTrait;
-
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['user', 'block'];
+  public static $modules = array('user', 'block');
 
   /**
    * Views used by this test.
    *
    * @var array
    */
-  public static $testViews = ['test_area_order'];
+  public static $testViews = array('test_area_order');
 
   /**
    * {@inheritdoc}
    */
   protected function setUpFixtures() {
-    // Install the themes used for this test.
-    $this->container->get('theme_installer')->install(['bartik']);
+    Block::create(
+      [
+        'id' => 'bartik_branding',
+        'theme' => 'bartik',
+        'plugin' => 'system_branding_block',
+        'weight' => 1,
+      ]
+    )->save();
 
-    $this->placeBlock('system_branding_block', [
-      'id' => 'bartik_branding',
-      'theme' => 'bartik',
-      'plugin' => 'system_branding_block',
-      'weight' => 1,
-    ]);
-
-    $this->placeBlock('system_powered_by_block', [
-      'id' => 'bartik_powered',
-      'theme' => 'bartik',
-      'weight' => 2,
-    ]);
+    Block::create(
+      [
+        'id' => 'bartik_powered',
+        'theme' => 'bartik',
+        'plugin' => 'system_powered_by_block',
+        'weight' => 2,
+      ]
+    )->save();
 
     parent::setUpFixtures();
   }

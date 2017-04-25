@@ -19,9 +19,9 @@ class Operations extends Dropbutton {
    * {@inheritdoc}
    */
   public function getInfo() {
-    return [
+    return array(
       '#theme' => 'links__dropbutton__operations',
-    ] + parent::getInfo();
+    ) + parent::getInfo();
   }
 
 }

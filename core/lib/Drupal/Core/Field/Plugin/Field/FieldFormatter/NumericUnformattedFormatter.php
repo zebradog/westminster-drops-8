@@ -24,10 +24,10 @@ class NumericUnformattedFormatter extends FormatterBase {
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
-    $elements = [];
+    $elements = array();
 
     foreach ($items as $delta => $item) {
-      $elements[$delta] = ['#markup' => $item->value];
+      $elements[$delta] = array('#markup' => $item->value);
     }
 
     return $elements;

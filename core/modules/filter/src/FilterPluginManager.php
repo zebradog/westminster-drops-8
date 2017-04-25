@@ -38,7 +38,7 @@ class FilterPluginManager extends DefaultPluginManager implements FallbackPlugin
   /**
    * {@inheritdoc}
    */
-  public function getFallbackPluginId($plugin_id, array $configuration = []) {
+  public function getFallbackPluginId($plugin_id, array $configuration = array()) {
     return 'filter_null';
   }
 

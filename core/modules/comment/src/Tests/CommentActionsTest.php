@@ -17,12 +17,12 @@ class CommentActionsTest extends CommentTestBase {
    *
    * @var array
    */
-  public static $modules = ['dblog', 'action'];
+  public static $modules = array('dblog', 'action');
 
   /**
    * Tests comment publish and unpublish actions.
    */
-  public function testCommentPublishUnpublishActions() {
+  function testCommentPublishUnpublishActions() {
     $this->drupalLogin($this->webUser);
     $comment_text = $this->randomMachineName();
     $subject = $this->randomMachineName();
@@ -30,31 +30,31 @@ class CommentActionsTest extends CommentTestBase {
 
     // Unpublish a comment.
     $action = Action::load('comment_unpublish_action');
-    $action->execute([$comment]);
+    $action->execute(array($comment));
     $this->assertTrue($comment->isPublished() === FALSE, 'Comment was unpublished');
 
     // Publish a comment.
     $action = Action::load('comment_publish_action');
-    $action->execute([$comment]);
+    $action->execute(array($comment));
     $this->assertTrue($comment->isPublished() === TRUE, 'Comment was published');
   }
 
   /**
    * Tests the unpublish comment by keyword action.
    */
-  public function testCommentUnpublishByKeyword() {
+  function testCommentUnpublishByKeyword() {
     $this->drupalLogin($this->adminUser);
     $keyword_1 = $this->randomMachineName();
     $keyword_2 = $this->randomMachineName();
-    $action = Action::create([
+    $action = Action::create(array(
       'id' => 'comment_unpublish_by_keyword_action',
       'label' => $this->randomMachineName(),
       'type' => 'comment',
-      'configuration' => [
-        'keywords' => [$keyword_1, $keyword_2],
-      ],
+      'configuration' => array(
+        'keywords' => array($keyword_1, $keyword_2),
+      ),
       'plugin' => 'comment_unpublish_by_keyword_action',
-    ]);
+    ));
     $action->save();
 
     $comment = $this->postComment($this->node, $keyword_2, $this->randomMachineName());
@@ -64,7 +64,7 @@ class CommentActionsTest extends CommentTestBase {
 
     $this->assertTrue($comment->isPublished() === TRUE, 'The comment status was set to published.');
 
-    $action->execute([$comment]);
+    $action->execute(array($comment));
     $this->assertTrue($comment->isPublished() === FALSE, 'The comment status was set to not published.');
   }
 

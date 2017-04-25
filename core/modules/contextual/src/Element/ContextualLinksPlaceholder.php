@@ -18,12 +18,12 @@ class ContextualLinksPlaceholder extends RenderElement {
    */
   public function getInfo() {
     $class = get_class($this);
-    return [
-      '#pre_render' => [
-        [$class, 'preRenderPlaceholder'],
-      ],
+    return array(
+      '#pre_render' => array(
+        array($class, 'preRenderPlaceholder'),
+      ),
       '#id' => NULL,
-    ];
+    );
   }
 
   /**

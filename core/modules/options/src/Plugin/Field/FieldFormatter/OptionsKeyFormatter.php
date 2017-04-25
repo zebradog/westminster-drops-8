@@ -28,13 +28,13 @@ class OptionsKeyFormatter extends FormatterBase {
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
-    $elements = [];
+    $elements = array();
 
     foreach ($items as $delta => $item) {
-      $elements[$delta] = [
+      $elements[$delta] = array(
         '#markup' => $item->value,
         '#allowed_tags' => FieldFilteredMarkup::allowedTags(),
-      ];
+      );
     }
 
     return $elements;

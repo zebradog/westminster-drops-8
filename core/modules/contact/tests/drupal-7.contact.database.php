@@ -11,23 +11,23 @@
 
 // Update the default category to that it is not selected.
 db_update('contact')
-  ->fields(['selected' => '0'])
+  ->fields(array('selected' => '0'))
   ->condition('cid', '1')
   ->execute();
 
 // Add a custom contact category.
-db_insert('contact')->fields([
+db_insert('contact')->fields(array(
   'category',
   'recipients',
   'reply',
   'weight',
   'selected'
-])
-  ->values([
+))
+  ->values(array(
   'category' => 'Upgrade test',
   'recipients' => 'test1@example.com,test2@example.com',
   'reply' => 'Test reply',
   'weight' => 1,
   'selected' => 1,
-])
+))
   ->execute();

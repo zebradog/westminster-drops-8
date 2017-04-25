@@ -37,33 +37,33 @@ class LogMessageParserTest extends UnitTestCase {
    * Data provider for testParseMessagePlaceholders().
    */
   public function providerTestParseMessagePlaceholders() {
-    return [
+    return array(
       // PSR3 only message.
-      [
-        ['message' => 'User {username} created', 'context' => ['username' => 'Dries']],
-        ['message' => 'User @username created', 'context' => ['@username' => 'Dries']],
-      ],
+      array(
+        array('message' => 'User {username} created', 'context' => array('username' => 'Dries')),
+        array('message' => 'User @username created', 'context' => array('@username' => 'Dries')),
+      ),
       // PSR3 style mixed in a format_string style message.
-      [
-        ['message' => 'User {username} created @time', 'context' => ['username' => 'Dries', '@time' => 'now']],
-        ['message' => 'User @username created @time', 'context' => ['@username' => 'Dries', '@time' => 'now']],
-      ],
+      array(
+        array('message' => 'User {username} created @time', 'context' => array('username' => 'Dries', '@time' => 'now')),
+        array('message' => 'User @username created @time', 'context' => array('@username' => 'Dries', '@time' => 'now')),
+      ),
       // format_string style message only.
-      [
-        ['message' => 'User @username created', 'context' => ['@username' => 'Dries']],
-        ['message' => 'User @username created', 'context' => ['@username' => 'Dries']],
-      ],
+      array(
+        array('message' => 'User @username created', 'context' => array('@username' => 'Dries')),
+        array('message' => 'User @username created', 'context' => array('@username' => 'Dries')),
+      ),
       // Message without placeholders but wildcard characters.
-      [
-        ['message' => 'User W-\\};~{&! created @', 'context' => ['' => '']],
-        ['message' => 'User W-\\};~{&! created @', 'context' => []],
-      ],
+      array(
+        array('message' => 'User W-\\};~{&! created @', 'context' => array('' => '')),
+        array('message' => 'User W-\\};~{&! created @', 'context' => array()),
+      ),
       // Message with double PSR3 style messages.
-      [
-        ['message' => 'Test {with} two {encapsuled} strings', 'context' => ['with' => 'together', 'encapsuled' => 'awesome']],
-        ['message' => 'Test @with two @encapsuled strings', 'context' => ['@with' => 'together', '@encapsuled' => 'awesome']],
-      ],
-    ];
+      array(
+        array('message' => 'Test {with} two {encapsuled} strings', 'context' => array('with' => 'together', 'encapsuled' => 'awesome')),
+        array('message' => 'Test @with two @encapsuled strings', 'context' => array('@with' => 'together', '@encapsuled' => 'awesome')),
+      ),
+    );
   }
 
 }

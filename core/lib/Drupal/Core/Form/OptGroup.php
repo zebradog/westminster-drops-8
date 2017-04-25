@@ -21,7 +21,7 @@ class OptGroup {
    *   An array with all hierarchical elements flattened to a single array.
    */
   public static function flattenOptions(array $array) {
-    $options = [];
+    $options = array();
     static::doFlattenOptions($array, $options);
     return $options;
   }

@@ -15,7 +15,7 @@ class ToolbarMenuLinkTree extends MenuLinkTree {
   public function build(array $tree, $level = 0) {
     if ($level == 0) {
       if (!$tree) {
-        return [];
+        return array();
       }
       $build = parent::build($tree, $level);
 

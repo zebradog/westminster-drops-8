@@ -7,7 +7,6 @@ use Drupal\Core\Database\DatabaseException;
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Entity\ContentEntityTypeInterface;
 use Drupal\Core\Entity\EntityManagerInterface;
-use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\Exception\FieldStorageDefinitionUpdateForbiddenException;
@@ -162,19 +161,11 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
    *   Returns TRUE if there have been changes.
    */
   protected function hasSharedTableNameChanges(EntityTypeInterface $entity_type, EntityTypeInterface $original) {
-    $base_table = $this->database->schema()->tableExists($entity_type->getBaseTable());
-    $data_table = $this->database->schema()->tableExists($entity_type->getDataTable());
-    $revision_table = $this->database->schema()->tableExists($entity_type->getRevisionTable());
-    $revision_data_table = $this->database->schema()->tableExists($entity_type->getRevisionDataTable());
-
-    // We first check if the new table already exists because the storage might
-    // have created it even though it wasn't specified in the entity type
-    // definition.
     return
-      (!$base_table && $entity_type->getBaseTable() != $original->getBaseTable()) ||
-      (!$data_table && $entity_type->getDataTable() != $original->getDataTable()) ||
-      (!$revision_table && $entity_type->getRevisionTable() != $original->getRevisionTable()) ||
-      (!$revision_data_table && $entity_type->getRevisionDataTable() != $original->getRevisionDataTable());
+      $entity_type->getBaseTable() != $original->getBaseTable() ||
+      $entity_type->getDataTable() != $original->getDataTable() ||
+      $entity_type->getRevisionTable() != $original->getRevisionTable() ||
+      $entity_type->getRevisionDataTable() != $original->getRevisionDataTable();
   }
 
   /**
@@ -325,7 +316,7 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
       }
       catch (\Exception $e) {
         if ($this->database->supportsTransactionalDDL()) {
-          $transaction->rollBack();
+          $transaction->rollback();
         }
         else {
           // Recreate original schema.
@@ -530,7 +521,7 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
       $storage_definitions = $this->entityManager->getFieldStorageDefinitions($entity_type_id);
       foreach ($table_names as $table_name) {
         if (!isset($schema[$table_name])) {
-          $schema[$table_name] = [];
+          $schema[$table_name] = array();
         }
         foreach ($table_mapping->getFieldNames($table_name) as $field_name) {
           if (!isset($storage_definitions[$field_name])) {
@@ -557,24 +548,6 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
         $this->processRevisionDataTable($entity_type, $schema[$tables['revision_data_table']]);
       }
 
-      // Add an index for the 'published' entity key.
-      if (is_subclass_of($entity_type->getClass(), EntityPublishedInterface::class)) {
-        $published_key = $entity_type->getKey('published');
-        if ($published_key && !$storage_definitions[$published_key]->hasCustomStorage()) {
-          $published_field_table = $table_mapping->getFieldTableName($published_key);
-          $id_key = $entity_type->getKey('id');
-          if ($bundle_key = $entity_type->getKey('bundle')) {
-            $key = "{$published_key}_{$bundle_key}";
-            $columns = [$published_key, $bundle_key, $id_key];
-          }
-          else {
-            $key = $published_key;
-            $columns = [$published_key, $id_key];
-          }
-          $schema[$published_field_table]['indexes'][$this->getEntityIndexName($entity_type, $key)] = $columns;
-        }
-      }
-
       $this->schema[$entity_type_id] = $schema;
 
       // Restore the actual definition.
@@ -591,12 +564,12 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
    *   A list of entity type tables, keyed by table key.
    */
   protected function getEntitySchemaTables() {
-    return array_filter([
+    return array_filter(array(
       'base_table' => $this->storage->getBaseTable(),
       'revision_table' => $this->storage->getRevisionTable(),
       'data_table' => $this->storage->getDataTable(),
       'revision_data_table' => $this->storage->getRevisionDataTable(),
-    ]);
+    ));
   }
 
   /**
@@ -701,22 +674,22 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
    *   The schema definition for the specified key.
    */
   protected function getFieldSchemaData($field_name, array $field_schema, array $column_mapping, $schema_key) {
-    $data = [];
+    $data = array();
 
-    $entity_type_id = $this->entityType->id();
     foreach ($field_schema[$schema_key] as $key => $columns) {
       // To avoid clashes with entity-level indexes or unique keys we use
       // "{$entity_type_id}_field__" as a prefix instead of just
       // "{$entity_type_id}__". We additionally namespace the specifier by the
       // field name to avoid clashes when multiple fields of the same type are
       // added to an entity type.
+      $entity_type_id = $this->entityType->id();
       $real_key = $this->getFieldSchemaIdentifierName($entity_type_id, $field_name, $key);
       foreach ($columns as $column) {
         // Allow for indexes and unique keys to specified as an array of column
         // name and length.
         if (is_array($column)) {
           list($column_name, $length) = $column;
-          $data[$real_key][] = [$column_mapping[$column_name], $length];
+          $data[$real_key][] = array($column_mapping[$column_name], $length);
         }
         else {
           $data[$real_key][] = $column_mapping[$column];
@@ -769,7 +742,7 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
    *   The schema definition for the foreign keys.
    */
   protected function getFieldForeignKeys($field_name, array $field_schema, array $column_mapping) {
-    $foreign_keys = [];
+    $foreign_keys = array();
 
     foreach ($field_schema['foreign keys'] as $specifier => $specification) {
       // To avoid clashes with entity-level foreign keys we use
@@ -798,7 +771,7 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
    *   The entity schema data array.
    */
   protected function loadEntitySchemaData(EntityTypeInterface $entity_type) {
-    return $this->installedStorageSchema()->get($entity_type->id() . '.entity_schema_data', []);
+    return $this->installedStorageSchema()->get($entity_type->id() . '.entity_schema_data', array());
   }
 
   /**
@@ -834,7 +807,7 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
    *   The field schema data array.
    */
   protected function loadFieldSchemaData(FieldStorageDefinitionInterface $storage_definition) {
-    return $this->installedStorageSchema()->get($storage_definition->getTargetEntityTypeId() . '.field_schema_data.' . $storage_definition->getName(), []);
+    return $this->installedStorageSchema()->get($storage_definition->getTargetEntityTypeId() . '.field_schema_data.' . $storage_definition->getName(), array());
   }
 
   /**
@@ -871,21 +844,21 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
   protected function initializeBaseTable(ContentEntityTypeInterface $entity_type) {
     $entity_type_id = $entity_type->id();
 
-    $schema = [
+    $schema = array(
       'description' => "The base table for $entity_type_id entities.",
-      'primary key' => [$entity_type->getKey('id')],
-      'indexes' => [],
-      'foreign keys' => [],
-    ];
+      'primary key' => array($entity_type->getKey('id')),
+      'indexes' => array(),
+      'foreign keys' => array(),
+    );
 
     if ($entity_type->hasKey('revision')) {
       $revision_key = $entity_type->getKey('revision');
       $key_name = $this->getEntityIndexName($entity_type, $revision_key);
-      $schema['unique keys'][$key_name] = [$revision_key];
-      $schema['foreign keys'][$entity_type_id . '__revision'] = [
+      $schema['unique keys'][$key_name] = array($revision_key);
+      $schema['foreign keys'][$entity_type_id . '__revision'] = array(
         'table' => $this->storage->getRevisionTable(),
-        'columns' => [$revision_key => $revision_key],
-      ];
+        'columns' => array($revision_key => $revision_key),
+      );
     }
 
     $this->addTableDefaults($schema);
@@ -907,19 +880,19 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
     $id_key = $entity_type->getKey('id');
     $revision_key = $entity_type->getKey('revision');
 
-    $schema = [
+    $schema = array(
       'description' => "The revision table for $entity_type_id entities.",
-      'primary key' => [$revision_key],
-      'indexes' => [],
-      'foreign keys' => [
-        $entity_type_id . '__revisioned' => [
+      'primary key' => array($revision_key),
+      'indexes' => array(),
+      'foreign keys' => array(
+        $entity_type_id . '__revisioned' => array(
           'table' => $this->storage->getBaseTable(),
-          'columns' => [$id_key => $id_key],
-        ],
-      ],
-    ];
+          'columns' => array($id_key => $id_key),
+        ),
+      ),
+    );
 
-    $schema['indexes'][$this->getEntityIndexName($entity_type, $id_key)] = [$id_key];
+    $schema['indexes'][$this->getEntityIndexName($entity_type, $id_key)] = array($id_key);
 
     $this->addTableDefaults($schema);
 
@@ -939,23 +912,23 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
     $entity_type_id = $entity_type->id();
     $id_key = $entity_type->getKey('id');
 
-    $schema = [
+    $schema = array(
       'description' => "The data table for $entity_type_id entities.",
-      'primary key' => [$id_key, $entity_type->getKey('langcode')],
-      'indexes' => [
-        $entity_type_id . '__id__default_langcode__langcode' => [$id_key, $entity_type->getKey('default_langcode'), $entity_type->getKey('langcode')],
-      ],
-      'foreign keys' => [
-        $entity_type_id => [
+      'primary key' => array($id_key, $entity_type->getKey('langcode')),
+      'indexes' => array(
+        $entity_type_id . '__id__default_langcode__langcode' => array($id_key, $entity_type->getKey('default_langcode'), $entity_type->getKey('langcode')),
+      ),
+      'foreign keys' => array(
+        $entity_type_id => array(
           'table' => $this->storage->getBaseTable(),
-          'columns' => [$id_key => $id_key],
-        ],
-      ],
-    ];
+          'columns' => array($id_key => $id_key),
+        ),
+      ),
+    );
 
     if ($entity_type->hasKey('revision')) {
       $key = $entity_type->getKey('revision');
-      $schema['indexes'][$this->getEntityIndexName($entity_type, $key)] = [$key];
+      $schema['indexes'][$this->getEntityIndexName($entity_type, $key)] = array($key);
     }
 
     $this->addTableDefaults($schema);
@@ -977,23 +950,23 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
     $id_key = $entity_type->getKey('id');
     $revision_key = $entity_type->getKey('revision');
 
-    $schema = [
+    $schema = array(
       'description' => "The revision data table for $entity_type_id entities.",
-      'primary key' => [$revision_key, $entity_type->getKey('langcode')],
-      'indexes' => [
-        $entity_type_id . '__id__default_langcode__langcode' => [$id_key, $entity_type->getKey('default_langcode'), $entity_type->getKey('langcode')],
-      ],
-      'foreign keys' => [
-        $entity_type_id => [
+      'primary key' => array($revision_key, $entity_type->getKey('langcode')),
+      'indexes' => array(
+        $entity_type_id . '__id__default_langcode__langcode' => array($id_key, $entity_type->getKey('default_langcode'), $entity_type->getKey('langcode')),
+      ),
+      'foreign keys' => array(
+        $entity_type_id => array(
           'table' => $this->storage->getBaseTable(),
-          'columns' => [$id_key => $id_key],
-        ],
-        $entity_type_id . '__revision' => [
+          'columns' => array($id_key => $id_key),
+        ),
+        $entity_type_id . '__revision' => array(
           'table' => $this->storage->getRevisionTable(),
-          'columns' => [$revision_key => $revision_key],
-        ]
-      ],
-    ];
+          'columns' => array($revision_key => $revision_key),
+        )
+      ),
+    );
 
     $this->addTableDefaults($schema);
 
@@ -1007,12 +980,12 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
    *   The schema definition array for a single table, passed by reference.
    */
   protected function addTableDefaults(&$schema) {
-    $schema += [
-      'fields' => [],
-      'unique keys' => [],
-      'indexes' => [],
-      'foreign keys' => [],
-    ];
+    $schema += array(
+      'fields' => array(),
+      'unique keys' => array(),
+      'indexes' => array(),
+      'foreign keys' => array(),
+    );
   }
 
   /**
@@ -1157,7 +1130,7 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
 
     // Iterate over the mapped table to find the ones that will host the created
     // field schema.
-    $schema = [];
+    $schema = array();
     foreach ($shared_table_names as $table_name) {
       foreach ($table_mapping->getFieldNames($table_name) as $field_name) {
         if ($field_name == $created_field_name) {
@@ -1298,7 +1271,7 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
       }
       catch (\Exception $e) {
         if ($this->database->supportsTransactionalDDL()) {
-          $transaction->rollBack();
+          $transaction->rollback();
         }
         else {
           // Recreate tables.
@@ -1337,15 +1310,15 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
       foreach ($schema['indexes'] as $name => $columns) {
         if (!isset($original_schema['indexes'][$name]) || $columns != $original_schema['indexes'][$name]) {
           $real_name = $this->getFieldIndexName($storage_definition, $name);
-          $real_columns = [];
+          $real_columns = array();
           foreach ($columns as $column_name) {
             // Indexes can be specified as either a column name or an array with
             // column name and length. Allow for either case.
             if (is_array($column_name)) {
-              $real_columns[] = [
+              $real_columns[] = array(
                 $table_mapping->getFieldColumnName($storage_definition, $column_name[0]),
                 $column_name[1],
-              ];
+              );
             }
             else {
               $real_columns[] = $table_mapping->getFieldColumnName($storage_definition, $column_name);
@@ -1389,7 +1362,7 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
       }
       catch (\Exception $e) {
         if ($this->database->supportsTransactionalDDL()) {
-          $transaction->rollBack();
+          $transaction->rollback();
         }
         else {
           // Recreate original schema.
@@ -1411,7 +1384,7 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
       // Iterate over the mapped table to find the ones that host the deleted
       // field schema.
       $original_schema = $this->loadFieldSchemaData($original);
-      $schema = [];
+      $schema = array();
       foreach ($table_mapping->getTableNames() as $table_name) {
         foreach ($table_mapping->getFieldNames($table_name) as $field_name) {
           if ($field_name == $updated_field_name) {
@@ -1606,7 +1579,7 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
    *   Exception thrown if the schema contains reserved column names.
    */
   protected function getSharedTableFieldSchema(FieldStorageDefinitionInterface $storage_definition, $table_name, array $column_mapping) {
-    $schema = [];
+    $schema = array();
     $field_schema = $storage_definition->getSchema();
 
     // Check that the schema does not include forbidden column names.
@@ -1678,7 +1651,7 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
   protected function addSharedTableFieldIndex(FieldStorageDefinitionInterface $storage_definition, &$schema, $not_null = FALSE, $size = NULL) {
     $name = $storage_definition->getName();
     $real_key = $this->getFieldSchemaIdentifierName($storage_definition->getTargetEntityTypeId(), $name);
-    $schema['indexes'][$real_key] = [$size ? [$name, $size] : $name];
+    $schema['indexes'][$real_key] = array($size ? array($name, $size) : $name);
     if ($not_null) {
       $schema['fields'][$name]['not null'] = TRUE;
     }
@@ -1698,7 +1671,7 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
   protected function addSharedTableFieldUniqueKey(FieldStorageDefinitionInterface $storage_definition, &$schema) {
     $name = $storage_definition->getName();
     $real_key = $this->getFieldSchemaIdentifierName($storage_definition->getTargetEntityTypeId(), $name);
-    $schema['unique keys'][$real_key] = [$name];
+    $schema['unique keys'][$real_key] = array($name);
     $schema['fields'][$name]['not null'] = TRUE;
   }
 
@@ -1717,10 +1690,10 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
   protected function addSharedTableFieldForeignKey(FieldStorageDefinitionInterface $storage_definition, &$schema, $foreign_table, $foreign_column) {
     $name = $storage_definition->getName();
     $real_key = $this->getFieldSchemaIdentifierName($storage_definition->getTargetEntityTypeId(), $name);
-    $schema['foreign keys'][$real_key] = [
+    $schema['foreign keys'][$real_key] = array(
       'table' => $foreign_table,
-      'columns' => [$name => $foreign_column],
-    ];
+      'columns' => array($name => $foreign_column),
+    );
   }
 
   /**
@@ -1750,20 +1723,20 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
 
     $id_definition = $this->fieldStorageDefinitions[$this->entityType->getKey('id')];
     if ($id_definition->getType() == 'integer') {
-      $id_schema = [
+      $id_schema = array(
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
         'description' => 'The entity id this data is attached to',
-      ];
+      );
     }
     else {
-      $id_schema = [
+      $id_schema = array(
         'type' => 'varchar_ascii',
         'length' => 128,
         'not null' => TRUE,
         'description' => 'The entity id this data is attached to',
-      ];
+      );
     }
 
     // Define the revision ID schema.
@@ -1772,61 +1745,61 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
       $revision_id_schema['description'] = 'The entity revision id this data is attached to, which for an unversioned entity type is the same as the entity id';
     }
     elseif ($this->fieldStorageDefinitions[$this->entityType->getKey('revision')]->getType() == 'integer') {
-      $revision_id_schema = [
+      $revision_id_schema = array(
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
         'description' => 'The entity revision id this data is attached to',
-      ];
+      );
     }
     else {
-      $revision_id_schema = [
+      $revision_id_schema = array(
         'type' => 'varchar',
         'length' => 128,
         'not null' => TRUE,
         'description' => 'The entity revision id this data is attached to',
-      ];
+      );
     }
 
-    $data_schema = [
+    $data_schema = array(
       'description' => $description_current,
-      'fields' => [
-        'bundle' => [
+      'fields' => array(
+        'bundle' => array(
           'type' => 'varchar_ascii',
           'length' => 128,
           'not null' => TRUE,
           'default' => '',
           'description' => 'The field instance bundle to which this row belongs, used when deleting a field instance',
-        ],
-        'deleted' => [
+        ),
+        'deleted' => array(
           'type' => 'int',
           'size' => 'tiny',
           'not null' => TRUE,
           'default' => 0,
           'description' => 'A boolean indicating whether this data item has been deleted'
-        ],
+        ),
         'entity_id' => $id_schema,
         'revision_id' => $revision_id_schema,
-        'langcode' => [
+        'langcode' => array(
           'type' => 'varchar_ascii',
           'length' => 32,
           'not null' => TRUE,
           'default' => '',
           'description' => 'The language code for this data item.',
-        ],
-        'delta' => [
+        ),
+        'delta' => array(
           'type' => 'int',
           'unsigned' => TRUE,
           'not null' => TRUE,
           'description' => 'The sequence number for this data item, used for multi-value fields',
-        ],
-      ],
-      'primary key' => ['entity_id', 'deleted', 'delta', 'langcode'],
-      'indexes' => [
-        'bundle' => ['bundle'],
-        'revision_id' => ['revision_id'],
-      ],
-    ];
+        ),
+      ),
+      'primary key' => array('entity_id', 'deleted', 'delta', 'langcode'),
+      'indexes' => array(
+        'bundle' => array('bundle'),
+        'revision_id' => array('revision_id'),
+      ),
+    );
 
     // Check that the schema does not include forbidden column names.
     $schema = $storage_definition->getSchema();
@@ -1853,10 +1826,10 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
         // Indexes can be specified as either a column name or an array with
         // column name and length. Allow for either case.
         if (is_array($column_name)) {
-          $data_schema['indexes'][$real_name][] = [
+          $data_schema['indexes'][$real_name][] = array(
             $table_mapping->getFieldColumnName($storage_definition, $column_name[0]),
             $column_name[1],
-          ];
+          );
         }
         else {
           $data_schema['indexes'][$real_name][] = $table_mapping->getFieldColumnName($storage_definition, $column_name);
@@ -1871,10 +1844,10 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
         // Unique keys can be specified as either a column name or an array with
         // column name and length. Allow for either case.
         if (is_array($column_name)) {
-          $data_schema['unique keys'][$real_name][] = [
+          $data_schema['unique keys'][$real_name][] = array(
             $table_mapping->getFieldColumnName($storage_definition, $column_name[0]),
             $column_name[1],
-          ];
+          );
         }
         else {
           $data_schema['unique keys'][$real_name][] = $table_mapping->getFieldColumnName($storage_definition, $column_name);
@@ -1892,17 +1865,17 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
       }
     }
 
-    $dedicated_table_schema = [$table_mapping->getDedicatedDataTableName($storage_definition) => $data_schema];
+    $dedicated_table_schema = array($table_mapping->getDedicatedDataTableName($storage_definition) => $data_schema);
 
     // If the entity type is revisionable, construct the revision table.
     $entity_type = $entity_type ?: $this->entityType;
     if ($entity_type->isRevisionable()) {
       $revision_schema = $data_schema;
       $revision_schema['description'] = $description_revision;
-      $revision_schema['primary key'] = ['entity_id', 'revision_id', 'deleted', 'delta', 'langcode'];
+      $revision_schema['primary key'] = array('entity_id', 'revision_id', 'deleted', 'delta', 'langcode');
       $revision_schema['fields']['revision_id']['not null'] = TRUE;
       $revision_schema['fields']['revision_id']['description'] = 'The entity revision id this data is attached to';
-      $dedicated_table_schema += [$table_mapping->getDedicatedRevisionTableName($storage_definition) => $revision_schema];
+      $dedicated_table_schema += array($table_mapping->getDedicatedRevisionTableName($storage_definition) => $revision_schema);
     }
 
     return $dedicated_table_schema;

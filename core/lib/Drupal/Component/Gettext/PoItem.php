@@ -59,7 +59,7 @@ class PoItem {
    *
    * @return string with langcode
    */
-  public function getLangcode() {
+  function getLangcode() {
     return $this->_langcode;
   }
 
@@ -68,7 +68,7 @@ class PoItem {
    *
    * @param string $langcode
    */
-  public function setLangcode($langcode) {
+  function setLangcode($langcode) {
     $this->_langcode = $langcode;
   }
 
@@ -77,7 +77,7 @@ class PoItem {
    *
    * @return string $context
    */
-  public function getContext() {
+  function getContext() {
     return $this->_context;
   }
 
@@ -86,7 +86,7 @@ class PoItem {
    *
    * @param string $context
    */
-  public function setContext($context) {
+  function setContext($context) {
     $this->_context = $context;
   }
 
@@ -96,7 +96,7 @@ class PoItem {
    *
    * @return string or array $translation
    */
-  public function getSource() {
+  function getSource() {
     return $this->_source;
   }
 
@@ -106,7 +106,7 @@ class PoItem {
    *
    * @param string or array $source
    */
-  public function setSource($source) {
+  function setSource($source) {
     $this->_source = $source;
   }
 
@@ -116,7 +116,7 @@ class PoItem {
    *
    * @return string or array $translation
    */
-  public function getTranslation() {
+  function getTranslation() {
     return $this->_translation;
   }
 
@@ -126,7 +126,7 @@ class PoItem {
    *
    * @param string or array $translation
    */
-  public function setTranslation($translation) {
+  function setTranslation($translation) {
     $this->_translation = $translation;
   }
 
@@ -135,7 +135,7 @@ class PoItem {
    *
    * @param bool $plural
    */
-  public function setPlural($plural) {
+  function setPlural($plural) {
     $this->_plural = $plural;
   }
 
@@ -144,7 +144,7 @@ class PoItem {
    *
    * @return bool
    */
-  public function isPlural() {
+  function isPlural() {
     return $this->_plural;
   }
 
@@ -153,7 +153,7 @@ class PoItem {
    *
    * @return String $comment
    */
-  public function getComment() {
+  function getComment() {
     return $this->_comment;
   }
 
@@ -162,7 +162,7 @@ class PoItem {
    *
    * @param string $comment
    */
-  public function setComment($comment) {
+  function setComment($comment) {
     $this->_comment = $comment;
   }
 
@@ -171,7 +171,7 @@ class PoItem {
    *
    * @param array $values
    */
-  public function setFromArray(array $values = []) {
+  public function setFromArray(array $values = array()) {
     if (isset($values['context'])) {
       $this->setContext($values['context']);
     }

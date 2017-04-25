@@ -90,14 +90,14 @@ class EntityListBuilderTest extends UnitTestCase {
    */
   public function testGetOperations() {
     $operation_name = $this->randomMachineName();
-    $operations = [
-      $operation_name => [
+    $operations = array(
+      $operation_name => array(
         'title' => $this->randomMachineName(),
-      ],
-    ];
+      ),
+    );
     $this->moduleHandler->expects($this->once())
       ->method('invokeAll')
-      ->with('entity_operation', [$this->role])
+      ->with('entity_operation', array($this->role))
       ->will($this->returnValue($operations));
     $this->moduleHandler->expects($this->once())
       ->method('alter')
@@ -116,7 +116,7 @@ class EntityListBuilderTest extends UnitTestCase {
       ->getMock();
     $url->expects($this->any())
       ->method('toArray')
-      ->will($this->returnValue([]));
+      ->will($this->returnValue(array()));
     $this->role->expects($this->any())
       ->method('urlInfo')
       ->will($this->returnValue($url));
@@ -141,7 +141,7 @@ class EntityListBuilderTest extends UnitTestCase {
 
 class TestEntityListBuilder extends EntityTestListBuilder {
   public function buildOperations(EntityInterface $entity) {
-    return [];
+    return array();
   }
 
 }

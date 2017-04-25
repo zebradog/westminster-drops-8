@@ -17,7 +17,7 @@ abstract class PluginSettingsBase extends PluginBase implements PluginSettingsIn
    *
    * @var array
    */
-  protected $settings = [];
+  protected $settings = array();
 
   /**
    * The plugin settings injected by third party modules.
@@ -26,7 +26,7 @@ abstract class PluginSettingsBase extends PluginBase implements PluginSettingsIn
    *
    * @var array
    */
-  protected $thirdPartySettings = [];
+  protected $thirdPartySettings = array();
 
   /**
    * Whether default settings have been merged into the current $settings.
@@ -39,7 +39,7 @@ abstract class PluginSettingsBase extends PluginBase implements PluginSettingsIn
    * {@inheritdoc}
    */
   public static function defaultSettings() {
-    return [];
+    return array();
   }
 
   /**
@@ -140,11 +140,11 @@ abstract class PluginSettingsBase extends PluginBase implements PluginSettingsIn
   public function calculateDependencies() {
     if (!empty($this->thirdPartySettings)) {
       // Create dependencies on any modules providing third party settings.
-      return [
+      return array(
         'module' => array_keys($this->thirdPartySettings)
-      ];
+      );
     }
-    return [];
+    return array();
   }
 
   /**

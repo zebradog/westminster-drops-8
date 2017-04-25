@@ -140,66 +140,66 @@ class BlockForm extends EntityForm {
     $form['visibility'] = $this->buildVisibilityInterface([], $form_state);
 
     // If creating a new block, calculate a safe default machine name.
-    $form['id'] = [
+    $form['id'] = array(
       '#type' => 'machine_name',
       '#maxlength' => 64,
       '#description' => $this->t('A unique name for this block instance. Must be alpha-numeric and underscore separated.'),
       '#default_value' => !$entity->isNew() ? $entity->id() : $this->getUniqueMachineName($entity),
-      '#machine_name' => [
+      '#machine_name' => array(
         'exists' => '\Drupal\block\Entity\Block::load',
         'replace_pattern' => '[^a-z0-9_.]+',
-        'source' => ['settings', 'label'],
-      ],
+        'source' => array('settings', 'label'),
+      ),
       '#required' => TRUE,
       '#disabled' => !$entity->isNew(),
-    ];
+    );
 
     // Theme settings.
     if ($entity->getTheme()) {
-      $form['theme'] = [
+      $form['theme'] = array(
         '#type' => 'value',
         '#value' => $theme,
-      ];
+      );
     }
     else {
-      $theme_options = [];
+      $theme_options = array();
       foreach ($this->themeHandler->listInfo() as $theme_name => $theme_info) {
         if (!empty($theme_info->status)) {
           $theme_options[$theme_name] = $theme_info->info['name'];
         }
       }
-      $form['theme'] = [
+      $form['theme'] = array(
         '#type' => 'select',
         '#options' => $theme_options,
         '#title' => t('Theme'),
         '#default_value' => $theme,
-        '#ajax' => [
+        '#ajax' => array(
           'callback' => '::themeSwitch',
           'wrapper' => 'edit-block-region-wrapper',
-        ],
-      ];
+        ),
+      );
     }
 
     // Hidden weight setting.
     $weight = $entity->isNew() ? $this->getRequest()->query->get('weight', 0) : $entity->getWeight();
-    $form['weight'] = [
+    $form['weight'] = array(
       '#type' => 'hidden',
       '#default_value' => $weight,
-    ];
+    );
 
     // Region settings.
     $entity_region = $entity->getRegion();
     $region = $entity->isNew() ? $this->getRequest()->query->get('region', $entity_region) : $entity_region;
-    $form['region'] = [
+    $form['region'] = array(
       '#type' => 'select',
       '#title' => $this->t('Region'),
       '#description' => $this->t('Select the region where this block should be displayed.'),
       '#default_value' => $region,
-      '#required' => TRUE,
+      '#empty_value' => BlockInterface::BLOCK_REGION_NONE,
       '#options' => system_region_list($theme, REGIONS_VISIBLE),
       '#prefix' => '<div id="edit-block-region-wrapper">',
       '#suffix' => '</div>',
-    ];
+    );
     $form['#attached']['library'][] = 'block/drupal.block.admin';
     return $form;
   }
@@ -292,7 +292,6 @@ class BlockForm extends EntityForm {
   protected function actions(array $form, FormStateInterface $form_state) {
     $actions = parent::actions($form, $form_state);
     $actions['submit']['#value'] = $this->t('Save block');
-    $actions['delete']['#title'] = $this->t('Remove block');
     return $actions;
   }
 
@@ -360,10 +359,10 @@ class BlockForm extends EntityForm {
     drupal_set_message($this->t('The block configuration has been saved.'));
     $form_state->setRedirect(
       'block.admin_display_theme',
-      [
+      array(
         'theme' => $form_state->getValue('theme'),
-      ],
-      ['query' => ['block-placement' => Html::getClass($this->entity->id())]]
+      ),
+      array('query' => array('block-placement' => Html::getClass($this->entity->id())))
     );
   }
 

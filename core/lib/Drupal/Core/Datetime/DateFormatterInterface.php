@@ -112,7 +112,7 @@ interface DateFormatterInterface {
    * @see \Drupal\Core\Datetime\DateFormatterInterface::formatDiff()
    * @see \Drupal\Core\Datetime\DateFormatterInterface::formatTimeDiffSince()
    */
-  public function formatTimeDiffUntil($timestamp, $options = []);
+  public function formatTimeDiffUntil($timestamp, $options = array());
 
   /**
    * Formats the time difference from a timestamp to the current request time.
@@ -142,7 +142,7 @@ interface DateFormatterInterface {
    * @see \Drupal\Core\Datetime\DateFormatterInterface::formatDiff()
    * @see \Drupal\Core\Datetime\DateFormatterInterface::formatTimeDiffUntil()
    */
-  public function formatTimeDiffSince($timestamp, $options = []);
+  public function formatTimeDiffSince($timestamp, $options = array());
 
   /**
    * Formats a time interval between two timestamps.
@@ -174,6 +174,6 @@ interface DateFormatterInterface {
    * @see \Drupal\Core\Datetime\DateFormatterInterface::formatTimeDiffSince()
    * @see \Drupal\Core\Datetime\DateFormatterInterface::formatTimeDiffUntil()
    */
-  public function formatDiff($from, $to, $options = []);
+  public function formatDiff($from, $to, $options = array());
 
 }

@@ -161,7 +161,7 @@ interface LanguageManagerInterface {
    *   An array of language codes sorted by priority: first values should be
    *   tried first.
    */
-  public function getFallbackCandidates(array $context = []);
+  public function getFallbackCandidates(array $context = array());
 
   /**
    * Returns the language switch links for the given language type.

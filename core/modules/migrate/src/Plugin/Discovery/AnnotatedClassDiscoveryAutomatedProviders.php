@@ -73,7 +73,7 @@ class AnnotatedClassDiscoveryAutomatedProviders extends AnnotatedClassDiscovery 
    * {@inheritdoc}
    */
   public function getDefinitions() {
-    $definitions = [];
+    $definitions = array();
 
     $reader = $this->getAnnotationReader();
 

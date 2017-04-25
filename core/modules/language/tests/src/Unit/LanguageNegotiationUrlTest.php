@@ -33,10 +33,10 @@ class LanguageNegotiationUrlTest extends UnitTestCase {
     $language_en->expects($this->any())
       ->method('getId')
       ->will($this->returnValue('en'));
-    $languages = [
+    $languages = array(
       'de' => $language_de,
       'en' => $language_en,
-    ];
+    );
     $this->languages = $languages;
 
     // Create a language manager stub.
@@ -126,7 +126,7 @@ class LanguageNegotiationUrlTest extends UnitTestCase {
     // No configuration.
     $path_prefix_configuration[] = [
       'prefix' => 'de',
-      'prefixes' => [],
+      'prefixes' => array(),
       'expected_langcode' => FALSE,
     ];
     // Non-matching prefix.
@@ -168,7 +168,7 @@ class LanguageNegotiationUrlTest extends UnitTestCase {
       ],
     ]);
 
-    $request = Request::create('', 'GET', [], [], [], ['HTTP_HOST' => $http_host]);
+    $request = Request::create('', 'GET', array(), array(), array(), array('HTTP_HOST' => $http_host));
     $method = new LanguageNegotiationUrl();
     $method->setLanguageManager($this->languageManager);
     $method->setConfig($config);
@@ -193,60 +193,60 @@ class LanguageNegotiationUrlTest extends UnitTestCase {
    */
   public function providerTestDomain() {
 
-    $domain_configuration[] = [
+    $domain_configuration[] = array(
       'http_host' => 'example.de',
-      'domains' => [
+      'domains' => array(
         'de' => 'http://example.de',
-      ],
+      ),
       'expected_langcode' => 'de',
-    ];
+    );
     // No configuration.
-    $domain_configuration[] = [
+    $domain_configuration[] = array(
       'http_host' => 'example.de',
-      'domains' => [],
+      'domains' => array(),
       'expected_langcode' => FALSE,
-    ];
+    );
     // HTTP host with a port.
-    $domain_configuration[] = [
+    $domain_configuration[] = array(
       'http_host' => 'example.de:8080',
-      'domains' => [
+      'domains' => array(
         'de' => 'http://example.de',
-      ],
+      ),
       'expected_langcode' => 'de',
-    ];
+    );
     // Domain configuration with https://.
-    $domain_configuration[] = [
+    $domain_configuration[] = array(
       'http_host' => 'example.de',
-      'domains' => [
+      'domains' => array(
         'de' => 'https://example.de',
-      ],
+      ),
       'expected_langcode' => 'de',
-    ];
+    );
     // Non-matching HTTP host.
-    $domain_configuration[] = [
+    $domain_configuration[] = array(
       'http_host' => 'example.com',
-      'domains' => [
+      'domains' => array(
         'de' => 'http://example.com',
-      ],
+      ),
       'expected_langcode' => 'de',
-    ];
+    );
     // Testing a non-existing language.
-    $domain_configuration[] = [
+    $domain_configuration[] = array(
       'http_host' => 'example.com',
-      'domains' => [
+      'domains' => array(
         'it' => 'http://example.it',
-      ],
+      ),
       'expected_langcode' => FALSE,
-    ];
+    );
     // Multiple domain configurations.
-    $domain_configuration[] = [
+    $domain_configuration[] = array(
       'http_host' => 'example.com',
-      'domains' => [
+      'domains' => array(
         'de' => 'http://example.de',
         'en' => 'http://example.com',
-      ],
+      ),
       'expected_langcode' => 'en',
-    ];
+    );
     return $domain_configuration;
   }
 

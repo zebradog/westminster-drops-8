@@ -6,6 +6,11 @@
  */
 
 /**
+ * @addtogroup updates-8.0.0-beta
+ * @{
+ */
+
+/**
  * Remove load plugin references from existing migrations.
  */
 function migrate_update_8001() {
@@ -16,3 +21,7 @@ function migrate_update_8001() {
     $migration->save(TRUE);
   }
 }
+
+/**
+ * @} End of "addtogroup updates-8.0.0-beta".
+ */

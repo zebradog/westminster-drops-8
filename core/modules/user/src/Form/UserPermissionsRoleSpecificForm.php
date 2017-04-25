@@ -21,7 +21,7 @@ class UserPermissionsRoleSpecificForm extends UserPermissionsForm {
    * {@inheritdoc}
    */
   protected function getRoles() {
-    return [$this->userRole->id() => $this->userRole];
+    return array($this->userRole->id() => $this->userRole);
   }
 
   /**

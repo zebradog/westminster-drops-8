@@ -42,8 +42,8 @@ class RouteFilterSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
-    $events[RoutingEvents::ALTER][] = ['onRouteAlter', -300];
+  static function getSubscribedEvents() {
+    $events[RoutingEvents::ALTER][] = array('onRouteAlter', -300);
     return $events;
   }
 

@@ -3,7 +3,6 @@
 namespace Drupal\system\Tests\Common;
 
 use Drupal\simpletest\WebTestBase;
-use Drupal\node\NodeInterface;
 
 /**
  * Tests that anonymous users are not served any JavaScript in the Standard
@@ -19,7 +18,7 @@ class NoJavaScriptAnonymousTest extends WebTestBase {
     parent::setUp();
 
     // Grant the anonymous user the permission to look at user profiles.
-    user_role_grant_permissions('anonymous', ['access user profiles']);
+    user_role_grant_permissions('anonymous', array('access user profiles'));
   }
 
   /**
@@ -27,9 +26,9 @@ class NoJavaScriptAnonymousTest extends WebTestBase {
    */
   public function testNoJavaScript() {
     // Create a node that is listed on the frontpage.
-    $this->drupalCreateNode([
-      'promote' => NodeInterface::PROMOTED,
-    ]);
+    $this->drupalCreateNode(array(
+      'promote' => NODE_PROMOTED,
+    ));
     $user = $this->drupalCreateUser();
 
     // Test frontpage.

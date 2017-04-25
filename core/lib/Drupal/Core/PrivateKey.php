@@ -23,7 +23,7 @@ class PrivateKey {
    * @param \Drupal\Core\State\StateInterface $state
    *   The state service.
    */
-  public function __construct(StateInterface $state) {
+  function __construct(StateInterface $state) {
     $this->state = $state;
   }
 

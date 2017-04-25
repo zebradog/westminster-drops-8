@@ -37,7 +37,7 @@ class ViewsDataHelper {
   /**
    * Fetches a list of all fields available for a given base type.
    *
-   * @param array|string $base
+   * @param (array|string) $base
    *   A list or a single base_table, for example node.
    * @param string $type
    *   The handler type, for example field or filter.
@@ -64,9 +64,9 @@ class ViewsDataHelper {
       // each field have a cheap kind of inheritance.
 
       foreach ($data as $table => $table_data) {
-        $bases = [];
-        $strings = [];
-        $skip_bases = [];
+        $bases = array();
+        $strings = array();
+        $skip_bases = array();
         foreach ($table_data as $field => $info) {
           // Collect table data from this table
           if ($field == 'table') {
@@ -78,7 +78,7 @@ class ViewsDataHelper {
             $bases[] = $table;
             continue;
           }
-          foreach (['field', 'sort', 'filter', 'argument', 'relationship', 'area'] as $key) {
+          foreach (array('field', 'sort', 'filter', 'argument', 'relationship', 'area') as $key) {
             if (!empty($info[$key])) {
               if ($grouping && !empty($info[$key]['no group by'])) {
                 continue;
@@ -96,7 +96,7 @@ class ViewsDataHelper {
                   $skip_bases[$field][$key][$base_name] = TRUE;
                 }
               }
-              foreach (['title', 'group', 'help', 'base', 'aliases'] as $string) {
+              foreach (array('title', 'group', 'help', 'base', 'aliases') as $string) {
                 // First, try the lowest possible level
                 if (!empty($info[$key][$string])) {
                   $strings[$field][$key][$string] = $info[$key][$string];
@@ -120,7 +120,7 @@ class ViewsDataHelper {
                 }
                 else {
                   if ($string != 'base') {
-                    $strings[$field][$key][$string] = SafeMarkup::format("Error: missing @component", ['@component' => $string]);
+                    $strings[$field][$key][$string] = SafeMarkup::format("Error: missing @component", array('@component' => $string));
                   }
                 }
               }
@@ -143,21 +143,21 @@ class ViewsDataHelper {
     // all and add them together. Duplicate keys will be lost and that's
     // Just Fine.
     if (is_array($base)) {
-      $strings = [];
+      $strings = array();
       foreach ($base as $base_table) {
         if (isset($this->fields[$base_table][$type])) {
           $strings += $this->fields[$base_table][$type];
         }
       }
-      uasort($strings, ['self', 'fetchedFieldSort']);
+      uasort($strings, array('self', 'fetchedFieldSort'));
       return $strings;
     }
 
     if (isset($this->fields[$base][$type])) {
-      uasort($this->fields[$base][$type], [$this, 'fetchedFieldSort']);
+      uasort($this->fields[$base][$type], array($this, 'fetchedFieldSort'));
       return $this->fields[$base][$type];
     }
-    return [];
+    return array();
   }
 
   /**

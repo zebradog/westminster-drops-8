@@ -14,7 +14,7 @@ class JavascriptGetDrupalSettingsTest extends JavascriptTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['test_page_test'];
+  public static $modules = ['test_page_test'];
 
   /**
    * Tests retrieval of Drupal settings.

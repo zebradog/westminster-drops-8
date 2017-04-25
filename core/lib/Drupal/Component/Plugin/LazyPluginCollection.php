@@ -14,14 +14,14 @@ abstract class LazyPluginCollection implements \IteratorAggregate, \Countable {
    *
    * @var array
    */
-  protected $pluginInstances = [];
+  protected $pluginInstances = array();
 
   /**
    * Stores the IDs of all potential plugin instances.
    *
    * @var array
    */
-  protected $instanceIDs = [];
+  protected $instanceIDs = array();
 
   /**
    * Initializes and stores a plugin.
@@ -53,7 +53,7 @@ abstract class LazyPluginCollection implements \IteratorAggregate, \Countable {
    * Clears all instantiated plugins.
    */
   public function clear() {
-    $this->pluginInstances = [];
+    $this->pluginInstances = array();
   }
 
   /**

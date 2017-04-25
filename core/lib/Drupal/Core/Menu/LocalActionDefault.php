@@ -83,7 +83,7 @@ class LocalActionDefault extends PluginBase implements LocalActionInterface, Con
    * {@inheritdoc}
    */
   public function getRouteParameters(RouteMatchInterface $route_match) {
-    $parameters = isset($this->pluginDefinition['route_parameters']) ? $this->pluginDefinition['route_parameters'] : [];
+    $parameters = isset($this->pluginDefinition['route_parameters']) ? $this->pluginDefinition['route_parameters'] : array();
     $route = $this->routeProvider->getRouteByName($this->getRouteName());
     $variables = $route->compile()->getVariables();
 

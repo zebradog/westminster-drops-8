@@ -7,14 +7,8 @@
 
 namespace Drupal\Tests\Component\DependencyInjection;
 
-use Drupal\Component\Utility\Crypt;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use Symfony\Component\DependencyInjection\Exception\LogicException;
-use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
-use Symfony\Component\DependencyInjection\Exception\RuntimeException;
-use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Prophecy\Argument;
 
 /**
@@ -65,11 +59,12 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
    * Tests that passing a non-supported format throws an InvalidArgumentException.
    *
    * @covers ::__construct
+   *
+   * @expectedException \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
    */
   public function testConstruct() {
     $container_definition = $this->getMockContainerDefinition();
     $container_definition['machine_format'] = !$this->machineFormat;
-    $this->setExpectedException(InvalidArgumentException::class);
     $container = new $this->containerClass($container_definition);
   }
 
@@ -90,9 +85,10 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
    * @covers ::getParameter
    * @covers ::getParameterAlternatives
    * @covers ::getAlternatives
+   *
+   * @expectedException \Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException
    */
   public function testGetParameterIfNotFound() {
-    $this->setExpectedException(ParameterNotFoundException::class);
     $this->container->getParameter('parameter_that_does_not_exist');
   }
 
@@ -100,9 +96,10 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
    * Tests that Container::getParameter() works properly for NULL parameters.
    *
    * @covers ::getParameter
+   *
+   * @expectedException \Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException
    */
   public function testGetParameterIfNotFoundBecauseNull() {
-    $this->setExpectedException(ParameterNotFoundException::class);
     $this->container->getParameter(NULL);
   }
 
@@ -133,10 +130,11 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
    * Tests that Container::setParameter() in a frozen case works properly.
    *
    * @covers ::setParameter
+   *
+   * @expectedException \Symfony\Component\DependencyInjection\Exception\LogicException
    */
   public function testSetParameterWithFrozenContainer() {
     $this->container = new $this->containerClass($this->containerDefinition);
-    $this->setExpectedException(LogicException::class);
     $this->container->setParameter('some_config', 'new_value');
   }
 
@@ -237,11 +235,11 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
 
   /**
    * Tests that Container::get() for circular dependencies works properly.
+   * @expectedException \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
    * @covers ::get
    * @covers ::createService
    */
   public function testGetForCircularServices() {
-    $this->setExpectedException(ServiceCircularReferenceException::class);
     $this->container->get('circular_dependency');
   }
 
@@ -252,9 +250,10 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
    * @covers ::createService
    * @covers ::getAlternatives
    * @covers ::getServiceAlternatives
+   *
+   * @expectedException \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
    */
   public function testGetForNonExistantService() {
-    $this->setExpectedException(ServiceNotFoundException::class);
     $this->container->get('service_not_exists');
   }
 
@@ -296,6 +295,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
    * @covers ::get
    * @covers ::createService
    * @covers ::resolveServicesAndParameters
+   *
+   * @expectedException \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
    */
   public function testGetForParameterDependencyWithExceptionOnSecondCall() {
     $service = $this->container->get('service_parameter_not_exists', ContainerInterface::NULL_ON_INVALID_REFERENCE);
@@ -303,7 +304,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
 
     // Reset the service.
     $this->container->set('service_parameter_not_exists', NULL);
-    $this->setExpectedException(InvalidArgumentException::class);
     $this->container->get('service_parameter_not_exists');
   }
 
@@ -313,9 +313,10 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
    * @covers ::get
    * @covers ::createService
    * @covers ::resolveServicesAndParameters
+   *
+   * @expectedException \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
    */
   public function testGetForNonExistantParameterDependencyWithException() {
-    $this->setExpectedException(InvalidArgumentException::class);
     $this->container->get('service_parameter_not_exists');
   }
 
@@ -338,9 +339,10 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
    * @covers ::createService
    * @covers ::resolveServicesAndParameters
    * @covers ::getAlternatives
+   *
+   * @expectedException \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
    */
   public function testGetForNonExistantServiceDependencyWithException() {
-    $this->setExpectedException(ServiceNotFoundException::class);
     $this->container->get('service_dependency_not_exists');
   }
 
@@ -358,9 +360,10 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
    * Tests that Container::get() for NULL service works properly.
    * @covers ::get
    * @covers ::createService
+   *
+   * @expectedException \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
    */
   public function testGetForNonExistantNULLService() {
-    $this->setExpectedException(ServiceNotFoundException::class);
     $this->container->get(NULL);
   }
 
@@ -383,10 +386,11 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
    * @covers ::get
    * @covers ::createService
    * @covers ::getAlternatives
+   *
+   * @expectedException \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
    */
   public function testGetForNonExistantServiceWithExceptionOnSecondCall() {
     $this->assertNull($this->container->get('service_not_exists', ContainerInterface::NULL_ON_INVALID_REFERENCE), 'Not found service does nto throw exception.');
-    $this->setExpectedException(ServiceNotFoundException::class);
     $this->container->get('service_not_exists');
   }
 
@@ -420,9 +424,10 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
    *
    * @covers ::get
    * @covers ::createService
+   *
+   * @expectedException \Symfony\Component\DependencyInjection\Exception\RuntimeException
    */
   public function testGetForSyntheticServiceWithException() {
-    $this->setExpectedException(RuntimeException::class);
     $this->container->get('synthetic');
   }
 
@@ -446,7 +451,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
    * @covers ::resolveServicesAndParameters
    */
   public function testGetForInstantiationWithVariousArgumentLengths() {
-    $args = [];
+    $args = array();
     for ($i = 0; $i < 12; $i++) {
       $instantiation_service = $this->container->get('service_test_instantiation_' . $i);
       $this->assertEquals($args, $instantiation_service->getArguments());
@@ -459,9 +464,10 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
    *
    * @covers ::get
    * @covers ::createService
+   *
+   * @expectedException \Symfony\Component\DependencyInjection\Exception\RuntimeException
    */
   public function testGetForWrongFactory() {
-    $this->setExpectedException(RuntimeException::class);
     $this->container->get('wrong_factory');
   }
 
@@ -497,9 +503,10 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
    *
    * @covers ::get
    * @covers ::createService
+   *
+   * @expectedException \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
    */
   public function testGetForConfiguratorWithException() {
-    $this->setExpectedException(InvalidArgumentException::class);
     $this->container->get('configurable_service_exception');
   }
 
@@ -595,9 +602,10 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
    * @covers ::get
    * @covers ::createService
    * @covers ::resolveServicesAndParameters
+   *
+   * @expectedException \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
    */
   public function testResolveServicesAndParametersForInvalidArgument() {
-    $this->setExpectedException(InvalidArgumentException::class);
     $this->container->get('invalid_argument_service');
   }
 
@@ -607,11 +615,12 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
    * @covers ::get
    * @covers ::createService
    * @covers ::resolveServicesAndParameters
+   *
+   * @expectedException \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
    */
   public function testResolveServicesAndParametersForInvalidArguments() {
     // In case the machine-optimized format is not used, we need to simulate the
     // test failure.
-    $this->setExpectedException(InvalidArgumentException::class);
     if (!$this->machineFormat) {
       throw new InvalidArgumentException('Simulating the test failure.');
     }
@@ -662,15 +671,16 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
    * @covers ::hasScope
    * @covers ::isScopeActive
    *
+   * @expectedException \BadMethodCallException
+   *
    * @dataProvider scopeExceptionTestProvider
    */
   public function testScopeFunctionsWithException($method, $argument) {
-    $callable = [
+    $callable = array(
       $this->container,
       $method,
-    ];
+    );
 
-    $this->setExpectedException(\BadMethodCallException::class);
     $callable($argument);
   }
 
@@ -684,13 +694,13 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
    */
   public function scopeExceptionTestProvider() {
     $scope = $this->prophesize('\Symfony\Component\DependencyInjection\ScopeInterface')->reveal();
-    return [
-      ['enterScope', 'test_scope'],
-      ['leaveScope', 'test_scope'],
-      ['hasScope', 'test_scope'],
-      ['isScopeActive', 'test_scope'],
-      ['addScope', $scope],
-    ];
+    return array(
+      array('enterScope', 'test_scope'),
+      array('leaveScope', 'test_scope'),
+      array('hasScope', 'test_scope'),
+      array('isScopeActive', 'test_scope'),
+      array('addScope', $scope),
+    );
   }
 
   /**
@@ -718,7 +728,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
    */
   protected function getMockContainerDefinition() {
     $fake_service = new \stdClass();
-    $parameters = [];
+    $parameters = array();
     $parameters['some_parameter_class'] = get_class($fake_service);
     $parameters['some_private_config'] = 'really_private_lama';
     $parameters['some_config'] = 'foo';
@@ -727,262 +737,262 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
     // Also test alias resolving.
     $parameters['service_from_parameter'] = $this->getServiceCall('service.provider_alias');
 
-    $services = [];
-    $services['service_container'] = [
+    $services = array();
+    $services['service_container'] = array(
       'class' => '\Drupal\service_container\DependencyInjection\Container',
-    ];
-    $services['other.service'] = [
+    );
+    $services['other.service'] = array(
       'class' => get_class($fake_service),
-    ];
+    );
 
-    $services['non_shared_service'] = [
+    $services['non_shared_service'] = array(
       'class' => get_class($fake_service),
       'shared' => FALSE,
-    ];
+    );
 
-    $services['other.service_class_from_parameter'] = [
+    $services['other.service_class_from_parameter'] = array(
       'class' => $this->getParameterCall('some_parameter_class'),
-    ];
-    $services['late.service'] = [
+    );
+    $services['late.service'] = array(
       'class' => get_class($fake_service),
-    ];
-    $services['service.provider'] = [
+    );
+    $services['service.provider'] = array(
       'class' => '\Drupal\Tests\Component\DependencyInjection\MockService',
-      'arguments' => $this->getCollection([
+      'arguments' => $this->getCollection(array(
         $this->getServiceCall('other.service'),
         $this->getParameterCall('some_config'),
-      ]),
-      'properties' => $this->getCollection(['_someProperty' => 'foo']),
-      'calls' => [
-        ['setContainer', $this->getCollection([
+      )),
+      'properties' => $this->getCollection(array('_someProperty' => 'foo')),
+      'calls' => array(
+        array('setContainer', $this->getCollection(array(
           $this->getServiceCall('service_container'),
-        ])],
-        ['setOtherConfigParameter', $this->getCollection([
+        ))),
+        array('setOtherConfigParameter', $this->getCollection(array(
           $this->getParameterCall('some_other_config'),
-        ])],
-      ],
+        ))),
+      ),
       'priority' => 0,
-    ];
+    );
 
     // Test private services.
-    $private_service = [
+    $private_service = array(
       'class' => '\Drupal\Tests\Component\DependencyInjection\MockService',
-      'arguments' => $this->getCollection([
+      'arguments' => $this->getCollection(array(
         $this->getServiceCall('other.service'),
         $this->getParameterCall('some_private_config'),
-      ]),
+      )),
       'public' => FALSE,
-    ];
+    );
 
-    $services['service_using_private'] = [
+    $services['service_using_private'] = array(
       'class' => '\Drupal\Tests\Component\DependencyInjection\MockService',
-      'arguments' => $this->getCollection([
+      'arguments' => $this->getCollection(array(
         $this->getPrivateServiceCall(NULL, $private_service),
         $this->getParameterCall('some_config'),
-      ]),
-    ];
-    $services['another_service_using_private'] = [
+      )),
+    );
+    $services['another_service_using_private'] = array(
       'class' => '\Drupal\Tests\Component\DependencyInjection\MockService',
-      'arguments' => $this->getCollection([
+      'arguments' => $this->getCollection(array(
         $this->getPrivateServiceCall(NULL, $private_service),
         $this->getParameterCall('some_config'),
-      ]),
-    ];
+      )),
+    );
 
     // Test shared private services.
     $id = 'private_service_shared_1';
 
-    $services['service_using_shared_private'] = [
+    $services['service_using_shared_private'] = array(
       'class' => '\Drupal\Tests\Component\DependencyInjection\MockService',
-      'arguments' => $this->getCollection([
+      'arguments' => $this->getCollection(array(
         $this->getPrivateServiceCall($id, $private_service, TRUE),
         $this->getParameterCall('some_config'),
-      ]),
-    ];
-    $services['another_service_using_shared_private'] = [
+      )),
+    );
+    $services['another_service_using_shared_private'] = array(
       'class' => '\Drupal\Tests\Component\DependencyInjection\MockService',
-      'arguments' => $this->getCollection([
+      'arguments' => $this->getCollection(array(
         $this->getPrivateServiceCall($id, $private_service, TRUE),
         $this->getParameterCall('some_config'),
-      ]),
-    ];
+      )),
+    );
 
     // Tests service with invalid argument.
-    $services['invalid_argument_service'] = [
+    $services['invalid_argument_service'] = array(
       'class' => '\Drupal\Tests\Component\DependencyInjection\MockService',
-      'arguments' => $this->getCollection([
+      'arguments' => $this->getCollection(array(
         1, // Test passing non-strings, too.
-        (object) [
+        (object) array(
           'type' => 'invalid',
-        ],
-      ]),
-    ];
+        ),
+      )),
+    );
 
-    $services['invalid_arguments_service'] = [
+    $services['invalid_arguments_service'] = array(
       'class' => '\Drupal\Tests\Component\DependencyInjection\MockService',
-      'arguments' => (object) [
+      'arguments' => (object) array(
         'type' => 'invalid',
-      ],
-    ];
+      ),
+    );
 
     // Test service that needs deep-traversal.
-    $services['service_using_array'] = [
+    $services['service_using_array'] = array(
       'class' => '\Drupal\Tests\Component\DependencyInjection\MockService',
-      'arguments' => $this->getCollection([
-        $this->getCollection([
+      'arguments' => $this->getCollection(array(
+        $this->getCollection(array(
           $this->getServiceCall('other.service'),
-        ]),
+        )),
         $this->getParameterCall('some_private_config'),
-      ]),
-    ];
+      )),
+    );
 
-    $services['service_with_optional_dependency'] = [
+    $services['service_with_optional_dependency'] = array(
       'class' => '\Drupal\Tests\Component\DependencyInjection\MockService',
-      'arguments' => $this->getCollection([
+      'arguments' => $this->getCollection(array(
         $this->getServiceCall('service.does_not_exist', ContainerInterface::NULL_ON_INVALID_REFERENCE),
         $this->getParameterCall('some_private_config'),
-      ]),
+      )),
 
-    ];
+    );
 
-    $services['factory_service'] = [
+    $services['factory_service'] = array(
       'class' => '\Drupal\service_container\ServiceContainer\ControllerInterface',
-      'factory' => [
+      'factory' => array(
         $this->getServiceCall('service.provider'),
         'getFactoryMethod',
-      ],
-      'arguments' => $this->getCollection([
+      ),
+      'arguments' => $this->getCollection(array(
         $this->getParameterCall('factory_service_class'),
-      ]),
-    ];
-    $services['factory_class'] = [
+      )),
+    );
+    $services['factory_class'] = array(
       'class' => '\Drupal\service_container\ServiceContainer\ControllerInterface',
       'factory' => '\Drupal\Tests\Component\DependencyInjection\MockService::getFactoryMethod',
-      'arguments' => [
+      'arguments' => array(
         '\Drupal\Tests\Component\DependencyInjection\MockService',
-        [NULL, 'bar'],
-      ],
-      'calls' => [
-        ['setContainer', $this->getCollection([
+        array(NULL, 'bar'),
+      ),
+      'calls' => array(
+        array('setContainer', $this->getCollection(array(
           $this->getServiceCall('service_container'),
-        ])],
-      ],
-    ];
+        ))),
+      ),
+    );
 
-    $services['wrong_factory'] = [
+    $services['wrong_factory'] = array(
       'class' => '\Drupal\service_container\ServiceContainer\ControllerInterface',
-      'factory' => (object) ['I am not a factory, but I pretend to be.'],
-    ];
+      'factory' => (object) array('I am not a factory, but I pretend to be.'),
+    );
 
-    $services['circular_dependency'] = [
+    $services['circular_dependency'] = array(
       'class' => '\Drupal\Tests\Component\DependencyInjection\MockService',
-      'arguments' => $this->getCollection([
+      'arguments' => $this->getCollection(array(
         $this->getServiceCall('circular_dependency'),
-      ]),
-    ];
-    $services['synthetic'] = [
+      )),
+    );
+    $services['synthetic'] = array(
       'synthetic' => TRUE,
-    ];
+    );
     // The file could have been named as a .php file. The reason it is a .data
     // file is that SimpleTest tries to load it. SimpleTest does not like such
     // fixtures and hence we use a neutral name like .data.
-    $services['container_test_file_service_test'] = [
+    $services['container_test_file_service_test'] = array(
       'class' => '\stdClass',
       'file' => __DIR__ . '/Fixture/container_test_file_service_test_service_function.data',
-    ];
+    );
 
     // Test multiple arguments.
-    $args = [];
+    $args = array();
     for ($i = 0; $i < 12; $i++) {
-      $services['service_test_instantiation_' . $i] = [
+      $services['service_test_instantiation_' . $i] = array(
         'class' => '\Drupal\Tests\Component\DependencyInjection\MockInstantiationService',
         // Also test a collection that does not need resolving.
         'arguments' => $this->getCollection($args, FALSE),
-      ];
+      );
       $args[] = 'arg_' . $i;
     }
 
-    $services['service_parameter_not_exists'] = [
+    $services['service_parameter_not_exists'] = array(
       'class' => '\Drupal\Tests\Component\DependencyInjection\MockService',
-      'arguments' => $this->getCollection([
+      'arguments' => $this->getCollection(array(
         $this->getServiceCall('service.provider'),
         $this->getParameterCall('not_exists'),
-      ]),
-    ];
-    $services['service_dependency_not_exists'] = [
+      )),
+    );
+    $services['service_dependency_not_exists'] = array(
       'class' => '\Drupal\Tests\Component\DependencyInjection\MockService',
-      'arguments' => $this->getCollection([
+      'arguments' => $this->getCollection(array(
         $this->getServiceCall('service_not_exists'),
         $this->getParameterCall('some_config'),
-      ]),
-    ];
+      )),
+    );
 
-    $services['service_with_parameter_service'] = [
+    $services['service_with_parameter_service'] = array(
       'class' => '\Drupal\Tests\Component\DependencyInjection\MockService',
-      'arguments' => $this->getCollection([
+      'arguments' => $this->getCollection(array(
         $this->getParameterCall('service_from_parameter'),
         // Also test deep collections that don't need resolving.
-        $this->getCollection([
+        $this->getCollection(array(
           1,
-        ], FALSE),
-      ]),
-    ];
+        ), FALSE),
+      )),
+    );
 
     // To ensure getAlternatives() finds something.
-    $services['service_not_exists_similar'] = [
+    $services['service_not_exists_similar'] = array(
       'synthetic' => TRUE,
-    ];
+    );
 
     // Test configurator.
-    $services['configurator'] = [
+    $services['configurator'] = array(
       'synthetic' => TRUE,
-    ];
-    $services['configurable_service'] = [
+    );
+    $services['configurable_service'] = array(
       'class' => '\Drupal\Tests\Component\DependencyInjection\MockService',
-      'arguments' => [],
-      'configurator' => [
+      'arguments' => array(),
+      'configurator' => array(
         $this->getServiceCall('configurator'),
         'configureService'
-      ],
-    ];
-    $services['configurable_service_exception'] = [
+      ),
+    );
+    $services['configurable_service_exception'] = array(
       'class' => '\Drupal\Tests\Component\DependencyInjection\MockService',
-      'arguments' => [],
+      'arguments' => array(),
       'configurator' => 'configurator_service_test_does_not_exist',
-    ];
+    );
 
-    $aliases = [];
+    $aliases = array();
     $aliases['service.provider_alias'] = 'service.provider';
     $aliases['late.service_alias'] = 'late.service';
 
-    return [
+    return array(
       'aliases' => $aliases,
       'parameters' => $parameters,
       'services' => $services,
       'frozen' => TRUE,
       'machine_format' => $this->machineFormat,
-    ];
+    );
   }
 
   /**
    * Helper function to return a service definition.
    */
   protected function getServiceCall($id, $invalid_behavior = ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE) {
-    return (object) [
+    return (object) array(
       'type' => 'service',
       'id' => $id,
       'invalidBehavior' => $invalid_behavior,
-    ];
+    );
   }
 
   /**
    * Helper function to return a service definition.
    */
   protected function getParameterCall($name) {
-    return (object) [
+    return (object) array(
       'type' => 'parameter',
       'name' => $name,
-    ];
+    );
   }
 
   /**
@@ -990,26 +1000,26 @@ class ContainerTest extends \PHPUnit_Framework_TestCase {
    */
   protected function getPrivateServiceCall($id, $service_definition, $shared = FALSE) {
     if (!$id) {
-      $hash = Crypt::hashBase64(serialize($service_definition));
+      $hash = sha1(serialize($service_definition));
       $id = 'private__' . $hash;
     }
-    return (object) [
+    return (object) array(
       'type' => 'private_service',
       'id' => $id,
       'value' => $service_definition,
       'shared' => $shared,
-    ];
+    );
   }
 
   /**
    * Helper function to return a machine-optimized collection.
    */
   protected function getCollection($collection, $resolve = TRUE) {
-    return (object) [
+    return (object) array(
       'type' => 'collection',
       'value' => $collection,
       'resolve' => $resolve,
-    ];
+    );
   }
 
 }
@@ -1178,7 +1188,7 @@ class MockService {
    * @return object
    *   The instantiated service object.
    */
-  public static function getFactoryMethod($class, $arguments = []) {
+  public static function getFactoryMethod($class, $arguments = array()) {
     $r = new \ReflectionClass($class);
     $service = ($r->getConstructor() === NULL) ? $r->newInstance() : $r->newInstanceArgs($arguments);
 

@@ -13,10 +13,10 @@ class Form extends RenderElement {
    * {@inheritdoc}
    */
   public function getInfo() {
-    return [
+    return array(
       '#method' => 'post',
-      '#theme_wrappers' => ['form'],
-    ];
+      '#theme_wrappers' => array('form'),
+    );
   }
 
 }

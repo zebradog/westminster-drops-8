@@ -31,16 +31,16 @@ use Drupal\Core\Url;
  * @see \Drupal\comment\CommentViewBuilder::buildLinks()
  */
 function hook_comment_links_alter(array &$links, CommentInterface $entity, array &$context) {
-  $links['mymodule'] = [
+  $links['mymodule'] = array(
     '#theme' => 'links__comment__mymodule',
-    '#attributes' => ['class' => ['links', 'inline']],
-    '#links' => [
-      'comment-report' => [
+    '#attributes' => array('class' => array('links', 'inline')),
+    '#links' => array(
+      'comment-report' => array(
         'title' => t('Report'),
         'url' => Url::fromRoute('comment_test.report', ['comment' => $entity->id()], ['query' => ['token' => \Drupal::getContainer()->get('csrf_token')->get("comment/{$entity->id()}/report")]]),
-      ],
-    ],
-  ];
+      ),
+    ),
+  );
 }
 
 /**

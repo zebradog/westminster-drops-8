@@ -34,18 +34,18 @@ class RequirementsExceptionTest extends UnitTestCase {
    * Provides a list of requirements to test.
    */
   public function getRequirementsProvider() {
-    return [
-      [
+    return array(
+      array(
         'requirements: random_jackson_pivot.',
         'Single Requirement',
-        ['requirements' => $this->missingRequirements[0]],
-      ],
-      [
+        array('requirements' => $this->missingRequirements[0]),
+      ),
+      array(
         'requirements: random_jackson_pivot. requirements: 51_Eridani_b.',
         'Multiple Requirements',
-        ['requirements' => $this->missingRequirements],
-      ],
-    ];
+        array('requirements' => $this->missingRequirements),
+      ),
+    );
   }
 
 }

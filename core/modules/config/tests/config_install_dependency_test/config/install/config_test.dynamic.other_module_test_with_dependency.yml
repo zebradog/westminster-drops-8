@@ -9,5 +9,3 @@ dependencies:
   enforced:
     module:
       - config_other_module_config_test
-    config:
-      - config_test.dynamic.dotted.english

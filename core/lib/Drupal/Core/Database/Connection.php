@@ -50,14 +50,14 @@ abstract class Connection {
    *
    * @var array
    */
-  protected $transactionLayers = [];
+  protected $transactionLayers = array();
 
   /**
    * Index of what driver-specific class to use for various operations.
    *
    * @var array
    */
-  protected $driverClasses = [];
+  protected $driverClasses = array();
 
   /**
    * The name of the Statement class for this connection.
@@ -101,7 +101,7 @@ abstract class Connection {
    *
    * @var array
    */
-  protected $connectionOptions = [];
+  protected $connectionOptions = array();
 
   /**
    * The schema object for this connection.
@@ -117,21 +117,21 @@ abstract class Connection {
    *
    * @var array
    */
-  protected $prefixes = [];
+  protected $prefixes = array();
 
   /**
    * List of search values for use in prefixTables().
    *
    * @var array
    */
-  protected $prefixSearch = [];
+  protected $prefixSearch = array();
 
   /**
    * List of replacement values for use in prefixTables().
    *
    * @var array
    */
-  protected $prefixReplace = [];
+  protected $prefixReplace = array();
 
   /**
    * List of un-prefixed table names, keyed by prefixed table names.
@@ -139,20 +139,6 @@ abstract class Connection {
    * @var array
    */
   protected $unprefixedTablesMap = [];
-
-  /**
-   * List of escaped database, table, and field names, keyed by unescaped names.
-   *
-   * @var array
-   */
-  protected $escapedNames = [];
-
-  /**
-   * List of escaped aliases names, keyed by unescaped aliases.
-   *
-   * @var array
-   */
-  protected $escapedAliases = [];
 
   /**
    * Constructs a Connection object.
@@ -171,7 +157,7 @@ abstract class Connection {
 
     // Set a Statement class, unless the driver opted out.
     if (!empty($this->statementClass)) {
-      $connection->setAttribute(\PDO::ATTR_STATEMENT_CLASS, [$this->statementClass, [$this]]);
+      $connection->setAttribute(\PDO::ATTR_STATEMENT_CLASS, array($this->statementClass, array($this)));
     }
 
     $this->connection = $connection;
@@ -187,7 +173,7 @@ abstract class Connection {
    * @return \PDO
    *   A \PDO object.
    */
-  public static function open(array &$connection_options = []) { }
+  public static function open(array &$connection_options = array()) { }
 
   /**
    * Destroys this Connection object.
@@ -202,7 +188,7 @@ abstract class Connection {
     // The Statement class attribute only accepts a new value that presents a
     // proper callable, so we reset it to PDOStatement.
     if (!empty($this->statementClass)) {
-      $this->connection->setAttribute(\PDO::ATTR_STATEMENT_CLASS, ['PDOStatement', []]);
+      $this->connection->setAttribute(\PDO::ATTR_STATEMENT_CLASS, array('PDOStatement', array()));
     }
     $this->schema = NULL;
   }
@@ -259,13 +245,13 @@ abstract class Connection {
    *   An array of default query options.
    */
   protected function defaultOptions() {
-    return [
+    return array(
       'target' => 'default',
       'fetch' => \PDO::FETCH_OBJ,
       'return' => Database::RETURN_STATEMENT,
       'throw_exception' => TRUE,
       'allow_delimiter_in_query' => FALSE,
-    ];
+    );
   }
 
   /**
@@ -293,16 +279,16 @@ abstract class Connection {
    */
   protected function setPrefix($prefix) {
     if (is_array($prefix)) {
-      $this->prefixes = $prefix + ['default' => ''];
+      $this->prefixes = $prefix + array('default' => '');
     }
     else {
-      $this->prefixes = ['default' => $prefix];
+      $this->prefixes = array('default' => $prefix);
     }
 
     // Set up variables for use in prefixTables(). Replace table-specific
     // prefixes first.
-    $this->prefixSearch = [];
-    $this->prefixReplace = [];
+    $this->prefixSearch = array();
+    $this->prefixReplace = array();
     foreach ($this->prefixes as $key => $val) {
       if ($key != 'default') {
         $this->prefixSearch[] = '{' . $key . '}';
@@ -596,7 +582,7 @@ abstract class Connection {
    *
    * @see \Drupal\Core\Database\Connection::defaultOptions()
    */
-  public function query($query, array $args = [], $options = []) {
+  public function query($query, array $args = array(), $options = array()) {
     // Use default values if not already set.
     $options += $this->defaultOptions();
 
@@ -670,7 +656,7 @@ abstract class Connection {
    * @throws \Drupal\Core\Database\DatabaseExceptionWrapper
    * @throws \Drupal\Core\Database\IntegrityConstraintViolationException
    */
-  protected function handleQueryException(\PDOException $e, $query, array $args = [], $options = []) {
+  protected function handleQueryException(\PDOException $e, $query, array $args = array(), $options = array()) {
     if ($options['throw_exception']) {
       // Wrap the exception in another exception, because PHP does not allow
       // overriding Exception::getMessage(). Its message is the extra database
@@ -732,7 +718,7 @@ abstract class Connection {
       }
       // Handle expansion of arrays.
       $key_name = str_replace('[]', '__', $key);
-      $new_keys = [];
+      $new_keys = array();
       // We require placeholders to have trailing brackets if the developer
       // intends them to be expanded to an array to make the intent explicit.
       foreach (array_values($data) as $i => $value) {
@@ -796,7 +782,7 @@ abstract class Connection {
    *
    * @see \Drupal\Core\Database\Query\Select
    */
-  public function select($table, $alias = NULL, array $options = []) {
+  public function select($table, $alias = NULL, array $options = array()) {
     $class = $this->getDriverClass('Select');
     return new $class($table, $alias, $this, $options);
   }
@@ -814,7 +800,7 @@ abstract class Connection {
    *
    * @see \Drupal\Core\Database\Query\Insert
    */
-  public function insert($table, array $options = []) {
+  public function insert($table, array $options = array()) {
     $class = $this->getDriverClass('Insert');
     return new $class($this, $table, $options);
   }
@@ -832,7 +818,7 @@ abstract class Connection {
    *
    * @see \Drupal\Core\Database\Query\Merge
    */
-  public function merge($table, array $options = []) {
+  public function merge($table, array $options = array()) {
     $class = $this->getDriverClass('Merge');
     return new $class($this, $table, $options);
   }
@@ -850,7 +836,7 @@ abstract class Connection {
    *
    * @see \Drupal\Core\Database\Query\Upsert
    */
-  public function upsert($table, array $options = []) {
+  public function upsert($table, array $options = array()) {
     $class = $this->getDriverClass('Upsert');
     return new $class($this, $table, $options);
   }
@@ -868,7 +854,7 @@ abstract class Connection {
    *
    * @see \Drupal\Core\Database\Query\Update
    */
-  public function update($table, array $options = []) {
+  public function update($table, array $options = array()) {
     $class = $this->getDriverClass('Update');
     return new $class($this, $table, $options);
   }
@@ -886,7 +872,7 @@ abstract class Connection {
    *
    * @see \Drupal\Core\Database\Query\Delete
    */
-  public function delete($table, array $options = []) {
+  public function delete($table, array $options = array()) {
     $class = $this->getDriverClass('Delete');
     return new $class($this, $table, $options);
   }
@@ -904,7 +890,7 @@ abstract class Connection {
    *
    * @see \Drupal\Core\Database\Query\Truncate
    */
-  public function truncate($table, array $options = []) {
+  public function truncate($table, array $options = array()) {
     $class = $this->getDriverClass('Truncate');
     return new $class($this, $table, $options);
   }
@@ -939,10 +925,7 @@ abstract class Connection {
    *   The sanitized database name.
    */
   public function escapeDatabase($database) {
-    if (!isset($this->escapedNames[$database])) {
-      $this->escapedNames[$database] = preg_replace('/[^A-Za-z0-9_.]+/', '', $database);
-    }
-    return $this->escapedNames[$database];
+    return preg_replace('/[^A-Za-z0-9_.]+/', '', $database);
   }
 
   /**
@@ -959,10 +942,7 @@ abstract class Connection {
    *   The sanitized table name.
    */
   public function escapeTable($table) {
-    if (!isset($this->escapedNames[$table])) {
-      $this->escapedNames[$table] = preg_replace('/[^A-Za-z0-9_.]+/', '', $table);
-    }
-    return $this->escapedNames[$table];
+    return preg_replace('/[^A-Za-z0-9_.]+/', '', $table);
   }
 
   /**
@@ -979,10 +959,7 @@ abstract class Connection {
    *   The sanitized field name.
    */
   public function escapeField($field) {
-    if (!isset($this->escapedNames[$field])) {
-      $this->escapedNames[$field] = preg_replace('/[^A-Za-z0-9_.]+/', '', $field);
-    }
-    return $this->escapedNames[$field];
+    return preg_replace('/[^A-Za-z0-9_.]+/', '', $field);
   }
 
   /**
@@ -1000,10 +977,7 @@ abstract class Connection {
    *   The sanitized alias name.
    */
   public function escapeAlias($field) {
-    if (!isset($this->escapedAliases[$field])) {
-      $this->escapedAliases[$field] = preg_replace('/[^A-Za-z0-9_]+/', '', $field);
-    }
-    return $this->escapedAliases[$field];
+    return preg_replace('/[^A-Za-z0-9_]+/', '', $field);
   }
 
   /**
@@ -1083,9 +1057,9 @@ abstract class Connection {
    * @throws \Drupal\Core\Database\TransactionOutOfOrderException
    * @throws \Drupal\Core\Database\TransactionNoActiveException
    *
-   * @see \Drupal\Core\Database\Transaction::rollBack()
+   * @see \Drupal\Core\Database\Transaction::rollback()
    */
-  public function rollBack($savepoint_name = 'drupal_transaction') {
+  public function rollback($savepoint_name = 'drupal_transaction') {
     if (!$this->supportsTransactions()) {
       return;
     }
@@ -1179,7 +1153,7 @@ abstract class Connection {
     // The transaction has already been committed earlier. There is nothing we
     // need to do. If this transaction was part of an earlier out-of-order
     // rollback, an exception would already have been thrown by
-    // Database::rollBack().
+    // Database::rollback().
     if (!isset($this->transactionLayers[$name])) {
       return;
     }
@@ -1237,7 +1211,7 @@ abstract class Connection {
    *   A database query result resource, or NULL if the query was not executed
    *   correctly.
    */
-  abstract public function queryRange($query, $from, $count, array $args = [], array $options = []);
+  abstract public function queryRange($query, $from, $count, array $args = array(), array $options = array());
 
   /**
    * Generates a temporary table name.
@@ -1274,7 +1248,7 @@ abstract class Connection {
    * @return string
    *   The name of the temporary table.
    */
-  abstract public function queryTemporary($query, array $args = [], array $options = []);
+  abstract function queryTemporary($query, array $args = array(), array $options = array());
 
   /**
    * Returns the type of database driver.
@@ -1421,7 +1395,7 @@ abstract class Connection {
    *
    * @see \PDO::prepare()
    */
-  public function prepare($statement, array $driver_options = []) {
+  public function prepare($statement, array $driver_options = array()) {
     return $this->connection->prepare($statement, $driver_options);
   }
 
@@ -1442,26 +1416,6 @@ abstract class Connection {
    */
   public function quote($string, $parameter_type = \PDO::PARAM_STR) {
     return $this->connection->quote($string, $parameter_type);
-  }
-
-  /**
-   * Extracts the SQLSTATE error from the PDOException.
-   *
-   * @param \Exception $e
-   *   The exception
-   *
-   * @return string
-   *   The five character error code.
-   */
-  protected static function getSQLState(\Exception $e) {
-    // The PDOException code is not always reliable, try to see whether the
-    // message has something usable.
-    if (preg_match('/^SQLSTATE\[(\w{5})\]/', $e->getMessage(), $matches)) {
-      return $matches[1];
-    }
-    else {
-      return $e->getCode();
-    }
   }
 
   /**

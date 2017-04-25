@@ -18,31 +18,31 @@ class AttributesTest extends UnitTestCase {
    * @return array
    */
   public function providerTestAttributeData() {
-    return [
+    return array(
       // Verify that special characters are HTML encoded.
-      [['&"\'<>' => 'value'], ' &amp;&quot;&#039;&lt;&gt;="value"', 'HTML encode attribute names.'],
-      [['title' => '&"\'<>'], ' title="&amp;&quot;&#039;&lt;&gt;"', 'HTML encode attribute values.'],
+      array(array('&"\'<>' => 'value'), ' &amp;&quot;&#039;&lt;&gt;="value"', 'HTML encode attribute names.'),
+      array(array('title' => '&"\'<>'), ' title="&amp;&quot;&#039;&lt;&gt;"', 'HTML encode attribute values.'),
       // Verify multi-value attributes are concatenated with spaces.
-      [['class' => ['first', 'last']], ' class="first last"', 'Concatenate multi-value attributes.'],
+      array(array('class' => array('first', 'last')), ' class="first last"', 'Concatenate multi-value attributes.'),
       // Verify boolean attribute values are rendered correctly.
-      [['disabled' => TRUE], ' disabled', 'Boolean attribute is rendered.'],
-      [['disabled' => FALSE], '', 'Boolean attribute is not rendered.'],
+      array(array('disabled' => TRUE), ' disabled', 'Boolean attribute is rendered.'),
+      array(array('disabled' => FALSE), '', 'Boolean attribute is not rendered.'),
       // Verify empty attribute values are rendered.
-      [['alt' => ''], ' alt=""', 'Empty attribute value #1.'],
-      [['alt' => NULL], '', 'Null attribute value #2.'],
+      array(array('alt' => ''), ' alt=""', 'Empty attribute value #1.'),
+      array(array('alt' => NULL), '', 'Null attribute value #2.'),
       // Verify multiple attributes are rendered.
-      [
-        [
+      array(
+        array(
           'id' => 'id-test',
-          'class' => ['first', 'last'],
+          'class' => array('first', 'last'),
           'alt' => 'Alternate',
-        ],
+        ),
         ' id="id-test" class="first last" alt="Alternate"',
         'Multiple attributes.'
-      ],
+      ),
       // Verify empty attributes array is rendered.
-      [[], '', 'Empty attributes array.'],
-    ];
+      array(array(), '', 'Empty attributes array.'),
+    );
   }
 
   /**
@@ -52,7 +52,7 @@ class AttributesTest extends UnitTestCase {
    *
    * @dataProvider providerTestAttributeData
    */
-  public function testDrupalAttributes($attributes, $expected, $message) {
+  function testDrupalAttributes($attributes, $expected, $message) {
     $this->assertSame($expected, (string) new Attribute($attributes), $message);
   }
 
@@ -60,7 +60,7 @@ class AttributesTest extends UnitTestCase {
    * Test attribute iteration
    */
   public function testAttributeIteration() {
-    $attribute = new Attribute(['key1' => 'value1']);
+    $attribute = new Attribute(array('key1' => 'value1'));
     foreach ($attribute as $value) {
       $this->assertSame((string) $value, 'value1', 'Iterate over attribute.');
     }

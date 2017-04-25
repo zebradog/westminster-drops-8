@@ -18,18 +18,18 @@ class EntityTestViewBuilder extends EntityViewBuilder {
     parent::buildComponents($build, $entities, $displays, $view_mode);
 
     foreach ($entities as $id => $entity) {
-      $build[$id]['label'] = [
+      $build[$id]['label'] = array(
         '#weight' => -100,
         '#plain_text' => $entity->label(),
-      ];
-      $build[$id]['separator'] = [
+      );
+      $build[$id]['separator'] = array(
         '#weight' => -150,
         '#markup' => ' | ',
-      ];
-      $build[$id]['view_mode'] = [
+      );
+      $build[$id]['view_mode'] = array(
         '#weight' => -200,
         '#plain_text' => $view_mode,
-      ];
+      );
     }
   }
 

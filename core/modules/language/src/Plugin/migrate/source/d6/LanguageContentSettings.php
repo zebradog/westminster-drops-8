@@ -19,20 +19,20 @@ class LanguageContentSettings extends DrupalSqlBase {
    */
   public function query() {
     return $this->select('node_type', 't')
-      ->fields('t', [
+      ->fields('t', array(
         'type',
-      ]);
+      ));
   }
 
   /**
    * {@inheritdoc}
    */
   public function fields() {
-    $fields = [
+    $fields = array(
       'type' => $this->t('Type'),
       'language_content_type' => $this->t('Multilingual support.'),
       'i18n_lock_node' => $this->t('Lock language.'),
-    ];
+    );
     return $fields;
   }
 

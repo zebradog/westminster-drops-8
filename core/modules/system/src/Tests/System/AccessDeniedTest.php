@@ -32,11 +32,11 @@ class AccessDeniedTest extends WebTestBase {
     $this->adminUser->roles[] = 'administrator';
     $this->adminUser->save();
 
-    user_role_grant_permissions(RoleInterface::ANONYMOUS_ID, ['access user profiles']);
-    user_role_grant_permissions(RoleInterface::AUTHENTICATED_ID, ['access user profiles']);
+    user_role_grant_permissions(RoleInterface::ANONYMOUS_ID, array('access user profiles'));
+    user_role_grant_permissions(RoleInterface::AUTHENTICATED_ID, array('access user profiles'));
   }
 
-  public function testAccessDenied() {
+  function testAccessDenied() {
     $this->drupalGet('admin');
     $this->assertText(t('Access denied'), 'Found the default 403 page');
     $this->assertResponse(403);
@@ -65,7 +65,7 @@ class AccessDeniedTest extends WebTestBase {
     $this->drupalPostForm('admin/config/system/site-information', $edit, t('Save configuration'));
 
     // Enable the user login block.
-    $block = $this->drupalPlaceBlock('user_login_block', ['id' => 'login']);
+    $this->drupalPlaceBlock('user_login_block', array('id' => 'login'));
 
     // Log out and check that the user login block is shown on custom 403 pages.
     $this->drupalLogout();
@@ -90,14 +90,17 @@ class AccessDeniedTest extends WebTestBase {
     // Log back in, set the custom 403 page to /user/login and remove the block
     $this->drupalLogin($this->adminUser);
     $this->config('system.site')->set('page.403', '/user/login')->save();
-    $block->disable()->save();
+    $edit = [
+      'region' => -1,
+    ];
+    $this->drupalPostForm('admin/structure/block/manage/login', $edit, t('Save block'));
 
     // Check that we can log in from the 403 page.
     $this->drupalLogout();
-    $edit = [
+    $edit = array(
       'name' => $this->adminUser->getUsername(),
       'pass' => $this->adminUser->pass_raw,
-    ];
+    );
     $this->drupalPostForm('admin/config/system/site-information', $edit, t('Log in'));
 
     // Check that we're still on the same page.

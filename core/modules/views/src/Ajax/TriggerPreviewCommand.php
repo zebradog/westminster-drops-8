@@ -15,9 +15,9 @@ class TriggerPreviewCommand implements CommandInterface {
    * {@inheritdoc}
    */
   public function render() {
-    return [
+    return array(
       'command' => 'viewsTriggerPreview',
-    ];
+    );
   }
 
 }

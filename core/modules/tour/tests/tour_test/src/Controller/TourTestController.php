@@ -18,56 +18,56 @@ class TourTestController {
    *   Array of markup.
    */
   public function tourTest1($locale = 'foo') {
-    return [
-      'tip-1' => [
+    return array(
+      'tip-1' => array(
         '#type' => 'container',
-        '#attributes' => [
+        '#attributes' => array(
           'id' => 'tour-test-1',
-        ],
+        ),
         '#children' => t('Where does the rain in Spain fail?'),
-      ],
-      'tip-3' => [
+      ),
+      'tip-3' => array(
         '#type' => 'container',
-        '#attributes' => [
+        '#attributes' => array(
           'id' => 'tour-test-3',
-        ],
+        ),
         '#children' => t('Tip created now?'),
-      ],
-      'tip-4' => [
+      ),
+      'tip-4' => array(
         '#type' => 'container',
-        '#attributes' => [
+        '#attributes' => array(
           'id' => 'tour-test-4',
-        ],
+        ),
         '#children' => t('Tip created later?'),
-      ],
-      'tip-5' => [
+      ),
+      'tip-5' => array(
         '#type' => 'container',
-        '#attributes' => [
-          'class' => ['tour-test-5'],
-        ],
+        '#attributes' => array(
+          'class' => array('tour-test-5'),
+        ),
         '#children' => t('Tip created later?'),
-      ],
-      'code-tip-1' => [
+      ),
+      'code-tip-1' => array(
         '#type' => 'container',
-        '#attributes' => [
+        '#attributes' => array(
           'id' => 'tour-code-test-1',
-        ],
+        ),
         '#children' => t('Tip created now?'),
-      ],
-    ];
+      ),
+    );
   }
 
   /**
    * Outputs some content for testing tours.
    */
   public function tourTest2() {
-    return [
+    return array(
       '#type' => 'container',
-      '#attributes' => [
+      '#attributes' => array(
         'id' => 'tour-test-2',
-      ],
+      ),
       '#children' => t('Pangram example'),
-    ];
+    );
 
   }
 

@@ -27,14 +27,14 @@ class MoreLink extends Link {
    */
   public function getInfo() {
     $info = parent::getInfo();
-    return [
+    return array(
       '#title' => $this->t('More'),
-      '#theme_wrappers' => [
-        'container' => [
-          '#attributes' => ['class' => ['more-link']],
-        ],
-      ],
-    ] + $info;
+      '#theme_wrappers' => array(
+        'container' => array(
+          '#attributes' => array('class' => array('more-link')),
+        ),
+      ),
+    ) + $info;
   }
 
 }

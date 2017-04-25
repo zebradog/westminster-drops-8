@@ -12,7 +12,7 @@ class TableSortExtender extends SelectExtender {
   /**
    * The array of fields that can be sorted by.
    */
-  protected $header = [];
+  protected $header = array();
 
   public function __construct(SelectInterface $query, Connection $connection) {
     parent::__construct($query, $connection);

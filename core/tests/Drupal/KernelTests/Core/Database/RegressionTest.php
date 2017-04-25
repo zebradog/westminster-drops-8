@@ -14,29 +14,29 @@ class RegressionTest extends DatabaseTestBase {
    *
    * @var array
    */
-  public static $modules = ['node', 'user'];
+  public static $modules = array('node', 'user');
 
   /**
    * Ensures that non-ASCII UTF-8 data is stored in the database properly.
    */
-  public function testRegression_310447() {
+  function testRegression_310447() {
     // That's a 255 character UTF-8 string.
     $job = str_repeat("é", 255);
     db_insert('test')
-      ->fields([
+      ->fields(array(
         'name' => $this->randomMachineName(),
         'age' => 20,
         'job' => $job,
-      ])->execute();
+      ))->execute();
 
-    $from_database = db_query('SELECT job FROM {test} WHERE job = :job', [':job' => $job])->fetchField();
+    $from_database = db_query('SELECT job FROM {test} WHERE job = :job', array(':job' => $job))->fetchField();
     $this->assertIdentical($job, $from_database, 'The database handles UTF-8 characters cleanly.');
   }
 
   /**
    * Tests the db_table_exists() function.
    */
-  public function testDBTableExists() {
+  function testDBTableExists() {
     $this->assertIdentical(TRUE, db_table_exists('test'), 'Returns true for existent table.');
     $this->assertIdentical(FALSE, db_table_exists('nosuchtable'), 'Returns false for nonexistent table.');
   }
@@ -44,7 +44,7 @@ class RegressionTest extends DatabaseTestBase {
   /**
    * Tests the db_field_exists() function.
    */
-  public function testDBFieldExists() {
+  function testDBFieldExists() {
     $this->assertIdentical(TRUE, db_field_exists('test', 'name'), 'Returns true for existent column.');
     $this->assertIdentical(FALSE, db_field_exists('test', 'nosuchcolumn'), 'Returns false for nonexistent column.');
   }
@@ -52,7 +52,7 @@ class RegressionTest extends DatabaseTestBase {
   /**
    * Tests the db_index_exists() function.
    */
-  public function testDBIndexExists() {
+  function testDBIndexExists() {
     $this->assertIdentical(TRUE, db_index_exists('test', 'ages'), 'Returns true for existent index.');
     $this->assertIdentical(FALSE, db_index_exists('test', 'nosuchindex'), 'Returns false for nonexistent index.');
   }

@@ -24,23 +24,23 @@ class AjaxTestForm extends FormBase {
 
     $form['#action'] = \Drupal::url('ajax_test.dialog');
 
-    $form['description'] = [
+    $form['description'] = array(
       '#markup' => '<p>' . $this->t("Ajax Form contents description.") . '</p>',
-    ];
+    );
 
-    $form['actions'] = [
+    $form['actions'] = array(
       '#type' => 'actions',
-    ];
-    $form['actions']['submit'] = [
+    );
+    $form['actions']['submit'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Do it'),
-    ];
-    $form['actions']['preview'] = [
+    );
+    $form['actions']['preview'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Preview'),
       // No regular submit-handler. This form only works via JavaScript.
-      '#submit' => [],
-      '#ajax' => [
+      '#submit' => array(),
+      '#ajax' => array(
         // This means the ::preview() method on this class would be invoked in
         // case of a click event. However, since Drupal core's test runner only
         // is able to execute PHP, not JS, there is no point in actually
@@ -51,8 +51,8 @@ class AjaxTestForm extends FormBase {
         // we cannot meaningfully test it anyway.
         'callback' => '::preview',
         'event' => 'click',
-      ],
-    ];
+      ),
+    );
     return $form;
   }
 

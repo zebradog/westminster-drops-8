@@ -44,7 +44,7 @@ class BlockPageVariantTest extends UnitTestCase {
    * @return \Drupal\block\Plugin\DisplayVariant\BlockPageVariant|\PHPUnit_Framework_MockObject_MockObject
    *   A mocked display variant plugin.
    */
-  public function setUpDisplayVariant($configuration = [], $definition = []) {
+  public function setUpDisplayVariant($configuration = array(), $definition = array()) {
 
     $container = new Container();
     $cache_context_manager = $this->getMockBuilder('Drupal\Core\Cache\CacheContextsManager')
@@ -60,37 +60,37 @@ class BlockPageVariantTest extends UnitTestCase {
     $this->blockViewBuilder = $this->getMock('Drupal\Core\Entity\EntityViewBuilderInterface');
 
     return $this->getMockBuilder('Drupal\block\Plugin\DisplayVariant\BlockPageVariant')
-      ->setConstructorArgs([$configuration, 'test', $definition, $this->blockRepository, $this->blockViewBuilder, ['config:block_list']])
-      ->setMethods(['getRegionNames'])
+      ->setConstructorArgs(array($configuration, 'test', $definition, $this->blockRepository, $this->blockViewBuilder, ['config:block_list']))
+      ->setMethods(array('getRegionNames'))
       ->getMock();
   }
 
   public function providerBuild() {
-    $blocks_config = [
-      'block1' => [
+    $blocks_config = array(
+      'block1' => array(
         // region, is main content block, is messages block, is title block
         'top', FALSE, FALSE, FALSE,
-      ],
+      ),
       // Test multiple blocks in the same region.
-      'block2' => [
+      'block2' => array(
         'bottom', FALSE, FALSE, FALSE,
-      ],
-      'block3' => [
+      ),
+      'block3' => array(
         'bottom', FALSE, FALSE, FALSE,
-      ],
+      ),
       // Test a block implementing MainContentBlockPluginInterface.
-      'block4' => [
+      'block4' => array(
         'center', TRUE, FALSE, FALSE,
-      ],
+      ),
       // Test a block implementing MessagesBlockPluginInterface.
-      'block5' => [
+      'block5' => array(
         'center', FALSE, TRUE, FALSE,
-      ],
+      ),
       // Test a block implementing TitleBlockPluginInterface.
-      'block6' => [
+      'block6' => array(
         'center', FALSE, FALSE, TRUE,
-      ],
-    ];
+      ),
+    );
 
     $test_cases = [];
     $test_cases[] = [$blocks_config, 6,
@@ -219,7 +219,7 @@ class BlockPageVariantTest extends UnitTestCase {
     }
     $this->blockViewBuilder->expects($this->exactly($visible_block_count))
       ->method('view')
-      ->will($this->returnValue([]));
+      ->will($this->returnValue(array()));
     $this->blockRepository->expects($this->once())
       ->method('getVisibleBlocksPerRegion')
       ->willReturnCallback(function (&$cacheable_metadata) use ($blocks) {

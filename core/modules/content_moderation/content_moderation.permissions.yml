@@ -2,13 +2,18 @@ view any unpublished content:
   title: 'View any unpublished content'
   description: 'This permission is necessary for any users that may moderate content.'
 
-'view content moderation':
-  title: 'View content moderation'
-  description: 'View content moderation.'
+'view moderation states':
+  title: 'View moderation states'
+  description: 'View moderation states.'
 
-'administer content moderation':
-  title: 'Administer content moderation'
-  description: 'Administer workflows on content entities.'
+'administer moderation states':
+  title: 'Administer moderation states'
+  description: 'Create and edit moderation states.'
+  'restrict access': TRUE
+
+'administer moderation state transitions':
+  title: 'Administer content moderation state transitions'
+  description: 'Create and edit content moderation state transitions.'
   'restrict access': TRUE
 
 view latest version:

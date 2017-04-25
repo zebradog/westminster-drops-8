@@ -346,9 +346,9 @@ class Migration extends PluginBase implements MigrationInterface, RequirementsIn
     }
     $index = serialize($process);
     if (!isset($this->processPlugins[$index])) {
-      $this->processPlugins[$index] = [];
+      $this->processPlugins[$index] = array();
       foreach ($this->getProcessNormalized($process) as $property => $configurations) {
-        $this->processPlugins[$index][$property] = [];
+        $this->processPlugins[$index][$property] = array();
         foreach ($configurations as $configuration) {
           if (isset($configuration['source'])) {
             $this->processPlugins[$index][$property][] = $this->processPluginManager->createInstance('get', $configuration, $this);
@@ -376,16 +376,16 @@ class Migration extends PluginBase implements MigrationInterface, RequirementsIn
    *   The normalized process configuration.
    */
   protected function getProcessNormalized(array $process) {
-    $normalized_configurations = [];
+    $normalized_configurations = array();
     foreach ($process as $destination => $configuration) {
       if (is_string($configuration)) {
-        $configuration = [
+        $configuration = array(
           'plugin' => 'get',
           'source' => $configuration,
-        ];
+        );
       }
       if (isset($configuration['plugin'])) {
-        $configuration = [$configuration];
+        $configuration = array($configuration);
       }
       $normalized_configurations[$destination] = $configuration;
     }

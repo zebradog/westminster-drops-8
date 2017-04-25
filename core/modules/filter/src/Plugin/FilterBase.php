@@ -16,6 +16,13 @@ use Drupal\Core\Plugin\PluginBase;
 abstract class FilterBase extends PluginBase implements FilterInterface {
 
   /**
+   * The plugin ID of this filter.
+   *
+   * @var string
+   */
+  protected $plugin_id;
+
+  /**
    * The name of the provider that owns this filter.
    *
    * @var string
@@ -41,7 +48,14 @@ abstract class FilterBase extends PluginBase implements FilterInterface {
    *
    * @var array
    */
-  public $settings = [];
+  public $settings = array();
+
+  /**
+   * A collection of all filters this filter participates in.
+   *
+   * @var \Drupal\filter\FilterPluginCollection
+   */
+  protected $collection;
 
   /**
    * {@inheritdoc}
@@ -74,32 +88,32 @@ abstract class FilterBase extends PluginBase implements FilterInterface {
    * {@inheritdoc}
    */
   public function getConfiguration() {
-    return [
+    return array(
       'id' => $this->getPluginId(),
       'provider' => $this->pluginDefinition['provider'],
       'status' => $this->status,
       'weight' => $this->weight,
       'settings' => $this->settings,
-    ];
+    );
   }
 
   /**
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return [
+    return array(
       'provider' => $this->pluginDefinition['provider'],
       'status' => FALSE,
       'weight' => $this->pluginDefinition['weight'] ?: 0,
       'settings' => $this->pluginDefinition['settings'],
-    ];
+    );
   }
 
   /**
    * {@inheritdoc}
    */
   public function calculateDependencies() {
-    return [];
+    return array();
   }
 
   /**
@@ -130,7 +144,7 @@ abstract class FilterBase extends PluginBase implements FilterInterface {
     // Implementations should work with and return $form. Returning an empty
     // array here allows the text format administration form to identify whether
     // the filter plugin has any settings form elements.
-    return [];
+    return array();
   }
 
   /**

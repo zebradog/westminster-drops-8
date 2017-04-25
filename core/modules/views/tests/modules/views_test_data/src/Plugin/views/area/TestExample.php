@@ -27,8 +27,8 @@ class TestExample extends AreaPluginBase {
    */
   public function defineOptions() {
     $options = parent::defineOptions();
-    $options['string'] = ['default' => ''];
-    $options['custom_access'] = ['default' => TRUE];
+    $options['string'] = array('default' => '');
+    $options['custom_access'] = array('default' => TRUE);
 
     return $options;
   }
@@ -46,11 +46,11 @@ class TestExample extends AreaPluginBase {
    */
   public function render($empty = FALSE) {
     if (!$empty || !empty($this->options['empty'])) {
-      return [
+      return array(
         '#markup' => $this->globalTokenReplace($this->options['string']),
-      ];
+      );
     }
-    return [];
+    return array();
   }
 
 }

@@ -55,10 +55,10 @@ class PermissionAccessCheckTest extends UnitTestCase {
     return [
       [[], FALSE],
       [['_permission' => 'allowed'], TRUE, ['user.permissions']],
-      [['_permission' => 'denied'], FALSE, ['user.permissions'], "The 'denied' permission is required."],
+      [['_permission' => 'denied'], FALSE, ['user.permissions']],
       [['_permission' => 'allowed+denied'], TRUE, ['user.permissions']],
       [['_permission' => 'allowed+denied+other'], TRUE, ['user.permissions']],
-      [['_permission' => 'allowed,denied'], FALSE, ['user.permissions'], "The following permissions are required: 'allowed' AND 'denied'."],
+      [['_permission' => 'allowed,denied'], FALSE, ['user.permissions']],
     ];
   }
 
@@ -68,11 +68,8 @@ class PermissionAccessCheckTest extends UnitTestCase {
    * @dataProvider providerTestAccess
    * @covers ::access
    */
-  public function testAccess($requirements, $access, array $contexts = [], $message = '') {
+  public function testAccess($requirements, $access, array $contexts = []) {
     $access_result = AccessResult::allowedIf($access)->addCacheContexts($contexts);
-    if (!empty($message)) {
-      $access_result->setReason($message);
-    }
     $user = $this->getMock('Drupal\Core\Session\AccountInterface');
     $user->expects($this->any())
       ->method('hasPermission')

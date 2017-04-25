@@ -87,11 +87,11 @@ class TextField extends CckFieldPluginBase {
       ];
     }
 
-    $process = [
+    $process = array(
       'plugin' => 'iterator',
       'source' => $field_name,
       'process' => $process,
-    ];
+    );
     $migration->setProcessOfProperty($field_name, $process);
   }
 

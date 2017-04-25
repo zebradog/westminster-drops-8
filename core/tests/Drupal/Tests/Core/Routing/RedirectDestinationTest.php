@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\Core\Routing;
 
-use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Routing\RedirectDestination;
 use Drupal\Tests\UnitTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,7 +51,7 @@ class RedirectDestinationTest extends UnitTestCase {
       ->willReturnCallback(function($route, $parameters, $options) {
         $query_string = '';
         if (!empty($options['query'])) {
-          $query_string = '?' . UrlHelper::buildQuery($options['query']);
+          $query_string = '?' . $options['query'];
         }
 
         return '/current-path' . $query_string;

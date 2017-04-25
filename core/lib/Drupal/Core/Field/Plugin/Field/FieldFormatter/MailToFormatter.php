@@ -23,14 +23,14 @@ class MailToFormatter extends FormatterBase {
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
-    $elements = [];
+    $elements = array();
 
     foreach ($items as $delta => $item) {
-      $elements[$delta] = [
+      $elements[$delta] = array(
         '#type' => 'link',
         '#title' => $item->value,
         '#url' => Url::fromUri('mailto:' . $item->value),
-      ];
+      );
     }
 
     return $elements;

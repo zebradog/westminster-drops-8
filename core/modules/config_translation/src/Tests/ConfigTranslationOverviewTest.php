@@ -35,7 +35,7 @@ class ConfigTranslationOverviewTest extends WebTestBase {
    *
    * @var array
    */
-  protected $langcodes = ['fr', 'ta'];
+  protected $langcodes = array('fr', 'ta');
 
   /**
    * String translation storage object.
@@ -46,7 +46,7 @@ class ConfigTranslationOverviewTest extends WebTestBase {
 
   protected function setUp() {
     parent::setUp();
-    $permissions = [
+    $permissions = array(
       'translate configuration',
       'administer languages',
       'administer site configuration',
@@ -54,7 +54,7 @@ class ConfigTranslationOverviewTest extends WebTestBase {
       'access site-wide contact form',
       'access contextual links',
       'administer views',
-    ];
+    );
     // Create and log in user.
     $this->drupalLogin($this->drupalCreateUser($permissions));
 
@@ -83,17 +83,17 @@ class ConfigTranslationOverviewTest extends WebTestBase {
       }
     }
 
-    $labels = [
+    $labels = array(
       '&$nxd~i0',
       'some "label" with quotes',
       $this->randomString(),
-    ];
+    );
 
     foreach ($labels as $label) {
-      $test_entity = entity_create('config_test', [
+      $test_entity = entity_create('config_test', array(
         'id' => $this->randomMachineName(),
         'label' => $label,
-      ]);
+      ));
       $test_entity->save();
 
       $base_url = 'admin/structure/config_test/manage/' . $test_entity->id();
@@ -119,7 +119,7 @@ class ConfigTranslationOverviewTest extends WebTestBase {
       $this->assertRaw('<th>' . t('Language') . '</th>');
 
       $this->drupalGet($base_url);
-      $this->assertLink(t('Translate @title', ['@title' => $entity_type->getLowercaseLabel()]));
+      $this->assertLink(t('Translate @title', array('@title' => $entity_type->getLowercaseLabel())));
     }
   }
 
@@ -154,10 +154,10 @@ class ConfigTranslationOverviewTest extends WebTestBase {
     $config_test_storage = $this->container->get('entity.manager')->getStorage('config_test');
 
     // Set up an override.
-    $settings['config']['config_test.dynamic.dotted.default']['label'] = (object) [
+    $settings['config']['config_test.dynamic.dotted.default']['label'] = (object) array(
       'value' => $overridden_label,
       'required' => TRUE,
-    ];
+    );
     $this->writeSettings($settings);
 
     // Test that the overridden label is loaded with the entity.

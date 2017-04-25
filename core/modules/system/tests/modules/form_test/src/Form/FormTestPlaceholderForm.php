@@ -21,12 +21,12 @@ class FormTestPlaceholderForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    foreach (['textfield', 'textarea', 'url', 'password', 'search', 'tel', 'email', 'number'] as $type) {
-      $form[$type] = [
+    foreach (array('textfield', 'textarea', 'url', 'password', 'search', 'tel', 'email', 'number') as $type) {
+      $form[$type] = array(
         '#type' => $type,
         '#title' => $type,
         '#placeholder' => 'placeholder-text',
-      ];
+      );
     }
 
     return $form;

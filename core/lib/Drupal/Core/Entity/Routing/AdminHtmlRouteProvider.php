@@ -11,6 +11,8 @@ use Drupal\Core\Entity\EntityTypeInterface;
  * administrative theme.
  *
  * @see \Drupal\Core\Entity\Routing\DefaultHtmlRouteProvider.
+ *
+ * @internal
  */
 class AdminHtmlRouteProvider extends DefaultHtmlRouteProvider {
 

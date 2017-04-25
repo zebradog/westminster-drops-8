@@ -16,26 +16,26 @@ class ArgumentStringTest extends HandlerTestBase {
    *
    * @var array
    */
-  public static $testViews = ['test_glossary'];
+  public static $testViews = array('test_glossary');
 
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['node'];
+  public static $modules = array('node');
 
   /**
    * Tests the glossary feature.
    */
-  public function testGlossary() {
+  function testGlossary() {
     // Setup some nodes, one with a, two with b and three with c.
     $counter = 1;
-    foreach (['a', 'b', 'c'] as $char) {
+    foreach (array('a', 'b', 'c') as $char) {
       for ($i = 0; $i < $counter; $i++) {
-        $edit = [
+        $edit = array(
           'title' => $char . $this->randomMachineName(),
-        ];
+        );
         $this->drupalCreateNode($edit);
       }
     }

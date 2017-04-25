@@ -22,21 +22,21 @@ class FormTestEmailForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['email'] = [
+    $form['email'] = array(
       '#type' => 'email',
       '#title' => 'Email address',
       '#description' => 'An email address.',
-    ];
-    $form['email_required'] = [
+    );
+    $form['email_required'] = array(
       '#type' => 'email',
       '#title' => 'Address',
       '#required' => TRUE,
       '#description' => 'A required email address field.',
-    ];
-    $form['submit'] = [
+    );
+    $form['submit'] = array(
       '#type' => 'submit',
       '#value' => 'Submit',
-    ];
+    );
     return $form;
   }
 

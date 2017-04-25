@@ -23,27 +23,27 @@ class FormTestCheckboxesZeroForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state, $json = TRUE) {
     $form_state->set('json', $json);
-    $form['checkbox_off'] = [
+    $form['checkbox_off'] = array(
       '#title' => t('Checkbox off'),
       '#type' => 'checkboxes',
-      '#options' => ['foo', 'bar', 'baz'],
-    ];
-    $form['checkbox_zero_default'] = [
+      '#options' => array('foo', 'bar', 'baz'),
+    );
+    $form['checkbox_zero_default'] = array(
       '#title' => t('Zero default'),
       '#type' => 'checkboxes',
-      '#options' => ['foo', 'bar', 'baz'],
-      '#default_value' => [0],
-    ];
-    $form['checkbox_string_zero_default'] = [
+      '#options' => array('foo', 'bar', 'baz'),
+      '#default_value' => array(0),
+    );
+    $form['checkbox_string_zero_default'] = array(
       '#title' => t('Zero default (string)'),
       '#type' => 'checkboxes',
-      '#options' => ['foo', 'bar', 'baz'],
-      '#default_value' => ['0'],
-    ];
-    $form['submit'] = [
+      '#options' => array('foo', 'bar', 'baz'),
+      '#default_value' => array('0'),
+    );
+    $form['submit'] = array(
       '#type' => 'submit',
       '#value' => 'Save',
-    ];
+    );
     return $form;
   }
 

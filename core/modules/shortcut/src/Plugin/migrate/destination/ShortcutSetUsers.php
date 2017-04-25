@@ -60,14 +60,14 @@ class ShortcutSetUsers extends DestinationBase implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   public function getIds() {
-    return [
-      'set_name' => [
+    return array(
+      'set_name' => array(
         'type' => 'string',
-      ],
-      'uid' => [
+      ),
+      'uid' => array(
         'type' => 'integer',
-      ],
-    ];
+      ),
+    );
   }
 
   /**
@@ -83,14 +83,14 @@ class ShortcutSetUsers extends DestinationBase implements ContainerFactoryPlugin
   /**
    * {@inheritdoc}
    */
-  public function import(Row $row, array $old_destination_id_values = []) {
+  public function import(Row $row, array $old_destination_id_values = array()) {
     /** @var \Drupal\shortcut\ShortcutSetInterface $set */
     $set = $this->shortcutSetStorage->load($row->getDestinationProperty('set_name'));
     /** @var \Drupal\user\UserInterface $account */
     $account = User::load($row->getDestinationProperty('uid'));
     $this->shortcutSetStorage->assignUser($set, $account);
 
-    return [$set->id(), $account->id()];
+    return array($set->id(), $account->id());
   }
 
 }

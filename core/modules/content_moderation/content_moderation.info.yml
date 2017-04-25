@@ -4,6 +4,4 @@ description: 'Provides moderation states for content'
 version: VERSION
 core: 8.x
 package: Core (Experimental)
-configure: entity.workflow.collection
-dependencies:
-  - workflows
+configure: content_moderation.overview

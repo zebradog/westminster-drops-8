@@ -48,19 +48,19 @@ class LanguageUILanguageNegotiationTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = ['locale', 'language_test', 'block', 'user', 'content_translation'];
+  public static $modules = array('locale', 'language_test', 'block', 'user', 'content_translation');
 
   protected function setUp() {
     parent::setUp();
 
-    $admin_user = $this->drupalCreateUser(['administer languages', 'translate interface', 'access administration pages', 'administer blocks']);
+    $admin_user = $this->drupalCreateUser(array('administer languages', 'translate interface', 'access administration pages', 'administer blocks'));
     $this->drupalLogin($admin_user);
   }
 
   /**
    * Tests for language switching by URL path.
    */
-  public function testUILanguageNegotiation() {
+  function testUILanguageNegotiation() {
     // A few languages to switch to.
     // This one is unknown, should get the default lang version.
     $langcode_unknown = 'blah-blah';
@@ -69,9 +69,9 @@ class LanguageUILanguageNegotiationTest extends WebTestBase {
     // For testing path prefix.
     $langcode = 'zh-hans';
     // For setting browser language preference to 'vi'.
-    $http_header_browser_fallback = ["Accept-Language: $langcode_browser_fallback;q=1"];
+    $http_header_browser_fallback = array("Accept-Language: $langcode_browser_fallback;q=1");
     // For setting browser language preference to some unknown.
-    $http_header_blah = ["Accept-Language: blah;q=1"];
+    $http_header_blah = array("Accept-Language: blah;q=1");
 
     // Setup the site languages by installing two languages.
     // Set the default language in order for the translated string to be registered
@@ -101,117 +101,117 @@ class LanguageUILanguageNegotiationTest extends WebTestBase {
     $language_browser_fallback_string = "In $langcode_browser_fallback In $langcode_browser_fallback In $langcode_browser_fallback";
     $language_string = "In $langcode In $langcode In $langcode";
     // Do a translate search of our target string.
-    $search = [
+    $search = array(
       'string' => $default_string,
       'langcode' => $langcode_browser_fallback,
-    ];
+    );
     $this->drupalPostForm('admin/config/regional/translate', $search, t('Filter'));
     $textarea = current($this->xpath('//textarea'));
     $lid = (string) $textarea[0]['name'];
-    $edit = [
+    $edit = array(
       $lid => $language_browser_fallback_string,
-    ];
+    );
     $this->drupalPostForm('admin/config/regional/translate', $edit, t('Save translations'));
 
-    $search = [
+    $search = array(
       'string' => $default_string,
       'langcode' => $langcode,
-    ];
+    );
     $this->drupalPostForm('admin/config/regional/translate', $search, t('Filter'));
     $textarea = current($this->xpath('//textarea'));
     $lid = (string) $textarea[0]['name'];
-    $edit = [
+    $edit = array(
       $lid => $language_string,
-    ];
+    );
     $this->drupalPostForm('admin/config/regional/translate', $edit, t('Save translations'));
 
     // Configure selected language negotiation to use zh-hans.
-    $edit = ['selected_langcode' => $langcode];
+    $edit = array('selected_langcode' => $langcode);
     $this->drupalPostForm('admin/config/regional/language/detection/selected', $edit, t('Save configuration'));
-    $test = [
-      'language_negotiation' => [LanguageNegotiationSelected::METHOD_ID],
+    $test = array(
+      'language_negotiation' => array(LanguageNegotiationSelected::METHOD_ID),
       'path' => 'admin/config',
       'expect' => $language_string,
       'expected_method_id' => LanguageNegotiationSelected::METHOD_ID,
       'http_header' => $http_header_browser_fallback,
       'message' => 'SELECTED: UI language is switched based on selected language.',
-    ];
-    $this->doRunTest($test);
+    );
+    $this->runTest($test);
 
     // An invalid language is selected.
     $this->config('language.negotiation')->set('selected_langcode', NULL)->save();
-    $test = [
-      'language_negotiation' => [LanguageNegotiationSelected::METHOD_ID],
+    $test = array(
+      'language_negotiation' => array(LanguageNegotiationSelected::METHOD_ID),
       'path' => 'admin/config',
       'expect' => $default_string,
       'expected_method_id' => LanguageNegotiatorInterface::METHOD_ID,
       'http_header' => $http_header_browser_fallback,
       'message' => 'SELECTED > DEFAULT: UI language is switched based on selected language.',
-    ];
-    $this->doRunTest($test);
+    );
+    $this->runTest($test);
 
     // No selected language is available.
     $this->config('language.negotiation')->set('selected_langcode', $langcode_unknown)->save();
-    $test = [
-      'language_negotiation' => [LanguageNegotiationSelected::METHOD_ID],
+    $test = array(
+      'language_negotiation' => array(LanguageNegotiationSelected::METHOD_ID),
       'path' => 'admin/config',
       'expect' => $default_string,
       'expected_method_id' => LanguageNegotiatorInterface::METHOD_ID,
       'http_header' => $http_header_browser_fallback,
       'message' => 'SELECTED > DEFAULT: UI language is switched based on selected language.',
-    ];
-    $this->doRunTest($test);
+    );
+    $this->runTest($test);
 
-    $tests = [
+    $tests = array(
       // Default, browser preference should have no influence.
-      [
-        'language_negotiation' => [LanguageNegotiationUrl::METHOD_ID, LanguageNegotiationSelected::METHOD_ID],
+      array(
+        'language_negotiation' => array(LanguageNegotiationUrl::METHOD_ID, LanguageNegotiationSelected::METHOD_ID),
         'path' => 'admin/config',
         'expect' => $default_string,
         'expected_method_id' => LanguageNegotiatorInterface::METHOD_ID,
         'http_header' => $http_header_browser_fallback,
         'message' => 'URL (PATH) > DEFAULT: no language prefix, UI language is default and the browser language preference setting is not used.',
-      ],
+      ),
       // Language prefix.
-      [
-        'language_negotiation' => [LanguageNegotiationUrl::METHOD_ID, LanguageNegotiationSelected::METHOD_ID],
+      array(
+        'language_negotiation' => array(LanguageNegotiationUrl::METHOD_ID, LanguageNegotiationSelected::METHOD_ID),
         'path' => "$langcode/admin/config",
         'expect' => $language_string,
         'expected_method_id' => LanguageNegotiationUrl::METHOD_ID,
         'http_header' => $http_header_browser_fallback,
         'message' => 'URL (PATH) > DEFAULT: with language prefix, UI language is switched based on path prefix',
-      ],
+      ),
       // Default, go by browser preference.
-      [
-        'language_negotiation' => [LanguageNegotiationUrl::METHOD_ID, LanguageNegotiationBrowser::METHOD_ID],
+      array(
+        'language_negotiation' => array(LanguageNegotiationUrl::METHOD_ID, LanguageNegotiationBrowser::METHOD_ID),
         'path' => 'admin/config',
         'expect' => $language_browser_fallback_string,
         'expected_method_id' => LanguageNegotiationBrowser::METHOD_ID,
         'http_header' => $http_header_browser_fallback,
         'message' => 'URL (PATH) > BROWSER: no language prefix, UI language is determined by browser language preference',
-      ],
+      ),
       // Prefix, switch to the language.
-      [
-        'language_negotiation' => [LanguageNegotiationUrl::METHOD_ID, LanguageNegotiationBrowser::METHOD_ID],
+      array(
+        'language_negotiation' => array(LanguageNegotiationUrl::METHOD_ID, LanguageNegotiationBrowser::METHOD_ID),
         'path' => "$langcode/admin/config",
         'expect' => $language_string,
         'expected_method_id' => LanguageNegotiationUrl::METHOD_ID,
         'http_header' => $http_header_browser_fallback,
         'message' => 'URL (PATH) > BROWSER: with language prefix, UI language is based on path prefix',
-      ],
+      ),
       // Default, browser language preference is not one of site's lang.
-      [
-        'language_negotiation' => [LanguageNegotiationUrl::METHOD_ID, LanguageNegotiationBrowser::METHOD_ID, LanguageNegotiationSelected::METHOD_ID],
+      array(
+        'language_negotiation' => array(LanguageNegotiationUrl::METHOD_ID, LanguageNegotiationBrowser::METHOD_ID, LanguageNegotiationSelected::METHOD_ID),
         'path' => 'admin/config',
         'expect' => $default_string,
         'expected_method_id' => LanguageNegotiatorInterface::METHOD_ID,
         'http_header' => $http_header_blah,
         'message' => 'URL (PATH) > BROWSER > DEFAULT: no language prefix and browser language preference set to unknown language should use default language',
-      ],
-    ];
+      ),
+    );
 
     foreach ($tests as $test) {
-      $this->doRunTest($test);
+      $this->runTest($test);
     }
 
     // Unknown language prefix should return 404.
@@ -224,7 +224,7 @@ class LanguageUILanguageNegotiationTest extends WebTestBase {
     $this->config('language.types')
       ->set('negotiation.' . LanguageInterface::TYPE_INTERFACE . '.enabled', array_flip(array_keys($language_interface_method_definitions)))
       ->save();
-    $this->drupalGet("$langcode_unknown/admin/config", [], $http_header_browser_fallback);
+    $this->drupalGet("$langcode_unknown/admin/config", array(), $http_header_browser_fallback);
     $this->assertResponse(404, "Unknown language path prefix should return 404");
 
     // Set preferred langcode for user to NULL.
@@ -232,117 +232,117 @@ class LanguageUILanguageNegotiationTest extends WebTestBase {
     $account->preferred_langcode = NULL;
     $account->save();
 
-    $test = [
-      'language_negotiation' => [LanguageNegotiationUser::METHOD_ID, LanguageNegotiationSelected::METHOD_ID],
+    $test = array(
+      'language_negotiation' => array(LanguageNegotiationUser::METHOD_ID, LanguageNegotiationSelected::METHOD_ID),
       'path' => 'admin/config',
       'expect' => $default_string,
       'expected_method_id' => LanguageNegotiatorInterface::METHOD_ID,
-      'http_header' => [],
+      'http_header' => array(),
       'message' => 'USER > DEFAULT: no preferred user language setting, the UI language is default',
-    ];
-    $this->doRunTest($test);
+    );
+    $this->runTest($test);
 
     // Set preferred langcode for user to unknown language.
     $account = $this->loggedInUser;
     $account->preferred_langcode = $langcode_unknown;
     $account->save();
 
-    $test = [
-      'language_negotiation' => [LanguageNegotiationUser::METHOD_ID, LanguageNegotiationSelected::METHOD_ID],
+    $test = array(
+      'language_negotiation' => array(LanguageNegotiationUser::METHOD_ID, LanguageNegotiationSelected::METHOD_ID),
       'path' => 'admin/config',
       'expect' => $default_string,
       'expected_method_id' => LanguageNegotiatorInterface::METHOD_ID,
-      'http_header' => [],
+      'http_header' => array(),
       'message' => 'USER > DEFAULT: invalid preferred user language setting, the UI language is default',
-    ];
-    $this->doRunTest($test);
+    );
+    $this->runTest($test);
 
     // Set preferred langcode for user to non default.
     $account->preferred_langcode = $langcode;
     $account->save();
 
-    $test = [
-      'language_negotiation' => [LanguageNegotiationUser::METHOD_ID, LanguageNegotiationSelected::METHOD_ID],
+    $test = array(
+      'language_negotiation' => array(LanguageNegotiationUser::METHOD_ID, LanguageNegotiationSelected::METHOD_ID),
       'path' => 'admin/config',
       'expect' => $language_string,
       'expected_method_id' => LanguageNegotiationUser::METHOD_ID,
-      'http_header' => [],
+      'http_header' => array(),
       'message' => 'USER > DEFAULT: defined preferred user language setting, the UI language is based on user setting',
-    ];
-    $this->doRunTest($test);
+    );
+    $this->runTest($test);
 
     // Set preferred admin langcode for user to NULL.
     $account->preferred_admin_langcode = NULL;
     $account->save();
 
-    $test = [
-      'language_negotiation' => [LanguageNegotiationUserAdmin::METHOD_ID, LanguageNegotiationSelected::METHOD_ID],
+    $test = array(
+      'language_negotiation' => array(LanguageNegotiationUserAdmin::METHOD_ID, LanguageNegotiationSelected::METHOD_ID),
       'path' => 'admin/config',
       'expect' => $default_string,
       'expected_method_id' => LanguageNegotiatorInterface::METHOD_ID,
-      'http_header' => [],
+      'http_header' => array(),
       'message' => 'USER ADMIN > DEFAULT: no preferred user admin language setting, the UI language is default',
-    ];
-    $this->doRunTest($test);
+    );
+    $this->runTest($test);
 
     // Set preferred admin langcode for user to unknown language.
     $account->preferred_admin_langcode = $langcode_unknown;
     $account->save();
 
-    $test = [
-      'language_negotiation' => [LanguageNegotiationUserAdmin::METHOD_ID, LanguageNegotiationSelected::METHOD_ID],
+    $test = array(
+      'language_negotiation' => array(LanguageNegotiationUserAdmin::METHOD_ID, LanguageNegotiationSelected::METHOD_ID),
       'path' => 'admin/config',
       'expect' => $default_string,
       'expected_method_id' => LanguageNegotiatorInterface::METHOD_ID,
-      'http_header' => [],
+      'http_header' => array(),
       'message' => 'USER ADMIN > DEFAULT: invalid preferred user admin language setting, the UI language is default',
-    ];
-    $this->doRunTest($test);
+    );
+    $this->runTest($test);
 
     // Set preferred admin langcode for user to non default.
     $account->preferred_admin_langcode = $langcode;
     $account->save();
 
-    $test = [
-      'language_negotiation' => [LanguageNegotiationUserAdmin::METHOD_ID, LanguageNegotiationSelected::METHOD_ID],
+    $test = array(
+      'language_negotiation' => array(LanguageNegotiationUserAdmin::METHOD_ID, LanguageNegotiationSelected::METHOD_ID),
       'path' => 'admin/config',
       'expect' => $language_string,
       'expected_method_id' => LanguageNegotiationUserAdmin::METHOD_ID,
-      'http_header' => [],
+      'http_header' => array(),
       'message' => 'USER ADMIN > DEFAULT: defined preferred user admin language setting, the UI language is based on user setting',
-    ];
-    $this->doRunTest($test);
+    );
+    $this->runTest($test);
 
     // Go by session preference.
     $language_negotiation_session_param = $this->randomMachineName();
-    $edit = ['language_negotiation_session_param' => $language_negotiation_session_param];
+    $edit = array('language_negotiation_session_param' => $language_negotiation_session_param);
     $this->drupalPostForm('admin/config/regional/language/detection/session', $edit, t('Save configuration'));
-    $tests = [
-      [
-        'language_negotiation' => [LanguageNegotiationSession::METHOD_ID],
+    $tests = array(
+      array(
+        'language_negotiation' => array(LanguageNegotiationSession::METHOD_ID),
         'path' => "admin/config",
         'expect' => $default_string,
         'expected_method_id' => LanguageNegotiatorInterface::METHOD_ID,
         'http_header' => $http_header_browser_fallback,
         'message' => 'SESSION > DEFAULT: no language given, the UI language is default',
-      ],
-      [
-        'language_negotiation' => [LanguageNegotiationSession::METHOD_ID],
+      ),
+      array(
+        'language_negotiation' => array(LanguageNegotiationSession::METHOD_ID),
         'path' => 'admin/config',
         'path_options' => ['query' => [$language_negotiation_session_param => $langcode]],
         'expect' => $language_string,
         'expected_method_id' => LanguageNegotiationSession::METHOD_ID,
         'http_header' => $http_header_browser_fallback,
         'message' => 'SESSION > DEFAULT: language given, UI language is determined by session language preference',
-      ],
-    ];
+      ),
+    );
     foreach ($tests as $test) {
-      $this->doRunTest($test);
+      $this->runTest($test);
     }
   }
 
-  protected function doRunTest($test) {
-    $test += ['path_options' => []];
+  protected function runTest($test) {
+    $test += array('path_options' => []);
     if (!empty($test['language_negotiation'])) {
       $method_weights = array_flip($test['language_negotiation']);
       $this->container->get('language_negotiator')->saveConfiguration(LanguageInterface::TYPE_INTERFACE, $method_weights);
@@ -358,13 +358,13 @@ class LanguageUILanguageNegotiationTest extends WebTestBase {
     $this->container->get('language_manager')->reset();
     $this->drupalGet($test['path'], $test['path_options'], $test['http_header']);
     $this->assertText($test['expect'], $test['message']);
-    $this->assertText(t('Language negotiation method: @name', ['@name' => $test['expected_method_id']]));
+    $this->assertText(t('Language negotiation method: @name', array('@name' => $test['expected_method_id'])));
   }
 
   /**
    * Test URL language detection when the requested URL has no language.
    */
-  public function testUrlLanguageFallback() {
+  function testUrlLanguageFallback() {
     // Add the Italian language.
     $langcode_browser_fallback = 'it';
     ConfigurableLanguage::createFromLangcode($langcode_browser_fallback)->save();
@@ -372,21 +372,21 @@ class LanguageUILanguageNegotiationTest extends WebTestBase {
 
     // Enable the path prefix for the default language: this way any unprefixed
     // URL must have a valid fallback value.
-    $edit = ['prefix[en]' => 'en'];
+    $edit = array('prefix[en]' => 'en');
     $this->drupalPostForm('admin/config/regional/language/detection/url', $edit, t('Save configuration'));
 
     // Enable browser and URL language detection.
-    $edit = [
+    $edit = array(
       'language_interface[enabled][language-browser]' => TRUE,
       'language_interface[enabled][language-url]' => TRUE,
       'language_interface[weight][language-browser]' => -8,
       'language_interface[weight][language-url]' => -10,
-    ];
+    );
     $this->drupalPostForm('admin/config/regional/language/detection', $edit, t('Save settings'));
     $this->drupalGet('admin/config/regional/language/detection');
 
     // Enable the language switcher block.
-    $this->drupalPlaceBlock('language_block:' . LanguageInterface::TYPE_INTERFACE, ['id' => 'test_language_block']);
+    $this->drupalPlaceBlock('language_block:' . LanguageInterface::TYPE_INTERFACE, array('id' => 'test_language_block'));
 
     // Log out, because for anonymous users, the "active" class is set by PHP
     // (which means we can easily test it here), whereas for authenticated users
@@ -398,13 +398,13 @@ class LanguageUILanguageNegotiationTest extends WebTestBase {
 
     // Access the front page without specifying any valid URL language prefix
     // and having as browser language preference a non-default language.
-    $http_header = ["Accept-Language: $langcode_browser_fallback;q=1"];
-    $language = new Language(['id' => '']);
-    $this->drupalGet('', ['language' => $language], $http_header);
+    $http_header = array("Accept-Language: $langcode_browser_fallback;q=1");
+    $language = new Language(array('id' => ''));
+    $this->drupalGet('', array('language' => $language), $http_header);
 
     // Check that the language switcher active link matches the given browser
     // language.
-    $args = [':id' => 'block-test-language-block', ':url' => \Drupal::url('<front>') . $langcode_browser_fallback];
+    $args = array(':id' => 'block-test-language-block', ':url' => \Drupal::url('<front>') . $langcode_browser_fallback);
     $fields = $this->xpath('//div[@id=:id]//a[@class="language-link is-active" and starts-with(@href, :url)]', $args);
     $this->assertTrue($fields[0] == $languages[$langcode_browser_fallback]->getName(), 'The browser language is the URL active language');
 
@@ -416,7 +416,7 @@ class LanguageUILanguageNegotiationTest extends WebTestBase {
   /**
    * Tests URL handling when separate domains are used for multiple languages.
    */
-  public function testLanguageDomain() {
+  function testLanguageDomain() {
     global $base_url;
 
     // Get the current host URI we're running on.
@@ -428,27 +428,27 @@ class LanguageUILanguageNegotiationTest extends WebTestBase {
     $languages = $this->container->get('language_manager')->getLanguages();
 
     // Enable browser and URL language detection.
-    $edit = [
+    $edit = array(
       'language_interface[enabled][language-url]' => TRUE,
       'language_interface[weight][language-url]' => -10,
-    ];
+    );
     $this->drupalPostForm('admin/config/regional/language/detection', $edit, t('Save settings'));
 
     // Do not allow blank domain.
-    $edit = [
+    $edit = array(
       'language_negotiation_url_part' => LanguageNegotiationUrl::CONFIG_DOMAIN,
       'domain[en]' => '',
-    ];
+    );
     $this->drupalPostForm('admin/config/regional/language/detection/url', $edit, t('Save configuration'));
     $this->assertText('The domain may not be left blank for English', 'The form does not allow blank domains.');
     $this->rebuildContainer();
 
     // Change the domain for the Italian language.
-    $edit = [
+    $edit = array(
       'language_negotiation_url_part' => LanguageNegotiationUrl::CONFIG_DOMAIN,
       'domain[en]' => $base_url_host,
       'domain[it]' => 'it.example.com',
-    ];
+    );
     $this->drupalPostForm('admin/config/regional/language/detection/url', $edit, t('Save configuration'));
     $this->assertText('The configuration options have been saved', 'Domain configuration is saved.');
     $this->rebuildContainer();
@@ -471,19 +471,19 @@ class LanguageUILanguageNegotiationTest extends WebTestBase {
     $italian_url = Url::fromRoute('system.admin', [], ['language' => $languages['it']])->toString();
     $url_scheme = \Drupal::request()->isSecure() ? 'https://' : 'http://';
     $correct_link = $url_scheme . $link;
-    $this->assertEqual($italian_url, $correct_link, format_string('The right URL (@url) in accordance with the chosen language', ['@url' => $italian_url]));
+    $this->assertEqual($italian_url, $correct_link, format_string('The right URL (@url) in accordance with the chosen language', array('@url' => $italian_url)));
 
     // Test HTTPS via options.
     $italian_url = Url::fromRoute('system.admin', [], ['https' => TRUE, 'language' => $languages['it']])->toString();
     $correct_link = 'https://' . $link;
-    $this->assertTrue($italian_url == $correct_link, format_string('The right HTTPS URL (via options) (@url) in accordance with the chosen language', ['@url' => $italian_url]));
+    $this->assertTrue($italian_url == $correct_link, format_string('The right HTTPS URL (via options) (@url) in accordance with the chosen language', array('@url' => $italian_url)));
 
     // Test HTTPS via current URL scheme.
-    $request = Request::create('', 'GET', [], [], [], ['HTTPS' => 'on']);
+    $request = Request::create('', 'GET', array(), array(), array(), array('HTTPS' => 'on'));
     $this->container->get('request_stack')->push($request);
     $italian_url = Url::fromRoute('system.admin', [], ['language' => $languages['it']])->toString();
     $correct_link = 'https://' . $link;
-    $this->assertTrue($italian_url == $correct_link, format_string('The right URL (via current URL scheme) (@url) in accordance with the chosen language', ['@url' => $italian_url]));
+    $this->assertTrue($italian_url == $correct_link, format_string('The right URL (via current URL scheme) (@url) in accordance with the chosen language', array('@url' => $italian_url)));
   }
 
   /**
@@ -491,11 +491,11 @@ class LanguageUILanguageNegotiationTest extends WebTestBase {
    */
   public function testContentCustomization() {
     // Customize content language settings from their defaults.
-    $edit = [
+    $edit = array(
       'language_content[configurable]' => TRUE,
       'language_content[enabled][language-url]' => FALSE,
       'language_content[enabled][language-session]' => TRUE,
-    ];
+    );
     $this->drupalPostForm('admin/config/regional/language/detection', $edit, t('Save settings'));
 
     // Check if configurability persisted.
@@ -515,16 +515,16 @@ class LanguageUILanguageNegotiationTest extends WebTestBase {
     $block_id = 'test_language_block';
 
     // Enable the language switcher block.
-    $this->drupalPlaceBlock('language_block:' . LanguageInterface::TYPE_CONTENT, ['id' => $block_id]);
+    $this->drupalPlaceBlock('language_block:' . LanguageInterface::TYPE_CONTENT, array('id' => $block_id));
 
     // Check if the language switcher block has been created.
     $block = Block::load($block_id);
     $this->assertTrue($block, 'Language switcher block was created.');
 
     // Make sure language_content is not configurable.
-    $edit = [
+    $edit = array(
       'language_content[configurable]' => FALSE,
-    ];
+    );
     $this->drupalPostForm('admin/config/regional/language/detection', $edit, t('Save settings'));
     $this->assertResponse(200);
 

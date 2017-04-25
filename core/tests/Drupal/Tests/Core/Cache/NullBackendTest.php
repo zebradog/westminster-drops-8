@@ -15,7 +15,7 @@ class NullBackendTest extends UnitTestCase {
   /**
    * Tests that the NullBackend does not actually store variables.
    */
-  public function testNullBackend() {
+  function testNullBackend() {
     $null_cache = new NullBackend('test');
 
     $key = $this->randomMachineName();

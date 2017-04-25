@@ -70,9 +70,9 @@ class PathSubscriber implements EventSubscriberInterface {
    * @return array
    *   An array of event listener definitions.
    */
-  public static function getSubscribedEvents() {
-    $events[KernelEvents::CONTROLLER][] = ['onKernelController', 200];
-    $events[KernelEvents::TERMINATE][] = ['onKernelTerminate', 200];
+  static function getSubscribedEvents() {
+    $events[KernelEvents::CONTROLLER][] = array('onKernelController', 200);
+    $events[KernelEvents::TERMINATE][] = array('onKernelTerminate', 200);
     return $events;
   }
 

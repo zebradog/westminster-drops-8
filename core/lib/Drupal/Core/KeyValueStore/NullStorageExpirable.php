@@ -12,7 +12,7 @@ class NullStorageExpirable implements KeyValueStoreExpirableInterface {
    *
    * @var array
    */
-  protected $data = [];
+  protected $data = array();
 
   /**
    * The name of the collection holding key and value pairs.
@@ -46,14 +46,14 @@ class NullStorageExpirable implements KeyValueStoreExpirableInterface {
    * {@inheritdoc}
    */
   public function getMultiple(array $keys) {
-    return [];
+    return array();
   }
 
   /**
    * {@inheritdoc}
    */
   public function getAll() {
-    return [];
+    return array();
   }
 
   /**

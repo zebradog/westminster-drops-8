@@ -24,6 +24,11 @@ class TermJsonCookieTest extends TermResourceTestBase {
   /**
    * {@inheritdoc}
    */
+  protected static $expectedErrorMimeType = 'application/json';
+
+  /**
+   * {@inheritdoc}
+   */
   protected static $auth = 'cookie';
 
 }

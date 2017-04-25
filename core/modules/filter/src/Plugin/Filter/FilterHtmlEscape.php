@@ -29,7 +29,7 @@ class FilterHtmlEscape extends FilterBase {
    */
   public function getHTMLRestrictions() {
     // Nothing is allowed.
-    return ['allowed' => []];
+    return array('allowed' => array());
   }
 
   /**

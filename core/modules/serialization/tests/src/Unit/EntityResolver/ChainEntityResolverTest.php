@@ -47,10 +47,10 @@ class ChainEntityResolverTest extends UnitTestCase {
    * @covers ::resolve
    */
   public function testResolverWithNoneResolved() {
-    $resolvers = [
+    $resolvers = array(
       $this->createEntityResolverMock(),
       $this->createEntityResolverMock(),
-    ];
+    );
 
     $resolver = new ChainEntityResolver($resolvers);
 
@@ -78,10 +78,10 @@ class ChainEntityResolverTest extends UnitTestCase {
    * @covers ::resolve
    */
   public function testResolverWithFirstResolved() {
-    $resolvers = [
+    $resolvers = array(
       $this->createEntityResolverMock(10),
       $this->createEntityResolverMock(NULL, FALSE),
-    ];
+    );
 
     $resolver = new ChainEntityResolver($resolvers);
 
@@ -95,10 +95,10 @@ class ChainEntityResolverTest extends UnitTestCase {
    * @covers ::resolve
    */
   public function testResolverWithLastResolved() {
-    $resolvers = [
+    $resolvers = array(
       $this->createEntityResolverMock(),
       $this->createEntityResolverMock(10),
-    ];
+    );
 
     $resolver = new ChainEntityResolver($resolvers);
 
@@ -112,10 +112,10 @@ class ChainEntityResolverTest extends UnitTestCase {
    * @covers ::resolve
    */
   public function testResolverWithResolvedToZero() {
-    $resolvers = [
+    $resolvers = array(
       $this->createEntityResolverMock(0),
       $this->createEntityResolverMock(NULL, FALSE),
-    ];
+    );
 
     $resolver = new ChainEntityResolver($resolvers);
 

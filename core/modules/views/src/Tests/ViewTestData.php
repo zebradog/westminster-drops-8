@@ -23,7 +23,7 @@ class ViewTestData {
    *   The module directories to look in for test views.
    */
   public static function createTestViews($class, array $modules) {
-    $views = [];
+    $views = array();
     while ($class) {
       if (property_exists($class, 'testViews')) {
         $views = array_merge($views, $class::$testViews);
@@ -60,57 +60,57 @@ class ViewTestData {
    * Returns the schema definition.
    */
   public static function schemaDefinition() {
-    $schema['views_test_data'] = [
+    $schema['views_test_data'] = array(
       'description' => 'Basic test table for Views tests.',
-      'fields' => [
-        'id' => [
+      'fields' => array(
+        'id' => array(
           'type' => 'serial',
           'unsigned' => TRUE,
           'not null' => TRUE,
-        ],
-        'name' => [
+        ),
+        'name' => array(
           'description' => "A person's name",
           'type' => 'varchar_ascii',
           'length' => 255,
           'not null' => TRUE,
           'default' => '',
-        ],
-        'age' => [
+        ),
+        'age' => array(
           'description' => "The person's age",
           'type' => 'int',
           'unsigned' => TRUE,
           'not null' => TRUE,
-          'default' => 0],
-        'job' => [
+          'default' => 0),
+        'job' => array(
           'description' => "The person's job",
           'type' => 'varchar',
           'length' => 255,
           'not null' => TRUE,
           'default' => 'Undefined',
-        ],
-        'created' => [
+        ),
+        'created' => array(
           'description' => "The creation date of this record",
           'type' => 'int',
           'unsigned' => TRUE,
           'not null' => TRUE,
           'default' => 0,
-        ],
-        'status' => [
+        ),
+        'status' => array(
           'description' => "The status of this record",
           'type' => 'int',
           'unsigned' => TRUE,
           'not null' => TRUE,
           'default' => 0,
-        ],
-      ],
-      'primary key' => ['id'],
-      'unique keys' => [
-        'name' => ['name']
-      ],
-      'indexes' => [
-        'ages' => ['age'],
-      ],
-    ];
+        ),
+      ),
+      'primary key' => array('id'),
+      'unique keys' => array(
+        'name' => array('name')
+      ),
+      'indexes' => array(
+        'ages' => array('age'),
+      ),
+    );
     return $schema;
   }
 
@@ -119,109 +119,109 @@ class ViewTestData {
    */
   public static function viewsData() {
     // Declaration of the base table.
-    $data['views_test_data']['table'] = [
+    $data['views_test_data']['table'] = array(
       'group' => 'Views test',
-      'base' => [
+      'base' => array(
         'field' => 'id',
         'title' => 'Views test data',
         'help' => 'Users who have created accounts on your site.',
-      ],
-    ];
+      ),
+    );
 
     // Declaration of fields.
-    $data['views_test_data']['id'] = [
+    $data['views_test_data']['id'] = array(
       'title' => 'ID',
       'help' => 'The test data ID',
-      'field' => [
+      'field' => array(
         'id' => 'numeric',
-      ],
-      'argument' => [
+      ),
+      'argument' => array(
         'id' => 'numeric',
-      ],
-      'filter' => [
+      ),
+      'filter' => array(
         'id' => 'numeric',
-      ],
-      'sort' => [
+      ),
+      'sort' => array(
         'id' => 'standard',
-      ],
-    ];
-    $data['views_test_data']['name'] = [
+      ),
+    );
+    $data['views_test_data']['name'] = array(
       'title' => 'Name',
       'help' => 'The name of the person',
-      'field' => [
+      'field' => array(
         'id' => 'standard',
-      ],
-      'argument' => [
+      ),
+      'argument' => array(
         'id' => 'string',
-      ],
-      'filter' => [
+      ),
+      'filter' => array(
         'id' => 'string',
-      ],
-      'sort' => [
+      ),
+      'sort' => array(
         'id' => 'standard',
-      ],
-    ];
-    $data['views_test_data']['age'] = [
+      ),
+    );
+    $data['views_test_data']['age'] = array(
       'title' => 'Age',
       'help' => 'The age of the person',
-      'field' => [
+      'field' => array(
         'id' => 'numeric',
-      ],
-      'argument' => [
+      ),
+      'argument' => array(
         'id' => 'numeric',
-      ],
-      'filter' => [
+      ),
+      'filter' => array(
         'id' => 'numeric',
-      ],
-      'sort' => [
+      ),
+      'sort' => array(
         'id' => 'standard',
-      ],
-    ];
-    $data['views_test_data']['job'] = [
+      ),
+    );
+    $data['views_test_data']['job'] = array(
       'title' => 'Job',
       'help' => 'The job of the person',
-      'field' => [
+      'field' => array(
         'id' => 'standard',
-      ],
-      'argument' => [
+      ),
+      'argument' => array(
         'id' => 'string',
-      ],
-      'filter' => [
+      ),
+      'filter' => array(
         'id' => 'string',
-      ],
-      'sort' => [
+      ),
+      'sort' => array(
         'id' => 'standard',
-      ],
-    ];
-    $data['views_test_data']['created'] = [
+      ),
+    );
+    $data['views_test_data']['created'] = array(
       'title' => 'Created',
       'help' => 'The creation date of this record',
-      'field' => [
+      'field' => array(
         'id' => 'date',
-      ],
-      'argument' => [
+      ),
+      'argument' => array(
         'id' => 'date',
-      ],
-      'filter' => [
+      ),
+      'filter' => array(
         'id' => 'date',
-      ],
-      'sort' => [
+      ),
+      'sort' => array(
         'id' => 'date',
-      ],
-    ];
-    $data['views_test_data']['status'] = [
+      ),
+    );
+    $data['views_test_data']['status'] = array(
       'title' => 'Status',
       'help' => 'The status of this record',
-      'field' => [
+      'field' => array(
         'id' => 'boolean',
-      ],
-      'filter' => [
+      ),
+      'filter' => array(
         'id' => 'boolean',
-      ],
-      'sort' => [
+      ),
+      'sort' => array(
         'id' => 'standard',
-      ],
-    ];
+      ),
+    );
     return $data;
   }
 
@@ -229,43 +229,43 @@ class ViewTestData {
    * Returns a very simple test dataset.
    */
   public static function dataSet() {
-    return [
-      [
+    return array(
+      array(
         'name' => 'John',
         'age' => 25,
         'job' => 'Singer',
         'created' => gmmktime(0, 0, 0, 1, 1, 2000),
         'status' => 1,
-      ],
-      [
+      ),
+      array(
         'name' => 'George',
         'age' => 27,
         'job' => 'Singer',
         'created' => gmmktime(0, 0, 0, 1, 2, 2000),
         'status' => 0,
-      ],
-      [
+      ),
+      array(
         'name' => 'Ringo',
         'age' => 28,
         'job' => 'Drummer',
         'created' => gmmktime(6, 30, 30, 1, 1, 2000),
         'status' => 1,
-      ],
-      [
+      ),
+      array(
         'name' => 'Paul',
         'age' => 26,
         'job' => 'Songwriter',
         'created' => gmmktime(6, 0, 0, 1, 1, 2000),
         'status' => 0,
-      ],
-      [
+      ),
+      array(
         'name' => 'Meredith',
         'age' => 30,
         'job' => 'Speaker',
         'created' => gmmktime(6, 30, 10, 1, 1, 2000),
         'status' => 1,
-      ],
-    ];
+      ),
+    );
   }
 
 }

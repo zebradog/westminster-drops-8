@@ -71,7 +71,7 @@ class CacheContextsManager {
    *   An array of available cache contexts and corresponding labels.
    */
   public function getLabels($include_calculated_cache_contexts = FALSE) {
-    $with_labels = [];
+    $with_labels = array();
     foreach ($this->contexts as $context) {
       $service = $this->getService($context);
       if (!$include_calculated_cache_contexts && $service instanceof CalculatedCacheContextInterface) {

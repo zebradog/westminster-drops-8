@@ -20,7 +20,7 @@ class NodeStorage extends SqlContentEntityStorage implements NodeStorageInterfac
   public function revisionIds(NodeInterface $node) {
     return $this->database->query(
       'SELECT vid FROM {node_revision} WHERE nid=:nid ORDER BY vid',
-      [':nid' => $node->id()]
+      array(':nid' => $node->id())
     )->fetchCol();
   }
 
@@ -30,7 +30,7 @@ class NodeStorage extends SqlContentEntityStorage implements NodeStorageInterfac
   public function userRevisionIds(AccountInterface $account) {
     return $this->database->query(
       'SELECT vid FROM {node_field_revision} WHERE uid = :uid ORDER BY vid',
-      [':uid' => $account->id()]
+      array(':uid' => $account->id())
     )->fetchCol();
   }
 
@@ -38,7 +38,7 @@ class NodeStorage extends SqlContentEntityStorage implements NodeStorageInterfac
    * {@inheritdoc}
    */
   public function countDefaultLanguageRevisions(NodeInterface $node) {
-    return $this->database->query('SELECT COUNT(*) FROM {node_field_revision} WHERE nid = :nid AND default_langcode = 1', [':nid' => $node->id()])->fetchField();
+    return $this->database->query('SELECT COUNT(*) FROM {node_field_revision} WHERE nid = :nid AND default_langcode = 1', array(':nid' => $node->id()))->fetchField();
   }
 
   /**
@@ -46,7 +46,7 @@ class NodeStorage extends SqlContentEntityStorage implements NodeStorageInterfac
    */
   public function updateType($old_type, $new_type) {
     return $this->database->update('node')
-      ->fields(['type' => $new_type])
+      ->fields(array('type' => $new_type))
       ->condition('type', $old_type)
       ->execute();
   }
@@ -56,7 +56,7 @@ class NodeStorage extends SqlContentEntityStorage implements NodeStorageInterfac
    */
   public function clearRevisionsLanguage(LanguageInterface $language) {
     return $this->database->update('node_revision')
-      ->fields(['langcode' => LanguageInterface::LANGCODE_NOT_SPECIFIED])
+      ->fields(array('langcode' => LanguageInterface::LANGCODE_NOT_SPECIFIED))
       ->condition('langcode', $language->getId())
       ->execute();
   }

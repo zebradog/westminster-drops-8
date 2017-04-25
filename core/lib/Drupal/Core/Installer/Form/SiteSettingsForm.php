@@ -97,15 +97,15 @@ class SiteSettingsForm extends FormBase {
     // when JavaScript is enabled (see below).
     else {
       $default_driver = current($drivers_keys);
-      $default_options = [];
+      $default_options = array();
     }
 
-    $form['driver'] = [
+    $form['driver'] = array(
       '#type' => 'radios',
       '#title' => $this->t('Database type'),
       '#required' => TRUE,
       '#default_value' => $default_driver,
-    ];
+    );
     if (count($drivers) == 1) {
       $form['driver']['#disabled'] = TRUE;
     }
@@ -115,31 +115,31 @@ class SiteSettingsForm extends FormBase {
       $form['driver']['#options'][$key] = $driver->name();
 
       $form['settings'][$key] = $driver->getFormOptions($default_options);
-      $form['settings'][$key]['#prefix'] = '<h2 class="js-hide">' . $this->t('@driver_name settings', ['@driver_name' => $driver->name()]) . '</h2>';
+      $form['settings'][$key]['#prefix'] = '<h2 class="js-hide">' . $this->t('@driver_name settings', array('@driver_name' => $driver->name())) . '</h2>';
       $form['settings'][$key]['#type'] = 'container';
       $form['settings'][$key]['#tree'] = TRUE;
-      $form['settings'][$key]['advanced_options']['#parents'] = [$key];
-      $form['settings'][$key]['#states'] = [
-        'visible' => [
-          ':input[name=driver]' => ['value' => $key],
-        ]
-      ];
+      $form['settings'][$key]['advanced_options']['#parents'] = array($key);
+      $form['settings'][$key]['#states'] = array(
+        'visible' => array(
+          ':input[name=driver]' => array('value' => $key),
+        )
+      );
     }
 
-    $form['actions'] = ['#type' => 'actions'];
-    $form['actions']['save'] = [
+    $form['actions'] = array('#type' => 'actions');
+    $form['actions']['save'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Save and continue'),
       '#button_type' => 'primary',
-      '#limit_validation_errors' => [
-        ['driver'],
-        [$default_driver],
-      ],
-      '#submit' => ['::submitForm'],
-    ];
+      '#limit_validation_errors' => array(
+        array('driver'),
+        array($default_driver),
+      ),
+      '#submit' => array('::submitForm'),
+    );
 
-    $form['errors'] = [];
-    $form['settings_file'] = ['#type' => 'value', '#value' => $settings_file];
+    $form['errors'] = array();
+    $form['settings_file'] = array('#type' => 'value', '#value' => $settings_file);
 
     return $form;
   }
@@ -213,21 +213,21 @@ class SiteSettingsForm extends FormBase {
     global $install_state;
 
     // Update global settings array and save.
-    $settings = [];
+    $settings = array();
     $database = $form_state->get('database');
-    $settings['databases']['default']['default'] = (object) [
+    $settings['databases']['default']['default'] = (object) array(
       'value'    => $database,
       'required' => TRUE,
-    ];
-    $settings['settings']['hash_salt'] = (object) [
+    );
+    $settings['settings']['hash_salt'] = (object) array(
       'value'    => Crypt::randomBytesBase64(55),
       'required' => TRUE,
-    ];
+    );
     // Remember the profile which was used.
-    $settings['settings']['install_profile'] = (object) [
+    $settings['settings']['install_profile'] = (object) array(
       'value' => $install_state['parameters']['profile'],
       'required' => TRUE,
-    ];
+    );
 
     drupal_rewrite_settings($settings);
 

@@ -100,19 +100,19 @@ class QuickEditFieldForm extends FormBase {
 
     // Add a dummy changed timestamp field to attach form errors to.
     if ($entity instanceof EntityChangedInterface) {
-      $form['changed_field'] = [
+      $form['changed_field'] = array(
         '#type' => 'hidden',
         '#value' => $entity->getChangedTime(),
-      ];
+      );
     }
 
     // Add a submit button. Give it a class for easy JavaScript targeting.
-    $form['actions'] = ['#type' => 'actions'];
-    $form['actions']['submit'] = [
+    $form['actions'] = array('#type' => 'actions');
+    $form['actions']['submit'] = array(
       '#type' => 'submit',
       '#value' => t('Save'),
-      '#attributes' => ['class' => ['quickedit-form-submit']],
-    ];
+      '#attributes' => array('class' => array('quickedit-form-submit')),
+    );
 
     // Simplify it for optimal in-place use.
     $this->simplify($form, $form_state);
@@ -183,7 +183,7 @@ class QuickEditFieldForm extends FormBase {
     // @todo Refine automated log messages and abstract them to all entity
     //   types: https://www.drupal.org/node/1678002.
     if ($entity->getEntityTypeId() == 'node' && $entity->isNewRevision() && $entity->revision_log->isEmpty()) {
-      $entity->revision_log = t('Updated the %field-name field through in-place editing.', ['%field-name' => $entity->get($field_name)->getFieldDefinition()->getLabel()]);
+      $entity->revision_log = t('Updated the %field-name field through in-place editing.', array('%field-name' => $entity->get($field_name)->getFieldDefinition()->getLabel()));
     }
 
     return $entity;

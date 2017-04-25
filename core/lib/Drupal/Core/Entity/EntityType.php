@@ -2,7 +2,6 @@
 
 namespace Drupal\Core\Entity;
 
-use Drupal\Component\Plugin\Definition\PluginDefinition;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Entity\Exception\EntityTypeIdLengthException;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -13,7 +12,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
  *
  * @ingroup entity_api
  */
-class EntityType extends PluginDefinition implements EntityTypeInterface {
+class EntityType implements EntityTypeInterface {
 
   use StringTranslationTrait;
 
@@ -43,7 +42,7 @@ class EntityType extends PluginDefinition implements EntityTypeInterface {
    *
    * @var array
    */
-  protected $entity_keys = [];
+  protected $entity_keys = array();
 
   /**
    * The unique identifier of this entity type.
@@ -51,6 +50,20 @@ class EntityType extends PluginDefinition implements EntityTypeInterface {
    * @var string
    */
   protected $id;
+
+  /**
+   * The name of the provider of this entity type.
+   *
+   * @var string
+   */
+  protected $provider;
+
+  /**
+   * The name of the entity type class.
+   *
+   * @var string
+   */
+  protected $class;
 
   /**
    * The name of the original entity type class.
@@ -66,7 +79,7 @@ class EntityType extends PluginDefinition implements EntityTypeInterface {
    *
    * @var array
    */
-  protected $handlers = [];
+  protected $handlers = array();
 
   /**
    * The name of the default administrative permission.
@@ -88,7 +101,7 @@ class EntityType extends PluginDefinition implements EntityTypeInterface {
    *
    * @var array
    */
-  protected $links = [];
+  protected $links = array();
 
   /**
    * The name of a callback that returns the label of the entity.
@@ -162,36 +175,16 @@ class EntityType extends PluginDefinition implements EntityTypeInterface {
   protected $translatable = FALSE;
 
   /**
-   * Indicates whether the revision form fields should be added to the form.
-   *
-   * @var bool
-   */
-  protected $show_revision_ui = FALSE;
-
-  /**
    * The human-readable name of the type.
    *
    * @var string
-   *
-   * @see \Drupal\Core\Entity\EntityTypeInterface::getLabel()
    */
   protected $label = '';
-
-  /**
-   * The human-readable label for a collection of entities of the type.
-   *
-   * @var string
-   *
-   * @see \Drupal\Core\Entity\EntityTypeInterface::getCollectionLabel()
-   */
-  protected $label_collection = '';
 
   /**
    * The indefinite singular name of the type.
    *
    * @var string
-   *
-   * @see \Drupal\Core\Entity\EntityTypeInterface::getSingularLabel()
    */
   protected $label_singular = '';
 
@@ -199,8 +192,6 @@ class EntityType extends PluginDefinition implements EntityTypeInterface {
    * The indefinite plural name of the type.
    *
    * @var string
-   *
-   * @see \Drupal\Core\Entity\EntityTypeInterface::getPluralLabel()
    */
   protected $label_plural = '';
 
@@ -210,8 +201,6 @@ class EntityType extends PluginDefinition implements EntityTypeInterface {
    * Needed keys: "singular" and "plural".
    *
    * @var string[]
-   *
-   * @see \Drupal\Core\Entity\EntityTypeInterface::getCountLabel()
    */
   protected $label_count = [];
 
@@ -268,7 +257,7 @@ class EntityType extends PluginDefinition implements EntityTypeInterface {
    *
    * @var array[]
    */
-  protected $constraints = [];
+  protected $constraints = array();
 
   /**
    * Any additional properties and values.
@@ -297,22 +286,22 @@ class EntityType extends PluginDefinition implements EntityTypeInterface {
     }
 
     // Ensure defaults.
-    $this->entity_keys += [
+    $this->entity_keys += array(
       'revision' => '',
       'bundle' => '',
       'langcode' => '',
       'default_langcode' => 'default_langcode',
-    ];
-    $this->handlers += [
+    );
+    $this->handlers += array(
       'access' => 'Drupal\Core\Entity\EntityAccessControlHandler',
-    ];
+    );
     if (isset($this->handlers['storage'])) {
       $this->checkStorageClass($this->handlers['storage']);
     }
 
     // Automatically add the EntityChanged constraint if the entity type tracks
     // the changed time.
-    if ($this->entityClassImplements(EntityChangedInterface::class) ) {
+    if ($this->isSubclassOf('Drupal\Core\Entity\EntityChangedInterface') ) {
       $this->addConstraint('EntityChanged');
     }
 
@@ -395,6 +384,27 @@ class EntityType extends PluginDefinition implements EntityTypeInterface {
   /**
    * {@inheritdoc}
    */
+  public function id() {
+    return $this->id;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getProvider() {
+    return $this->provider;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getClass() {
+    return $this->class;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getOriginalClass() {
     return $this->originalClass ?: $this->class;
   }
@@ -408,22 +418,15 @@ class EntityType extends PluginDefinition implements EntityTypeInterface {
       // class, assume that is the original class name.
       $this->originalClass = $this->class;
     }
-
-    return parent::setClass($class);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function entityClassImplements($interface) {
-    return is_subclass_of($this->getClass(), $interface);
+    $this->class = $class;
+    return $this;
   }
 
   /**
    * {@inheritdoc}
    */
   public function isSubclassOf($class) {
-    return $this->entityClassImplements($class);
+    return is_subclass_of($this->getClass(), $class);
   }
 
   /**
@@ -689,13 +692,6 @@ class EntityType extends PluginDefinition implements EntityTypeInterface {
   /**
    * {@inheritdoc}
    */
-  public function showRevisionUi() {
-    return $this->isRevisionable() && $this->show_revision_ui;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function isTranslatable() {
     return !empty($this->translatable);
   }
@@ -741,17 +737,6 @@ class EntityType extends PluginDefinition implements EntityTypeInterface {
    */
   public function getLowercaseLabel() {
     return Unicode::strtolower($this->getLabel());
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getCollectionLabel() {
-    if (empty($this->label_collection)) {
-      $label = $this->getLabel();
-      $this->label_collection = new TranslatableMarkup('@label entities', ['@label' => $label], [], $this->getStringTranslation());
-    }
-    return $this->label_collection;
   }
 
   /**
@@ -814,7 +799,7 @@ class EntityType extends PluginDefinition implements EntityTypeInterface {
    * {@inheritdoc}
    */
   public function getGroupLabel() {
-    return !empty($this->group_label) ? $this->group_label : $this->t('Other', [], ['context' => 'Entity type group']);
+    return !empty($this->group_label) ? $this->group_label : $this->t('Other', array(), array('context' => 'Entity type group'));
   }
 
   /**

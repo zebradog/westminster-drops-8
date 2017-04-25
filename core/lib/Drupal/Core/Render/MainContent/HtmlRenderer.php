@@ -253,9 +253,9 @@ class HtmlRenderer implements MainContentRendererInterface {
 
       // Generate a #type => page render array using the page display variant,
       // the page display will build the content for the various page regions.
-      $page = [
+      $page = array(
         '#type' => 'page',
-      ];
+      );
       $page += $page_display->build();
     }
 

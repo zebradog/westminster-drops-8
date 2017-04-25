@@ -2,6 +2,7 @@
 
 namespace Drupal\Core\Block;
 
+use Drupal\block\BlockInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContextAwarePluginAssignmentTrait;
@@ -82,19 +83,19 @@ abstract class BlockBase extends ContextAwarePluginBase implements BlockPluginIn
    *   An associative array with the default configuration.
    */
   protected function baseConfigurationDefaults() {
-    return [
+    return array(
       'id' => $this->getPluginId(),
       'label' => '',
       'provider' => $this->pluginDefinition['provider'],
-      'label_display' => static::BLOCK_LABEL_VISIBLE,
-    ];
+      'label_display' => BlockInterface::BLOCK_LABEL_VISIBLE,
+    );
   }
 
   /**
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return [];
+    return array();
   }
 
   /**
@@ -108,7 +109,7 @@ abstract class BlockBase extends ContextAwarePluginBase implements BlockPluginIn
    * {@inheritdoc}
    */
   public function calculateDependencies() {
-    return [];
+    return array();
   }
 
   /**
@@ -151,29 +152,29 @@ abstract class BlockBase extends ContextAwarePluginBase implements BlockPluginIn
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $definition = $this->getPluginDefinition();
-    $form['provider'] = [
+    $form['provider'] = array(
       '#type' => 'value',
       '#value' => $definition['provider'],
-    ];
+    );
 
-    $form['admin_label'] = [
+    $form['admin_label'] = array(
       '#type' => 'item',
       '#title' => $this->t('Block description'),
       '#plain_text' => $definition['admin_label'],
-    ];
-    $form['label'] = [
+    );
+    $form['label'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Title'),
       '#maxlength' => 255,
       '#default_value' => $this->label(),
       '#required' => TRUE,
-    ];
-    $form['label_display'] = [
+    );
+    $form['label_display'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Display title'),
-      '#default_value' => ($this->configuration['label_display'] === static::BLOCK_LABEL_VISIBLE),
-      '#return_value' => static::BLOCK_LABEL_VISIBLE,
-    ];
+      '#default_value' => ($this->configuration['label_display'] === BlockInterface::BLOCK_LABEL_VISIBLE),
+      '#return_value' => BlockInterface::BLOCK_LABEL_VISIBLE,
+    );
 
     // Add context mapping UI form elements.
     $contexts = $form_state->getTemporaryValue('gathered_contexts') ?: [];
@@ -187,7 +188,7 @@ abstract class BlockBase extends ContextAwarePluginBase implements BlockPluginIn
    * {@inheritdoc}
    */
   public function blockForm($form, FormStateInterface $form_state) {
-    return [];
+    return array();
   }
 
   /**

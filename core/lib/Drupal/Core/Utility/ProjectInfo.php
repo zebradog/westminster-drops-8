@@ -39,7 +39,7 @@ class ProjectInfo {
    *   (optional) Array of additional elements to be collected from the .info.yml
    *   file. Defaults to array().
    */
-  public function processInfoList(array &$projects, array $list, $project_type, $status, array $additional_whitelist = []) {
+  function processInfoList(array &$projects, array $list, $project_type, $status, array $additional_whitelist = array()) {
     foreach ($list as $file) {
       // Just projects with a matching status should be listed.
       if ($file->status != $status) {
@@ -107,16 +107,16 @@ class ProjectInfo {
       if (!isset($projects[$project_name])) {
         // Only process this if we haven't done this project, since a single
         // project can have multiple modules or themes.
-        $projects[$project_name] = [
+        $projects[$project_name] = array(
           'name' => $project_name,
           // Only save attributes from the .info.yml file we care about so we do
           // not bloat our RAM usage needlessly.
           'info' => $this->filterProjectInfo($file->info, $additional_whitelist),
           'datestamp' => $file->info['datestamp'],
-          'includes' => [$file->getName() => $file->info['name']],
+          'includes' => array($file->getName() => $file->info['name']),
           'project_type' => $project_display_type,
           'project_status' => $status,
-        ];
+        );
       }
       elseif ($projects[$project_name]['project_type'] == $project_display_type) {
         // Only add the file we're processing to the 'includes' array for this
@@ -148,7 +148,7 @@ class ProjectInfo {
    * @return string
    *   The canonical project short name.
    */
-  public function getProjectName(Extension $file) {
+  function getProjectName(Extension $file) {
     $project_name = '';
     if (isset($file->info['project'])) {
       $project_name = $file->info['project'];
@@ -174,8 +174,8 @@ class ProjectInfo {
    *
    * @see \Drupal\Core\Utility\ProjectInfo::processInfoList()
    */
-  public function filterProjectInfo($info, $additional_whitelist = []) {
-    $whitelist = [
+  function filterProjectInfo($info, $additional_whitelist = array()) {
+    $whitelist = array(
       '_info_file_ctime',
       'datestamp',
       'major',
@@ -184,7 +184,7 @@ class ProjectInfo {
       'project',
       'project status url',
       'version',
-    ];
+    );
     $whitelist = array_merge($whitelist, $additional_whitelist);
     return array_intersect_key($info, array_combine($whitelist, $whitelist));
   }

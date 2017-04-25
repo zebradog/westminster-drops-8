@@ -50,9 +50,9 @@ class QueueTest extends KernelTestBase {
    */
   protected function queueTest($queue1, $queue2) {
     // Create four items.
-    $data = [];
+    $data = array();
     for ($i = 0; $i < 4; $i++) {
-      $data[] = [$this->randomMachineName() => $this->randomMachineName()];
+      $data[] = array($this->randomMachineName() => $this->randomMachineName());
     }
 
     // Queue items 1 and 2 in the queue1.
@@ -60,8 +60,8 @@ class QueueTest extends KernelTestBase {
     $queue1->createItem($data[1]);
 
     // Retrieve two items from queue1.
-    $items = [];
-    $new_items = [];
+    $items = array();
+    $new_items = array();
 
     $items[] = $item = $queue1->claimItem();
     $new_items[] = $item->data;

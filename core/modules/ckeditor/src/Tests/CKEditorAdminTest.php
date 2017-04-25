@@ -20,7 +20,7 @@ class CKEditorAdminTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = ['filter', 'editor', 'ckeditor'];
+  public static $modules = array('filter', 'editor', 'ckeditor');
 
   /**
    * A user with the 'administer filters' permission.
@@ -33,22 +33,22 @@ class CKEditorAdminTest extends WebTestBase {
     parent::setUp();
 
     // Create text format.
-    $filtered_html_format = FilterFormat::create([
+    $filtered_html_format = FilterFormat::create(array(
       'format' => 'filtered_html',
       'name' => 'Filtered HTML',
       'weight' => 0,
-      'filters' => [],
-    ]);
+      'filters' => array(),
+    ));
     $filtered_html_format->save();
 
     // Create admin user.
-    $this->adminUser = $this->drupalCreateUser(['administer filters']);
+    $this->adminUser = $this->drupalCreateUser(array('administer filters'));
   }
 
   /**
    * Tests configuring a text editor for an existing text format.
    */
-  public function testExistingFormat() {
+  function testExistingFormat() {
     $ckeditor = $this->container->get('plugin.manager.editor')->createInstance('ckeditor');
 
     $this->drupalLogin($this->adminUser);
@@ -70,43 +70,43 @@ class CKEditorAdminTest extends WebTestBase {
     $this->assertTrue(((string) $options[0]['selected']) === 'selected', 'Option 1 ("None") is selected.');
 
     // Select the "CKEditor" editor and click the "Save configuration" button.
-    $edit = [
+    $edit = array(
       'editor[editor]' => 'ckeditor',
-    ];
+    );
     $this->drupalPostForm(NULL, $edit, t('Save configuration'));
     $this->assertRaw(t('You must configure the selected text editor.'));
 
     // Ensure the CKEditor editor returns the expected default settings.
-    $expected_default_settings = [
-      'toolbar' => [
-        'rows' => [
+    $expected_default_settings = array(
+      'toolbar' => array(
+        'rows' => array(
           // Button groups
-          [
-            [
+          array(
+            array(
               'name' => 'Formatting',
-              'items' => ['Bold', 'Italic'],
-            ],
-            [
+              'items' => array('Bold', 'Italic',),
+            ),
+            array(
               'name' => 'Links',
-              'items' => ['DrupalLink', 'DrupalUnlink'],
-            ],
-            [
+              'items' => array('DrupalLink', 'DrupalUnlink',),
+            ),
+            array(
               'name' => 'Lists',
-              'items' => ['BulletedList', 'NumberedList'],
-            ],
-            [
+              'items' => array('BulletedList', 'NumberedList',),
+            ),
+            array(
               'name' => 'Media',
-              'items' => ['Blockquote', 'DrupalImage'],
-            ],
-            [
+              'items' => array('Blockquote', 'DrupalImage',),
+            ),
+            array(
               'name' => 'Tools',
-              'items' => ['Source'],
-            ],
-          ],
-        ],
-      ],
+              'items' => array('Source',),
+            ),
+          ),
+        ),
+      ),
       'plugins' => ['language' => ['language_list' => 'un']],
-    ];
+    );
     $this->assertIdentical($this->castSafeStrings($ckeditor->getDefaultSettings()), $expected_default_settings);
 
     // Keep the "CKEditor" editor selected and click the "Configure" button.
@@ -115,11 +115,11 @@ class CKEditorAdminTest extends WebTestBase {
     $this->assertFalse($editor, 'No Editor config entity exists yet.');
 
     // Ensure that drupalSettings is correct.
-    $ckeditor_settings_toolbar = [
+    $ckeditor_settings_toolbar = array(
       '#theme' => 'ckeditor_settings_toolbar',
       '#editor' => Editor::create(['editor' => 'ckeditor']),
       '#plugins' => $this->container->get('plugin.manager.ckeditor.plugin')->getButtons(),
-    ];
+    );
     $this->assertEqual(
       $this->drupalSettings['ckeditor']['toolbarAdmin'],
       $this->container->get('renderer')->renderPlain($ckeditor_settings_toolbar),
@@ -148,9 +148,9 @@ class CKEditorAdminTest extends WebTestBase {
 
     // Configure the Styles plugin, and ensure the updated settings are saved.
     $this->drupalGet('admin/config/content/formats/manage/filtered_html');
-    $edit = [
+    $edit = array(
       'editor[settings][plugins][stylescombo][styles]' => "h1.title|Title\np.callout|Callout\n\n",
-    ];
+    );
     $this->drupalPostForm(NULL, $edit, t('Save configuration'));
     $expected_settings['plugins']['stylescombo']['styles'] = "h1.title|Title\np.callout|Callout\n\n";
     $editor = Editor::load('filtered_html');
@@ -161,13 +161,13 @@ class CKEditorAdminTest extends WebTestBase {
     // done via drag and drop, but here we can only emulate the end result of
     // that interaction). Test multiple toolbar rows and a divider within a row.
     $this->drupalGet('admin/config/content/formats/manage/filtered_html');
-    $expected_settings['toolbar']['rows'][0][] = [
+    $expected_settings['toolbar']['rows'][0][] = array(
       'name' => 'Action history',
-      'items' => ['Undo', '|', 'Redo', 'JustifyCenter'],
-    ];
-    $edit = [
+      'items' => array('Undo', '|', 'Redo', 'JustifyCenter'),
+    );
+    $edit = array(
       'editor[settings][toolbar][button_groups]' => json_encode($expected_settings['toolbar']['rows']),
-    ];
+    );
     $this->drupalPostForm(NULL, $edit, t('Save configuration'));
     $editor = Editor::load('filtered_html');
     $this->assertTrue($editor instanceof Editor, 'An Editor config entity exists.');
@@ -191,7 +191,7 @@ class CKEditorAdminTest extends WebTestBase {
 
     // Now enable the ckeditor_test module, which provides one configurable
     // CKEditor plugin — this should not affect the Editor config entity.
-    \Drupal::service('module_installer')->install(['ckeditor_test']);
+    \Drupal::service('module_installer')->install(array('ckeditor_test'));
     $this->resetAll();
     $this->container->get('plugin.manager.ckeditor.plugin')->clearCachedDefinitions();
     $this->drupalGet('admin/config/content/formats/manage/filtered_html');
@@ -203,9 +203,9 @@ class CKEditorAdminTest extends WebTestBase {
 
     // Finally, check the "Ultra llama mode" checkbox.
     $this->drupalGet('admin/config/content/formats/manage/filtered_html');
-    $edit = [
+    $edit = array(
       'editor[settings][plugins][llama_contextual_and_button][ultra_llama_mode]' => '1',
-    ];
+    );
     $this->drupalPostForm(NULL, $edit, t('Save configuration'));
     $this->drupalGet('admin/config/content/formats/manage/filtered_html');
     $ultra_llama_mode_checkbox = $this->xpath('//input[@type="checkbox" and @name="editor[settings][plugins][llama_contextual_and_button][ultra_llama_mode]" and @checked="checked"]');
@@ -222,7 +222,7 @@ class CKEditorAdminTest extends WebTestBase {
    * This test only needs to ensure that the basics of the CKEditor
    * configuration form work; details are tested in testExistingFormat().
    */
-  public function testNewFormat() {
+  function testNewFormat() {
     $this->drupalLogin($this->adminUser);
     $this->drupalGet('admin/config/content/formats/add');
 
@@ -239,11 +239,11 @@ class CKEditorAdminTest extends WebTestBase {
 
     // Name our fancy new text format, select the "CKEditor" editor and click
     // the "Configure" button.
-    $edit = [
+    $edit = array(
       'name' => 'My amazing text format',
       'format' => 'amazing_format',
       'editor[editor]' => 'ckeditor',
-    ];
+    );
     $this->drupalPostAjaxForm(NULL, $edit, 'editor_configure');
     $filter_format = FilterFormat::load('amazing_format');
     $this->assertFalse($filter_format, 'No FilterFormat config entity exists yet.');

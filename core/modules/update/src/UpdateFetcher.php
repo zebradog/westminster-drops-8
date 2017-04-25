@@ -62,7 +62,7 @@ class UpdateFetcher implements UpdateFetcherInterface {
     $data = '';
     try {
       $data = (string) $this->httpClient
-        ->get($url, ['headers' => ['Accept' => 'text/xml']])
+        ->get($url, array('headers' => array('Accept' => 'text/xml')))
         ->getBody();
     }
     catch (RequestException $exception) {

@@ -19,14 +19,14 @@ class Resize extends GDImageToolkitOperationBase {
    * {@inheritdoc}
    */
   protected function arguments() {
-    return [
-      'width' => [
+    return array(
+      'width' => array(
         'description' => 'The new width of the resized image, in pixels',
-      ],
-      'height' => [
+      ),
+      'height' => array(
         'description' => 'The new height of the resized image, in pixels',
-      ],
-    ];
+      ),
+    );
   }
 
   /**
@@ -51,18 +51,18 @@ class Resize extends GDImageToolkitOperationBase {
   /**
    * {@inheritdoc}
    */
-  protected function execute(array $arguments = []) {
+  protected function execute(array $arguments = array()) {
     // Create a new resource of the required dimensions, and copy and resize
     // the original resource on it with resampling. Destroy the original
     // resource upon success.
     $original_resource = $this->getToolkit()->getResource();
-    $data = [
+    $data = array(
       'width' => $arguments['width'],
       'height' => $arguments['height'],
       'extension' => image_type_to_extension($this->getToolkit()->getType(), FALSE),
       'transparent_color' => $this->getToolkit()->getTransparentColor(),
       'is_temp' => TRUE,
-    ];
+    );
     if ($this->getToolkit()->apply('create_new', $data)) {
       if (imagecopyresampled($this->getToolkit()->getResource(), $original_resource, 0, 0, 0, 0, $arguments['width'], $arguments['height'], imagesx($original_resource), imagesy($original_resource))) {
         imagedestroy($original_resource);

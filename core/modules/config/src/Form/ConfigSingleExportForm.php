@@ -2,7 +2,6 @@
 
 namespace Drupal\config\Form;
 
-use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -37,7 +36,7 @@ class ConfigSingleExportForm extends FormBase {
    *
    * @var \Drupal\Core\Entity\EntityTypeInterface[]
    */
-  protected $definitions = [];
+  protected $definitions = array();
 
   /**
    * Constructs a new ConfigSingleImportForm.
@@ -74,7 +73,7 @@ class ConfigSingleExportForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state, $config_type = NULL, $config_name = NULL) {
     foreach ($this->entityManager->getDefinitions() as $entity_type => $definition) {
-      if ($definition->entityClassImplements(ConfigEntityInterface::class)) {
+      if ($definition->isSubclassOf('Drupal\Core\Config\Entity\ConfigEntityInterface')) {
         $this->definitions[$entity_type] = $definition;
       }
     }
@@ -83,40 +82,40 @@ class ConfigSingleExportForm extends FormBase {
     }, $this->definitions);
     // Sort the entity types by label, then add the simple config to the top.
     uasort($entity_types, 'strnatcasecmp');
-    $config_types = [
+    $config_types = array(
       'system.simple' => $this->t('Simple configuration'),
-    ] + $entity_types;
-    $form['config_type'] = [
+    ) + $entity_types;
+    $form['config_type'] = array(
       '#title' => $this->t('Configuration type'),
       '#type' => 'select',
       '#options' => $config_types,
       '#default_value' => $config_type,
-      '#ajax' => [
+      '#ajax' => array(
         'callback' => '::updateConfigurationType',
         'wrapper' => 'edit-config-type-wrapper',
-      ],
-    ];
+      ),
+    );
     $default_type = $form_state->getValue('config_type', $config_type);
-    $form['config_name'] = [
+    $form['config_name'] = array(
       '#title' => $this->t('Configuration name'),
       '#type' => 'select',
       '#options' => $this->findConfiguration($default_type),
       '#default_value' => $config_name,
       '#prefix' => '<div id="edit-config-type-wrapper">',
       '#suffix' => '</div>',
-      '#ajax' => [
+      '#ajax' => array(
         'callback' => '::updateExport',
         'wrapper' => 'edit-export-wrapper',
-      ],
-    ];
+      ),
+    );
 
-    $form['export'] = [
+    $form['export'] = array(
       '#title' => $this->t('Here is your configuration:'),
       '#type' => 'textarea',
       '#rows' => 24,
       '#prefix' => '<div id="edit-export-wrapper">',
       '#suffix' => '</div>',
-    ];
+    );
     if ($config_type && $config_name) {
       $fake_form_state = (new FormState())->setValues([
         'config_type' => $config_type,
@@ -150,7 +149,7 @@ class ConfigSingleExportForm extends FormBase {
     }
     // Read the raw data for this config name, encode it, and display it.
     $form['export']['#value'] = Yaml::encode($this->configStorage->read($name));
-    $form['export']['#description'] = $this->t('Filename: %name', ['%name' => $name . '.yml']);
+    $form['export']['#description'] = $this->t('Filename: %name', array('%name' => $name . '.yml'));
     return $form['export'];
   }
 
@@ -158,9 +157,9 @@ class ConfigSingleExportForm extends FormBase {
    * Handles switching the configuration type selector.
    */
   protected function findConfiguration($config_type) {
-    $names = [
+    $names = array(
       '' => $this->t('- Select -'),
-    ];
+    );
     // For a given entity type, load all entities.
     if ($config_type && $config_type !== 'system.simple') {
       $entity_storage = $this->entityManager->getStorage($config_type);

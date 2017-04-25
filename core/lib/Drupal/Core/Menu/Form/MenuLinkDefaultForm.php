@@ -98,41 +98,41 @@ class MenuLinkDefaultForm implements MenuLinkFormInterface, ContainerInjectionIn
    * {@inheritdoc}
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
-    $form['#title'] = $this->t('Edit menu link %title', ['%title' => $this->menuLink->getTitle()]);
+    $form['#title'] = $this->t('Edit menu link %title', array('%title' => $this->menuLink->getTitle()));
 
     $provider = $this->menuLink->getProvider();
-    $form['info'] = [
+    $form['info'] = array(
       '#type' => 'item',
-      '#title' => $this->t('This link is provided by the @name module. The title and path cannot be edited.', ['@name' => $this->moduleHandler->getName($provider)]),
-    ];
-    $form['id'] = [
+      '#title' => $this->t('This link is provided by the @name module. The title and path cannot be edited.', array('@name' => $this->moduleHandler->getName($provider))),
+    );
+    $form['id'] = array(
       '#type' => 'value',
       '#value' => $this->menuLink->getPluginId(),
-    ];
-    $link = [
+    );
+    $link = array(
       '#type' => 'link',
       '#title' => $this->menuLink->getTitle(),
       '#url' => $this->menuLink->getUrlObject(),
-    ];
-    $form['path'] = [
+    );
+    $form['path'] = array(
       'link' => $link,
       '#type' => 'item',
       '#title' => $this->t('Link'),
-    ];
+    );
 
-    $form['enabled'] = [
+    $form['enabled'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Enable menu link'),
       '#description' => $this->t('Menu links that are not enabled will not be listed in any menu.'),
       '#default_value' => $this->menuLink->isEnabled(),
-    ];
+    );
 
-    $form['expanded'] = [
+    $form['expanded'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show as expanded'),
       '#description' => $this->t('If selected and this menu link has children, the menu will always appear expanded.'),
       '#default_value' => $this->menuLink->isExpanded(),
-    ];
+    );
 
     $menu_parent = $this->menuLink->getMenuName() . ':' . $this->menuLink->getParent();
     $form['menu_parent'] = $this->menuParentSelector->parentSelectElement($menu_parent, $this->menuLink->getPluginId());
@@ -141,14 +141,14 @@ class MenuLinkDefaultForm implements MenuLinkFormInterface, ContainerInjectionIn
     $form['menu_parent']['#attributes']['class'][] = 'menu-title-select';
 
     $delta = max(abs($this->menuLink->getWeight()), 50);
-    $form['weight'] = [
+    $form['weight'] = array(
       '#type' => 'number',
       '#min' => -$delta,
       '#max' => $delta,
       '#default_value' => $this->menuLink->getWeight(),
       '#title' => $this->t('Weight'),
       '#description' => $this->t('Link weight among links in the same menu at the same depth. In the menu, the links with high weight will sink and links with a low weight will be positioned nearer the top.'),
-    ];
+    );
 
     return $form;
   }

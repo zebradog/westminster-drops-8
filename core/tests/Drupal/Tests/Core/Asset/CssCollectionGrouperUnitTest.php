@@ -28,79 +28,79 @@ class CssCollectionGrouperUnitTest extends UnitTestCase {
   /**
    * Tests \Drupal\Core\Asset\CssCollectionGrouper.
    */
-  public function testGrouper() {
-    $css_assets = [
-      'system.base.css' => [
+  function testGrouper() {
+    $css_assets = array(
+      'system.base.css' => array(
         'group' => -100,
         'type' => 'file',
         'weight' => 0.012,
         'media' => 'all',
         'preprocess' => TRUE,
         'data' => 'core/modules/system/system.base.css',
-        'browsers' => ['IE' => TRUE, '!IE' => TRUE],
+        'browsers' => array('IE' => TRUE, '!IE' => TRUE),
         'basename' => 'system.base.css',
-      ],
-      'js.module.css' => [
+      ),
+      'js.module.css' => array(
         'group' => -100,
         'type' => 'file',
         'weight' => 0.013,
         'media' => 'all',
         'preprocess' => TRUE,
         'data' => 'core/modules/system/js.module.css',
-        'browsers' => ['IE' => TRUE, '!IE' => TRUE],
+        'browsers' => array('IE' => TRUE, '!IE' => TRUE),
         'basename' => 'js.module.css',
-      ],
-      'jquery.ui.core.css' => [
+      ),
+      'jquery.ui.core.css' => array(
         'group' => -100,
         'type' => 'file',
         'weight' => 0.004,
         'media' => 'all',
         'preprocess' => TRUE,
         'data' => 'core/misc/ui/themes/base/jquery.ui.core.css',
-        'browsers' => ['IE' => TRUE, '!IE' => TRUE],
+        'browsers' => array('IE' => TRUE, '!IE' => TRUE),
         'basename' => 'jquery.ui.core.css',
-      ],
-      'field.css' => [
+      ),
+      'field.css' => array(
         'group' => 0,
         'type' => 'file',
         'weight' => 0.011,
         'media' => 'all',
         'preprocess' => TRUE,
         'data' => 'core/modules/field/theme/field.css',
-        'browsers' => ['IE' => TRUE, '!IE' => TRUE],
+        'browsers' => array('IE' => TRUE, '!IE' => TRUE),
         'basename' => 'field.css',
-      ],
-      'external.css' => [
+      ),
+      'external.css' => array(
         'group' => 0,
         'type' => 'external',
         'weight' => 0.009,
         'media' => 'all',
         'preprocess' => TRUE,
         'data' => 'http://example.com/external.css',
-        'browsers' => ['IE' => TRUE, '!IE' => TRUE],
+        'browsers' => array('IE' => TRUE, '!IE' => TRUE),
         'basename' => 'external.css',
-      ],
-      'elements.css' => [
+      ),
+      'elements.css' => array(
         'group' => 100,
         'media' => 'all',
         'type' => 'file',
         'weight' => 0.001,
         'preprocess' => TRUE,
         'data' => 'core/themes/bartik/css/base/elements.css',
-        'browsers' => ['IE' => TRUE, '!IE' => TRUE],
+        'browsers' => array('IE' => TRUE, '!IE' => TRUE),
         'basename' => 'elements.css',
-      ],
-      'print.css' => [
+      ),
+      'print.css' => array(
         'group' => 100,
         'media' => 'print',
         'type' => 'file',
         'weight' => 0.003,
         'preprocess' => TRUE,
         'data' => 'core/themes/bartik/css/print.css',
-        'browsers' => ['IE' => TRUE, '!IE' => TRUE],
+        'browsers' => array('IE' => TRUE, '!IE' => TRUE),
         'basename' => 'print.css',
-      ],
-    ];
+      ),
+    );
 
     $groups = $this->grouper->group($css_assets);
 

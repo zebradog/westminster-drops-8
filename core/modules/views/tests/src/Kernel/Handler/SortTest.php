@@ -17,7 +17,7 @@ class SortTest extends ViewsKernelTestBase {
    *
    * @var array
    */
-  public static $testViews = ['test_view'];
+  public static $testViews = array('test_view');
 
   /**
    * Tests numeric ordering of the result set.
@@ -27,49 +27,49 @@ class SortTest extends ViewsKernelTestBase {
     $view->setDisplay();
 
     // Change the ordering
-    $view->displayHandlers->get('default')->overrideOption('sorts', [
-      'age' => [
+    $view->displayHandlers->get('default')->overrideOption('sorts', array(
+      'age' => array(
         'order' => 'ASC',
         'id' => 'age',
         'table' => 'views_test_data',
         'field' => 'age',
         'relationship' => 'none',
-      ],
-    ]);
+      ),
+    ));
 
     // Execute the view.
     $this->executeView($view);
 
     // Verify the result.
     $this->assertEqual(count($this->dataSet()), count($view->result), 'The number of returned rows match.');
-    $this->assertIdenticalResultset($view, $this->orderResultSet($this->dataSet(), 'age'), [
+    $this->assertIdenticalResultset($view, $this->orderResultSet($this->dataSet(), 'age'), array(
       'views_test_data_name' => 'name',
       'views_test_data_age' => 'age',
-    ]);
+    ));
 
     $view->destroy();
     $view->setDisplay();
 
     // Reverse the ordering
-    $view->displayHandlers->get('default')->overrideOption('sorts', [
-      'age' => [
+    $view->displayHandlers->get('default')->overrideOption('sorts', array(
+      'age' => array(
         'order' => 'DESC',
         'id' => 'age',
         'table' => 'views_test_data',
         'field' => 'age',
         'relationship' => 'none',
-      ],
-    ]);
+      ),
+    ));
 
     // Execute the view.
     $this->executeView($view);
 
     // Verify the result.
     $this->assertEqual(count($this->dataSet()), count($view->result), 'The number of returned rows match.');
-    $this->assertIdenticalResultset($view, $this->orderResultSet($this->dataSet(), 'age', TRUE), [
+    $this->assertIdenticalResultset($view, $this->orderResultSet($this->dataSet(), 'age', TRUE), array(
       'views_test_data_name' => 'name',
       'views_test_data_age' => 'age',
-    ]);
+    ));
   }
 
   /**
@@ -80,49 +80,49 @@ class SortTest extends ViewsKernelTestBase {
     $view->setDisplay();
 
     // Change the ordering
-    $view->displayHandlers->get('default')->overrideOption('sorts', [
-      'name' => [
+    $view->displayHandlers->get('default')->overrideOption('sorts', array(
+      'name' => array(
         'order' => 'ASC',
         'id' => 'name',
         'table' => 'views_test_data',
         'field' => 'name',
         'relationship' => 'none',
-      ],
-    ]);
+      ),
+    ));
 
     // Execute the view.
     $this->executeView($view);
 
     // Verify the result.
     $this->assertEqual(count($this->dataSet()), count($view->result), 'The number of returned rows match.');
-    $this->assertIdenticalResultset($view, $this->orderResultSet($this->dataSet(), 'name'), [
+    $this->assertIdenticalResultset($view, $this->orderResultSet($this->dataSet(), 'name'), array(
       'views_test_data_name' => 'name',
       'views_test_data_age' => 'age',
-    ]);
+    ));
 
     $view->destroy();
     $view->setDisplay();
 
     // Reverse the ordering
-    $view->displayHandlers->get('default')->overrideOption('sorts', [
-      'name' => [
+    $view->displayHandlers->get('default')->overrideOption('sorts', array(
+      'name' => array(
         'order' => 'DESC',
         'id' => 'name',
         'table' => 'views_test_data',
         'field' => 'name',
         'relationship' => 'none',
-      ],
-    ]);
+      ),
+    ));
 
     // Execute the view.
     $this->executeView($view);
 
     // Verify the result.
     $this->assertEqual(count($this->dataSet()), count($view->result), 'The number of returned rows match.');
-    $this->assertIdenticalResultset($view, $this->orderResultSet($this->dataSet(), 'name', TRUE), [
+    $this->assertIdenticalResultset($view, $this->orderResultSet($this->dataSet(), 'name', TRUE), array(
       'views_test_data_name' => 'name',
       'views_test_data_age' => 'age',
-    ]);
+    ));
   }
 
 }

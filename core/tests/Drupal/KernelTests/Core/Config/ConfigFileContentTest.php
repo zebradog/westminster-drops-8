@@ -15,7 +15,7 @@ class ConfigFileContentTest extends KernelTestBase {
   /**
    * Exempt from strict schema checking.
    *
-   * @see \Drupal\Core\Config\Development\ConfigSchemaChecker
+   * @see \Drupal\Core\Config\Testing\ConfigSchemaChecker
    *
    * @var bool
    */
@@ -24,7 +24,7 @@ class ConfigFileContentTest extends KernelTestBase {
   /**
    * Tests setting, writing, and reading of a configuration setting.
    */
-  public function testReadWriteConfig() {
+  function testReadWriteConfig() {
     $storage = $this->container->get('config.storage');
 
     $name = 'foo.bar';
@@ -33,19 +33,19 @@ class ConfigFileContentTest extends KernelTestBase {
     $nested_key = 'biff.bang';
     $nested_value = 'pow';
     $array_key = 'array';
-    $array_value = [
+    $array_value = array(
       'foo' => 'bar',
-      'biff' => [
+      'biff' => array(
         'bang' => 'pow',
-      ],
-    ];
+      ),
+    );
     $casting_array_key = 'casting_array';
     $casting_array_false_value_key = 'casting_array.cast.false';
-    $casting_array_value = [
-      'cast' => [
+    $casting_array_value = array(
+      'cast' => array(
         'false' => FALSE,
-      ],
-    ];
+      ),
+    );
     $nested_array_key = 'nested.array';
     $true_key = 'true';
     $false_key = 'false';
@@ -58,7 +58,7 @@ class ConfigFileContentTest extends KernelTestBase {
     $this->assertTrue($config, 'Config object created.');
 
     // Verify the configuration object is empty.
-    $this->assertEqual($config->get(), [], 'New config object is empty.');
+    $this->assertEqual($config->get(), array(), 'New config object is empty.');
 
     // Verify nothing was saved.
     $data = $storage->read($name);
@@ -173,7 +173,7 @@ class ConfigFileContentTest extends KernelTestBase {
     // Get file listing for all files starting with 'bar'. Should return
     // an empty array.
     $files = $storage->listAll('bar');
-    $this->assertEqual($files, [], 'No files listed with the prefix \'bar\'.');
+    $this->assertEqual($files, array(), 'No files listed with the prefix \'bar\'.');
 
     // Delete the configuration.
     $config = $this->config($name);
@@ -187,22 +187,22 @@ class ConfigFileContentTest extends KernelTestBase {
   /**
    * Tests serialization of configuration to file.
    */
-  public function testSerialization() {
+  function testSerialization() {
     $name = $this->randomMachineName(10) . '.' . $this->randomMachineName(10);
-    $config_data = [
+    $config_data = array(
       // Indexed arrays; the order of elements is essential.
-      'numeric keys' => ['i', 'n', 'd', 'e', 'x', 'e', 'd'],
+      'numeric keys' => array('i', 'n', 'd', 'e', 'x', 'e', 'd'),
       // Infinitely nested keys using arbitrary element names.
-      'nested keys' => [
+      'nested keys' => array(
         // HTML/XML in values.
         'HTML' => '<strong> <bold> <em> <blockquote>',
         // UTF-8 in values.
         'UTF-8' => 'FrançAIS is ÜBER-åwesome',
         // Unicode in keys and values.
         'ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΣὨ' => 'αβγδεζηθικλμνξοσὠ',
-      ],
+      ),
       'invalid xml' => '</title><script type="text/javascript">alert("Title XSS!");</script> & < > " \' ',
-    ];
+    );
 
     // Encode and write, and reload and decode the configuration data.
     $filestorage = new FileStorage(config_get_config_directory(CONFIG_SYNC_DIRECTORY));

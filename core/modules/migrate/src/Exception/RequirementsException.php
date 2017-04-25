@@ -56,7 +56,7 @@ class RequirementsException extends \RuntimeException {
     $output = '';
     foreach ($this->requirements as $requirement_type => $requirements) {
       if (!is_array($requirements)) {
-        $requirements = [$requirements];
+        $requirements = array($requirements);
       }
 
       foreach ($requirements as $value) {

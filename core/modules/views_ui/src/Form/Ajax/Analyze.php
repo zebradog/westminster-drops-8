@@ -36,11 +36,11 @@ class Analyze extends ViewsFormBase {
     $analyzer = Views::analyzer();
     $messages = $analyzer->getMessages($view->getExecutable());
 
-    $form['analysis'] = [
+    $form['analysis'] = array(
       '#prefix' => '<div class="js-form-item form-item">',
       '#suffix' => '</div>',
       '#markup' => $analyzer->formatMessages($messages),
-    ];
+    );
 
     // Inform the standard button function that we want an OK button.
     $form_state->set('ok_button', TRUE);

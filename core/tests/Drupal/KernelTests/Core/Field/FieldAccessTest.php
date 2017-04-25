@@ -34,7 +34,7 @@ class FieldAccessTest extends KernelTestBase {
   protected function setUp() {
     parent::setUp();
     // Install field configuration.
-    $this->installConfig(['field']);
+    $this->installConfig(array('field'));
     // The users table is needed for creating dummy user accounts.
     $this->installEntitySchema('user');
     // Register entity_test text field.
@@ -48,19 +48,19 @@ class FieldAccessTest extends KernelTestBase {
    * @see entity_test_entity_field_access()
    * @see entity_test_entity_field_access_alter()
    */
-  public function testFieldAccess() {
-    $values = [
+  function testFieldAccess() {
+    $values = array(
       'name' => $this->randomMachineName(),
       'user_id' => 1,
-      'field_test_text' => [
+      'field_test_text' => array(
         'value' => 'no access value',
         'format' => 'full_html',
-      ],
-    ];
+      ),
+    );
     $entity = EntityTest::create($values);
 
     // Create a dummy user account for testing access with.
-    $values = ['name' => 'test'];
+    $values = array('name' => 'test');
     $account = User::create($values);
 
     $this->assertFalse($entity->field_test_text->access('view', $account), 'Access to the field was denied.');

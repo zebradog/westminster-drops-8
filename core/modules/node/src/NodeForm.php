@@ -2,10 +2,8 @@
 
 namespace Drupal\node;
 
-use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Entity\EntityManagerInterface;
-use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\user\PrivateTempStoreFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -23,19 +21,23 @@ class NodeForm extends ContentEntityForm {
   protected $tempStoreFactory;
 
   /**
-   * Constructs a NodeForm object.
+   * Whether this node has been previewed or not.
+   *
+   * @deprecated Scheduled for removal in Drupal 8.3.x. Use the form state
+   *   property 'has_been_previewed' instead.
+   */
+  protected $hasBeenPreviewed = FALSE;
+
+  /**
+   * Constructs a ContentEntityForm object.
    *
    * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
    *   The entity manager.
    * @param \Drupal\user\PrivateTempStoreFactory $temp_store_factory
    *   The factory for the temp store object.
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
-   *   The entity type bundle service.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time service.
    */
-  public function __construct(EntityManagerInterface $entity_manager, PrivateTempStoreFactory $temp_store_factory, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL, TimeInterface $time = NULL) {
-    parent::__construct($entity_manager, $entity_type_bundle_info, $time);
+  public function __construct(EntityManagerInterface $entity_manager, PrivateTempStoreFactory $temp_store_factory) {
+    parent::__construct($entity_manager);
     $this->tempStoreFactory = $temp_store_factory;
   }
 
@@ -45,16 +47,29 @@ class NodeForm extends ContentEntityForm {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity.manager'),
-      $container->get('user.private_tempstore'),
-      $container->get('entity_type.bundle.info'),
-      $container->get('datetime.time')
+      $container->get('user.private_tempstore')
     );
   }
 
   /**
    * {@inheritdoc}
    */
+  protected function prepareEntity() {
+    /** @var \Drupal\node\NodeInterface $node */
+    $node = $this->entity;
+
+    if (!$node->isNew()) {
+      // Remove the revision log message from the original node entity.
+      $node->revision_log = NULL;
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function form(array $form, FormStateInterface $form_state) {
+    $this->hasBeenPreviewed = $form_state->get('has_been_previewed') ?: FALSE;
+
     // Try to restore from temp store, this must be done before calling
     // parent::form().
     $store = $this->tempStoreFactory->get('node_preview');
@@ -80,39 +95,80 @@ class NodeForm extends ContentEntityForm {
       $this->entity->in_preview = NULL;
 
       $form_state->set('has_been_previewed', TRUE);
+      $this->hasBeenPreviewed = TRUE;
     }
 
     /** @var \Drupal\node\NodeInterface $node */
     $node = $this->entity;
 
     if ($this->operation == 'edit') {
-      $form['#title'] = $this->t('<em>Edit @type</em> @title', ['@type' => node_get_type_label($node), '@title' => $node->label()]);
+      $form['#title'] = $this->t('<em>Edit @type</em> @title', array('@type' => node_get_type_label($node), '@title' => $node->label()));
     }
 
+    $current_user = $this->currentUser();
+
     // Changed must be sent to the client, for later overwrite error checking.
-    $form['changed'] = [
+    $form['changed'] = array(
       '#type' => 'hidden',
       '#default_value' => $node->getChangedTime(),
-    ];
+    );
 
+    $form['advanced'] = array(
+      '#type' => 'vertical_tabs',
+      '#attributes' => array('class' => array('entity-meta')),
+      '#weight' => 99,
+    );
     $form = parent::form($form, $form_state);
 
-    $form['advanced']['#attributes']['class'][] = 'entity-meta';
+    // Add a revision_log field if the "Create new revision" option is checked,
+    // or if the current user has the ability to check that option.
+    $form['revision_information'] = array(
+      '#type' => 'details',
+      '#group' => 'advanced',
+      '#title' => t('Revision information'),
+      // Open by default when "Create new revision" is checked.
+      '#open' => $node->isNewRevision(),
+      '#attributes' => array(
+        'class' => array('node-form-revision-information'),
+      ),
+      '#attached' => array(
+        'library' => array('node/drupal.node'),
+      ),
+      '#weight' => 20,
+      '#optional' => TRUE,
+    );
+
+    $form['revision'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Create new revision'),
+      '#default_value' => $node->type->entity->isNewRevision(),
+      '#access' => $current_user->hasPermission('administer nodes'),
+      '#group' => 'revision_information',
+    );
+
+    $form['revision_log'] += array(
+      '#states' => array(
+        'visible' => array(
+          ':input[name="revision"]' => array('checked' => TRUE),
+        ),
+      ),
+      '#group' => 'revision_information',
+    );
 
     // Node author information for administrators.
-    $form['author'] = [
+    $form['author'] = array(
       '#type' => 'details',
       '#title' => t('Authoring information'),
       '#group' => 'advanced',
-      '#attributes' => [
-        'class' => ['node-form-author'],
-      ],
-      '#attached' => [
-        'library' => ['node/drupal.node'],
-      ],
+      '#attributes' => array(
+        'class' => array('node-form-author'),
+      ),
+      '#attached' => array(
+        'library' => array('node/drupal.node'),
+      ),
       '#weight' => 90,
       '#optional' => TRUE,
-    ];
+    );
 
     if (isset($form['uid'])) {
       $form['uid']['#group'] = 'author';
@@ -123,19 +179,19 @@ class NodeForm extends ContentEntityForm {
     }
 
     // Node options for administrators.
-    $form['options'] = [
+    $form['options'] = array(
       '#type' => 'details',
       '#title' => t('Promotion options'),
       '#group' => 'advanced',
-      '#attributes' => [
-        'class' => ['node-form-options'],
-      ],
-      '#attached' => [
-        'library' => ['node/drupal.node'],
-      ],
+      '#attributes' => array(
+        'class' => array('node-form-options'),
+      ),
+      '#attached' => array(
+        'library' => array('node/drupal.node'),
+      ),
       '#weight' => 95,
       '#optional' => TRUE,
-    ];
+    );
 
     if (isset($form['promote'])) {
       $form['promote']['#group'] = 'options';
@@ -147,7 +203,7 @@ class NodeForm extends ContentEntityForm {
 
     $form['#attached']['library'][] = 'node/form';
 
-    $form['#entity_builders']['update_status'] = '::updateStatus';
+    $form['#entity_builders']['update_status'] = [$this, 'updateStatus'];
 
     return $form;
   }
@@ -166,7 +222,7 @@ class NodeForm extends ContentEntityForm {
    *
    * @see \Drupal\node\NodeForm::form()
    */
-  public function updateStatus($entity_type_id, NodeInterface $node, array $form, FormStateInterface $form_state) {
+  function updateStatus($entity_type_id, NodeInterface $node, array $form, FormStateInterface $form_state) {
     $element = $form_state->getTriggeringElement();
     if (isset($element['#published_status'])) {
       $node->setPublished($element['#published_status']);
@@ -236,18 +292,44 @@ class NodeForm extends ContentEntityForm {
       $element['submit']['#access'] = FALSE;
     }
 
-    $element['preview'] = [
+    $element['preview'] = array(
       '#type' => 'submit',
       '#access' => $preview_mode != DRUPAL_DISABLED && ($node->access('create') || $node->access('update')),
       '#value' => t('Preview'),
       '#weight' => 20,
-      '#submit' => ['::submitForm', '::preview'],
-    ];
+      '#submit' => array('::submitForm', '::preview'),
+    );
 
     $element['delete']['#access'] = $node->access('delete');
     $element['delete']['#weight'] = 100;
 
     return $element;
+  }
+
+  /**
+   * {@inheritdoc}
+   *
+   * Updates the node object by processing the submitted values.
+   *
+   * This function can be called by a "Next" button of a wizard to update the
+   * form state's entity with the current step's values before proceeding to the
+   * next step.
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    // Build the node object from the submitted values.
+    parent::submitForm($form, $form_state);
+    $node = $this->entity;
+
+    // Save as a new revision if requested to do so.
+    if (!$form_state->isValueEmpty('revision') && $form_state->getValue('revision') != FALSE) {
+      $node->setNewRevision();
+      // If a new revision is created, save the current user as revision author.
+      $node->setRevisionCreationTime(REQUEST_TIME);
+      $node->setRevisionUserId(\Drupal::currentUser()->id());
+    }
+    else {
+      $node->setNewRevision(FALSE);
+    }
   }
 
   /**
@@ -285,8 +367,8 @@ class NodeForm extends ContentEntityForm {
     $insert = $node->isNew();
     $node->save();
     $node_link = $node->link($this->t('View'));
-    $context = ['@type' => $node->getType(), '%title' => $node->label(), 'link' => $node_link];
-    $t_args = ['@type' => node_get_type_label($node), '%title' => $node->link($node->label())];
+    $context = array('@type' => $node->getType(), '%title' => $node->label(), 'link' => $node_link);
+    $t_args = array('@type' => node_get_type_label($node), '%title' => $node->link($node->label()));
 
     if ($insert) {
       $this->logger('content')->notice('@type: added %title.', $context);
@@ -303,7 +385,7 @@ class NodeForm extends ContentEntityForm {
       if ($node->access('view')) {
         $form_state->setRedirect(
           'entity.node.canonical',
-          ['node' => $node->id()]
+          array('node' => $node->id())
         );
       }
       else {

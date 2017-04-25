@@ -30,18 +30,18 @@ class DistributionProfileTranslationTest extends InstallerTestBase {
    * {@inheritdoc}
    */
   protected function setUp() {
-    $this->info = [
+    $this->info = array(
       'type' => 'profile',
       'core' => \Drupal::CORE_COMPATIBILITY,
       'name' => 'Distribution profile',
-      'distribution' => [
+      'distribution' => array(
         'name' => 'My Distribution',
         'langcode' => $this->langcode,
-        'install' => [
+        'install' => array(
           'theme' => 'bartik',
-        ],
-      ],
-    ];
+        ),
+      ),
+    );
     // File API functions are not available yet.
     $path = $this->siteDirectory . '/profiles/mydistro';
     mkdir($path, 0777, TRUE);

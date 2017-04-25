@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\Core\Access;
 
-use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Tests\UnitTestCase;
 use Drupal\Core\Access\RouteProcessorCsrf;
@@ -44,7 +43,7 @@ class RouteProcessorCsrfTest extends UnitTestCase {
       ->method('get');
 
     $route = new Route('/test-path');
-    $parameters = [];
+    $parameters = array();
 
     $bubbleable_metadata = new BubbleableMetadata();
     $this->processor->processOutbound('test', $route, $parameters, $bubbleable_metadata);
@@ -59,8 +58,8 @@ class RouteProcessorCsrfTest extends UnitTestCase {
    * Tests the processOutbound() method with a _csrf_token route requirement.
    */
   public function testProcessOutbound() {
-    $route = new Route('/test-path', [], ['_csrf_token' => 'TRUE']);
-    $parameters = [];
+    $route = new Route('/test-path', array(), array('_csrf_token' => 'TRUE'));
+    $parameters = array();
 
     $bubbleable_metadata = new BubbleableMetadata();
     $this->processor->processOutbound('test', $route, $parameters, $bubbleable_metadata);
@@ -69,7 +68,7 @@ class RouteProcessorCsrfTest extends UnitTestCase {
     // Bubbleable metadata of routes with a _csrf_token route requirement is a
     // placeholder.
     $path = 'test-path';
-    $placeholder = Crypt::hashBase64($path);
+    $placeholder = hash('sha1', $path);
     $placeholder_render_array = [
       '#lazy_builder' => ['route_processor_csrf:renderPlaceholderCsrfToken', [$path]],
     ];
@@ -81,15 +80,15 @@ class RouteProcessorCsrfTest extends UnitTestCase {
    * Tests the processOutbound() method with a dynamic path and one replacement.
    */
   public function testProcessOutboundDynamicOne() {
-    $route = new Route('/test-path/{slug}', [], ['_csrf_token' => 'TRUE']);
-    $parameters = ['slug' => 100];
+    $route = new Route('/test-path/{slug}', array(), array('_csrf_token' => 'TRUE'));
+    $parameters = array('slug' => 100);
 
     $bubbleable_metadata = new BubbleableMetadata();
     $this->processor->processOutbound('test', $route, $parameters, $bubbleable_metadata);
     // Bubbleable metadata of routes with a _csrf_token route requirement is a
     // placeholder.
     $path = 'test-path/100';
-    $placeholder = Crypt::hashBase64($path);
+    $placeholder = hash('sha1', $path);
     $placeholder_render_array = [
       '#lazy_builder' => ['route_processor_csrf:renderPlaceholderCsrfToken', [$path]],
     ];
@@ -100,15 +99,15 @@ class RouteProcessorCsrfTest extends UnitTestCase {
    * Tests the processOutbound() method with two parameter replacements.
    */
   public function testProcessOutboundDynamicTwo() {
-    $route = new Route('{slug_1}/test-path/{slug_2}', [], ['_csrf_token' => 'TRUE']);
-    $parameters = ['slug_1' => 100, 'slug_2' => 'test'];
+    $route = new Route('{slug_1}/test-path/{slug_2}', array(), array('_csrf_token' => 'TRUE'));
+    $parameters = array('slug_1' => 100, 'slug_2' => 'test');
 
     $bubbleable_metadata = new BubbleableMetadata();
     $this->processor->processOutbound('test', $route, $parameters, $bubbleable_metadata);
     // Bubbleable metadata of routes with a _csrf_token route requirement is a
     // placeholder.
     $path = '100/test-path/test';
-    $placeholder = Crypt::hashBase64($path);
+    $placeholder = hash('sha1', $path);
     $placeholder_render_array = [
       '#lazy_builder' => ['route_processor_csrf:renderPlaceholderCsrfToken', [$path]],
     ];

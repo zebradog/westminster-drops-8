@@ -40,11 +40,11 @@ class CloseDialogCommand implements CommandInterface {
    * {@inheritdoc}
    */
   public function render() {
-    return [
+    return array(
       'command' => 'closeDialog',
       'selector' => $this->selector,
       'persist' => $this->persist,
-    ];
+    );
   }
 
 }

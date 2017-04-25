@@ -17,14 +17,14 @@ class AreaHTTPStatusCodeTest extends HandlerTestBase {
    *
    * @var array
    */
-  public static $testViews = ['test_http_status_code'];
+  public static $testViews = array('test_http_status_code');
 
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['node'];
+  public static $modules = array('node');
 
   /**
    * Tests the area handler.

@@ -9,6 +9,11 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 
 /**
+ * @addtogroup updates-8.1.x
+ * @{
+ */
+
+/**
  * Make responsive image formatters dependent on responsive image styles.
  */
 function responsive_image_post_update_recreate_dependencies() {
@@ -21,3 +26,7 @@ function responsive_image_post_update_recreate_dependencies() {
     }
   });
 }
+
+/**
+ * @} End of "addtogroup updates-8.1.x".
+ */

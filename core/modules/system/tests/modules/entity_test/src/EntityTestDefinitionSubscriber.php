@@ -38,7 +38,7 @@ class EntityTestDefinitionSubscriber implements EventSubscriberInterface, Entity
   /**
    * {@inheritdoc}
    */
-  public function __construct(StateInterface $state) {
+  function __construct(StateInterface $state) {
     $this->state = $state;
   }
 

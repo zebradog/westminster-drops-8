@@ -20,7 +20,7 @@ class KernelDestructionSubscriber implements EventSubscriberInterface, Container
    *
    * @var array
    */
-  protected $services = [];
+  protected $services = array();
 
   /**
    * Registers a service for destruction.
@@ -58,11 +58,8 @@ class KernelDestructionSubscriber implements EventSubscriberInterface, Container
    * @return array
    *   An array of event listener definitions.
    */
-  public static function getSubscribedEvents() {
-    // Run this subscriber after others as those might use services that need
-    // to be terminated as well or run code that needs to run before
-    // termination.
-    $events[KernelEvents::TERMINATE][] = ['onKernelTerminate', -100];
+  static function getSubscribedEvents() {
+    $events[KernelEvents::TERMINATE][] = array('onKernelTerminate', 100);
     return $events;
   }
 

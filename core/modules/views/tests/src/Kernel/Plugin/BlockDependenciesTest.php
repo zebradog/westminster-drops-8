@@ -17,14 +17,14 @@ class BlockDependenciesTest extends ViewsKernelTestBase {
    *
    * @var array
    */
-  public static $testViews = ['test_exposed_block'];
+  public static $testViews = array('test_exposed_block');
 
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['node', 'block', 'user', 'field'];
+  public static $modules = array('node', 'block', 'user', 'field');
 
   /**
    * Tests that exposed filter blocks have the correct dependencies.
@@ -34,11 +34,11 @@ class BlockDependenciesTest extends ViewsKernelTestBase {
   public function testExposedBlock() {
     $block = $this->createBlock('views_exposed_filter_block:test_exposed_block-page_1');
     $dependencies = $block->calculateDependencies()->getDependencies();
-    $expected = [
-      'config' => ['views.view.test_exposed_block'],
-      'module' => ['views'],
-      'theme' => ['stark']
-    ];
+    $expected = array(
+      'config' => array('views.view.test_exposed_block'),
+      'module' => array('views'),
+      'theme' => array('stark')
+    );
     $this->assertIdentical($expected, $dependencies);
   }
 
@@ -50,11 +50,11 @@ class BlockDependenciesTest extends ViewsKernelTestBase {
   public function testViewsBlock() {
     $block = $this->createBlock('views_block:content_recent-block_1');
     $dependencies = $block->calculateDependencies()->getDependencies();
-    $expected = [
-      'config' => ['views.view.content_recent'],
-      'module' => ['views'],
-      'theme' => ['stark']
-    ];
+    $expected = array(
+      'config' => array('views.view.content_recent'),
+      'module' => array('views'),
+      'theme' => array('stark')
+    );
     $this->assertIdentical($expected, $dependencies);
   }
 
@@ -82,18 +82,18 @@ class BlockDependenciesTest extends ViewsKernelTestBase {
    * @return \Drupal\block\Entity\Block
    *   The block entity.
    */
-  protected function createBlock($plugin_id, array $settings = []) {
-    $settings += [
+  protected function createBlock($plugin_id, array $settings = array()) {
+    $settings += array(
       'plugin' => $plugin_id,
       'region' => 'sidebar_first',
       'id' => strtolower($this->randomMachineName(8)),
       'theme' => $this->config('system.theme')->get('default'),
       'label' => $this->randomMachineName(8),
-      'visibility' => [],
+      'visibility' => array(),
       'weight' => 0,
-    ];
+    );
     $values = [];
-    foreach (['region', 'id', 'theme', 'plugin', 'weight', 'visibility'] as $key) {
+    foreach (array('region', 'id', 'theme', 'plugin', 'weight', 'visibility') as $key) {
       $values[$key] = $settings[$key];
       // Remove extra values that do not belong in the settings array.
       unset($settings[$key]);

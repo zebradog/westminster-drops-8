@@ -49,7 +49,6 @@ class ManagedFile extends FormElement {
       '#attached' => [
         'library' => ['file/drupal.file'],
       ],
-      '#accept' => NULL,
     ];
   }
 
@@ -108,7 +107,7 @@ class ManagedFile extends FormElement {
                 // submissions of the same form, so to allow that, check for the
                 // token added by $this->processManagedFile().
                 elseif (\Drupal::currentUser()->isAnonymous()) {
-                  $token = NestedArray::getValue($form_state->getUserInput(), array_merge($element['#parents'], ['file_' . $file->id(), 'fid_token']));
+                  $token = NestedArray::getValue($form_state->getUserInput(), array_merge($element['#parents'], array('file_' . $file->id(), 'fid_token')));
                   if ($token !== Crypt::hmacBase64('file-' . $file->id(), \Drupal::service('private_key')->get() . Settings::getHashSalt())) {
                     $force_default = TRUE;
                     break;
@@ -309,9 +308,6 @@ class ManagedFile extends FormElement {
       '#weight' => -10,
       '#error_no_message' => TRUE,
     ];
-    if (!empty($element['#accept'])) {
-      $element['upload']['#attributes'] = ['accept' => $element['#accept']];
-    }
 
     if (!empty($fids) && $element['#files']) {
       foreach ($element['#files'] as $delta => $file) {
@@ -334,10 +330,10 @@ class ManagedFile extends FormElement {
         // of the same form (for example, after an Ajax upload or form
         // validation error).
         if ($file->isTemporary() && \Drupal::currentUser()->isAnonymous()) {
-          $element['file_' . $delta]['fid_token'] = [
+          $element['file_' . $delta]['fid_token'] = array(
             '#type' => 'hidden',
             '#value' => Crypt::hmacBase64('file-' . $delta, \Drupal::service('private_key')->get() . Settings::getHashSalt()),
-          ];
+          );
         }
       }
     }

@@ -14,20 +14,20 @@ class InsertDefaultsTest extends DatabaseTestBase {
   /**
    * Tests that we can run a query that uses default values for everything.
    */
-  public function testDefaultInsert() {
-    $query = db_insert('test')->useDefaults(['job']);
+  function testDefaultInsert() {
+    $query = db_insert('test')->useDefaults(array('job'));
     $id = $query->execute();
 
     $schema = drupal_get_module_schema('database_test', 'test');
 
-    $job = db_query('SELECT job FROM {test} WHERE id = :id', [':id' => $id])->fetchField();
+    $job = db_query('SELECT job FROM {test} WHERE id = :id', array(':id' => $id))->fetchField();
     $this->assertEqual($job, $schema['fields']['job']['default'], 'Default field value is set.');
   }
 
   /**
    * Tests that no action will be preformed if no fields are specified.
    */
-  public function testDefaultEmptyInsert() {
+  function testDefaultEmptyInsert() {
     $num_records_before = (int) db_query('SELECT COUNT(*) FROM {test}')->fetchField();
 
     try {
@@ -46,15 +46,15 @@ class InsertDefaultsTest extends DatabaseTestBase {
   /**
    * Tests that we can insert fields with values and defaults in the same query.
    */
-  public function testDefaultInsertWithFields() {
+  function testDefaultInsertWithFields() {
     $query = db_insert('test')
-      ->fields(['name' => 'Bob'])
-      ->useDefaults(['job']);
+      ->fields(array('name' => 'Bob'))
+      ->useDefaults(array('job'));
     $id = $query->execute();
 
     $schema = drupal_get_module_schema('database_test', 'test');
 
-    $job = db_query('SELECT job FROM {test} WHERE id = :id', [':id' => $id])->fetchField();
+    $job = db_query('SELECT job FROM {test} WHERE id = :id', array(':id' => $id))->fetchField();
     $this->assertEqual($job, $schema['fields']['job']['default'], 'Default field value is set.');
   }
 

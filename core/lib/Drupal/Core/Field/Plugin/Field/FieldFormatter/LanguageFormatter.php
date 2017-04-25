@@ -89,11 +89,11 @@ class LanguageFormatter extends StringFormatter {
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
     $form = parent::settingsForm($form, $form_state);
-    $form['native_language'] = [
+    $form['native_language'] = array(
       '#title' => $this->t('Display in native language'),
       '#type' => 'checkbox',
       '#default_value' => $this->getSetting('native_language'),
-    ];
+    );
     return $form;
   }
 

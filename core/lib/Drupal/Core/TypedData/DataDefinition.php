@@ -12,7 +12,7 @@ class DataDefinition implements DataDefinitionInterface, \ArrayAccess {
    *
    * @var array
    */
-  protected $definition = [];
+  protected $definition = array();
 
   /**
    * Creates a new data definition.
@@ -41,7 +41,7 @@ class DataDefinition implements DataDefinitionInterface, \ArrayAccess {
    * @param array $values
    *   (optional) If given, an array of initial values to set on the definition.
    */
-  public function __construct(array $values = []) {
+  public function __construct(array $values = array()) {
     $this->definition = $values;
   }
 
@@ -213,7 +213,7 @@ class DataDefinition implements DataDefinitionInterface, \ArrayAccess {
    * {@inheritdoc}
    */
   public function getSettings() {
-    return isset($this->definition['settings']) ? $this->definition['settings'] : [];
+    return isset($this->definition['settings']) ? $this->definition['settings'] : array();
   }
 
   /**
@@ -257,7 +257,7 @@ class DataDefinition implements DataDefinitionInterface, \ArrayAccess {
    * {@inheritdoc}
    */
   public function getConstraints() {
-    $constraints = isset($this->definition['constraints']) ? $this->definition['constraints'] : [];
+    $constraints = isset($this->definition['constraints']) ? $this->definition['constraints'] : array();
     $constraints += \Drupal::typedDataManager()->getDefaultConstraints($this);
     return $constraints;
   }

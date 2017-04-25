@@ -3,7 +3,7 @@
 namespace Drupal\Tests\block\Kernel;
 
 use Drupal\block\Entity\Block;
-use Drupal\Tests\SchemaCheckTestTrait;
+use Drupal\config\Tests\SchemaCheckTestTrait;
 use Drupal\KernelTests\KernelTestBase;
 
 /**
@@ -18,7 +18,7 @@ class BlockConfigSchemaTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  public static $modules = array(
     'block',
     'aggregator',
     'book',
@@ -32,7 +32,7 @@ class BlockConfigSchemaTest extends KernelTestBase {
     'taxonomy',
     'user',
     'text',
-  ];
+  );
 
   /**
    * The typed config manager.
@@ -59,7 +59,7 @@ class BlockConfigSchemaTest extends KernelTestBase {
     $this->installEntitySchema('block_content');
     $this->installEntitySchema('taxonomy_term');
     $this->installEntitySchema('node');
-    $this->installSchema('book', ['book']);
+    $this->installSchema('book', array('book'));
   }
 
   /**
@@ -68,20 +68,20 @@ class BlockConfigSchemaTest extends KernelTestBase {
   public function testBlockConfigSchema() {
     foreach ($this->blockManager->getDefinitions() as $block_id => $definition) {
       $id = strtolower($this->randomMachineName());
-      $block = Block::create([
+      $block = Block::create(array(
         'id' => $id,
         'theme' => 'classy',
         'weight' => 00,
         'status' => TRUE,
         'region' => 'content',
         'plugin' => $block_id,
-        'settings' => [
+        'settings' => array(
           'label' => $this->randomMachineName(),
           'provider' => 'system',
           'label_display' => FALSE,
-        ],
-        'visibility' => [],
-      ]);
+        ),
+        'visibility' => array(),
+      ));
       $block->save();
 
       $config = $this->config("block.block.$id");

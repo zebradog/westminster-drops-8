@@ -100,64 +100,64 @@ class PerformanceForm extends ConfigFormBase {
 
     $config = $this->config('system.performance');
 
-    $form['clear_cache'] = [
+    $form['clear_cache'] = array(
       '#type' => 'details',
       '#title' => t('Clear cache'),
       '#open' => TRUE,
-    ];
+    );
 
-    $form['clear_cache']['clear'] = [
+    $form['clear_cache']['clear'] = array(
       '#type' => 'submit',
       '#value' => t('Clear all caches'),
-      '#submit' => ['::submitCacheClear'],
-    ];
+      '#submit' => array('::submitCacheClear'),
+    );
 
-    $form['caching'] = [
+    $form['caching'] = array(
       '#type' => 'details',
       '#title' => t('Caching'),
       '#open' => TRUE,
       '#description' => $this->t('Note: Drupal provides an internal page cache module that is recommended for small to medium-sized websites.'),
-    ];
+    );
     // Identical options to the ones for block caching.
     // @see \Drupal\Core\Block\BlockBase::buildConfigurationForm()
-    $period = [0, 60, 180, 300, 600, 900, 1800, 2700, 3600, 10800, 21600, 32400, 43200, 86400];
-    $period = array_map([$this->dateFormatter, 'formatInterval'], array_combine($period, $period));
+    $period = array(0, 60, 180, 300, 600, 900, 1800, 2700, 3600, 10800, 21600, 32400, 43200, 86400);
+    $period = array_map(array($this->dateFormatter, 'formatInterval'), array_combine($period, $period));
     $period[0] = '<' . t('no caching') . '>';
-    $form['caching']['page_cache_maximum_age'] = [
+    $form['caching']['page_cache_maximum_age'] = array(
       '#type' => 'select',
       '#title' => t('Page cache maximum age'),
       '#default_value' => $config->get('cache.page.max_age'),
       '#options' => $period,
       '#description' => t('The maximum time a page can be cached by browsers and proxies. This is used as the value for max-age in Cache-Control headers.'),
-    ];
+    );
 
     $directory = 'public://';
     $is_writable = is_dir($directory) && is_writable($directory);
     $disabled = !$is_writable;
     $disabled_message = '';
     if (!$is_writable) {
-      $disabled_message = ' ' . t('<strong class="error">Set up the <a href=":file-system">public files directory</a> to make these optimizations available.</strong>', [':file-system' => $this->url('system.file_system_settings')]);
+      $disabled_message = ' ' . t('<strong class="error">Set up the <a href=":file-system">public files directory</a> to make these optimizations available.</strong>', array(':file-system' => $this->url('system.file_system_settings')));
     }
 
-    $form['bandwidth_optimization'] = [
+    $form['bandwidth_optimization'] = array(
       '#type' => 'details',
       '#title' => t('Bandwidth optimization'),
       '#open' => TRUE,
       '#description' => t('External resources can be optimized automatically, which can reduce both the size and number of requests made to your website.') . $disabled_message,
-    ];
+    );
 
-    $form['bandwidth_optimization']['preprocess_css'] = [
+    $form['bandwidth_optimization']['preprocess_css'] = array(
       '#type' => 'checkbox',
       '#title' => t('Aggregate CSS files'),
       '#default_value' => $config->get('css.preprocess'),
       '#disabled' => $disabled,
-    ];
-    $form['bandwidth_optimization']['preprocess_js'] = [
+    );
+    $form['bandwidth_optimization']['preprocess_js'] = array(
       '#type' => 'checkbox',
       '#title' => t('Aggregate JavaScript files'),
       '#default_value' => $config->get('js.preprocess'),
       '#disabled' => $disabled,
-    ];
+    );
 
     return parent::buildForm($form, $form_state);
   }

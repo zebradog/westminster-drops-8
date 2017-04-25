@@ -49,11 +49,11 @@ class HistoryUserTimestamp extends FilterPluginBase {
       else {
         $label = $this->t('Has new content');
       }
-      $form['value'] = [
+      $form['value'] = array(
         '#type' => 'checkbox',
         '#title' => $label,
         '#default_value' => $this->value,
-      ];
+      );
     }
   }
 

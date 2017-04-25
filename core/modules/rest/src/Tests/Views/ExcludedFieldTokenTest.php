@@ -84,4 +84,5 @@ class ExcludedFieldTokenTest extends ViewTestBase {
     $this->assertIdentical($actual_json, json_encode($expected));
   }
 
+
 }

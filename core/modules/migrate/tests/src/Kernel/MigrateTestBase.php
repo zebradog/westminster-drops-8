@@ -47,7 +47,7 @@ abstract class MigrateTestBase extends KernelTestBase implements MigrateMessageI
    */
   protected $sourceDatabase;
 
-  public static $modules = ['migrate'];
+  public static $modules = array('migrate');
 
   /**
    * {@inheritdoc}
@@ -201,7 +201,7 @@ abstract class MigrateTestBase extends KernelTestBase implements MigrateMessageI
    */
   public function startCollectingMessages() {
     $this->collectMessages = TRUE;
-    $this->migrateMessages = [];
+    $this->migrateMessages = array();
   }
 
   /**

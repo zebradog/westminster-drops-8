@@ -30,10 +30,10 @@ class LinkItem extends FieldItemBase implements LinkItemInterface {
    * {@inheritdoc}
    */
   public static function defaultFieldSettings() {
-    return [
+    return array(
       'title' => DRUPAL_OPTIONAL,
       'link_type' => LinkItemInterface::LINK_GENERIC
-    ] + parent::defaultFieldSettings();
+    ) + parent::defaultFieldSettings();
   }
 
   /**
@@ -56,58 +56,58 @@ class LinkItem extends FieldItemBase implements LinkItemInterface {
    * {@inheritdoc}
    */
   public static function schema(FieldStorageDefinitionInterface $field_definition) {
-    return [
-      'columns' => [
-        'uri' => [
+    return array(
+      'columns' => array(
+        'uri' => array(
           'description' => 'The URI of the link.',
           'type' => 'varchar',
           'length' => 2048,
-        ],
-        'title' => [
+        ),
+        'title' => array(
           'description' => 'The link text.',
           'type' => 'varchar',
           'length' => 255,
-        ],
-        'options' => [
+        ),
+        'options' => array(
           'description' => 'Serialized array of options for the link.',
           'type' => 'blob',
           'size' => 'big',
           'serialize' => TRUE,
-        ],
-      ],
-      'indexes' => [
-        'uri' => [['uri', 30]],
-      ],
-    ];
+        ),
+      ),
+      'indexes' => array(
+        'uri' => array(array('uri', 30)),
+      ),
+    );
   }
 
   /**
    * {@inheritdoc}
    */
   public function fieldSettingsForm(array $form, FormStateInterface $form_state) {
-    $element = [];
+    $element = array();
 
-    $element['link_type'] = [
+    $element['link_type'] = array(
       '#type' => 'radios',
       '#title' => t('Allowed link type'),
       '#default_value' => $this->getSetting('link_type'),
-      '#options' => [
+      '#options' => array(
         static::LINK_INTERNAL => t('Internal links only'),
         static::LINK_EXTERNAL => t('External links only'),
         static::LINK_GENERIC => t('Both internal and external links'),
-      ],
-    ];
+      ),
+    );
 
-    $element['title'] = [
+    $element['title'] = array(
       '#type' => 'radios',
       '#title' => t('Allow link text'),
       '#default_value' => $this->getSetting('title'),
-      '#options' => [
+      '#options' => array(
         DRUPAL_DISABLED => t('Disabled'),
         DRUPAL_OPTIONAL => t('Optional'),
         DRUPAL_REQUIRED => t('Required'),
-      ],
-    ];
+      ),
+    );
 
     return $element;
   }
@@ -119,7 +119,7 @@ class LinkItem extends FieldItemBase implements LinkItemInterface {
     $random = new Random();
     if ($field_definition->getItemDefinition()->getSetting('link_type') & LinkItemInterface::LINK_EXTERNAL) {
       // Set of possible top-level domains.
-      $tlds = ['com', 'net', 'gov', 'org', 'edu', 'biz', 'info'];
+      $tlds = array('com', 'net', 'gov', 'org', 'edu', 'biz', 'info');
       // Set random length for the domain name.
       $domain_length = mt_rand(7, 15);
 

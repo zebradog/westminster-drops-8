@@ -21,10 +21,9 @@ interface UrlGeneratorInterface extends VersatileGeneratorInterface {
    *   \Symfony\Component\Routing\Generator\UrlGeneratorInterface::generate().
    *
    * @return string
-   *   The internal Drupal path corresponding to the route. This string is
-   *   not urlencoded and will be an empty string for the front page.
+   *   The internal Drupal path corresponding to the route.
    */
-  public function getPathFromRoute($name, $parameters = []);
+  public function getPathFromRoute($name, $parameters = array());
 
   /**
    * Generates a URL or path for a specific route based on the given parameters.
@@ -78,6 +77,6 @@ interface UrlGeneratorInterface extends VersatileGeneratorInterface {
    *   Should not be used in user code.
    *   Use \Drupal\Core\Url instead.
    */
-  public function generateFromRoute($name, $parameters = [], $options = [], $collect_bubbleable_metadata = FALSE);
+  public function generateFromRoute($name, $parameters = array(), $options = array(), $collect_bubbleable_metadata = FALSE);
 
 }

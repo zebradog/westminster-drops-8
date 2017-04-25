@@ -23,10 +23,10 @@ class UserName extends User {
 
     $entity_type = $this->entityManager->getDefinition('user');
 
-    $form['multiple']['#options'] = [
-      0 => $this->t('Single name', ['%type' => $entity_type->getLabel()]),
-      1 => $this->t('One or more names separated by , or +', ['%type' => $entity_type->getLabel()]),
-    ];
+    $form['multiple']['#options'] = array(
+      0 => $this->t('Single name', array('%type' => $entity_type->getLabel())),
+      1 => $this->t('One or more names separated by , or +', array('%type' => $entity_type->getLabel())),
+    );
   }
 
   /**
@@ -39,14 +39,14 @@ class UserName extends User {
       $names = array_filter(preg_split('/[,+ ]/', $argument));
     }
     elseif ($argument) {
-      $names = [$argument];
+      $names = array($argument);
     }
     // No specified argument should be invalid.
     else {
       return FALSE;
     }
 
-    $accounts = $this->userStorage->loadByProperties(['name' => $names]);
+    $accounts = $this->userStorage->loadByProperties(array('name' => $names));
 
     // If there are no accounts, return FALSE now. As we will not enter the
     // loop below otherwise.

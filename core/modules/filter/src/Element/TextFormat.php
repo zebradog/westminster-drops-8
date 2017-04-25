@@ -40,13 +40,13 @@ class TextFormat extends RenderElement {
    */
   public function getInfo() {
     $class = get_class($this);
-    return [
-      '#process' => [
-        [$class, 'processFormat'],
-      ],
+    return array(
+      '#process' => array(
+        array($class, 'processFormat'),
+      ),
       '#base_type' => 'textarea',
-      '#theme_wrappers' => ['text_format_wrapper'],
-    ];
+      '#theme_wrappers' => array('text_format_wrapper'),
+    );
   }
 
   /**
@@ -84,7 +84,7 @@ class TextFormat extends RenderElement {
 
     // Ensure that children appear as subkeys of this element.
     $element['#tree'] = TRUE;
-    $blacklist = [
+    $blacklist = array(
       // Make \Drupal::formBuilder()->doBuildForm() regenerate child properties.
       '#parents',
       '#id',
@@ -104,7 +104,7 @@ class TextFormat extends RenderElement {
       '#attached',
       '#processed',
       '#theme_wrappers',
-    ];
+    );
     // Move this element into sub-element 'value'.
     unset($element['value']);
     foreach (Element::properties($element) as $key) {
@@ -116,16 +116,16 @@ class TextFormat extends RenderElement {
     $element['value']['#type'] = $element['#base_type'];
     $element['value'] += static::elementInfo()->getInfo($element['#base_type']);
     // Make sure the #default_value key is set, so we can use it below.
-    $element['value'] += ['#default_value' => ''];
+    $element['value'] += array('#default_value' => '');
 
     // Turn original element into a text format wrapper.
     $element['#attached']['library'][] = 'filter/drupal.filter';
 
     // Setup child container for the text format widget.
-    $element['format'] = [
+    $element['format'] = array(
       '#type' => 'container',
-      '#attributes' => ['class' => ['filter-wrapper']],
-    ];
+      '#attributes' => array('class' => array('filter-wrapper')),
+    );
 
     // Get a list of formats that the current user has access to.
     $formats = filter_formats($user);
@@ -162,30 +162,30 @@ class TextFormat extends RenderElement {
     }
 
     // Prepare text format guidelines.
-    $element['format']['guidelines'] = [
+    $element['format']['guidelines'] = array(
       '#type' => 'container',
-      '#attributes' => ['class' => ['filter-guidelines']],
+      '#attributes' => array('class' => array('filter-guidelines')),
       '#weight' => 20,
-    ];
-    $options = [];
+    );
+    $options = array();
     foreach ($formats as $format) {
       $options[$format->id()] = $format->label();
-      $element['format']['guidelines'][$format->id()] = [
+      $element['format']['guidelines'][$format->id()] = array(
         '#theme' => 'filter_guidelines',
         '#format' => $format,
-      ];
+      );
     }
 
-    $element['format']['format'] = [
+    $element['format']['format'] = array(
       '#type' => 'select',
       '#title' => t('Text format'),
       '#options' => $options,
       '#default_value' => $element['#format'],
       '#access' => count($formats) > 1,
       '#weight' => 10,
-      '#attributes' => ['class' => ['filter-list']],
-      '#parents' => array_merge($element['#parents'], ['format']),
-    ];
+      '#attributes' => array('class' => array('filter-list')),
+      '#parents' => array_merge($element['#parents'], array('format')),
+    );
 
     $element['format']['help'] = [
       '#type' => 'container',
@@ -225,7 +225,7 @@ class TextFormat extends RenderElement {
 
       // Prepend #pre_render callback to replace field value with user notice
       // prior to rendering.
-      $element['value'] += ['#pre_render' => []];
+      $element['value'] += array('#pre_render' => array());
       array_unshift($element['value']['#pre_render'], 'filter_form_access_denied');
 
       // Cosmetic adjustments.

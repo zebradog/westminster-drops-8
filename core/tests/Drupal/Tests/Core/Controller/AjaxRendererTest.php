@@ -42,7 +42,7 @@ class AjaxRendererTest extends UnitTestCase {
       ->with('ajax')
       ->willReturn([
         '#header' => TRUE,
-        '#commands' => [],
+        '#commands' => array(),
         '#error' => NULL,
       ]);
     $this->ajaxRenderer = new TestAjaxRenderer($element_info_manager);

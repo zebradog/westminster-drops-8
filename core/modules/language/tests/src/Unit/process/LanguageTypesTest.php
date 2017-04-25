@@ -4,7 +4,6 @@ namespace Drupal\Tests\language\Unit\process;
 
 use Drupal\language\Plugin\migrate\process\LanguageTypes;
 use Drupal\Tests\migrate\Unit\process\MigrateProcessTestCase;
-use Drupal\migrate\MigrateException;
 
 /**
  * @coversDefaultClass \Drupal\language\Plugin\migrate\process\LanguageTypes
@@ -50,10 +49,12 @@ class LanguageTypesTest extends MigrateProcessTestCase {
 
   /**
    * Tests string input.
+   *
+   * @expectedException \Drupal\migrate\MigrateException
+   * @expectedExceptionMessage The input should be an array
    */
   public function testStringInput() {
     $this->plugin = new LanguageTypes([], 'map', []);
-    $this->setExpectedException(MigrateException::class, 'The input should be an array');
     $this->plugin->transform('foo', $this->migrateExecutable, $this->row, 'destinationproperty');
   }
 

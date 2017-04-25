@@ -47,7 +47,7 @@ class YamlDiscovery implements DiscoveryInterface {
    * @param array $directories
    *   An array of directories to scan.
    */
-  public function __construct($name, array $directories) {
+  function __construct($name, array $directories) {
     $this->discovery = new CoreYamlDiscovery($name, $directories);
   }
 
@@ -75,7 +75,7 @@ class YamlDiscovery implements DiscoveryInterface {
     $plugins = $this->discovery->findAll();
 
     // Flatten definitions into what's expected from plugins.
-    $definitions = [];
+    $definitions = array();
     foreach ($plugins as $provider => $list) {
       foreach ($list as $id => $definition) {
         // Add TranslatableMarkup.
@@ -92,10 +92,10 @@ class YamlDiscovery implements DiscoveryInterface {
           }
         }
         // Add ID and provider.
-        $definitions[$id] = $definition + [
+        $definitions[$id] = $definition + array(
           'provider' => $provider,
           'id' => $id,
-        ];
+        );
       }
     }
 

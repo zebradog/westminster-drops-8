@@ -20,10 +20,10 @@ class Dropbutton extends Links {
     $links = $this->getLinks();
 
     if (!empty($links)) {
-      return [
+      return array(
         '#type' => 'dropbutton',
         '#links' => $links,
-      ];
+      );
     }
     else {
       return '';

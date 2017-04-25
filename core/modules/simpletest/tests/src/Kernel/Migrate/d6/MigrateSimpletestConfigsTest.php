@@ -2,7 +2,7 @@
 
 namespace Drupal\Tests\simpletest\Kernel\Migrate\d6;
 
-use Drupal\Tests\SchemaCheckTestTrait;
+use Drupal\config\Tests\SchemaCheckTestTrait;
 use Drupal\Tests\migrate_drupal\Kernel\d6\MigrateDrupal6TestBase;
 
 /**
@@ -17,7 +17,7 @@ class MigrateSimpletestConfigsTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['simpletest'];
+  public static $modules = array('simpletest');
 
   /**
    * {@inheritdoc}

@@ -72,9 +72,6 @@ system.cron:
         requirements_error:
           type: integer
           label: 'Requirements error period'
-    logging:
-      type: integer
-      label: 'Detailed cron logging'
 
 system.date:
   type: config_object

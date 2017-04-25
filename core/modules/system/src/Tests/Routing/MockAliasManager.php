@@ -14,21 +14,21 @@ class MockAliasManager implements AliasManagerInterface {
    *
    * @var array
    */
-  protected $aliases = [];
+  protected $aliases = array();
 
   /**
    * Array of mocked aliases. Keys are aliases, followed by language.
    *
    * @var array
    */
-  protected $systemPaths = [];
+  protected $systemPaths = array();
 
   /**
    * An index of aliases that have been requested.
    *
    * @var array
    */
-  protected $lookedUp = [];
+  protected $lookedUp = array();
 
   /**
    * The language to assume a path alias is for if not specified.

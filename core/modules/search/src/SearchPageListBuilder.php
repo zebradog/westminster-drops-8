@@ -26,7 +26,7 @@ class SearchPageListBuilder extends DraggableListBuilder implements FormInterfac
    *
    * @var \Drupal\search\SearchPageInterface[]
    */
-  protected $entities = [];
+  protected $entities = array();
 
   /**
    * Stores the configuration factory.
@@ -90,24 +90,24 @@ class SearchPageListBuilder extends DraggableListBuilder implements FormInterfac
    * {@inheritdoc}
    */
   public function buildHeader() {
-    $header['label'] = [
+    $header['label'] = array(
       'data' => $this->t('Label'),
-    ];
-    $header['url'] = [
+    );
+    $header['url'] = array(
       'data' => $this->t('URL'),
-      'class' => [RESPONSIVE_PRIORITY_LOW],
-    ];
-    $header['plugin'] = [
+      'class' => array(RESPONSIVE_PRIORITY_LOW),
+    );
+    $header['plugin'] = array(
       'data' => $this->t('Type'),
-      'class' => [RESPONSIVE_PRIORITY_LOW],
-    ];
-    $header['status'] = [
+      'class' => array(RESPONSIVE_PRIORITY_LOW),
+    );
+    $header['status'] = array(
       'data' => $this->t('Status'),
-    ];
-    $header['progress'] = [
+    );
+    $header['progress'] = array(
       'data' => $this->t('Indexing progress'),
-      'class' => [RESPONSIVE_PRIORITY_MEDIUM],
-    ];
+      'class' => array(RESPONSIVE_PRIORITY_MEDIUM),
+    );
     return $header + parent::buildHeader();
   }
 
@@ -120,11 +120,11 @@ class SearchPageListBuilder extends DraggableListBuilder implements FormInterfac
     $row['url']['#markup'] = 'search/' . $entity->getPath();
     // If the search page is active, link to it.
     if ($entity->status()) {
-      $row['url'] = [
+      $row['url'] = array(
         '#type' => 'link',
         '#title' => $row['url'],
         '#url' => Url::fromRoute('search.view_' . $entity->id()),
-      ];
+      );
     }
 
     $definition = $entity->getPlugin()->getPluginDefinition();
@@ -143,10 +143,10 @@ class SearchPageListBuilder extends DraggableListBuilder implements FormInterfac
 
     if ($entity->isIndexable()) {
       $status = $entity->getPlugin()->indexStatus();
-      $row['progress']['#markup'] = $this->t('%num_indexed of %num_total indexed', [
+      $row['progress']['#markup'] = $this->t('%num_indexed of %num_total indexed', array(
         '%num_indexed' => $status['total'] - $status['remaining'],
         '%num_total' => $status['total']
-      ]);
+      ));
     }
     else {
       $row['progress']['#markup'] = $this->t('Does not use index');
@@ -178,102 +178,102 @@ class SearchPageListBuilder extends DraggableListBuilder implements FormInterfac
     // will show as 99%, to indicate "almost done".
     $percentage = $total > 0 ? floor(100 * $done / $total) : 100;
     $percentage .= '%';
-    $status = '<p><strong>' . $this->t('%percentage of the site has been indexed.', ['%percentage' => $percentage]) . ' ' . $count . '</strong></p>';
-    $form['status'] = [
+    $status = '<p><strong>' . $this->t('%percentage of the site has been indexed.', array('%percentage' => $percentage)) . ' ' . $count . '</strong></p>';
+    $form['status'] = array(
       '#type' => 'details',
       '#title' => $this->t('Indexing progress'),
       '#open' => TRUE,
-      '#description' => $this->t('Only items in the index will appear in search results. To build and maintain the index, a correctly configured <a href=":cron">cron maintenance task</a> is required.', [':cron' => \Drupal::url('system.cron_settings')]),
-    ];
-    $form['status']['status'] = ['#markup' => $status];
-    $form['status']['wipe'] = [
+      '#description' => $this->t('Only items in the index will appear in search results. To build and maintain the index, a correctly configured <a href=":cron">cron maintenance task</a> is required.', array(':cron' => \Drupal::url('system.cron_settings'))),
+    );
+    $form['status']['status'] = array('#markup' => $status);
+    $form['status']['wipe'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Re-index site'),
-      '#submit' => ['::searchAdminReindexSubmit'],
-    ];
+      '#submit' => array('::searchAdminReindexSubmit'),
+    );
 
-    $items = [10, 20, 50, 100, 200, 500];
+    $items = array(10, 20, 50, 100, 200, 500);
     $items = array_combine($items, $items);
 
     // Indexing throttle:
-    $form['indexing_throttle'] = [
+    $form['indexing_throttle'] = array(
       '#type' => 'details',
       '#title' => $this->t('Indexing throttle'),
       '#open' => TRUE,
-    ];
-    $form['indexing_throttle']['cron_limit'] = [
+    );
+    $form['indexing_throttle']['cron_limit'] = array(
       '#type' => 'select',
       '#title' => $this->t('Number of items to index per cron run'),
       '#default_value' => $search_settings->get('index.cron_limit'),
       '#options' => $items,
-      '#description' => $this->t('The maximum number of items indexed in each run of the <a href=":cron">cron maintenance task</a>. If necessary, reduce the number of items to prevent timeouts and memory errors while indexing. Some search page types may have their own setting for this.', [':cron' => \Drupal::url('system.cron_settings')]),
-    ];
+      '#description' => $this->t('The maximum number of items indexed in each run of the <a href=":cron">cron maintenance task</a>. If necessary, reduce the number of items to prevent timeouts and memory errors while indexing. Some search page types may have their own setting for this.', array(':cron' => \Drupal::url('system.cron_settings'))),
+    );
     // Indexing settings:
-    $form['indexing_settings'] = [
+    $form['indexing_settings'] = array(
       '#type' => 'details',
       '#title' => $this->t('Default indexing settings'),
       '#open' => TRUE,
-    ];
-    $form['indexing_settings']['info'] = [
+    );
+    $form['indexing_settings']['info'] = array(
       '#markup' => $this->t("<p>Search pages that use an index may use the default index provided by the Search module, or they may use a different indexing mechanism. These settings are for the default index. <em>Changing these settings will cause the default search index to be rebuilt to reflect the new settings. Searching will continue to work, based on the existing index, but new content won't be indexed until all existing content has been re-indexed.</em></p><p><em>The default settings should be appropriate for the majority of sites.</em></p>")
-    ];
-    $form['indexing_settings']['minimum_word_size'] = [
+    );
+    $form['indexing_settings']['minimum_word_size'] = array(
       '#type' => 'number',
       '#title' => $this->t('Minimum word length to index'),
       '#default_value' => $search_settings->get('index.minimum_word_size'),
       '#min' => 1,
       '#max' => 1000,
       '#description' => $this->t('The minimum character length for a word to be added to the index. Searches must include a keyword of at least this length.'),
-    ];
-    $form['indexing_settings']['overlap_cjk'] = [
+    );
+    $form['indexing_settings']['overlap_cjk'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Simple CJK handling'),
       '#default_value' => $search_settings->get('index.overlap_cjk'),
       '#description' => $this->t('Whether to apply a simple Chinese/Japanese/Korean tokenizer based on overlapping sequences. Turn this off if you want to use an external preprocessor for this instead. Does not affect other languages.')
-    ];
+    );
 
     // Indexing settings:
-    $form['logging'] = [
+    $form['logging'] = array(
       '#type' => 'details',
       '#title' => $this->t('Logging'),
       '#open' => TRUE,
-    ];
+    );
 
-    $form['logging']['logging'] = [
+    $form['logging']['logging'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Log searches'),
       '#default_value' => $search_settings->get('logging'),
       '#description' => $this->t('If checked, all searches will be logged. Uncheck to skip logging. Logging may affect performance.'),
-    ];
+    );
 
-    $form['search_pages'] = [
+    $form['search_pages'] = array(
       '#type' => 'details',
       '#title' => $this->t('Search pages'),
       '#open' => TRUE,
-    ];
-    $form['search_pages']['add_page'] = [
+    );
+    $form['search_pages']['add_page'] = array(
       '#type' => 'container',
-      '#attributes' => [
-        'class' => ['container-inline'],
-      ],
-    ];
+      '#attributes' => array(
+        'class' => array('container-inline'),
+      ),
+    );
     // In order to prevent validation errors for the parent form, this cannot be
     // required, see self::validateAddSearchPage().
-    $form['search_pages']['add_page']['search_type'] = [
+    $form['search_pages']['add_page']['search_type'] = array(
       '#type' => 'select',
       '#title' => $this->t('Search page type'),
       '#empty_option' => $this->t('- Choose page type -'),
       '#options' => array_map(function ($definition) {
         return $definition['title'];
       }, $this->searchManager->getDefinitions()),
-    ];
-    $form['search_pages']['add_page']['add_search_submit'] = [
+    );
+    $form['search_pages']['add_page']['add_search_submit'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Add search page'),
-      '#validate' => ['::validateAddSearchPage'],
-      '#submit' => ['::submitAddSearchPage'],
-      '#limit_validation_errors' => [['search_type']],
-    ];
+      '#validate' => array('::validateAddSearchPage'),
+      '#submit' => array('::submitAddSearchPage'),
+      '#limit_validation_errors' => array(array('search_type')),
+    );
 
     // Move the listing into the search_pages element.
     $form['search_pages'][$this->entitiesKey] = $form[$this->entitiesKey];
@@ -281,11 +281,11 @@ class SearchPageListBuilder extends DraggableListBuilder implements FormInterfac
     unset($form[$this->entitiesKey]);
 
     $form['actions']['#type'] = 'actions';
-    $form['actions']['submit'] = [
+    $form['actions']['submit'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Save configuration'),
       '#button_type' => 'primary',
-    ];
+    );
 
     return $form;
   }
@@ -302,13 +302,13 @@ class SearchPageListBuilder extends DraggableListBuilder implements FormInterfac
       unset($operations['disable'], $operations['delete']);
     }
     else {
-      $operations['default'] = [
+      $operations['default'] = array(
         'title' => $this->t('Set as default'),
         'url' => Url::fromRoute('entity.search_page.set_default', [
           'search_page' => $entity->id(),
         ]),
         'weight' => 50,
-      ];
+      );
     }
 
     return $operations;
@@ -369,7 +369,7 @@ class SearchPageListBuilder extends DraggableListBuilder implements FormInterfac
   public function submitAddSearchPage(array &$form, FormStateInterface $form_state) {
     $form_state->setRedirect(
       'search.add_type',
-      ['search_plugin_id' => $form_state->getValue('search_type')]
+      array('search_plugin_id' => $form_state->getValue('search_type'))
     );
   }
 

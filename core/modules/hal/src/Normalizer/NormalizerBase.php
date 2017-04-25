@@ -15,7 +15,7 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Den
    *
    * @var array
    */
-  protected $formats = ['hal_json'];
+  protected $formats = array('hal_json');
 
   /**
    * {@inheritdoc}

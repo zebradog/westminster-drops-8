@@ -11,28 +11,13 @@ use Drupal\migrate\Row;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Creates a machine name.
+ * This plugin creates a machine name.
  *
- * The machine_name process plugin takes the source value and runs it through
- * the transliteration service. This makes the source value lowercase,
- * replaces anything that is not a number or a letter with an underscore,
- * and removes duplicate underscores.
+ * The current value gets transliterated, non-alphanumeric characters removed
+ * and replaced by an underscore and multiple underscores are collapsed into
+ * one.
  *
- * Letters will have language decorations and accents removed.
- *
- * Example:
- *
- * @code
- * process:
- *   bar:
- *     plugin: machine_name
- *     source: foo
- * @endcode
- *
- * If the value of foo in the source is 'áéí!' then the destination value of bar
- * will be 'aei_'.
- *
- * @see \Drupal\migrate\Plugin\MigrateProcessInterface
+ * @link https://www.drupal.org/node/2135323 Online handbook documentation for machine_name process plugin @endlink
  *
  * @MigrateProcessPlugin(
  *   id = "machine_name"

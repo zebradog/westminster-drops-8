@@ -44,14 +44,14 @@ class DatabaseFileUsageBackend extends FileUsageBase {
    */
   public function add(FileInterface $file, $module, $type, $id, $count = 1) {
     $this->connection->merge($this->tableName)
-      ->keys([
+      ->keys(array(
         'fid' => $file->id(),
         'module' => $module,
         'type' => $type,
         'id' => $id,
-      ])
-      ->fields(['count' => $count])
-      ->expression('count', 'count + :count', [':count' => $count])
+      ))
+      ->fields(array('count' => $count))
+      ->expression('count', 'count + :count', array(':count' => $count))
       ->execute();
 
     parent::add($file, $module, $type, $id, $count);
@@ -85,7 +85,7 @@ class DatabaseFileUsageBackend extends FileUsageBase {
           ->condition('type', $type)
           ->condition('id', $id);
       }
-      $query->expression('count', 'count - :count', [':count' => $count]);
+      $query->expression('count', 'count - :count', array(':count' => $count));
       $query->execute();
     }
 
@@ -97,11 +97,11 @@ class DatabaseFileUsageBackend extends FileUsageBase {
    */
   public function listUsage(FileInterface $file) {
     $result = $this->connection->select($this->tableName, 'f')
-      ->fields('f', ['module', 'type', 'id', 'count'])
+      ->fields('f', array('module', 'type', 'id', 'count'))
       ->condition('fid', $file->id())
       ->condition('count', 0, '>')
       ->execute();
-    $references = [];
+    $references = array();
     foreach ($result as $usage) {
       $references[$usage->module][$usage->type][$usage->id] = $usage->count;
     }

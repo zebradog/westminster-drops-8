@@ -2,10 +2,8 @@
 
 namespace Drupal\Tests\Core\Menu;
 
-use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Language\Language;
-use Drupal\Core\Menu\ContextualLinkDefault;
 use Drupal\Tests\UnitTestCase;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -113,7 +111,7 @@ class ContextualLinkManagerTest extends UnitTestCase {
     $language_manager = $this->getMock('Drupal\Core\Language\LanguageManagerInterface');
     $language_manager->expects($this->any())
       ->method('getCurrentLanguage')
-      ->will($this->returnValue(new Language(['id' => 'en'])));
+      ->will($this->returnValue(new Language(array('id' => 'en'))));
 
     $request_stack = new RequestStack();
     $property = new \ReflectionProperty('Drupal\Core\Menu\ContextualLinkManager', 'requestStack');
@@ -133,26 +131,26 @@ class ContextualLinkManagerTest extends UnitTestCase {
    * @see \Drupal\Core\Menu\ContextualLinkManager::getContextualLinkPluginsByGroup()
    */
   public function testGetContextualLinkPluginsByGroup() {
-    $definitions = [
-      'test_plugin1' => [
+    $definitions = array(
+      'test_plugin1' => array(
         'id' => 'test_plugin1',
         'class' => '\Drupal\Core\Menu\ContextualLinkDefault',
         'group' => 'group1',
         'route_name' => 'test_route',
-      ],
-      'test_plugin2' => [
+      ),
+      'test_plugin2' => array(
         'id' => 'test_plugin2',
         'class' => '\Drupal\Core\Menu\ContextualLinkDefault',
         'group' => 'group1',
         'route_name' => 'test_route2',
-      ],
-      'test_plugin3' => [
+      ),
+      'test_plugin3' => array(
         'id' => 'test_plugin3',
         'class' => '\Drupal\Core\Menu\ContextualLinkDefault',
         'group' => 'group2',
         'route_name' => 'test_router3',
-      ],
-    ];
+      ),
+    );
     $this->pluginDiscovery->expects($this->once())
       ->method('getDefinitions')
       ->will($this->returnValue($definitions));
@@ -162,35 +160,35 @@ class ContextualLinkManagerTest extends UnitTestCase {
     $this->assertEmpty($result);
 
     $result = $this->contextualLinkManager->getContextualLinkPluginsByGroup('group1');
-    $this->assertEquals(['test_plugin1', 'test_plugin2'], array_keys($result));
+    $this->assertEquals(array('test_plugin1', 'test_plugin2'), array_keys($result));
 
     $result = $this->contextualLinkManager->getContextualLinkPluginsByGroup('group2');
-    $this->assertEquals(['test_plugin3'], array_keys($result));
+    $this->assertEquals(array('test_plugin3'), array_keys($result));
   }
 
   /**
    * Tests the getContextualLinkPluginsByGroup method with a prefilled cache.
    */
   public function testGetContextualLinkPluginsByGroupWithCache() {
-    $definitions = [
-      'test_plugin1' => [
+    $definitions = array(
+      'test_plugin1' => array(
         'id' => 'test_plugin1',
         'class' => '\Drupal\Core\Menu\ContextualLinkDefault',
         'group' => 'group1',
         'route_name' => 'test_route',
-      ],
-      'test_plugin2' => [
+      ),
+      'test_plugin2' => array(
         'id' => 'test_plugin2',
         'class' => '\Drupal\Core\Menu\ContextualLinkDefault',
         'group' => 'group1',
         'route_name' => 'test_route2',
-      ],
-    ];
+      ),
+    );
 
     $this->cacheBackend->expects($this->once())
       ->method('get')
       ->with('contextual_links_plugins:en:group1')
-      ->will($this->returnValue((object) ['data' => $definitions]));
+      ->will($this->returnValue((object) array('data' => $definitions)));
 
     $result = $this->contextualLinkManager->getContextualLinkPluginsByGroup('group1');
     $this->assertEquals($definitions, $result);
@@ -205,14 +203,15 @@ class ContextualLinkManagerTest extends UnitTestCase {
    * Tests processDefinition() by passing a plugin definition without a route.
    *
    * @see \Drupal\Core\Menu\ContextualLinkManager::processDefinition()
+   *
+   * @expectedException \Drupal\Component\Plugin\Exception\PluginException
    */
   public function testProcessDefinitionWithoutRoute() {
-    $definition = [
+    $definition = array(
       'class' => '\Drupal\Core\Menu\ContextualLinkDefault',
       'group' => 'example',
       'id' => 'test_plugin',
-    ];
-    $this->setExpectedException(PluginException::class);
+    );
     $this->contextualLinkManager->processDefinition($definition, 'test_plugin');
   }
 
@@ -220,14 +219,15 @@ class ContextualLinkManagerTest extends UnitTestCase {
    * Tests processDefinition() by passing a plugin definition without a group.
    *
    * @see \Drupal\Core\Menu\ContextualLinkManager::processDefinition()
+   *
+   * @expectedException \Drupal\Component\Plugin\Exception\PluginException
    */
   public function testProcessDefinitionWithoutGroup() {
-    $definition = [
+    $definition = array(
       'class' => '\Drupal\Core\Menu\ContextualLinkDefault',
       'route_name' => 'example',
       'id' => 'test_plugin',
-    ];
-    $this->setExpectedException(PluginException::class);
+    );
     $this->contextualLinkManager->processDefinition($definition, 'test_plugin');
   }
 
@@ -237,35 +237,35 @@ class ContextualLinkManagerTest extends UnitTestCase {
    * @see \Drupal\Core\Menu\ContextualLinkManager::getContextualLinksArrayByGroup()
    */
   public function testGetContextualLinksArrayByGroup() {
-    $definitions = [
-      'test_plugin1' => [
+    $definitions = array(
+      'test_plugin1' => array(
         'id' => 'test_plugin1',
         'class' => '\Drupal\Core\Menu\ContextualLinkDefault',
         'title' => 'Plugin 1',
         'weight' => 0,
         'group' => 'group1',
         'route_name' => 'test_route',
-        'options' => [],
-      ],
-      'test_plugin2' => [
+        'options' => array(),
+      ),
+      'test_plugin2' => array(
         'id' => 'test_plugin2',
         'class' => '\Drupal\Core\Menu\ContextualLinkDefault',
         'title' => 'Plugin 2',
         'weight' => 2,
         'group' => 'group1',
         'route_name' => 'test_route2',
-        'options' => ['key' => 'value'],
-      ],
-      'test_plugin3' => [
+        'options' => array('key' => 'value'),
+      ),
+      'test_plugin3' => array(
         'id' => 'test_plugin3',
         'class' => '\Drupal\Core\Menu\ContextualLinkDefault',
         'title' => 'Plugin 3',
         'weight' => 5,
         'group' => 'group2',
         'route_name' => 'test_router3',
-        'options' => [],
-      ],
-    ];
+        'options' => array(),
+      ),
+    );
 
     $this->pluginDiscovery->expects($this->once())
       ->method('getDefinitions')
@@ -276,7 +276,7 @@ class ContextualLinkManagerTest extends UnitTestCase {
       ->will($this->returnValue(AccessResult::allowed()));
 
     // Set up mocking of the plugin factory.
-    $map = [];
+    $map = array();
     foreach ($definitions as $plugin_id => $definition) {
       $plugin = $this->getMock('Drupal\Core\Menu\ContextualLinkInterface');
       $plugin->expects($this->any())
@@ -291,7 +291,7 @@ class ContextualLinkManagerTest extends UnitTestCase {
       $plugin->expects($this->any())
         ->method('getOptions')
         ->will($this->returnValue($definition['options']));
-      $map[] = [$plugin_id, [], $plugin];
+      $map[] = array($plugin_id, array(), $plugin);
     }
     $this->factory->expects($this->any())
       ->method('createInstance')
@@ -299,11 +299,11 @@ class ContextualLinkManagerTest extends UnitTestCase {
 
     $this->moduleHandler->expects($this->at(1))
       ->method('alter')
-      ->with($this->equalTo('contextual_links'), new \PHPUnit_Framework_Constraint_Count(2), $this->equalTo('group1'), $this->equalTo(['key' => 'value']));
+      ->with($this->equalTo('contextual_links'), new \PHPUnit_Framework_Constraint_Count(2), $this->equalTo('group1'), $this->equalTo(array('key' => 'value')));
 
-    $result = $this->contextualLinkManager->getContextualLinksArrayByGroup('group1', ['key' => 'value']);
+    $result = $this->contextualLinkManager->getContextualLinksArrayByGroup('group1', array('key' => 'value'));
     $this->assertCount(2, $result);
-    foreach (['test_plugin1', 'test_plugin2'] as $plugin_id) {
+    foreach (array('test_plugin1', 'test_plugin2') as $plugin_id) {
       $definition = $definitions[$plugin_id];
       $this->assertEquals($definition['weight'], $result[$plugin_id]['weight']);
       $this->assertEquals($definition['title'], $result[$plugin_id]['title']);
@@ -317,26 +317,26 @@ class ContextualLinkManagerTest extends UnitTestCase {
    * @see \Drupal\Core\Menu\ContextualLinkManager::getContextualLinksArrayByGroup()
    */
   public function testGetContextualLinksArrayByGroupAccessCheck() {
-    $definitions = [
-      'test_plugin1' => [
+    $definitions = array(
+      'test_plugin1' => array(
         'id' => 'test_plugin1',
         'class' => '\Drupal\Core\Menu\ContextualLinkDefault',
         'title' => 'Plugin 1',
         'weight' => 0,
         'group' => 'group1',
         'route_name' => 'test_route',
-        'options' => [],
-      ],
-      'test_plugin2' => [
+        'options' => array(),
+      ),
+      'test_plugin2' => array(
         'id' => 'test_plugin2',
         'class' => '\Drupal\Core\Menu\ContextualLinkDefault',
         'title' => 'Plugin 2',
         'weight' => 2,
         'group' => 'group1',
         'route_name' => 'test_route2',
-        'options' => ['key' => 'value'],
-      ],
-    ];
+        'options' => array('key' => 'value'),
+      ),
+    );
 
     $this->pluginDiscovery->expects($this->once())
       ->method('getDefinitions')
@@ -344,13 +344,13 @@ class ContextualLinkManagerTest extends UnitTestCase {
 
     $this->accessManager->expects($this->any())
       ->method('checkNamedRoute')
-      ->will($this->returnValueMap([
-        ['test_route', ['key' => 'value'], $this->account, FALSE, TRUE],
-        ['test_route2', ['key' => 'value'], $this->account, FALSE, FALSE],
-      ]));
+      ->will($this->returnValueMap(array(
+        array('test_route', array('key' => 'value'), $this->account, FALSE, TRUE),
+        array('test_route2', array('key' => 'value'), $this->account, FALSE, FALSE),
+      )));
 
     // Set up mocking of the plugin factory.
-    $map = [];
+    $map = array();
     foreach ($definitions as $plugin_id => $definition) {
       $plugin = $this->getMock('Drupal\Core\Menu\ContextualLinkInterface');
       $plugin->expects($this->any())
@@ -365,13 +365,13 @@ class ContextualLinkManagerTest extends UnitTestCase {
       $plugin->expects($this->any())
         ->method('getOptions')
         ->will($this->returnValue($definition['options']));
-      $map[] = [$plugin_id, [], $plugin];
+      $map[] = array($plugin_id, array(), $plugin);
     }
     $this->factory->expects($this->any())
       ->method('createInstance')
       ->will($this->returnValueMap($map));
 
-    $result = $this->contextualLinkManager->getContextualLinksArrayByGroup('group1', ['key' => 'value']);
+    $result = $this->contextualLinkManager->getContextualLinksArrayByGroup('group1', array('key' => 'value'));
 
     // Ensure that access checking was respected.
     $this->assertTrue(isset($result['test_plugin1']));
@@ -382,15 +382,15 @@ class ContextualLinkManagerTest extends UnitTestCase {
    * Tests the plugins alter hook.
    */
   public function testPluginDefinitionAlter() {
-    $definitions['test_plugin'] = [
+    $definitions['test_plugin'] = array(
       'id' => 'test_plugin',
-      'class' => ContextualLinkDefault::class,
+      'class' => '\Drupal\Core\Menu\ContextualLinkDefault',
       'title' => 'Plugin',
       'weight' => 2,
       'group' => 'group1',
       'route_name' => 'test_route',
-      'options' => ['key' => 'value'],
-    ];
+      'options' => array('key' => 'value'),
+    );
 
     $this->pluginDiscovery->expects($this->once())
       ->method('getDefinitions')

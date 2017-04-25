@@ -33,10 +33,10 @@ class EditorDialogSave implements CommandInterface {
    * {@inheritdoc}
    */
   public function render() {
-    return [
+    return array(
       'command' => 'editorDialogSave',
       'values' => $this->values,
-    ];
+    );
   }
 
 }

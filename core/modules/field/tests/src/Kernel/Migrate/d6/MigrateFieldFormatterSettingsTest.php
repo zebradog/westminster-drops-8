@@ -21,32 +21,18 @@ class MigrateFieldFormatterSettingsTest extends MigrateDrupal6TestBase {
   }
 
   /**
-   * Asserts that a particular component is NOT included in a display.
-   *
-   * @param string $display_id
-   *   The display ID.
-   * @param string $component_id
-   *   The component ID.
-   */
-  protected function assertComponentNotExists($display_id, $component_id) {
-    $component = EntityViewDisplay::load($display_id)->getComponent($component_id);
-    $this->assertNull($component);
-  }
-
-  /**
    * Test that migrated entity display settings can be loaded using D8 API's.
    */
   public function testEntityDisplaySettings() {
     // Run tests.
     $field_name = "field_test";
-    $expected = [
+    $expected = array(
       'label' => 'above',
       'weight' => 1,
       'type' => 'text_trimmed',
-      'settings' => ['trim_length' => 600],
-      'third_party_settings' => [],
-      'region' => 'content',
-    ];
+      'settings' => array('trim_length' => 600),
+      'third_party_settings' => array(),
+    );
 
     // Can we load any entity display.
     $display = EntityViewDisplay::load('node.story.teaser');
@@ -64,7 +50,7 @@ class MigrateFieldFormatterSettingsTest extends MigrateDrupal6TestBase {
 
     // Test the default format with text_default which comes from a static map.
     $expected['type'] = 'text_default';
-    $expected['settings'] = [];
+    $expected['settings'] = array();
     $display = EntityViewDisplay::load('node.story.default');
     $this->assertIdentical($expected, $display->getComponent($field_name));
 
@@ -79,40 +65,40 @@ class MigrateFieldFormatterSettingsTest extends MigrateDrupal6TestBase {
     // Test the number field formatter settings are correct.
     $expected['weight'] = 1;
     $expected['type'] = 'number_integer';
-    $expected['settings'] = [
+    $expected['settings'] = array(
       'thousand_separator' => ',',
       'prefix_suffix' => TRUE,
-    ];
+    );
     $component = $display->getComponent('field_test_two');
     $this->assertIdentical($expected, $component);
     $expected['weight'] = 2;
     $expected['type'] = 'number_decimal';
-    $expected['settings'] = [
+    $expected['settings'] = array(
        'scale' => 2,
        'decimal_separator' => '.',
        'thousand_separator' => ',',
        'prefix_suffix' => TRUE,
-    ];
+    );
     $component = $display->getComponent('field_test_three');
     $this->assertIdentical($expected, $component);
 
     // Test the email field formatter settings are correct.
     $expected['weight'] = 6;
     $expected['type'] = 'email_mailto';
-    $expected['settings'] = [];
+    $expected['settings'] = array();
     $component = $display->getComponent('field_test_email');
     $this->assertIdentical($expected, $component);
 
     // Test the link field formatter settings.
     $expected['weight'] = 7;
     $expected['type'] = 'link';
-    $expected['settings'] = [
+    $expected['settings'] = array(
       'trim_length' => 80,
       'url_only' => TRUE,
       'url_plain' => TRUE,
       'rel' => '0',
       'target' => '0',
-    ];
+    );
     $component = $display->getComponent('field_test_link');
     $this->assertIdentical($expected, $component);
     $expected['settings']['url_only'] = FALSE;
@@ -124,7 +110,7 @@ class MigrateFieldFormatterSettingsTest extends MigrateDrupal6TestBase {
     // Test the file field formatter settings.
     $expected['weight'] = 8;
     $expected['type'] = 'file_default';
-    $expected['settings'] = [];
+    $expected['settings'] = array();
     $component = $display->getComponent('field_test_filefield');
     $this->assertIdentical($expected, $component);
     $display = EntityViewDisplay::load('node.story.default');
@@ -135,7 +121,7 @@ class MigrateFieldFormatterSettingsTest extends MigrateDrupal6TestBase {
     // Test the image field formatter settings.
     $expected['weight'] = 9;
     $expected['type'] = 'image';
-    $expected['settings'] = ['image_style' => '', 'image_link' => ''];
+    $expected['settings'] = array('image_style' => '', 'image_link' => '');
     $component = $display->getComponent('field_test_imagefield');
     $this->assertIdentical($expected, $component);
     $display = EntityViewDisplay::load('node.story.teaser');
@@ -146,15 +132,15 @@ class MigrateFieldFormatterSettingsTest extends MigrateDrupal6TestBase {
     // Test phone field.
     $expected['weight'] = 13;
     $expected['type'] = 'basic_string';
-    $expected['settings'] = [];
+    $expected['settings'] = array();
     $component = $display->getComponent('field_test_phone');
     $this->assertIdentical($expected, $component);
 
     // Test date field.
-    $defaults = ['format_type' => 'fallback', 'timezone_override' => ''];
+    $defaults = array('format_type' => 'fallback', 'timezone_override' => '',);
     $expected['weight'] = 10;
     $expected['type'] = 'datetime_default';
-    $expected['settings'] = ['format_type' => 'fallback'] + $defaults;
+    $expected['settings'] = array('format_type' => 'fallback') + $defaults;
     $component = $display->getComponent('field_test_date');
     $this->assertIdentical($expected, $component);
     $display = EntityViewDisplay::load('node.story.default');
@@ -168,13 +154,13 @@ class MigrateFieldFormatterSettingsTest extends MigrateDrupal6TestBase {
     $component = $display->getComponent('field_test_datestamp');
     $this->assertIdentical($expected, $component);
     $display = EntityViewDisplay::load('node.story.teaser');
-    $expected['settings'] = ['format_type' => 'medium'] + $defaults;
+    $expected['settings'] = array('format_type' => 'medium') + $defaults;
     $component = $display->getComponent('field_test_datestamp');
     $this->assertIdentical($expected, $component);
 
     // Test datetime field.
     $expected['weight'] = 12;
-    $expected['settings'] = ['format_type' => 'short'] + $defaults;
+    $expected['settings'] = array('format_type' => 'short') + $defaults;
     $component = $display->getComponent('field_test_datetime');
     $this->assertIdentical($expected, $component);
     $display = EntityViewDisplay::load('node.story.default');
@@ -189,10 +175,7 @@ class MigrateFieldFormatterSettingsTest extends MigrateDrupal6TestBase {
     $component = $display->getComponent('field_test_datetime');
     $this->assertIdentical($expected, $component);
     // Test that our Id map has the correct data.
-    $this->assertIdentical(['node', 'story', 'teaser', 'field_test'], $this->getMigration('d6_field_formatter_settings')->getIdMap()->lookupDestinationID(['story', 'teaser', 'node', 'field_test']));
-
-    // Test hidden field.
-    $this->assertComponentNotExists('node.test_planet.teaser', 'field_test_text_single_checkbox');
+    $this->assertIdentical(array('node', 'story', 'teaser', 'field_test'), $this->getMigration('d6_field_formatter_settings')->getIdMap()->lookupDestinationID(array('story', 'teaser', 'node', 'field_test')));
   }
 
 }

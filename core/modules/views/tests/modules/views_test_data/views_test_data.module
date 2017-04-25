@@ -66,13 +66,13 @@ function views_test_data_preprocess_views_view_table(&$variables) {
  *   - view: The view object.
  */
 function template_preprocess_views_view_mapping_test(&$variables) {
-  $variables['element'] = [];
+  $variables['element'] = array();
 
   foreach ($variables['rows'] as $delta => $row) {
-    $fields = [];
+    $fields = array();
     foreach ($variables['options']['mapping'] as $type => $field_names) {
       if (!is_array($field_names)) {
-        $field_names = [$field_names];
+        $field_names = array($field_names);
       }
       foreach ($field_names as $field_name) {
         if ($value = $variables['view']->style_plugin->getField($delta, $field_name)) {
@@ -87,26 +87,26 @@ function template_preprocess_views_view_mapping_test(&$variables) {
     }
 
     // Build a container for the row.
-    $variables['element'][$delta] = [
+    $variables['element'][$delta] = array(
       '#type' => 'container',
-      '#attributes' => [
-        'class' => [
+      '#attributes' => array(
+        'class' => array(
           'views-row-mapping-test',
-        ],
-      ],
-    ];
+        ),
+      ),
+    );
 
     // Add each field to the row.
     foreach ($fields as $key => $render) {
-      $variables['element'][$delta][$key] = [
+      $variables['element'][$delta][$key] = array(
         '#children' => $render,
         '#type' => 'container',
-        '#attributes' => [
-          'class' => [
+        '#attributes' => array(
+          'class' => array(
             $key,
-          ],
-        ],
-      ];
+          ),
+        ),
+      );
     }
   }
 }

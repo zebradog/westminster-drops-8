@@ -14,7 +14,7 @@ use Drupal\field\Entity\FieldStorageConfig;
  */
 class EntityReferenceFileUploadTest extends WebTestBase {
 
-  public static $modules = ['entity_reference', 'node', 'file'];
+  public static $modules = array('entity_reference', 'node', 'file');
 
   /**
    * The name of a content type that will reference $referencedType.
@@ -46,19 +46,19 @@ class EntityReferenceFileUploadTest extends WebTestBase {
 
     $referenced = $this->drupalCreateContentType();
     $this->referencedType = $referenced->id();
-    $this->nodeId = $this->drupalCreateNode(['type' => $referenced->id()])->id();
+    $this->nodeId = $this->drupalCreateNode(array('type' => $referenced->id()))->id();
 
-    FieldStorageConfig::create([
+    FieldStorageConfig::create(array(
       'field_name' => 'test_field',
       'entity_type' => 'node',
       'translatable' => FALSE,
-      'entity_types' => [],
-      'settings' => [
+      'entity_types' => array(),
+      'settings' => array(
         'target_type' => 'node',
-      ],
+      ),
       'type' => 'entity_reference',
       'cardinality' => FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED,
-    ])->save();
+    ))->save();
 
     FieldConfig::create([
       'label' => 'Entity reference field',
@@ -66,25 +66,25 @@ class EntityReferenceFileUploadTest extends WebTestBase {
       'entity_type' => 'node',
       'required' => TRUE,
       'bundle' => $referencing->id(),
-      'settings' => [
+      'settings' => array(
         'handler' => 'default',
-        'handler_settings' => [
+        'handler_settings' => array(
           // Reference a single vocabulary.
-          'target_bundles' => [
+          'target_bundles' => array(
             $referenced->id(),
-          ],
-        ],
-      ],
+          ),
+        ),
+      ),
     ])->save();
 
 
     // Create a file field.
     $file_field_name = 'file_field';
-    $field_storage = FieldStorageConfig::create([
+    $field_storage = FieldStorageConfig::create(array(
       'field_name' => $file_field_name,
       'entity_type' => 'node',
       'type' => 'file'
-    ]);
+    ));
     $field_storage->save();
     FieldConfig::create([
       'entity_type' => 'node',
@@ -98,12 +98,12 @@ class EntityReferenceFileUploadTest extends WebTestBase {
       ->setComponent($file_field_name)
       ->save();
     entity_get_form_display('node', $referencing->id(), 'default')
-      ->setComponent('test_field', [
+      ->setComponent('test_field', array(
         'type' => 'entity_reference_autocomplete',
-      ])
-      ->setComponent($file_field_name, [
+      ))
+      ->setComponent($file_field_name, array(
          'type' => 'file_generic',
-      ])
+      ))
       ->save();
   }
 
@@ -111,17 +111,17 @@ class EntityReferenceFileUploadTest extends WebTestBase {
    * Tests that the autocomplete input element does not cause ajax fatal.
    */
   public function testFileUpload() {
-    $user1 = $this->drupalCreateUser(['access content', "create $this->referencingType content"]);
+    $user1 = $this->drupalCreateUser(array('access content', "create $this->referencingType content"));
     $this->drupalLogin($user1);
 
     $test_file = current($this->drupalGetTestFiles('text'));
     $edit['files[file_field_0]'] = drupal_realpath($test_file->uri);
     $this->drupalPostForm('node/add/' . $this->referencingType, $edit, 'Upload');
     $this->assertResponse(200);
-    $edit = [
+    $edit = array(
       'title[0][value]' => $this->randomMachineName(),
       'test_field[0][target_id]' => $this->nodeId,
-    ];
+    );
     $this->drupalPostForm(NULL, $edit, 'Save');
     $this->assertResponse(200);
   }

@@ -86,12 +86,12 @@ class Transaction {
    * transaction has been rolled back or the log messages will be rolled back
    * too.
    *
-   * @see \Drupal\Core\Database\Connection::rollBack()
+   * @see \Drupal\Core\Database\Connection::rollback()
    * @see watchdog_exception()
    */
-  public function rollBack() {
+  public function rollback() {
     $this->rolledBack = TRUE;
-    $this->connection->rollBack($this->name);
+    $this->connection->rollback($this->name);
   }
 
 }

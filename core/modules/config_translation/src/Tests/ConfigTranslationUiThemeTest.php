@@ -24,7 +24,7 @@ class ConfigTranslationUiThemeTest extends WebTestBase {
    *
    * @var array
    */
-  protected $langcodes = ['fr', 'ta'];
+  protected $langcodes = array('fr', 'ta');
 
   /**
    * Administrator user for tests.

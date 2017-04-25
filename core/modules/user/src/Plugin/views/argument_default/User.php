@@ -64,7 +64,7 @@ class User extends ArgumentDefaultPluginBase implements CacheableDependencyInter
    */
   protected function defineOptions() {
     $options = parent::defineOptions();
-    $options['user'] = ['default' => ''];
+    $options['user'] = array('default' => '');
 
     return $options;
   }
@@ -73,11 +73,11 @@ class User extends ArgumentDefaultPluginBase implements CacheableDependencyInter
    * {@inheritdoc}
    */
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
-    $form['user'] = [
+    $form['user'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Also look for a node and use the node author'),
       '#default_value' => $this->options['user'],
-    ];
+    );
   }
 
   /**

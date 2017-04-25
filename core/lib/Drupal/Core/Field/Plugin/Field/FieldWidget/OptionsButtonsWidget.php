@@ -35,25 +35,25 @@ class OptionsButtonsWidget extends OptionsWidgetBase {
     // If required and there is one single option, preselect it.
     if ($this->required && count($options) == 1) {
       reset($options);
-      $selected = [key($options)];
+      $selected = array(key($options));
     }
 
     if ($this->multiple) {
-      $element += [
+      $element += array(
         '#type' => 'checkboxes',
         '#default_value' => $selected,
         '#options' => $options,
-      ];
+      );
     }
     else {
-      $element += [
+      $element += array(
         '#type' => 'radios',
         // Radio buttons need a scalar value. Take the first default value, or
         // default to NULL so that the form element is properly recognized as
         // not having a default value.
         '#default_value' => $selected ? reset($selected) : NULL,
         '#options' => $options,
-      ];
+      );
     }
 
     return $element;

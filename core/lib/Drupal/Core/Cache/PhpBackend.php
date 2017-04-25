@@ -28,7 +28,7 @@ class PhpBackend implements CacheBackendInterface {
   /**
    * Array to store cache objects.
    */
-  protected $cache = [];
+  protected $cache = array();
 
   /**
    * The cache tags checksum provider.
@@ -83,7 +83,7 @@ class PhpBackend implements CacheBackendInterface {
    */
   public function setMultiple(array $items) {
     foreach ($items as $cid => $item) {
-      $this->set($cid, $item['data'], isset($item['expire']) ? $item['expire'] : CacheBackendInterface::CACHE_PERMANENT, isset($item['tags']) ? $item['tags'] : []);
+      $this->set($cid, $item['data'], isset($item['expire']) ? $item['expire'] : CacheBackendInterface::CACHE_PERMANENT, isset($item['tags']) ? $item['tags'] : array());
     }
   }
 
@@ -91,7 +91,7 @@ class PhpBackend implements CacheBackendInterface {
    * {@inheritdoc}
    */
   public function getMultiple(&$cids, $allow_invalid = FALSE) {
-    $ret = [];
+    $ret = array();
 
     foreach ($cids as $cid) {
       if ($item = $this->get($cid, $allow_invalid)) {
@@ -142,16 +142,16 @@ class PhpBackend implements CacheBackendInterface {
   /**
    * {@inheritdoc}
    */
-  public function set($cid, $data, $expire = Cache::PERMANENT, array $tags = []) {
+  public function set($cid, $data, $expire = Cache::PERMANENT, array $tags = array()) {
     assert('\Drupal\Component\Assertion\Inspector::assertAllStrings($tags)', 'Cache Tags must be strings.');
-    $item = (object) [
+    $item = (object) array(
       'cid' => $cid,
       'data' => $data,
       'created' => round(microtime(TRUE), 3),
       'expire' => $expire,
       'tags' => array_unique($tags),
       'checksum' => $this->checksumProvider->getCurrentChecksum($tags),
-    ];
+    );
     $this->writeItem($this->normalizeCid($cid), $item);
   }
 
@@ -226,7 +226,7 @@ class PhpBackend implements CacheBackendInterface {
    * {@inheritdoc}
    */
   public function removeBin() {
-    $this->cache = [];
+    $this->cache = array();
     $this->storage()->deleteAll();
   }
 

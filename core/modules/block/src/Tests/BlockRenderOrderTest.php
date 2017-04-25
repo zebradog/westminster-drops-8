@@ -17,49 +17,49 @@ class BlockRenderOrderTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = ['node', 'block'];
+  public static $modules = array('node', 'block');
 
   protected function setUp() {
     parent::setUp();
     // Create a test user.
-    $end_user = $this->drupalCreateUser([
+    $end_user = $this->drupalCreateUser(array(
       'access content',
-    ]);
+    ));
     $this->drupalLogin($end_user);
   }
 
   /**
    * Tests the render order of the blocks.
    */
-  public function testBlockRenderOrder() {
+  function testBlockRenderOrder() {
     // Enable test blocks and place them in the same region.
     $region = 'header';
-    $test_blocks = [
-      'stark_powered' => [
+    $test_blocks = array(
+      'stark_powered' => array(
         'weight' => '-3',
         'id' => 'stark_powered',
         'label' => 'Test block A',
-      ],
-      'stark_by' => [
+      ),
+      'stark_by' => array(
         'weight' => '3',
         'id' => 'stark_by',
         'label' => 'Test block C',
-      ],
-      'stark_drupal' => [
+      ),
+      'stark_drupal' => array(
         'weight' => '3',
         'id' => 'stark_drupal',
         'label' => 'Test block B',
-      ],
-    ];
+      ),
+    );
 
     // Place the test blocks.
     foreach ($test_blocks as $test_block) {
-      $this->drupalPlaceBlock('system_powered_by_block', [
+      $this->drupalPlaceBlock('system_powered_by_block', array(
         'label' => $test_block['label'],
         'region' => $region,
         'weight' => $test_block['weight'],
         'id' => $test_block['id'],
-      ]);
+      ));
     }
 
     $this->drupalGet('');

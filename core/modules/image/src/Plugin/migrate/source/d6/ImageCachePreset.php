@@ -47,7 +47,7 @@ class ImageCachePreset extends DrupalSqlBase {
    * {@inheritdoc}
    */
   public function prepareRow(Row $row) {
-    $actions = [];
+    $actions = array();
 
     $results = $this->select('imagecache_action', 'ica')
       ->fields('ica')

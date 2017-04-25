@@ -4,9 +4,8 @@ namespace Drupal\Core\Menu;
 
 use Drupal\Core\Access\AccessManagerInterface;
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\node\NodeInterface;
 
 /**
  * Provides a couple of menu link tree manipulators.
@@ -34,11 +33,11 @@ class DefaultMenuLinkTreeManipulators {
   protected $account;
 
   /**
-   * The entity type manager.
+   * The entity query factory.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   * @var \Drupal\Core\Entity\Query\QueryFactory
    */
-  protected $entityTypeManager;
+  protected $queryFactory;
 
   /**
    * Constructs a \Drupal\Core\Menu\DefaultMenuLinkTreeManipulators object.
@@ -47,13 +46,13 @@ class DefaultMenuLinkTreeManipulators {
    *   The access manager.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The current user.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
+   * @param \Drupal\Core\Entity\Query\QueryFactory $query_factory
+   *   The entity query factory.
    */
-  public function __construct(AccessManagerInterface $access_manager, AccountInterface $account, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(AccessManagerInterface $access_manager, AccountInterface $account, QueryFactory $query_factory) {
     $this->accessManager = $access_manager;
     $this->account = $account;
-    $this->entityTypeManager = $entity_type_manager;
+    $this->queryFactory = $query_factory;
   }
 
   /**
@@ -130,12 +129,12 @@ class DefaultMenuLinkTreeManipulators {
    *   The manipulated menu link tree.
    */
   public function checkNodeAccess(array $tree) {
-    $node_links = [];
+    $node_links = array();
     $this->collectNodeLinks($tree, $node_links);
     if ($node_links) {
       $nids = array_keys($node_links);
 
-      $query = $this->entityTypeManager->getStorage('node')->getQuery();
+      $query = $this->queryFactory->get('node');
       $query->condition('nid', $nids, 'IN');
 
       // Allows admins to view all nodes, by both disabling node_access
@@ -148,7 +147,7 @@ class DefaultMenuLinkTreeManipulators {
       }
       else {
         $access_result->addCacheContexts(['user.node_grants:view']);
-        $query->condition('status', NodeInterface::PUBLISHED);
+        $query->condition('status', NODE_PUBLISHED);
       }
 
       $nids = $query->execute();
@@ -225,7 +224,7 @@ class DefaultMenuLinkTreeManipulators {
    *   The manipulated menu link tree.
    */
   public function generateIndexAndSort(array $tree) {
-    $new_tree = [];
+    $new_tree = array();
     foreach ($tree as $key => $v) {
       if ($tree[$key]->subtree) {
         $tree[$key]->subtree = $this->generateIndexAndSort($tree[$key]->subtree);
@@ -255,7 +254,7 @@ class DefaultMenuLinkTreeManipulators {
       if ($tree[$key]->subtree) {
         $tree += $this->flatten($tree[$key]->subtree);
       }
-      $tree[$key]->subtree = [];
+      $tree[$key]->subtree = array();
     }
     return $tree;
   }

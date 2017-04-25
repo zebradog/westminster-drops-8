@@ -30,14 +30,14 @@ class RouteProcessorManagerTest extends UnitTestCase {
    */
   public function testRouteProcessorManager() {
     $route = new Route('');
-    $parameters = ['test' => 'test'];
+    $parameters = array('test' => 'test');
     $route_name = 'test_name';
 
-    $processors = [
+    $processors = array(
       10 => $this->getMockProcessor($route_name, $route, $parameters),
       5 => $this->getMockProcessor($route_name, $route, $parameters),
       0 => $this->getMockProcessor($route_name, $route, $parameters),
-    ];
+    );
 
     // Add the processors in reverse order.
     foreach ($processors as $priority => $processor) {

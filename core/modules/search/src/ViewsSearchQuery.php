@@ -69,7 +69,7 @@ class ViewsSearchQuery extends SearchQuery {
    *   item from a \Drupal\Core\Database\Query\Condition::conditions array,
    *   which must have a 'field' element.
    */
-  public function conditionReplaceString($search, $replace, &$condition) {
+  function conditionReplaceString($search, $replace, &$condition) {
     if ($condition['field'] instanceof Condition) {
       $conditions =& $condition['field']->conditions();
       foreach ($conditions as $key => &$subcondition) {

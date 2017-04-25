@@ -32,10 +32,10 @@ class HighlightCommand implements CommandInterface {
    * {@inheritdoc}
    */
   public function render() {
-    return [
+    return array(
       'command' => 'viewsHighlight',
       'selector' => $this->selector,
-    ];
+    );
   }
 
 }

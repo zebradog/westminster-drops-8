@@ -21,10 +21,10 @@ class ConfigExportForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['submit'] = [
+    $form['submit'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Export'),
-    ];
+    );
     return $form;
   }
 

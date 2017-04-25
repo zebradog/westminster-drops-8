@@ -24,26 +24,26 @@ class MappingTest extends Mapping {
    * {@inheritdoc}
    */
   protected function defineMapping() {
-    return [
-      'title_field' => [
+    return array(
+      'title_field' => array(
         '#title' => $this->t('Title field'),
         '#description' => $this->t('Choose the field with the custom title.'),
         '#toggle' => TRUE,
         '#required' => TRUE,
-      ],
-      'name_field' => [
+      ),
+      'name_field' => array(
         '#title' => $this->t('Name field'),
         '#description' => $this->t('Choose the field with the custom name.'),
-      ],
-      'numeric_field' => [
+      ),
+      'numeric_field' => array(
         '#title' => $this->t('Numeric field'),
         '#description' => $this->t('Select one or more numeric fields.'),
         '#multiple' => TRUE,
         '#toggle' => TRUE,
         '#filter' => 'filterNumericFields',
         '#required' => TRUE,
-      ],
-    ];
+      ),
+    );
   }
 
   /**

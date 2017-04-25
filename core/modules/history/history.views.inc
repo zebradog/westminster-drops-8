@@ -17,29 +17,29 @@ function history_views_data() {
   $data['history']['table']['group']  = t('Content');
 
   // Explain how this table joins to others.
-  $data['history']['table']['join'] = [
+  $data['history']['table']['join'] = array(
      // Directly links to node table.
-    'node_field_data' => [
+    'node_field_data' => array(
       'table' => 'history',
       'left_field' => 'nid',
       'field' => 'nid',
-      'extra' => [
-        ['field' => 'uid', 'value' => '***CURRENT_USER***', 'numeric' => TRUE],
-      ],
-    ],
-  ];
+      'extra' => array(
+        array('field' => 'uid', 'value' => '***CURRENT_USER***', 'numeric' => TRUE),
+      ),
+    ),
+  );
 
-  $data['history']['timestamp'] = [
+  $data['history']['timestamp'] = array(
     'title' => t('Has new content'),
-    'field' => [
+    'field' => array(
       'id' => 'history_user_timestamp',
       'help' => t('Show a marker if the content is new or updated.'),
-    ],
-    'filter' => [
+    ),
+    'filter' => array(
       'help' => t('Show only content that is new or updated.'),
       'id' => 'history_user_timestamp',
-    ],
-  ];
+    ),
+  );
 
   return $data;
 }

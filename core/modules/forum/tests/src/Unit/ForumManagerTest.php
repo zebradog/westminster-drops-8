@@ -57,17 +57,17 @@ class ForumManagerTest extends UnitTestCase {
       ->disableOriginalConstructor()
       ->getMock();
 
-    $manager = $this->getMock('\Drupal\forum\ForumManager', ['getChildren'], [
+    $manager = $this->getMock('\Drupal\forum\ForumManager', array('getChildren'), array(
       $config_factory,
       $entity_manager,
       $connection,
       $translation_manager,
       $comment_manager,
-    ]);
+    ));
 
     $manager->expects($this->once())
       ->method('getChildren')
-      ->will($this->returnValue([]));
+      ->will($this->returnValue(array()));
 
     // Get the index once.
     $index1 = $manager->getIndex();

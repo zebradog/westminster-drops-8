@@ -22,7 +22,7 @@ class SchemaOrgDataConverter {
    *
    * @see http://schema.org/UserInteraction
    */
-  public static function interactionCount($count, $arguments) {
+  static function interactionCount($count, $arguments) {
     $interaction_type = $arguments['interaction_type'];
     return "$interaction_type:$count";
   }

@@ -30,9 +30,9 @@ class GroupByNumeric extends SortPluginBase {
   public function query() {
     $this->ensureMyTable();
 
-    $params = [
+    $params = array(
       'function' => $this->options['group_type'],
-    ];
+    );
 
     $this->query->addOrderBy($this->tableAlias, $this->realField, $this->options['order'], NULL, $params);
   }

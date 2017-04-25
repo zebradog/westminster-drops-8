@@ -29,10 +29,10 @@ use Drupal\Core\Render\Element;
 function content_translation_field_sync_widget(FieldDefinitionInterface $field, $element_name = 'third_party_settings[content_translation][translation_sync]') {
   // No way to store field sync information on this field.
   if (!($field instanceof ThirdPartySettingsInterface)) {
-    return [];
+    return array();
   }
 
-  $element = [];
+  $element = array();
   $definition = \Drupal::service('plugin.manager.field.field_type')->getDefinition($field->getType());
   $column_groups = $definition['column_groups'];
   if (!empty($column_groups) && count($column_groups) > 1) {
@@ -50,12 +50,12 @@ function content_translation_field_sync_widget(FieldDefinitionInterface $field, 
 
     $default = $field->getThirdPartySetting('content_translation', 'translation_sync', $default);
 
-    $element = [
+    $element = array(
       '#type' => 'checkboxes',
       '#title' => t('Translatable elements'),
       '#options' => $options,
       '#default_value' => $default,
-    ];
+    );
 
     if ($require_all_groups_for_translation) {
       // The actual checkboxes are sometimes rendered separately and the parent
@@ -96,7 +96,7 @@ function _content_translation_form_language_content_settings_form_alter(array &$
   $bundle_info_service = \Drupal::service('entity_type.bundle.info');
   foreach ($form['#labels'] as $entity_type_id => $label) {
     $entity_type = $entity_manager->getDefinition($entity_type_id);
-    $storage_definitions = $entity_type instanceof ContentEntityTypeInterface ? $entity_manager->getFieldStorageDefinitions($entity_type_id) : [];
+    $storage_definitions = $entity_type instanceof ContentEntityTypeInterface ? $entity_manager->getFieldStorageDefinitions($entity_type_id) : array();
 
     $entity_type_translatable = $content_translation_manager->isSupported($entity_type_id);
     foreach ($bundle_info_service->getBundleInfo($entity_type_id) as $bundle => $bundle_info) {
@@ -106,7 +106,7 @@ function _content_translation_form_language_content_settings_form_alter(array &$
       // about UI integration.
       $form['settings'][$entity_type_id][$bundle]['settings']['language']['#content_translation_skip_alter'] = TRUE;
       if (!$entity_type_translatable) {
-        $form['settings'][$entity_type_id]['#title'] = t('@label (Translation is not supported).', ['@label' => $entity_type->getLabel()]);
+        $form['settings'][$entity_type_id]['#title'] = t('@label (Translation is not supported).', array('@label' => $entity_type->getLabel()));
         continue;
       }
 
@@ -114,11 +114,11 @@ function _content_translation_form_language_content_settings_form_alter(array &$
       if ($fields) {
         foreach ($fields as $field_name => $definition) {
           if ($definition->isComputed() || (!empty($storage_definitions[$field_name]) && _content_translation_is_field_translatability_configurable($entity_type, $storage_definitions[$field_name]))) {
-            $form['settings'][$entity_type_id][$bundle]['fields'][$field_name] = [
+            $form['settings'][$entity_type_id][$bundle]['fields'][$field_name] = array(
               '#label' => $definition->getLabel(),
               '#type' => 'checkbox',
               '#default_value' => $definition->isTranslatable(),
-            ];
+            );
             // Display the column translatability configuration widget.
             $column_element = content_translation_field_sync_widget($definition, "settings[{$entity_type_id}][{$bundle}][columns][{$field_name}]");
             if ($column_element) {
@@ -129,10 +129,10 @@ function _content_translation_form_language_content_settings_form_alter(array &$
         if (!empty($form['settings'][$entity_type_id][$bundle]['fields'])) {
           // Only show the checkbox to enable translation if the bundles in the
           // entity might have fields and if there are fields to translate.
-          $form['settings'][$entity_type_id][$bundle]['translatable'] = [
+          $form['settings'][$entity_type_id][$bundle]['translatable'] = array(
             '#type' => 'checkbox',
             '#default_value' => $content_translation_manager->isEnabled($entity_type_id, $bundle),
-          ];
+          );
         }
       }
     }
@@ -177,102 +177,102 @@ function _content_translation_preprocess_language_content_settings_table(&$varia
   $element = $variables['element'];
   $build = &$variables['build'];
 
-  array_unshift($build['#header'], ['data' => t('Translatable'), 'class' => ['translatable']]);
-  $rows = [];
+  array_unshift($build['#header'], array('data' => t('Translatable'), 'class' => array('translatable')));
+  $rows = array();
 
   foreach (Element::children($element) as $bundle) {
-    $field_names = !empty($element[$bundle]['fields']) ? Element::children($element[$bundle]['fields']) : [];
+    $field_names = !empty($element[$bundle]['fields']) ? Element::children($element[$bundle]['fields']) : array();
     if (!empty($element[$bundle]['translatable'])) {
       $checkbox_id = $element[$bundle]['translatable']['#id'];
     }
     $rows[$bundle] = $build['#rows'][$bundle];
 
     if (!empty($element[$bundle]['translatable'])) {
-      $translatable = [
+      $translatable = array(
         'data' => $element[$bundle]['translatable'],
-        'class' => ['translatable'],
-      ];
+        'class' => array('translatable'),
+      );
       array_unshift($rows[$bundle]['data'], $translatable);
 
       $rows[$bundle]['data'][1]['data']['#prefix'] = '<label for="' . $checkbox_id . '">';
     }
     else {
-      $translatable = [
+      $translatable = array(
         'data' => t('N/A'),
-        'class' => ['untranslatable'],
-      ];
+        'class' => array('untranslatable'),
+      );
       array_unshift($rows[$bundle]['data'], $translatable);
     }
 
     foreach ($field_names as $field_name) {
       $field_element = &$element[$bundle]['fields'][$field_name];
-      $rows[] = [
-        'data' => [
-          [
+      $rows[] = array(
+        'data' => array(
+          array(
             'data' => drupal_render($field_element),
-            'class' => ['translatable'],
-          ],
-          [
-            'data' => [
+            'class' => array('translatable'),
+          ),
+          array(
+            'data' => array(
               '#prefix' => '<label for="' . $field_element['#id'] . '">',
               '#suffix' => '</label>',
-              'bundle' => [
+              'bundle' => array(
                 '#prefix' => '<span class="visually-hidden">',
                 '#suffix' => '</span> ',
                 '#plain_text' => $element[$bundle]['settings']['#label'],
-              ],
-              'field' => [
+              ),
+              'field' => array(
                 '#plain_text' => $field_element['#label'],
-              ],
-            ],
-            'class' => ['field'],
-          ],
-          [
+              ),
+            ),
+            'class' => array('field'),
+          ),
+          array(
             'data' => '',
-            'class' => ['operations'],
-          ],
-        ],
-        'class' => ['field-settings'],
-      ];
+            'class' => array('operations'),
+          ),
+        ),
+        'class' => array('field-settings'),
+      );
 
       if (!empty($element[$bundle]['columns'][$field_name])) {
         $column_element = &$element[$bundle]['columns'][$field_name];
         foreach (Element::children($column_element) as $key) {
           $column_label = $column_element[$key]['#title'];
           unset($column_element[$key]['#title']);
-          $rows[] = [
-            'data' => [
-              [
+          $rows[] = array(
+            'data' => array(
+              array(
                 'data' => drupal_render($column_element[$key]),
-                'class' => ['translatable'],
-              ],
-              [
-                'data' => [
+                'class' => array('translatable'),
+              ),
+              array(
+                'data' => array(
                   '#prefix' => '<label for="' . $column_element[$key]['#id'] . '">',
                   '#suffix' => '</label>',
-                  'bundle' => [
+                  'bundle' => array(
                     '#prefix' => '<span class="visually-hidden">',
                     '#suffix' => '</span> ',
                     '#plain_text' => $element[$bundle]['settings']['#label'],
-                  ],
-                  'field' => [
+                  ),
+                  'field' => array(
                     '#prefix' => '<span class="visually-hidden">',
                     '#suffix' => '</span> ',
                     '#plain_text' => $field_element['#label'],
-                  ],
-                  'columns' => [
+                  ),
+                  'columns' => array(
                     '#plain_text' => $column_label,
-                  ],
-                ],
-                'class' => ['column'],
-              ],
-              [
+                  ),
+                ),
+                'class' => array('column'),
+              ),
+              array(
                 'data' => '',
-                'class' => ['operations'],
-              ],
-            ],
-            'class' => ['column-settings'],
-          ];
+                'class' => array('operations'),
+              ),
+            ),
+            'class' => array('column-settings'),
+          );
         }
       }
     }
@@ -295,7 +295,7 @@ function content_translation_form_language_content_settings_validate(array $form
 
         $translatable_fields = isset($settings[$entity_type][$bundle]['fields']) ? array_filter($settings[$entity_type][$bundle]['fields']) : FALSE;
         if (empty($translatable_fields)) {
-          $t_args = ['%bundle' => $form['settings'][$entity_type][$bundle]['settings']['#label']];
+          $t_args = array('%bundle' => $form['settings'][$entity_type][$bundle]['settings']['#label']);
           $form_state->setErrorByName($name, t('At least one field needs to be translatable to enable %bundle for translation.', $t_args));
         }
 
@@ -304,7 +304,7 @@ function content_translation_form_language_content_settings_validate(array $form
           foreach (\Drupal::languageManager()->getLanguages(LanguageInterface::STATE_LOCKED) as $language) {
             $locked_languages[] = $language->getName();
           }
-          $form_state->setErrorByName($name, t('Translation is not supported if language is always one of: @locked_languages', ['@locked_languages' => implode(', ', $locked_languages)]));
+          $form_state->setErrorByName($name, t('Translation is not supported if language is always one of: @locked_languages', array('@locked_languages' => implode(', ', $locked_languages))));
         }
       }
     }

@@ -40,7 +40,7 @@ abstract class EntityLanguageTestBase extends EntityKernelTestBase {
    */
   protected $untranslatableFieldName;
 
-  public static $modules = ['language', 'entity_test'];
+  public static $modules = array('language', 'entity_test');
 
   protected function setUp() {
     parent::setUp();
@@ -54,7 +54,7 @@ abstract class EntityLanguageTestBase extends EntityKernelTestBase {
       }
     }
 
-    $this->installConfig(['language']);
+    $this->installConfig(array('language'));
 
     // Create the test field.
     module_load_install('entity_test');
@@ -71,12 +71,12 @@ abstract class EntityLanguageTestBase extends EntityKernelTestBase {
 
     // Create field fields in all entity variations.
     foreach (entity_test_entity_types() as $entity_type) {
-      FieldStorageConfig::create([
+      FieldStorageConfig::create(array(
         'field_name' => $this->fieldName,
         'entity_type' => $entity_type,
         'type' => 'text',
         'cardinality' => 4,
-      ])->save();
+      ))->save();
       FieldConfig::create([
         'field_name' => $this->fieldName,
         'entity_type' => $entity_type,
@@ -84,12 +84,12 @@ abstract class EntityLanguageTestBase extends EntityKernelTestBase {
         'translatable' => TRUE,
       ])->save();
 
-      FieldStorageConfig::create([
+      FieldStorageConfig::create(array(
         'field_name' => $this->untranslatableFieldName,
         'entity_type' => $entity_type,
         'type' => 'text',
         'cardinality' => 4,
-      ])->save();
+      ))->save();
       FieldConfig::create([
         'field_name' => $this->untranslatableFieldName,
         'entity_type' => $entity_type,
@@ -99,16 +99,16 @@ abstract class EntityLanguageTestBase extends EntityKernelTestBase {
     }
 
     // Create the default languages.
-    $this->installConfig(['language']);
+    $this->installConfig(array('language'));
 
     // Create test languages.
-    $this->langcodes = [];
+    $this->langcodes = array();
     for ($i = 0; $i < 3; ++$i) {
-      $language = ConfigurableLanguage::create([
+      $language = ConfigurableLanguage::create(array(
         'id' => 'l' . $i,
         'label' => $this->randomString(),
         'weight' => $i,
-      ]);
+      ));
       $this->langcodes[$i] = $language->getId();
       $language->save();
     }
@@ -121,7 +121,7 @@ abstract class EntityLanguageTestBase extends EntityKernelTestBase {
    *   The type of the entity fields are attached to.
    */
   protected function toggleFieldTranslatability($entity_type, $bundle) {
-    $fields = [$this->fieldName, $this->untranslatableFieldName];
+    $fields = array($this->fieldName, $this->untranslatableFieldName);
     foreach ($fields as $field_name) {
       $field = FieldConfig::loadByName($entity_type, $bundle, $field_name);
       $translatable = !$field->isTranslatable();

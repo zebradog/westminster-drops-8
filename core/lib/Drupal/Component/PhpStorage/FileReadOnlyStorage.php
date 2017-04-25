@@ -68,7 +68,7 @@ class FileReadOnlyStorage implements PhpStorageInterface {
   /**
    * {@inheritdoc}
    */
-  public function writeable() {
+  function writeable() {
     return FALSE;
   }
 
@@ -83,7 +83,7 @@ class FileReadOnlyStorage implements PhpStorageInterface {
    * {@inheritdoc}
    */
   public function listAll() {
-    $names = [];
+    $names = array();
     if (file_exists($this->directory)) {
       foreach (new \DirectoryIterator($this->directory) as $fileinfo) {
         if (!$fileinfo->isDot()) {

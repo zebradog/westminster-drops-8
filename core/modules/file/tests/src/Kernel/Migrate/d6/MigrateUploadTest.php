@@ -24,10 +24,10 @@ class MigrateUploadTest extends MigrateDrupal6TestBase {
     $this->installSchema('file', ['file_usage']);
     $this->installSchema('node', ['node_access']);
 
-    $id_mappings = ['d6_file' => []];
+    $id_mappings = array('d6_file' => array());
     // Create new file entities.
     for ($i = 1; $i <= 3; $i++) {
-      $file = File::create([
+      $file = File::create(array(
         'fid' => $i,
         'uid' => 1,
         'filename' => 'druplicon.txt',
@@ -36,13 +36,13 @@ class MigrateUploadTest extends MigrateDrupal6TestBase {
         'created' => 1,
         'changed' => 1,
         'status' => FILE_STATUS_PERMANENT,
-      ]);
+      ));
       $file->enforceIsNew();
       file_put_contents($file->getFileUri(), 'hello world');
 
       // Save it, inserting a new record.
       $file->save();
-      $id_mappings['d6_file'][] = [[$i], [$i]];
+      $id_mappings['d6_file'][] = array(array($i), array($i));
     }
     $this->prepareMigrations($id_mappings);
 
@@ -57,7 +57,7 @@ class MigrateUploadTest extends MigrateDrupal6TestBase {
   /**
    * Test upload migration from Drupal 6 to Drupal 8.
    */
-  public function testUpload() {
+  function testUpload() {
     $this->container->get('entity.manager')
       ->getStorage('node')
       ->resetCache([1, 2]);

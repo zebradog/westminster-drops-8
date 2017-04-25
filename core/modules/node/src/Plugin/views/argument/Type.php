@@ -63,11 +63,11 @@ class Type extends StringArgument {
    * Override the behavior of title(). Get the user friendly version of the
    * node type.
    */
-  public function title() {
+  function title() {
     return $this->node_type($this->argument);
   }
 
-  public function node_type($type_name) {
+  function node_type($type_name) {
     $type = $this->nodeTypeStorage->load($type_name);
     $output = $type ? $type->label() : $this->t('Unknown content type');
     return $output;

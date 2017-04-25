@@ -159,15 +159,15 @@ class RouteBuilder implements RouteBuilderInterface, DestructableInterface {
         unset($routes['route_callbacks']);
       }
       foreach ($routes as $name => $route_info) {
-        $route_info += [
-          'defaults' => [],
-          'requirements' => [],
-          'options' => [],
+        $route_info += array(
+          'defaults' => array(),
+          'requirements' => array(),
+          'options' => array(),
           'host' => NULL,
-          'schemes' => [],
-          'methods' => [],
+          'schemes' => array(),
+          'methods' => array(),
           'condition' => '',
-        ];
+        );
 
         $route = new Route($route_info['path'], $route_info['defaults'], $route_info['requirements'], $route_info['options'], $route_info['host'], $route_info['schemes'], $route_info['methods'], $route_info['condition']);
         $collection->add($name, $route);

@@ -14,7 +14,6 @@ namespace Symfony\Bridge\PsrHttpMessage\Factory;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UploadedFileInterface;
-use Psr\Http\Message\UriInterface;
 use Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -33,20 +32,6 @@ class HttpFoundationFactory implements HttpFoundationFactoryInterface
      */
     public function createRequest(ServerRequestInterface $psrRequest)
     {
-        $server = array();
-        $uri = $psrRequest->getUri();
-
-        if ($uri instanceof UriInterface) {
-            $server['SERVER_NAME'] = $uri->getHost();
-            $server['SERVER_PORT'] = $uri->getPort();
-            $server['REQUEST_URI'] = $uri->getPath();
-            $server['QUERY_STRING'] = $uri->getQuery();
-        }
-
-        $server['REQUEST_METHOD'] = $psrRequest->getMethod();
-
-        $server = array_replace($server, $psrRequest->getServerParams());
-
         $parsedBody = $psrRequest->getParsedBody();
         $parsedBody = is_array($parsedBody) ? $parsedBody : array();
 
@@ -56,7 +41,7 @@ class HttpFoundationFactory implements HttpFoundationFactoryInterface
             $psrRequest->getAttributes(),
             $psrRequest->getCookieParams(),
             $this->getFiles($psrRequest->getUploadedFiles()),
-            $server,
+            $psrRequest->getServerParams(),
             $psrRequest->getBody()->__toString()
         );
         $request->headers->replace($psrRequest->getHeaders());
@@ -95,14 +80,10 @@ class HttpFoundationFactory implements HttpFoundationFactoryInterface
      */
     private function createUploadedFile(UploadedFileInterface $psrUploadedFile)
     {
-        $temporaryPath = '';
-        $clientFileName = '';
-        if (UPLOAD_ERR_NO_FILE !== $psrUploadedFile->getError()) {
-            $temporaryPath = $this->getTemporaryPath();
-            $psrUploadedFile->moveTo($temporaryPath);
+        $temporaryPath = $this->getTemporaryPath();
+        $psrUploadedFile->moveTo($temporaryPath);
 
-            $clientFileName = $psrUploadedFile->getClientFilename();
-        }
+        $clientFileName = $psrUploadedFile->getClientFilename();
 
         return new UploadedFile(
             $temporaryPath,

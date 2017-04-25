@@ -31,7 +31,7 @@ class ResourceResponse extends Response implements CacheableResponseInterface, R
    * @param array $headers
    *   An array of response headers.
    */
-  public function __construct($data = NULL, $status = 200, $headers = []) {
+  public function __construct($data = NULL, $status = 200, $headers = array()) {
     $this->responseData = $data;
     parent::__construct('', $status, $headers);
   }

@@ -18,9 +18,9 @@ class Upsert extends QueryUpsert {
     }
 
     // Default options for upsert queries.
-    $this->queryOptions += [
+    $this->queryOptions += array(
       'throw_exception' => TRUE,
-    ];
+    );
 
     // Default fields are always placed first for consistency.
     $insert_fields = array_merge($this->defaultFields, $this->insertFields);
@@ -59,14 +59,14 @@ class Upsert extends QueryUpsert {
     }
     catch (\Exception $e) {
       // One of the queries failed, rollback the whole batch.
-      $transaction->rollBack();
+      $transaction->rollback();
 
       // Rethrow the exception for the calling code.
       throw $e;
     }
 
     // Re-initialize the values array so that we can re-use this query.
-    $this->insertValues = [];
+    $this->insertValues = array();
 
     // Transaction commits here where $transaction looses scope.
 

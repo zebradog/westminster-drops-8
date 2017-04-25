@@ -191,7 +191,7 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: target_id
-          type: string
+          type: entity_reference_entity_id
           settings: {  }
           group_column: target_id
           group_columns: {  }

@@ -175,7 +175,7 @@
  *   }
  *   catch (Exception $e) {
  *     // Something went wrong somewhere, so roll back now.
- *     $txn->rollBack();
+ *     $txn->rollback();
  *     // Log the exception to watchdog.
  *     watchdog_exception('type', $e);
  *   }
@@ -482,60 +482,60 @@ function hook_query_TAG_alter(Drupal\Core\Database\Query\AlterableInterface $que
  * @ingroup schemaapi
  */
 function hook_schema() {
-  $schema['node'] = [
+  $schema['node'] = array(
     // Example (partial) specification for table "node".
     'description' => 'The base table for nodes.',
-    'fields' => [
-      'nid' => [
+    'fields' => array(
+      'nid' => array(
         'description' => 'The primary identifier for a node.',
         'type' => 'serial',
         'unsigned' => TRUE,
         'not null' => TRUE,
-      ],
-      'vid' => [
+      ),
+      'vid' => array(
         'description' => 'The current {node_field_revision}.vid version identifier.',
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
         'default' => 0,
-      ],
-      'type' => [
+      ),
+      'type' => array(
         'description' => 'The type of this node.',
         'type' => 'varchar',
         'length' => 32,
         'not null' => TRUE,
         'default' => '',
-      ],
-      'title' => [
+      ),
+      'title' => array(
         'description' => 'The node title.',
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,
         'default' => '',
-      ],
-    ],
-    'indexes' => [
-      'node_changed'        => ['changed'],
-      'node_created'        => ['created'],
-    ],
-    'unique keys' => [
-      'nid_vid' => ['nid', 'vid'],
-      'vid'     => ['vid'],
-    ],
+      ),
+    ),
+    'indexes' => array(
+      'node_changed'        => array('changed'),
+      'node_created'        => array('created'),
+    ),
+    'unique keys' => array(
+      'nid_vid' => array('nid', 'vid'),
+      'vid'     => array('vid'),
+    ),
     // For documentation purposes only; foreign keys are not created in the
     // database.
-    'foreign keys' => [
-      'node_revision' => [
+    'foreign keys' => array(
+      'node_revision' => array(
         'table' => 'node_field_revision',
-        'columns' => ['vid' => 'vid'],
-      ],
-      'node_author' => [
+        'columns' => array('vid' => 'vid'),
+      ),
+      'node_author' => array(
         'table' => 'users',
-        'columns' => ['uid' => 'uid'],
-      ],
-    ],
-    'primary key' => ['nid'],
-  ];
+        'columns' => array('uid' => 'uid'),
+      ),
+    ),
+    'primary key' => array('nid'),
+  );
   return $schema;
 }
 

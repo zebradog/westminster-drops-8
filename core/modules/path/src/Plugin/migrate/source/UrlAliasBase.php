@@ -24,10 +24,10 @@ abstract class UrlAliasBase extends DrupalSqlBase {
    * {@inheritdoc}
    */
   public function fields() {
-    return [
+    return array(
       'pid' => $this->t('The numeric identifier of the path alias.'),
       'language' => $this->t('The language code of the URL alias.'),
-    ];
+    );
   }
 
   /**

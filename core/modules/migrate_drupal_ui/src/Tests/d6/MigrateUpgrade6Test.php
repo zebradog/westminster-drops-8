@@ -76,7 +76,7 @@ class MigrateUpgrade6Test extends MigrateUpgradeTestBase {
   /**
    * Executes all steps of migrations upgrade.
    */
-  public function testMigrateUpgrade() {
+  protected function testMigrateUpgrade() {
     parent::testMigrateUpgrade();
 
     // Ensure migrated users can log in.

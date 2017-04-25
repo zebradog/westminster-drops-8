@@ -21,4 +21,9 @@ class NodeJsonAnonTest extends NodeResourceTestBase {
    */
   protected static $mimeType = 'application/json';
 
+  /**
+   * {@inheritdoc}
+   */
+  protected static $expectedErrorMimeType = 'application/json';
+
 }

@@ -30,22 +30,22 @@ class Checkbox extends FormElement {
    */
   public function getInfo() {
     $class = get_class($this);
-    return [
+    return array(
       '#input' => TRUE,
       '#return_value' => 1,
-      '#process' => [
-        [$class, 'processCheckbox'],
-        [$class, 'processAjaxForm'],
-        [$class, 'processGroup'],
-      ],
-      '#pre_render' => [
-        [$class, 'preRenderCheckbox'],
-        [$class, 'preRenderGroup'],
-      ],
+      '#process' => array(
+        array($class, 'processCheckbox'),
+        array($class, 'processAjaxForm'),
+        array($class, 'processGroup'),
+      ),
+      '#pre_render' => array(
+        array($class, 'preRenderCheckbox'),
+        array($class, 'preRenderGroup'),
+      ),
       '#theme' => 'input__checkbox',
-      '#theme_wrappers' => ['form_element'],
+      '#theme_wrappers' => array('form_element'),
       '#title_display' => 'after',
-    ];
+    );
   }
 
   /**
@@ -93,13 +93,13 @@ class Checkbox extends FormElement {
    */
   public static function preRenderCheckbox($element) {
     $element['#attributes']['type'] = 'checkbox';
-    Element::setAttributes($element, ['id', 'name', '#return_value' => 'value']);
+    Element::setAttributes($element, array('id', 'name', '#return_value' => 'value'));
 
     // Unchecked checkbox has #value of integer 0.
     if (!empty($element['#checked'])) {
       $element['#attributes']['checked'] = 'checked';
     }
-    static::setAttributes($element, ['form-checkbox']);
+    static::setAttributes($element, array('form-checkbox'));
 
     return $element;
   }

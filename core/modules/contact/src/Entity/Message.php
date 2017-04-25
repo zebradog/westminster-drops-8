@@ -153,29 +153,29 @@ class Message extends ContentEntityBase implements MessageInterface {
       ->setLabel(t('Subject'))
       ->setRequired(TRUE)
       ->setSetting('max_length', 100)
-      ->setDisplayOptions('form', [
+      ->setDisplayOptions('form', array(
         'type' => 'string_textfield',
         'weight' => -10,
-      ])
+      ))
       ->setDisplayConfigurable('form', TRUE);
 
     // The text of the contact message.
     $fields['message'] = BaseFieldDefinition::create('string_long')
       ->setLabel(t('Message'))
       ->setRequired(TRUE)
-      ->setDisplayOptions('form', [
+      ->setDisplayOptions('form', array(
         'type' => 'string_textarea',
         'weight' => 0,
-        'settings' => [
+        'settings' => array(
           'rows' => 12,
-        ],
-      ])
+        ),
+      ))
       ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('view', [
+      ->setDisplayOptions('view', array(
         'type' => 'string',
         'weight' => 0,
         'label' => 'above',
-      ])
+      ))
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['copy'] = BaseFieldDefinition::create('boolean')

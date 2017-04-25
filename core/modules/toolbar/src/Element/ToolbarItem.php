@@ -19,16 +19,16 @@ class ToolbarItem extends RenderElement {
    */
   public function getInfo() {
     $class = get_class($this);
-    return [
-      '#pre_render' => [
-        [$class, 'preRenderToolbarItem'],
-      ],
-      'tab' => [
+    return array(
+      '#pre_render' => array(
+        array($class, 'preRenderToolbarItem'),
+      ),
+      'tab' => array(
         '#type' => 'link',
         '#title' => NULL,
         '#url' => Url::fromRoute('<front>'),
-      ],
-    ];
+      ),
+    );
   }
 
   /**
@@ -47,33 +47,33 @@ class ToolbarItem extends RenderElement {
     $id = $element['#id'];
 
     // Provide attributes for a toolbar item.
-    $attributes = [
+    $attributes = array(
       'id' => $id,
-    ];
+    );
 
     // If tray content is present, markup the tray and its associated trigger.
     if (!empty($element['tray'])) {
       // Provide attributes necessary for trays.
-      $attributes += [
+      $attributes += array(
         'data-toolbar-tray' => $id . '-tray',
         'aria-owns' => $id . '-tray',
         'role' => 'button',
         'aria-pressed' => 'false',
-      ];
+      );
 
       // Merge in module-provided attributes.
-      $element['tab'] += ['#attributes' => []];
+      $element['tab'] += array('#attributes' => array());
       $element['tab']['#attributes'] += $attributes;
       $element['tab']['#attributes']['class'][] = 'trigger';
 
       // Provide attributes for the tray theme wrapper.
-      $attributes = [
+      $attributes = array(
         'id' => $id . '-tray',
         'data-toolbar-tray' => $id . '-tray',
-      ];
+      );
       // Merge in module-provided attributes.
       if (!isset($element['tray']['#wrapper_attributes'])) {
-        $element['tray']['#wrapper_attributes'] = [];
+        $element['tray']['#wrapper_attributes'] = array();
       }
       $element['tray']['#wrapper_attributes'] += $attributes;
       $element['tray']['#wrapper_attributes']['class'][] = 'toolbar-tray';

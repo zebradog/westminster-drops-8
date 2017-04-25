@@ -5,7 +5,6 @@ namespace Drupal\views\Plugin\views\argument_validator;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Plugin\Context\ContextDefinition;
 use Drupal\views\Plugin\views\argument\ArgumentPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -71,10 +70,10 @@ class Entity extends ArgumentValidatorPluginBase {
   protected function defineOptions() {
     $options = parent::defineOptions();
 
-    $options['bundles'] = ['default' => []];
-    $options['access'] = ['default' => FALSE];
-    $options['operation'] = ['default' => 'view'];
-    $options['multiple'] = ['default' => FALSE];
+    $options['bundles'] = array('default' => array());
+    $options['access'] = array('default' => FALSE);
+    $options['operation'] = array('default' => 'view');
+    $options['multiple'] = array('default' => FALSE);
 
     return $options;
   }
@@ -93,60 +92,60 @@ class Entity extends ArgumentValidatorPluginBase {
 
     // If the entity has bundles, allow option to restrict to bundle(s).
     if ($entity_type->hasKey('bundle')) {
-      $bundle_options = [];
+      $bundle_options = array();
       foreach ($this->entityManager->getBundleInfo($entity_type_id) as $bundle_id => $bundle_info) {
         $bundle_options[$bundle_id] = $bundle_info['label'];
       }
 
-      $form['bundles'] = [
+      $form['bundles'] = array(
         '#title' => $entity_type->getBundleLabel() ?: $this->t('Bundles'),
         '#default_value' => $this->options['bundles'],
         '#type' => 'checkboxes',
         '#options' => $bundle_options,
         '#description' => $this->t('If none are selected, all are allowed.'),
-      ];
+      );
     }
 
     // Offer the option to filter by access to the entity in the argument.
-    $form['access'] = [
+    $form['access'] = array(
       '#type' => 'checkbox',
-      '#title' => $this->t('Validate user has access to the %name', ['%name' => $entity_type->getLabel()]),
+      '#title' => $this->t('Validate user has access to the %name', array('%name' => $entity_type->getLabel())),
       '#default_value' => $this->options['access'],
-    ];
-    $form['operation'] = [
+    );
+    $form['operation'] = array(
       '#type' => 'radios',
       '#title' => $this->t('Access operation to check'),
-      '#options' => [
+      '#options' => array(
         'view' => $this->t('View'),
         'update' => $this->t('Edit'),
         'delete' => $this->t('Delete'),
-      ],
+      ),
       '#default_value' => $this->options['operation'],
-      '#states' => [
-        'visible' => [
-          ':input[name="options[validate][options][' . $sanitized_id . '][access]"]' => ['checked' => TRUE],
-        ],
-      ],
-    ];
+      '#states' => array(
+        'visible' => array(
+          ':input[name="options[validate][options][' . $sanitized_id . '][access]"]' => array('checked' => TRUE),
+        ),
+      ),
+    );
 
     // If class is multiple capable give the option to validate single/multiple.
     if ($this->multipleCapable) {
-      $form['multiple'] = [
+      $form['multiple'] = array(
         '#type' => 'radios',
         '#title' => $this->t('Multiple arguments'),
-        '#options' => [
-          0 => $this->t('Single ID', ['%type' => $entity_type->getLabel()]),
-          1 => $this->t('One or more IDs separated by , or +', ['%type' => $entity_type->getLabel()]),
-        ],
+        '#options' => array(
+          0 => $this->t('Single ID', array('%type' => $entity_type->getLabel())),
+          1 => $this->t('One or more IDs separated by , or +', array('%type' => $entity_type->getLabel())),
+        ),
         '#default_value' => (string) $this->options['multiple'],
-      ];
+      );
     }
   }
 
   /**
    * {@inheritdoc}
    */
-  public function submitOptionsForm(&$form, FormStateInterface $form_state, &$options = []) {
+  public function submitOptionsForm(&$form, FormStateInterface $form_state, &$options = array()) {
     // Filter out unused options so we don't store giant unnecessary arrays.
     $options['bundles'] = array_filter($options['bundles']);
   }
@@ -163,7 +162,7 @@ class Entity extends ArgumentValidatorPluginBase {
       $ids = array_filter(preg_split('/[,+ ]/', $argument));
     }
     elseif ($argument) {
-      $ids = [$argument];
+      $ids = array($argument);
     }
     // No specified argument should be invalid.
     else {
@@ -227,13 +226,6 @@ class Entity extends ArgumentValidatorPluginBase {
     }
 
     return $dependencies;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getContextDefinition() {
-    return new ContextDefinition('entity:' . $this->definition['entity_type'], $this->argument->adminLabel(), FALSE);
   }
 
 }

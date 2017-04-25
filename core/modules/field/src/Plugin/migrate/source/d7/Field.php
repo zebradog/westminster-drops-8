@@ -21,7 +21,7 @@ class Field extends DrupalSqlBase {
     $query = $this->select('field_config', 'fc')
       ->distinct()
       ->fields('fc')
-      ->fields('fci', ['entity_type'])
+      ->fields('fci', array('entity_type'))
       ->condition('fc.active', 1)
       ->condition('fc.deleted', 0)
       ->condition('fc.storage_active', 1);
@@ -34,7 +34,7 @@ class Field extends DrupalSqlBase {
    * {@inheritdoc}
    */
   public function fields() {
-    return [
+    return array(
       'field_name' => $this->t('The name of this field.'),
       'type' => $this->t('The type of this field.'),
       'module' => $this->t('The module that implements the field type.'),
@@ -42,7 +42,7 @@ class Field extends DrupalSqlBase {
       'locked' => $this->t('Locked'),
       'cardinality' => $this->t('Cardinality'),
       'translatable' => $this->t('Translatable'),
-    ];
+    );
   }
 
   /**
@@ -59,16 +59,16 @@ class Field extends DrupalSqlBase {
    * {@inheritdoc}
    */
   public function getIds() {
-    return [
-      'field_name' => [
+    return array(
+      'field_name' => array(
         'type' => 'string',
         'alias' => 'fc',
-      ],
-      'entity_type' => [
+      ),
+      'entity_type' => array(
         'type' => 'string',
         'alias' => 'fci',
-      ],
-    ];
+      ),
+    );
   }
 
 }

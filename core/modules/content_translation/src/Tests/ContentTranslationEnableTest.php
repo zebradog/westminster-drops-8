@@ -24,8 +24,8 @@ class ContentTranslationEnableTest extends WebTestBase {
     // Enable modules and make sure the related config entity type definitions
     // are installed.
     $edit = [
-      'modules[content_translation][enable]' => TRUE,
-      'modules[language][enable]' => TRUE,
+      'modules[Multilingual][content_translation][enable]' => TRUE,
+      'modules[Multilingual][language][enable]' => TRUE,
     ];
     $this->drupalPostForm('admin/modules', $edit, t('Install'));
 
@@ -35,7 +35,7 @@ class ContentTranslationEnableTest extends WebTestBase {
 
     // No pending updates should be available.
     $this->drupalGet('admin/reports/status');
-    $requirement_value = $this->cssSelect("details.system-status-report__entry summary:contains('Entity/field definitions') + div");
+    $requirement_value = $this->cssSelect("tr.system-status-report__entry th:contains('Entity/field definitions') + td");
     $this->assertEqual(t('Up to date'), trim((string) $requirement_value[0]));
 
     $this->drupalGet('admin/config/regional/content-language');
@@ -53,16 +53,16 @@ class ContentTranslationEnableTest extends WebTestBase {
 
     // No pending updates should be available.
     $this->drupalGet('admin/reports/status');
-    $requirement_value = $this->cssSelect("details.system-status-report__entry summary:contains('Entity/field definitions') + div");
+    $requirement_value = $this->cssSelect("tr.system-status-report__entry th:contains('Entity/field definitions') + td");
     $this->assertEqual(t('Up to date'), trim((string) $requirement_value[0]));
 
     // Create a node type and check the content translation settings are now
     // available for nodes.
-    $edit = [
+    $edit = array(
       'name' => 'foo',
       'title_label' => 'title for foo',
       'type' => 'foo',
-    ];
+    );
     $this->drupalPostForm('admin/structure/types/add', $edit, t('Save content type'));
     $this->drupalGet('admin/config/regional/content-language');
     $this->assertRaw('entity_types[node]');

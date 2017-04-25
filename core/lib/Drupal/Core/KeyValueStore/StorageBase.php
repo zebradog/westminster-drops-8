@@ -32,7 +32,7 @@ abstract class StorageBase implements KeyValueStoreInterface {
    * {@inheritdoc}
    */
   public function get($key, $default = NULL) {
-    $values = $this->getMultiple([$key]);
+    $values = $this->getMultiple(array($key));
     return isset($values[$key]) ? $values[$key] : $default;
   }
 
@@ -49,7 +49,7 @@ abstract class StorageBase implements KeyValueStoreInterface {
    * {@inheritdoc}
    */
   public function delete($key) {
-    $this->deleteMultiple([$key]);
+    $this->deleteMultiple(array($key));
   }
 
 }

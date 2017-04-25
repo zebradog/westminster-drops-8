@@ -147,7 +147,7 @@ abstract class FormBase implements FormInterface, ContainerInjectionInterface {
   /**
    * Gets the request object.
    *
-   * @return \Symfony\Component\HttpFoundation\Request
+   * @return \Symfony\Component\HttpFoundation\Request $request
    *   The request object.
    */
   protected function getRequest() {
@@ -200,7 +200,7 @@ abstract class FormBase implements FormInterface, ContainerInjectionInterface {
    * \Drupal\Core\DependencyInjection\ContainerInjectionInterface should be used
    * for injecting services.
    *
-   * @return \Symfony\Component\DependencyInjection\ContainerInterface
+   * @return \Symfony\Component\DependencyInjection\ContainerInterface $container
    *   The service container.
    */
   private function container() {

@@ -154,17 +154,6 @@ class AssertLegacyTraitTest extends UnitTestCase {
   }
 
   /**
-   * @covers ::assertNoPattern
-   */
-  public function testAssertNoPattern() {
-    $this->webAssert
-      ->responseNotMatches('/.*foo$/')
-      ->shouldBeCalled();
-
-    $this->assertNoPattern('/.*foo$/');
-  }
-
-  /**
    * Returns a mocked behat session object.
    *
    * @return \Behat\Mink\Session

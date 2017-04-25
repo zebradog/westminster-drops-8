@@ -77,7 +77,7 @@ class EntityAutocompleteController extends ControllerBase {
    *   or if it does not match the stored data.
    */
   public function handleAutocomplete(Request $request, $target_type, $selection_handler, $selection_settings_key) {
-    $matches = [];
+    $matches = array();
     // Get the typed string from the URL, if it exists.
     if ($input = $request->query->get('q')) {
       $typed_string = Tags::explode($input);

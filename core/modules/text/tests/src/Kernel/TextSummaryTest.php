@@ -12,12 +12,12 @@ use Drupal\filter\Entity\FilterFormat;
  */
 class TextSummaryTest extends KernelTestBase {
 
-  public static $modules = ['system', 'user', 'filter', 'text'];
+  public static $modules = array('system', 'user', 'filter', 'text');
 
   protected function setUp() {
     parent::setUp();
 
-    $this->installConfig(['text']);
+    $this->installConfig(array('text'));
   }
 
   /**
@@ -25,7 +25,7 @@ class TextSummaryTest extends KernelTestBase {
    * subsequent sentences are not. This edge case is documented at
    * https://www.drupal.org/node/180425.
    */
-  public function testFirstSentenceQuestion() {
+  function testFirstSentenceQuestion() {
     $text = 'A question? A sentence. Another sentence.';
     $expected = 'A question? A sentence.';
     $this->assertTextSummary($text, $expected, NULL, 30);
@@ -34,7 +34,7 @@ class TextSummaryTest extends KernelTestBase {
   /**
    * Test summary with long example.
    */
-  public function testLongSentence() {
+  function testLongSentence() {
     $text = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' . // 125
             'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ' . // 108
             'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' . // 103
@@ -49,26 +49,26 @@ class TextSummaryTest extends KernelTestBase {
   /**
    * Test various summary length edge cases.
    */
-  public function testLength() {
-    FilterFormat::create([
+  function testLength() {
+    FilterFormat::create(array(
       'format' => 'autop',
-      'filters' => [
-        'filter_autop' => [
+      'filters' => array(
+        'filter_autop' => array(
           'status' => 1,
-        ],
-      ],
-    ])->save();
-    FilterFormat::create([
+        ),
+      ),
+    ))->save();
+    FilterFormat::create(array(
       'format' => 'autop_correct',
-      'filters' => [
-        'filter_autop' => [
+      'filters' => array(
+        'filter_autop' => array(
           'status' => 1,
-        ],
-        'filter_htmlcorrector' => [
+        ),
+        'filter_htmlcorrector' => array(
           'status' => 1,
-        ],
-      ],
-    ])->save();
+        ),
+      ),
+    ))->save();
 
     // This string tests a number of edge cases.
     $text = "<p>\nHi\n</p>\n<p>\nfolks\n<br />\n!\n</p>";
@@ -205,12 +205,12 @@ class TextSummaryTest extends KernelTestBase {
   /**
    * Calls text_summary() and asserts that the expected teaser is returned.
    */
-  public function assertTextSummary($text, $expected, $format = NULL, $size = NULL) {
+  function assertTextSummary($text, $expected, $format = NULL, $size = NULL) {
     $summary = text_summary($text, $format, $size);
-    $this->assertIdentical($summary, $expected, format_string('<pre style="white-space: pre-wrap">@actual</pre> is identical to <pre style="white-space: pre-wrap">@expected</pre>', [
+    $this->assertIdentical($summary, $expected, format_string('<pre style="white-space: pre-wrap">@actual</pre> is identical to <pre style="white-space: pre-wrap">@expected</pre>', array(
       '@actual' => $summary,
       '@expected' => $expected,
-    ]));
+    )));
   }
 
 }

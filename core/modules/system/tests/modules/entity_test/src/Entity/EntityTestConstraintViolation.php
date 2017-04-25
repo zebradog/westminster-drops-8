@@ -33,11 +33,11 @@ class EntityTestConstraintViolation extends EntityTest {
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
 
-    $fields['name']->setDisplayOptions('form', [
+    $fields['name']->setDisplayOptions('form', array(
       'type' => 'string',
       'weight' => 0,
-    ]);
-    $fields['name']->addConstraint('FieldWidgetConstraint', []);
+    ));
+    $fields['name']->addConstraint('FieldWidgetConstraint', array());
 
     return $fields;
   }

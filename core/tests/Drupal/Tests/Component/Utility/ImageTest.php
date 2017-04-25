@@ -44,113 +44,113 @@ class ImageTest extends UnitTestCase {
    */
   public function providerTestScaleDimensions() {
     // Define input / output datasets to test different branch conditions.
-    $tests = [];
+    $tests = array();
 
     // Test branch conditions:
     // - No height.
     // - Upscale, don't need to upscale.
-    $tests[] = [
-      'input' => [
-        'dimensions' => [
+    $tests[] = array(
+      'input' => array(
+        'dimensions' => array(
           'width' => 1000,
           'height' => 2000,
-        ],
+        ),
         'width' => 200,
         'height' => NULL,
         'upscale' => TRUE,
-      ],
-      'output' => [
-        'dimensions' => [
+      ),
+      'output' => array(
+        'dimensions' => array(
           'width' => 200,
           'height' => 400,
-        ],
+        ),
         'return_value' => TRUE,
-      ],
-    ];
+      ),
+    );
 
     // Test branch conditions:
     // - No width.
     // - Don't upscale, don't need to upscale.
-    $tests[] = [
-      'input' => [
-        'dimensions' => [
+    $tests[] = array(
+      'input' => array(
+        'dimensions' => array(
           'width' => 1000,
           'height' => 800,
-        ],
+        ),
         'width' => NULL,
         'height' => 140,
         'upscale' => FALSE,
-      ],
-      'output' => [
-        'dimensions' => [
+      ),
+      'output' => array(
+        'dimensions' => array(
           'width' => 175,
           'height' => 140,
-        ],
+        ),
         'return_value' => TRUE,
-      ],
-    ];
+      ),
+    );
 
     // Test branch conditions:
     // - Source aspect ratio greater than target.
     // - Upscale, need to upscale.
-    $tests[] = [
-      'input' => [
-        'dimensions' => [
+    $tests[] = array(
+      'input' => array(
+        'dimensions' => array(
           'width' => 8,
           'height' => 20,
-        ],
+        ),
         'width' => 200,
         'height' => 140,
         'upscale' => TRUE,
-      ],
-      'output' => [
-        'dimensions' => [
+      ),
+      'output' => array(
+        'dimensions' => array(
           'width' => 56,
           'height' => 140,
-        ],
+        ),
         'return_value' => TRUE,
-      ],
-    ];
+      ),
+    );
 
     // Test branch condition: target aspect ratio greater than source.
-    $tests[] = [
-      'input' => [
-        'dimensions' => [
+    $tests[] = array(
+      'input' => array(
+        'dimensions' => array(
           'width' => 2000,
           'height' => 800,
-        ],
+        ),
         'width' => 200,
         'height' => 140,
         'upscale' => FALSE,
-      ],
-      'output' => [
-        'dimensions' => [
+      ),
+      'output' => array(
+        'dimensions' => array(
           'width' => 200,
           'height' => 80,
-        ],
+        ),
         'return_value' => TRUE,
-      ],
-    ];
+      ),
+    );
 
     // Test branch condition: don't upscale, need to upscale.
-    $tests[] = [
-      'input' => [
-        'dimensions' => [
+    $tests[] = array(
+      'input' => array(
+        'dimensions' => array(
           'width' => 100,
           'height' => 50,
-        ],
+        ),
         'width' => 200,
         'height' => 140,
         'upscale' => FALSE,
-      ],
-      'output' => [
-        'dimensions' => [
+      ),
+      'output' => array(
+        'dimensions' => array(
           'width' => 100,
           'height' => 50,
-        ],
+        ),
         'return_value' => FALSE,
-      ],
-    ];
+      ),
+    );
 
     return $tests;
   }

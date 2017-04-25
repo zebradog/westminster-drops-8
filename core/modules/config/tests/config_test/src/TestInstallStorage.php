@@ -20,7 +20,7 @@ class TestInstallStorage extends InstallStorage {
     if (!isset($this->folders)) {
       $this->folders = $this->getCoreNames();
       $listing = new ExtensionDiscovery(\Drupal::root());
-      $listing->setProfileDirectories([]);
+      $listing->setProfileDirectories(array());
       $this->folders += $this->getComponentNames($listing->scan('profile'));
       $this->folders += $this->getComponentNames($listing->scan('module'));
       $this->folders += $this->getComponentNames($listing->scan('theme'));

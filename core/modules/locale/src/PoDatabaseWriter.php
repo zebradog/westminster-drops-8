@@ -89,14 +89,14 @@ class PoDatabaseWriter implements PoWriterInterface {
    * @param array $report
    *   Associative array with result information.
    */
-  public function setReport($report = []) {
-    $report += [
+  public function setReport($report = array()) {
+    $report += array(
       'additions' => 0,
       'updates' => 0,
       'deletes' => 0,
       'skips' => 0,
-      'strings' => [],
-    ];
+      'strings' => array(),
+    );
     $this->report = $report;
   }
 
@@ -112,15 +112,15 @@ class PoDatabaseWriter implements PoWriterInterface {
    */
   public function setOptions(array $options) {
     if (!isset($options['overwrite_options'])) {
-      $options['overwrite_options'] = [];
+      $options['overwrite_options'] = array();
     }
-    $options['overwrite_options'] += [
+    $options['overwrite_options'] += array(
       'not_customized' => FALSE,
       'customized' => FALSE,
-    ];
-    $options += [
+    );
+    $options += array(
       'customized' => LOCALE_NOT_CUSTOMIZED,
-    ];
+    );
     $this->options = $options;
   }
 
@@ -148,7 +148,7 @@ class PoDatabaseWriter implements PoWriterInterface {
    */
   public function setHeader(PoHeader $header) {
     $this->header = $header;
-    $locale_plurals = \Drupal::state()->get('locale.translation.plurals') ?: [];
+    $locale_plurals = \Drupal::state()->get('locale.translation.plurals') ?: array();
 
     // Check for options.
     $options = $this->getOptions();
@@ -205,10 +205,10 @@ class PoDatabaseWriter implements PoWriterInterface {
    */
   private function importString(PoItem $item) {
     // Initialize overwrite options if not set.
-    $this->options['overwrite_options'] += [
+    $this->options['overwrite_options'] += array(
       'not_customized' => FALSE,
       'customized' => FALSE,
-    ];
+    );
     $overwrite_options = $this->options['overwrite_options'];
     $customized = $this->options['customized'];
 
@@ -217,17 +217,17 @@ class PoDatabaseWriter implements PoWriterInterface {
     $translation = $item->getTranslation();
 
     // Look up the source string and any existing translation.
-    $strings = \Drupal::service('locale.storage')->getTranslations([
+    $strings = \Drupal::service('locale.storage')->getTranslations(array(
       'language' => $this->langcode,
       'source' => $source,
       'context' => $context,
-    ]);
+    ));
     $string = reset($strings);
 
     if (!empty($translation)) {
       // Skip this string unless it passes a check for dangerous code.
       if (!locale_string_is_safe($translation)) {
-        \Drupal::logger('locale')->error('Import of string "%string" was skipped because of disallowed or malformed HTML.', ['%string' => $translation]);
+        \Drupal::logger('locale')->error('Import of string "%string" was skipped because of disallowed or malformed HTML.', array('%string' => $translation));
         $this->report['skips']++;
         return 0;
       }
@@ -235,10 +235,10 @@ class PoDatabaseWriter implements PoWriterInterface {
         $string->setString($translation);
         if ($string->isNew()) {
           // No translation in this language.
-          $string->setValues([
+          $string->setValues(array(
             'language' => $this->langcode,
             'customized' => $customized,
-          ]);
+          ));
           $string->save();
           $this->report['additions']++;
         }
@@ -253,14 +253,14 @@ class PoDatabaseWriter implements PoWriterInterface {
       }
       else {
         // No such source string in the database yet.
-        $string = \Drupal::service('locale.storage')->createString(['source' => $source, 'context' => $context])
+        $string = \Drupal::service('locale.storage')->createString(array('source' => $source, 'context' => $context))
           ->save();
-        \Drupal::service('locale.storage')->createTranslation([
+        \Drupal::service('locale.storage')->createTranslation(array(
           'lid' => $string->getId(),
           'language' => $this->langcode,
           'translation' => $translation,
           'customized' => $customized,
-        ])->save();
+        ))->save();
 
         $this->report['additions']++;
         $this->report['strings'][] = $string->getId();

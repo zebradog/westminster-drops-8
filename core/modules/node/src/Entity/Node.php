@@ -4,7 +4,6 @@ namespace Drupal\node\Entity;
 
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
-use Drupal\Core\Entity\EntityPublishedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
@@ -18,7 +17,6 @@ use Drupal\user\UserInterface;
  * @ContentEntityType(
  *   id = "node",
  *   label = @Translation("Content"),
- *   label_collection = @Translation("Content"),
  *   label_singular = @Translation("content item"),
  *   label_plural = @Translation("content items"),
  *   label_count = @PluralTranslation(
@@ -47,7 +45,6 @@ use Drupal\user\UserInterface;
  *   data_table = "node_field_data",
  *   revision_table = "node_revision",
  *   revision_data_table = "node_field_revision",
- *   show_revision_ui = TRUE,
  *   translatable = TRUE,
  *   list_cache_contexts = { "user.node_grants:view" },
  *   entity_keys = {
@@ -58,7 +55,6 @@ use Drupal\user\UserInterface;
  *     "langcode" = "langcode",
  *     "uuid" = "uuid",
  *     "status" = "status",
- *     "published" = "status",
  *     "uid" = "uid",
  *   },
  *   bundle_entity_type = "node_type",
@@ -77,7 +73,6 @@ use Drupal\user\UserInterface;
 class Node extends ContentEntityBase implements NodeInterface {
 
   use EntityChangedTrait;
-  use EntityPublishedTrait;
 
   /**
    * Whether the node is being previewed or not.
@@ -229,7 +224,7 @@ class Node extends ContentEntityBase implements NodeInterface {
    * {@inheritdoc}
    */
   public function setPromoted($promoted) {
-    $this->set('promote', $promoted ? NodeInterface::PROMOTED : NodeInterface::NOT_PROMOTED);
+    $this->set('promote', $promoted ? NODE_PROMOTED : NODE_NOT_PROMOTED);
     return $this;
   }
 
@@ -244,7 +239,21 @@ class Node extends ContentEntityBase implements NodeInterface {
    * {@inheritdoc}
    */
   public function setSticky($sticky) {
-    $this->set('sticky', $sticky ? NodeInterface::STICKY : NodeInterface::NOT_STICKY);
+    $this->set('sticky', $sticky ? NODE_STICKY : NODE_NOT_STICKY);
+    return $this;
+  }
+  /**
+   * {@inheritdoc}
+   */
+  public function isPublished() {
+    return (bool) $this->getEntityKey('status');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setPublished($published) {
+    $this->set('status', $published ? NODE_PUBLISHED : NODE_NOT_PUBLISHED);
     return $this;
   }
 
@@ -358,7 +367,6 @@ class Node extends ContentEntityBase implements NodeInterface {
    */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
-    $fields += static::publishedBaseFieldDefinitions($entity_type);
 
     $fields['title'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Title'))
@@ -366,15 +374,15 @@ class Node extends ContentEntityBase implements NodeInterface {
       ->setTranslatable(TRUE)
       ->setRevisionable(TRUE)
       ->setSetting('max_length', 255)
-      ->setDisplayOptions('view', [
+      ->setDisplayOptions('view', array(
         'label' => 'hidden',
         'type' => 'string',
         'weight' => -5,
-      ])
-      ->setDisplayOptions('form', [
+      ))
+      ->setDisplayOptions('form', array(
         'type' => 'string_textfield',
         'weight' => -5,
-      ])
+      ))
       ->setDisplayConfigurable('form', TRUE);
 
     $fields['uid'] = BaseFieldDefinition::create('entity_reference')
@@ -384,36 +392,43 @@ class Node extends ContentEntityBase implements NodeInterface {
       ->setSetting('target_type', 'user')
       ->setDefaultValueCallback('Drupal\node\Entity\Node::getCurrentUserId')
       ->setTranslatable(TRUE)
-      ->setDisplayOptions('view', [
+      ->setDisplayOptions('view', array(
         'label' => 'hidden',
         'type' => 'author',
         'weight' => 0,
-      ])
-      ->setDisplayOptions('form', [
+      ))
+      ->setDisplayOptions('form', array(
         'type' => 'entity_reference_autocomplete',
         'weight' => 5,
-        'settings' => [
+        'settings' => array(
           'match_operator' => 'CONTAINS',
           'size' => '60',
           'placeholder' => '',
-        ],
-      ])
+        ),
+      ))
       ->setDisplayConfigurable('form', TRUE);
+
+    $fields['status'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Publishing status'))
+      ->setDescription(t('A boolean indicating whether the node is published.'))
+      ->setRevisionable(TRUE)
+      ->setTranslatable(TRUE)
+      ->setDefaultValue(TRUE);
 
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Authored on'))
       ->setDescription(t('The time that the node was created.'))
       ->setRevisionable(TRUE)
       ->setTranslatable(TRUE)
-      ->setDisplayOptions('view', [
+      ->setDisplayOptions('view', array(
         'label' => 'hidden',
         'type' => 'timestamp',
         'weight' => 0,
-      ])
-      ->setDisplayOptions('form', [
+      ))
+      ->setDisplayOptions('form', array(
         'type' => 'datetime_timestamp',
         'weight' => 10,
-      ])
+      ))
       ->setDisplayConfigurable('form', TRUE);
 
     $fields['changed'] = BaseFieldDefinition::create('changed')
@@ -427,13 +442,13 @@ class Node extends ContentEntityBase implements NodeInterface {
       ->setRevisionable(TRUE)
       ->setTranslatable(TRUE)
       ->setDefaultValue(TRUE)
-      ->setDisplayOptions('form', [
+      ->setDisplayOptions('form', array(
         'type' => 'boolean_checkbox',
-        'settings' => [
+        'settings' => array(
           'display_label' => TRUE,
-        ],
+        ),
         'weight' => 15,
-      ])
+      ))
       ->setDisplayConfigurable('form', TRUE);
 
     $fields['sticky'] = BaseFieldDefinition::create('boolean')
@@ -441,13 +456,13 @@ class Node extends ContentEntityBase implements NodeInterface {
       ->setRevisionable(TRUE)
       ->setTranslatable(TRUE)
       ->setDefaultValue(FALSE)
-      ->setDisplayOptions('form', [
+      ->setDisplayOptions('form', array(
         'type' => 'boolean_checkbox',
-        'settings' => [
+        'settings' => array(
           'display_label' => TRUE,
-        ],
+        ),
         'weight' => 16,
-      ])
+      ))
       ->setDisplayConfigurable('form', TRUE);
 
     $fields['revision_timestamp'] = BaseFieldDefinition::create('created')
@@ -468,13 +483,13 @@ class Node extends ContentEntityBase implements NodeInterface {
       ->setDescription(t('Briefly describe the changes you have made.'))
       ->setRevisionable(TRUE)
       ->setDefaultValue('')
-      ->setDisplayOptions('form', [
+      ->setDisplayOptions('form', array(
         'type' => 'string_textarea',
         'weight' => 25,
-        'settings' => [
+        'settings' => array(
           'rows' => 4,
-        ],
-      ]);
+        ),
+      ));
 
     $fields['revision_translation_affected'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Revision translation affected'))
@@ -495,7 +510,7 @@ class Node extends ContentEntityBase implements NodeInterface {
    *   An array of default values.
    */
   public static function getCurrentUserId() {
-    return [\Drupal::currentUser()->id()];
+    return array(\Drupal::currentUser()->id());
   }
 
 }

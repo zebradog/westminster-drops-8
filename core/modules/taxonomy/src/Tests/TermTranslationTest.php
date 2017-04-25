@@ -20,23 +20,23 @@ class TermTranslationTest extends TaxonomyTestBase {
    *
    * @var array
    */
-  protected $termTranslationMap = [
+  protected $termTranslationMap = array(
     'one' => 'translatedOne',
     'two' => 'translatedTwo',
     'three' => 'translatedThree',
-  ];
+  );
 
   /**
    * Created terms.
    *
    * @var \Drupal\taxonomy\Entity\Term[]
    */
-  protected $terms = [];
+  protected $terms = array();
 
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['taxonomy', 'language', 'content_translation'];
+  public static $modules = array('taxonomy', 'language', 'content_translation');
 
   /**
    * {@inheritdoc}
@@ -55,7 +55,7 @@ class TermTranslationTest extends TaxonomyTestBase {
    */
   public function testTranslatedBreadcrumbs() {
     // Ensure non-translated breadcrumb is correct.
-    $breadcrumb = [Url::fromRoute('<front>')->toString() => 'Home'];
+    $breadcrumb = array(Url::fromRoute('<front>')->toString() => 'Home');
     foreach ($this->terms as $term) {
       $breadcrumb[$term->url()] = $term->label();
     }
@@ -69,7 +69,7 @@ class TermTranslationTest extends TaxonomyTestBase {
     $languages = \Drupal::languageManager()->getLanguages();
 
     // Construct the expected translated breadcrumb.
-    $breadcrumb = [Url::fromRoute('<front>', [], ['language' => $languages[$this->translateToLangcode]])->toString() => 'Home'];
+    $breadcrumb = array(Url::fromRoute('<front>', [], ['language' => $languages[$this->translateToLangcode]])->toString() => 'Home');
     foreach ($this->terms as $term) {
       $translated = $term->getTranslation($this->translateToLangcode);
       $url = $translated->url('canonical', ['language' => $languages[$this->translateToLangcode]]);
@@ -87,14 +87,14 @@ class TermTranslationTest extends TaxonomyTestBase {
   /**
    * Test translation of terms are showed in the node.
    */
-  public function testTermsTranslation() {
+  protected function testTermsTranslation() {
 
     // Set the display of the term reference field on the article content type
     // to "Check boxes/radio buttons".
     entity_get_form_display('node', 'article', 'default')
-      ->setComponent($this->termFieldName, [
+      ->setComponent($this->termFieldName, array(
         'type' => 'options_buttons',
-      ])
+      ))
       ->save();
     $this->drupalLogin($this->drupalCreateUser(['create article content']));
 
@@ -118,15 +118,15 @@ class TermTranslationTest extends TaxonomyTestBase {
     $parent_vid = 0;
     foreach ($this->termTranslationMap as $name => $translation) {
 
-      $term = $this->createTerm($this->vocabulary, [
+      $term = $this->createTerm($this->vocabulary, array(
         'name' => $name,
         'langcode' => $this->baseLangcode,
         'parent' => $parent_vid,
-      ]);
+      ));
 
-      $term->addTranslation($this->translateToLangcode, [
+      $term->addTranslation($this->translateToLangcode, array(
         'name' => $translation,
-      ]);
+      ));
       $term->save();
 
       // Each term is nested under the last.

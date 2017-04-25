@@ -2,9 +2,7 @@
 
 namespace Drupal\KernelTests\Core\Routing;
 
-use Drupal\Core\Cache\MemoryBackend;
 use Drupal\Core\KeyValueStore\KeyValueMemoryFactory;
-use Drupal\Core\Lock\NullLockBackend;
 use Drupal\Core\State\State;
 use Drupal\KernelTests\KernelTestBase;
 use Symfony\Component\Routing\Route;
@@ -38,13 +36,13 @@ class MatcherDumperTest extends KernelTestBase {
     parent::setUp();
 
     $this->fixtures = new RoutingFixtures();
-    $this->state = new State(new KeyValueMemoryFactory(), new MemoryBackend('test'), new NullLockBackend());
+    $this->state = new State(new KeyValueMemoryFactory());
   }
 
   /**
    * Confirms that the dumper can be instantiated successfully.
    */
-  public function testCreate() {
+  function testCreate() {
     $connection = Database::getConnection();
     $dumper = new MatcherDumper($connection, $this->state);
 
@@ -55,7 +53,7 @@ class MatcherDumperTest extends KernelTestBase {
   /**
    * Confirms that we can add routes to the dumper.
    */
-  public function testAddRoutes() {
+  function testAddRoutes() {
     $connection = Database::getConnection();
     $dumper = new MatcherDumper($connection, $this->state);
 
@@ -76,7 +74,7 @@ class MatcherDumperTest extends KernelTestBase {
   /**
    * Confirms that we can add routes to the dumper when it already has some.
    */
-  public function testAddAdditionalRoutes() {
+  function testAddAdditionalRoutes() {
     $connection = Database::getConnection();
     $dumper = new MatcherDumper($connection, $this->state);
 
@@ -125,9 +123,9 @@ class MatcherDumperTest extends KernelTestBase {
 
     $this->fixtures->createTables($connection);
 
-    $dumper->dump(['provider' => 'test']);
+    $dumper->dump(array('provider' => 'test'));
 
-    $record = $connection->query("SELECT * FROM {test_routes} WHERE name= :name", [':name' => 'test_route'])->fetchObject();
+    $record = $connection->query("SELECT * FROM {test_routes} WHERE name= :name", array(':name' => 'test_route'))->fetchObject();
 
     $loaded_route = unserialize($record->route);
 
@@ -155,15 +153,15 @@ class MatcherDumperTest extends KernelTestBase {
 
     $this->fixtures->createTables($connection);
 
-    $dumper->dump(['provider' => 'test']);
+    $dumper->dump(array('provider' => 'test'));
     // Using binary for readability, we expect a 0 at any wildcard slug. They
     // should be ordered from longest to shortest.
-    $expected = [
+    $expected = array(
       bindec('1011111'),
       bindec('10111'),
       bindec('111'),
       bindec('101'),
-    ];
+    );
     $this->assertEqual($this->state->get('routing.menu_masks.test_routes'), $expected);
   }
 

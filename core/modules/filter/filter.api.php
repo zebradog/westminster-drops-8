@@ -18,9 +18,9 @@
  */
 function hook_filter_info_alter(&$info) {
   // Alter the default settings of the URL filter provided by core.
-  $info['filter_url']['default_settings'] = [
+  $info['filter_url']['default_settings'] = array(
     'filter_url_length' => 100,
-  ];
+  );
 }
 
 /**

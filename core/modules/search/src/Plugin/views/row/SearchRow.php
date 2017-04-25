@@ -22,7 +22,7 @@ class SearchRow extends RowPluginBase {
   protected function defineOptions() {
     $options = parent::defineOptions();
 
-    $options['score'] = ['default' => TRUE];
+    $options['score'] = array('default' => TRUE);
 
     return $options;
   }
@@ -31,23 +31,23 @@ class SearchRow extends RowPluginBase {
    * {@inheritdoc}
    */
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
-    $form['score'] = [
+    $form['score'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Display score'),
       '#default_value' => $this->options['score'],
-    ];
+    );
   }
 
   /**
    * {@inheritdoc}
    */
   public function render($row) {
-    return [
+    return array(
       '#theme' => $this->themeFunctions(),
       '#view' => $this->view,
       '#options' => $this->options,
       '#row' => $row,
-    ];
+    );
   }
 
 }

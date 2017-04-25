@@ -15,13 +15,13 @@ class ConfigDraggableListBuilderTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['config_test'];
+  public static $modules = array('config_test');
 
   /**
    * Test draggable lists.
    */
   public function testDraggableList() {
-    $this->drupalLogin($this->drupalCreateUser(['administer permissions']));
+    $this->drupalLogin($this->drupalCreateUser(array('administer permissions')));
 
     // Create more than 50 roles.
     for ($i = 0; $i < 51; $i++) {

@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\hal\Functional\EntityResource\Node;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Tests\hal\Functional\EntityResource\HalEntityNormalizationTrait;
 use Drupal\Tests\rest\Functional\AnonResourceTestTrait;
 use Drupal\Tests\rest\Functional\EntityResource\Node\NodeResourceTestBase;
@@ -29,6 +30,11 @@ class NodeHalJsonAnonTest extends NodeResourceTestBase {
    * {@inheritdoc}
    */
   protected static $mimeType = 'application/hal+json';
+
+  /**
+   * {@inheritdoc}
+   */
+  protected static $expectedErrorMimeType = 'application/json';
 
   /**
    * {@inheritdoc}
@@ -118,6 +124,14 @@ class NodeHalJsonAnonTest extends NodeResourceTestBase {
         ],
       ],
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getExpectedCacheContexts() {
+    // The 'url.site' cache context is added for '_links' in the response.
+    return Cache::mergeContexts(parent::getExpectedCacheContexts(), ['url.site']);
   }
 
 }

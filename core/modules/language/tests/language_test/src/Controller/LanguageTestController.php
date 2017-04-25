@@ -60,7 +60,7 @@ class LanguageTestController implements ContainerInjectionInterface {
    *   Testing feedback based on (translated) entity title.
    */
   public function testEntity(ConfigurableLanguageInterface $configurable_language) {
-    return ['#markup' => $this->t('Loaded %label.', ['%label' => $configurable_language->label()])];
+    return array('#markup' => $this->t('Loaded %label.', array('%label' => $configurable_language->label())));
   }
 
   /**
@@ -72,43 +72,43 @@ class LanguageTestController implements ContainerInjectionInterface {
   public function typeLinkActiveClass() {
     // We assume that 'en' and 'fr' have been configured.
     $languages = $this->languageManager->getLanguages();
-    return [
-      'no_language' => [
+    return array(
+      'no_language' => array(
         '#type' => 'link',
         '#title' => t('Link to the current path with no langcode provided.'),
         '#url' => Url::fromRoute('<current>'),
-        '#options' => [
-          'attributes' => [
+        '#options' => array(
+          'attributes' => array(
             'id' => 'no_lang_link',
-          ],
+          ),
           'set_active_class' => TRUE,
-        ],
-      ],
-      'fr' => [
+        ),
+      ),
+      'fr' => array(
         '#type' => 'link',
         '#title' => t('Link to a French version of the current path.'),
         '#url' => Url::fromRoute('<current>'),
-        '#options' => [
+        '#options' => array(
           'language' => $languages['fr'],
-          'attributes' => [
+          'attributes' => array(
             'id' => 'fr_link',
-          ],
+          ),
           'set_active_class' => TRUE,
-        ],
-      ],
-      'en' => [
+        ),
+      ),
+      'en' => array(
         '#type' => 'link',
         '#title' => t('Link to an English version of the current path.'),
         '#url' => Url::fromRoute('<current>'),
-        '#options' => [
+        '#options' => array(
           'language' => $languages['en'],
-          'attributes' => [
+          'attributes' => array(
             'id' => 'en_link',
-          ],
+          ),
           'set_active_class' => TRUE,
-        ],
-      ],
-    ];
+        ),
+      ),
+    );
   }
 
   /**
@@ -130,7 +130,7 @@ class LanguageTestController implements ContainerInjectionInterface {
     else {
       $base_path = $request->getBasePath();
     }
-    $sub_request = Request::create($base_path . '/user', 'GET', $request->query->all(), $request->cookies->all(), [], $server);
+    $sub_request = Request::create($base_path . '/user', 'GET', $request->query->all(), $request->cookies->all(), array(), $server);
     return $this->httpKernel->handle($sub_request, HttpKernelInterface::SUB_REQUEST);
   }
 

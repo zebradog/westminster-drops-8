@@ -19,16 +19,16 @@ class FieldInstancePerFormDisplay extends DrupalSqlBase {
    */
   public function query() {
     $query = $this->select('field_config_instance', 'fci')
-      ->fields('fci', [
+      ->fields('fci', array(
         'field_name',
         'bundle',
         'data',
         'entity_type'
-      ])
-      ->fields('fc', [
+      ))
+      ->fields('fc', array(
         'type',
         'module',
-      ]);
+      ));
     $query->join('field_config', 'fc', 'fci.field_id = fc.id');
     return $query;
   }
@@ -47,27 +47,27 @@ class FieldInstancePerFormDisplay extends DrupalSqlBase {
    * {@inheritdoc}
    */
   public function fields() {
-    return [
+    return array(
       'field_name' => $this->t('The machine name of field.'),
       'bundle' => $this->t('Content type where this field is used.'),
       'data' => $this->t('Field configuration data.'),
       'entity_type' => $this->t('The entity type.'),
-    ];
+    );
   }
 
   /**
    * {@inheritdoc}
    */
   public function getIds() {
-    return [
-      'bundle' => [
+    return array(
+      'bundle' => array(
         'type' => 'string',
-      ],
-      'field_name' => [
+      ),
+      'field_name' => array(
         'type' => 'string',
         'alias' => 'fci',
-      ],
-    ];
+      ),
+    );
   }
 
 }

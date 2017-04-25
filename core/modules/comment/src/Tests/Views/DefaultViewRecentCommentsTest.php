@@ -22,7 +22,7 @@ class DefaultViewRecentCommentsTest extends ViewTestBase {
    *
    * @var array
    */
-  public static $modules = ['node', 'comment', 'block'];
+  public static $modules = array('node', 'comment', 'block');
 
   /**
    * Number of results for the Master display.
@@ -50,7 +50,7 @@ class DefaultViewRecentCommentsTest extends ViewTestBase {
    *
    * @var array
    */
-  protected $commentsCreated = [];
+  protected $commentsCreated = array();
 
   /**
    * Contains the node object used for comments of this test.
@@ -66,9 +66,9 @@ class DefaultViewRecentCommentsTest extends ViewTestBase {
     $content_type = $this->drupalCreateContentType();
 
     // Add a node of the new content type.
-    $node_data = [
+    $node_data = array(
       'type' => $content_type->id(),
-    ];
+    );
 
     $this->addDefaultCommentField('node', $content_type->id());
     $this->node = $this->drupalCreateNode($node_data);
@@ -79,12 +79,12 @@ class DefaultViewRecentCommentsTest extends ViewTestBase {
     // Create some comments and attach them to the created node.
     for ($i = 0; $i < $this->masterDisplayResults; $i++) {
       /** @var \Drupal\comment\CommentInterface $comment */
-      $comment = Comment::create([
+      $comment = Comment::create(array(
         'status' => CommentInterface::PUBLISHED,
         'field_name' => 'comment',
         'entity_type' => 'node',
         'entity_id' => $this->node->id(),
-      ]);
+      ));
       $comment->setOwnerId(0);
       $comment->setSubject('Test comment ' . $i);
       $comment->comment_body->value = 'Test body ' . $i;
@@ -116,12 +116,12 @@ class DefaultViewRecentCommentsTest extends ViewTestBase {
     $view->setDisplay('block_1');
     $this->executeView($view);
 
-    $map = [
+    $map = array(
       'subject' => 'subject',
       'cid' => 'cid',
       'comment_field_data_created' => 'created'
-    ];
-    $expected_result = [];
+    );
+    $expected_result = array();
     foreach (array_values($this->commentsCreated) as $key => $comment) {
       $expected_result[$key]['subject'] = $comment->getSubject();
       $expected_result[$key]['cid'] = $comment->id();
@@ -132,7 +132,7 @@ class DefaultViewRecentCommentsTest extends ViewTestBase {
     // Check the number of results given by the display is the expected.
     $this->assertEqual(sizeof($view->result), $this->blockDisplayResults,
       format_string('There are exactly @results comments. Expected @expected',
-        ['@results' => count($view->result), '@expected' => $this->blockDisplayResults]
+        array('@results' => count($view->result), '@expected' => $this->blockDisplayResults)
       )
     );
   }

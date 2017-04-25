@@ -19,47 +19,47 @@ class HandlerFilterUserNameTest extends ViewTestBase {
    *
    * @var array
    */
-  public static $modules = ['views_ui', 'user_test_views'];
+  public static $modules = array('views_ui', 'user_test_views');
 
   /**
    * Views used by this test.
    *
    * @var array
    */
-  public static $testViews = ['test_user_name'];
+  public static $testViews = array('test_user_name');
 
   /**
    * Accounts used by this test.
    *
    * @var array
    */
-  protected $accounts = [];
+  protected $accounts = array();
 
   /**
    * Usernames of $accounts.
    *
    * @var array
    */
-  protected $names = [];
+  protected $names = array();
 
   /**
    * Stores the column map for this testCase.
    *
    * @var array
    */
-  public $columnMap = [
+  public $columnMap = array(
     'uid' => 'uid',
-  ];
+  );
 
   protected function setUp() {
     parent::setUp();
 
-    ViewTestData::createTestViews(get_class($this), ['user_test_views']);
+    ViewTestData::createTestViews(get_class($this), array('user_test_views'));
 
     $this->enableViewsTestModule();
 
-    $this->accounts = [];
-    $this->names = [];
+    $this->accounts = array();
+    $this->names = array();
     for ($i = 0; $i < 3; $i++) {
       $this->accounts[] = $account = $this->drupalCreateUser();
       $this->names[] = $account->label();
@@ -74,10 +74,10 @@ class HandlerFilterUserNameTest extends ViewTestBase {
     $view = Views::getView('test_user_name');
 
     $view->initHandlers();
-    $view->filter['uid']->value = [$this->accounts[0]->id()];
+    $view->filter['uid']->value = array($this->accounts[0]->id());
 
     $this->executeView($view);
-    $this->assertIdenticalResultset($view, [['uid' => $this->accounts[0]->id()]], $this->columnMap);
+    $this->assertIdenticalResultset($view, array(array('uid' => $this->accounts[0]->id())), $this->columnMap);
 
     $this->assertEqual($view->filter['uid']->getValueOptions(), NULL);
   }
@@ -86,40 +86,40 @@ class HandlerFilterUserNameTest extends ViewTestBase {
    * Tests using the user interface.
    */
   public function testAdminUserInterface() {
-    $admin_user = $this->drupalCreateUser(['administer views', 'administer site configuration']);
+    $admin_user = $this->drupalCreateUser(array('administer views', 'administer site configuration'));
     $this->drupalLogin($admin_user);
 
     $path = 'admin/structure/views/nojs/handler/test_user_name/default/filter/uid';
     $this->drupalGet($path);
 
     // Pass in an invalid username, the validation should catch it.
-    $users = [$this->randomMachineName()];
+    $users = array($this->randomMachineName());
     $users = array_map('strtolower', $users);
-    $edit = [
+    $edit = array(
       'options[value]' => implode(', ', $users)
-    ];
+    );
     $this->drupalPostForm($path, $edit, t('Apply'));
-    $this->assertRaw(t('There are no entities matching "%value".', ['%value' => implode(', ', $users)]));
+    $this->assertRaw(t('There are no entities matching "%value".', array('%value' => implode(', ', $users))));
 
     // Pass in an invalid username and a valid username.
     $random_name = $this->randomMachineName();
-    $users = [$random_name, $this->names[0]];
+    $users = array($random_name, $this->names[0]);
     $users = array_map('strtolower', $users);
-    $edit = [
+    $edit = array(
       'options[value]' => implode(', ', $users)
-    ];
-    $users = [$users[0]];
+    );
+    $users = array($users[0]);
     $this->drupalPostForm($path, $edit, t('Apply'));
-    $this->assertRaw(t('There are no entities matching "%value".', ['%value' => implode(', ', $users)]));
+    $this->assertRaw(t('There are no entities matching "%value".', array('%value' => implode(', ', $users))));
 
     // Pass in just valid usernames.
     $users = $this->names;
     $users = array_map('strtolower', $users);
-    $edit = [
+    $edit = array(
       'options[value]' => implode(', ', $users)
-    ];
+    );
     $this->drupalPostForm($path, $edit, t('Apply'));
-    $this->assertNoRaw(t('There are no entities matching "%value".', ['%value' => implode(', ', $users)]));
+    $this->assertNoRaw(t('There are no entities matching "%value".', array('%value' => implode(', ', $users))));
   }
 
   /**
@@ -128,14 +128,14 @@ class HandlerFilterUserNameTest extends ViewTestBase {
   public function testExposedFilter() {
     $path = 'test_user_name';
 
-    $options = [];
+    $options = array();
 
     // Pass in an invalid username, the validation should catch it.
-    $users = [$this->randomMachineName()];
+    $users = array($this->randomMachineName());
     $users = array_map('strtolower', $users);
     $options['query']['uid'] = implode(', ', $users);
     $this->drupalGet($path, $options);
-    $this->assertRaw(t('There are no entities matching "%value".', ['%value' => implode(', ', $users)]));
+    $this->assertRaw(t('There are no entities matching "%value".', array('%value' => implode(', ', $users))));
 
     // Pass in an invalid target_id in for the entity_autocomplete value format.
     // There should be no errors, but all results should be returned as the
@@ -149,13 +149,13 @@ class HandlerFilterUserNameTest extends ViewTestBase {
     }
 
     // Pass in an invalid username and a valid username.
-    $users = [$this->randomMachineName(), $this->names[0]];
+    $users = array($this->randomMachineName(), $this->names[0]);
     $users = array_map('strtolower', $users);
     $options['query']['uid'] = implode(', ', $users);
-    $users = [$users[0]];
+    $users = array($users[0]);
 
     $this->drupalGet($path, $options);
-    $this->assertRaw(t('There are no entities matching "%value".', ['%value' => implode(', ', $users)]));
+    $this->assertRaw(t('There are no entities matching "%value".', array('%value' => implode(', ', $users))));
 
     // Pass in just valid usernames.
     $users = $this->names;

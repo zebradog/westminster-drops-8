@@ -33,21 +33,21 @@ class Textarea extends FormElement {
    */
   public function getInfo() {
     $class = get_class($this);
-    return [
+    return array(
       '#input' => TRUE,
       '#cols' => 60,
       '#rows' => 5,
       '#resizable' => 'vertical',
-      '#process' => [
-        [$class, 'processAjaxForm'],
-        [$class, 'processGroup'],
-      ],
-      '#pre_render' => [
-        [$class, 'preRenderGroup'],
-      ],
+      '#process' => array(
+        array($class, 'processAjaxForm'),
+        array($class, 'processGroup'),
+      ),
+      '#pre_render' => array(
+        array($class, 'preRenderGroup'),
+      ),
       '#theme' => 'textarea',
-      '#theme_wrappers' => ['form_element'],
-    ];
+      '#theme_wrappers' => array('form_element'),
+    );
   }
 
   /**

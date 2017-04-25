@@ -19,14 +19,14 @@ class ScaleAndCrop extends GDImageToolkitOperationBase {
    * {@inheritdoc}
    */
   protected function arguments() {
-    return [
-      'width' => [
+    return array(
+      'width' => array(
         'description' => 'The target width, in pixels',
-      ],
-      'height' => [
+      ),
+      'height' => array(
         'description' => 'The target height, in pixels',
-      ],
-    ];
+      ),
+    );
   }
 
   /**
@@ -40,10 +40,10 @@ class ScaleAndCrop extends GDImageToolkitOperationBase {
 
     $arguments['x'] = (int) round(($actualWidth * $scaleFactor - $arguments['width']) / 2);
     $arguments['y'] = (int) round(($actualHeight * $scaleFactor - $arguments['height']) / 2);
-    $arguments['resize'] = [
+    $arguments['resize'] = array(
       'width' => (int) round($actualWidth * $scaleFactor),
       'height' => (int) round($actualHeight * $scaleFactor),
-    ];
+    );
 
     // Fail when width or height are 0 or negative.
     if ($arguments['width'] <= 0) {
@@ -59,7 +59,7 @@ class ScaleAndCrop extends GDImageToolkitOperationBase {
   /**
    * {@inheritdoc}
    */
-  protected function execute(array $arguments = []) {
+  protected function execute(array $arguments = array()) {
     return $this->getToolkit()->apply('resize', $arguments['resize'])
         && $this->getToolkit()->apply('crop', $arguments);
   }

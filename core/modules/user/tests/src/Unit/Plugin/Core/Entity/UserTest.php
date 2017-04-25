@@ -14,20 +14,20 @@ class UserTest extends UserSessionTest {
   /**
    * {@inheritdoc}
    */
-  protected function createUserSession(array $rids = [], $authenticated = FALSE) {
+  protected function createUserSession(array $rids = array(), $authenticated = FALSE) {
     $user = $this->getMockBuilder('Drupal\user\Entity\User')
       ->disableOriginalConstructor()
-      ->setMethods(['get', 'id'])
+      ->setMethods(array('get', 'id'))
       ->getMock();
     $user->expects($this->any())
       ->method('id')
       // @todo Also test the uid = 1 handling.
       ->will($this->returnValue($authenticated ? 2 : 0));
-    $roles = [];
+    $roles = array();
     foreach ($rids as $rid) {
-      $roles[] = (object) [
+      $roles[] = (object) array(
         'target_id' => $rid,
-      ];
+      );
     }
     $user->expects($this->any())
       ->method('get')
@@ -44,14 +44,14 @@ class UserTest extends UserSessionTest {
    */
   public function testUserGetRoles() {
     // Anonymous user.
-    $user = $this->createUserSession([]);
-    $this->assertEquals([RoleInterface::ANONYMOUS_ID], $user->getRoles());
-    $this->assertEquals([], $user->getRoles(TRUE));
+    $user = $this->createUserSession(array());
+    $this->assertEquals(array(RoleInterface::ANONYMOUS_ID), $user->getRoles());
+    $this->assertEquals(array(), $user->getRoles(TRUE));
 
     // Authenticated user.
-    $user = $this->createUserSession([], TRUE);
-    $this->assertEquals([RoleInterface::AUTHENTICATED_ID], $user->getRoles());
-    $this->assertEquals([], $user->getRoles(TRUE));
+    $user = $this->createUserSession(array(), TRUE);
+    $this->assertEquals(array(RoleInterface::AUTHENTICATED_ID), $user->getRoles());
+    $this->assertEquals(array(), $user->getRoles(TRUE));
   }
 
 }

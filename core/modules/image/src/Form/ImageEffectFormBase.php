@@ -64,14 +64,14 @@ abstract class ImageEffectFormBase extends FormBase {
     }
 
     $form['#attached']['library'][] = 'image/admin';
-    $form['uuid'] = [
+    $form['uuid'] = array(
       '#type' => 'value',
       '#value' => $this->imageEffect->getUuid(),
-    ];
-    $form['id'] = [
+    );
+    $form['id'] = array(
       '#type' => 'value',
       '#value' => $this->imageEffect->getPluginId(),
-    ];
+    );
 
     $form['data'] = [];
     $subform_state = SubformState::createForSubform($form['data'], $form, $form_state);
@@ -79,22 +79,22 @@ abstract class ImageEffectFormBase extends FormBase {
     $form['data']['#tree'] = TRUE;
 
     // Check the URL for a weight, then the image effect, otherwise use default.
-    $form['weight'] = [
+    $form['weight'] = array(
       '#type' => 'hidden',
       '#value' => $request->query->has('weight') ? (int) $request->query->get('weight') : $this->imageEffect->getWeight(),
-    ];
+    );
 
-    $form['actions'] = ['#type' => 'actions'];
-    $form['actions']['submit'] = [
+    $form['actions'] = array('#type' => 'actions');
+    $form['actions']['submit'] = array(
       '#type' => 'submit',
       '#button_type' => 'primary',
-    ];
-    $form['actions']['cancel'] = [
+    );
+    $form['actions']['cancel'] = array(
       '#type' => 'link',
       '#title' => $this->t('Cancel'),
       '#url' => $this->imageStyle->urlInfo('edit-form'),
       '#attributes' => ['class' => ['button']],
-    ];
+    );
     return $form;
   }
 

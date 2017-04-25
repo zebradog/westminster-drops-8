@@ -14,9 +14,9 @@ class DrupalSqlBaseTest extends MigrateTestCase {
   /**
    * Define bare minimum migration configuration.
    */
-  protected $migrationConfiguration = [
+  protected $migrationConfiguration = array(
     'id' => 'DrupalSqlBase',
-  ];
+  );
 
   /**
    * @var \Drupal\migrate_drupal\Plugin\migrate\source\DrupalSqlBase
@@ -26,17 +26,17 @@ class DrupalSqlBaseTest extends MigrateTestCase {
   /**
    * Minimum database contents needed to test DrupalSqlBase.
    */
-  protected $databaseContents = [
-    'system' => [
-      [
+  protected $databaseContents = array(
+    'system' => array(
+      array(
         'filename' => 'sites/all/modules/module1',
         'name' => 'module1',
         'type' => 'module',
         'status' => 0,
         'schema_version' => -1,
-      ],
-    ],
-  ];
+      ),
+    ),
+  );
 
   /**
    * @covers ::checkRequirements

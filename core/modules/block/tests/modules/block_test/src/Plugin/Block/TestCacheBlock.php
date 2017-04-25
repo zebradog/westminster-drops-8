@@ -20,7 +20,7 @@ class TestCacheBlock extends BlockBase {
   public function build() {
     $content = \Drupal::state()->get('block_test.content');
 
-    $build = [];
+    $build = array();
     if (!empty($content)) {
       $build['#markup'] = $content;
     }

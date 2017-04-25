@@ -16,12 +16,12 @@ class TrustedRedirectResponse extends CacheableSecuredRedirectResponse {
    *
    * @var string[]
    */
-  protected $trustedUrls = [];
+  protected $trustedUrls = array();
 
   /**
    * {@inheritdoc}
    */
-  public function __construct($url, $status = 302, $headers = []) {
+  public function __construct($url, $status = 302, $headers = array()) {
     $this->trustedUrls[$url] = TRUE;
     parent::__construct($url, $status, $headers);
   }

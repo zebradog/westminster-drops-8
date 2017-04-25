@@ -24,22 +24,22 @@ class TestItem extends FieldItemBase {
    * {@inheritdoc}
    */
   public static function defaultStorageSettings() {
-    return [
+    return array(
       'test_field_storage_setting' => 'dummy test string',
       'changeable' => 'a changeable field storage setting',
       'unchangeable' => 'an unchangeable field storage setting',
       'translatable_storage_setting' => 'a translatable field storage setting',
-    ] + parent::defaultStorageSettings();
+    ) + parent::defaultStorageSettings();
   }
 
   /**
    * {@inheritdoc}
    */
   public static function defaultFieldSettings() {
-    return [
+    return array(
       'test_field_setting' => 'dummy test string',
       'translatable_field_setting' => 'a translatable field setting',
-    ] + parent::defaultFieldSettings();
+    ) + parent::defaultFieldSettings();
   }
 
   /**
@@ -57,30 +57,30 @@ class TestItem extends FieldItemBase {
    * {@inheritdoc}
    */
   public static function schema(FieldStorageDefinitionInterface $field_definition) {
-    return [
-      'columns' => [
-        'value' => [
+    return array(
+      'columns' => array(
+        'value' => array(
           'type' => 'int',
           'size' => 'medium',
-        ],
-      ],
-      'indexes' => [
-        'value' => ['value'],
-      ],
-    ];
+        ),
+      ),
+      'indexes' => array(
+        'value' => array('value'),
+      ),
+    );
   }
 
   /**
    * {@inheritdoc}
    */
   public function storageSettingsForm(array &$form, FormStateInterface $form_state, $has_data) {
-    $form['test_field_storage_setting'] = [
+    $form['test_field_storage_setting'] = array(
       '#type' => 'textfield',
       '#title' => t('Field test field storage setting'),
       '#default_value' => $this->getSetting('test_field_storage_setting'),
       '#required' => FALSE,
       '#description' => t('A dummy form element to simulate field storage setting.'),
-    ];
+    );
 
     return $form;
   }
@@ -89,13 +89,13 @@ class TestItem extends FieldItemBase {
    * {@inheritdoc}
    */
   public function fieldSettingsForm(array $form, FormStateInterface $form_state) {
-    $form['test_field_setting'] = [
+    $form['test_field_setting'] = array(
       '#type' => 'textfield',
       '#title' => t('Field test field setting'),
       '#default_value' => $this->getSetting('test_field_setting'),
       '#required' => FALSE,
       '#description' => t('A dummy form element to simulate field setting.'),
-    ];
+    );
 
     return $form;
   }
@@ -105,7 +105,7 @@ class TestItem extends FieldItemBase {
    */
   public function delete() {
     // Reports that delete() method is executed for testing purposes.
-    field_test_memorize('field_test_field_delete', [$this->getEntity()]);
+    field_test_memorize('field_test_field_delete', array($this->getEntity()));
   }
 
   /**
@@ -115,14 +115,14 @@ class TestItem extends FieldItemBase {
     $constraint_manager = \Drupal::typedDataManager()->getValidationConstraintManager();
     $constraints = parent::getConstraints();
 
-    $constraints[] = $constraint_manager->create('ComplexData', [
-      'value' => [
-        'TestField' => [
+    $constraints[] = $constraint_manager->create('ComplexData', array(
+      'value' => array(
+        'TestField' => array(
           'value' => -1,
-          'message' => t('%name does not accept the value @value.', ['%name' => $this->getFieldDefinition()->getLabel(), '@value' => -1]),
-        ]
-      ],
-    ]);
+          'message' => t('%name does not accept the value @value.', array('%name' => $this->getFieldDefinition()->getLabel(), '@value' => -1)),
+        )
+      ),
+    ));
 
     return $constraints;
   }

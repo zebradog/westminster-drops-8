@@ -12,25 +12,25 @@ use Drupal\views\Views;
  */
 class FilterStringTest extends ViewsKernelTestBase {
 
-  public static $modules = ['system'];
+  public static $modules = array('system');
 
   /**
    * Views used by this test.
    *
    * @var array
    */
-  public static $testViews = ['test_view'];
+  public static $testViews = array('test_view');
 
   /**
    * Map column names.
    *
    * @var array
    */
-  protected $columnMap = [
+  protected $columnMap = array(
     'views_test_data_name' => 'name',
-  ];
+  );
 
-  public function viewsData() {
+  function viewsData() {
     $data = parent::viewsData();
     $data['views_test_data']['name']['filter']['allow empty'] = TRUE;
     $data['views_test_data']['job']['filter']['allow empty'] = FALSE;
@@ -41,12 +41,12 @@ class FilterStringTest extends ViewsKernelTestBase {
 
   protected function schemaDefinition() {
     $schema = parent::schemaDefinition();
-    $schema['views_test_data']['fields']['description'] = [
+    $schema['views_test_data']['fields']['description'] = array(
       'description' => "A person's description",
       'type' => 'text',
       'not null' => FALSE,
       'size' => 'big',
-    ];
+    );
 
     return $schema;
   }
@@ -81,32 +81,32 @@ class FilterStringTest extends ViewsKernelTestBase {
     return $view;
   }
 
-  public function testFilterStringEqual() {
+  function testFilterStringEqual() {
     $view = Views::getView('test_view');
     $view->setDisplay();
 
     // Change the filtering
-    $view->displayHandlers->get('default')->overrideOption('filters', [
-      'name' => [
+    $view->displayHandlers->get('default')->overrideOption('filters', array(
+      'name' => array(
         'id' => 'name',
         'table' => 'views_test_data',
         'field' => 'name',
         'relationship' => 'none',
         'operator' => '=',
         'value' => 'Ringo',
-      ],
-    ]);
+      ),
+    ));
 
     $this->executeView($view);
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'Ringo',
-      ],
-    ];
+      ),
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
-  public function testFilterStringGroupedExposedEqual() {
+  function testFilterStringGroupedExposedEqual() {
     $filters = $this->getGroupedExposedFilters();
     $view = $this->getBasicPageView();
 
@@ -119,50 +119,50 @@ class FilterStringTest extends ViewsKernelTestBase {
 
     $this->executeView($view);
 
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'Ringo',
-      ],
-    ];
+      ),
+    );
 
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
-  public function testFilterStringNotEqual() {
+  function testFilterStringNotEqual() {
     $view = Views::getView('test_view');
     $view->setDisplay();
 
     // Change the filtering
-    $view->displayHandlers->get('default')->overrideOption('filters', [
-      'name' => [
+    $view->displayHandlers->get('default')->overrideOption('filters', array(
+      'name' => array(
         'id' => 'name',
         'table' => 'views_test_data',
         'field' => 'name',
         'relationship' => 'none',
         'operator' => '!=',
         'value' => 'Ringo',
-      ],
-    ]);
+      ),
+    ));
 
     $this->executeView($view);
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'John',
-      ],
-      [
+      ),
+      array(
         'name' => 'George',
-      ],
-      [
+      ),
+      array(
         'name' => 'Paul',
-      ],
-      [
+      ),
+      array(
         'name' => 'Meredith',
-      ],
-    ];
+      ),
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
-  public function testFilterStringGroupedExposedNotEqual() {
+  function testFilterStringGroupedExposedNotEqual() {
     $filters = $this->getGroupedExposedFilters();
     $view = $this->getBasicPageView();
 
@@ -176,51 +176,51 @@ class FilterStringTest extends ViewsKernelTestBase {
 
     $this->executeView($view);
 
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'John',
-      ],
-      [
+      ),
+      array(
         'name' => 'George',
-      ],
-      [
+      ),
+      array(
         'name' => 'Paul',
-      ],
-      [
+      ),
+      array(
         'name' => 'Meredith',
-      ],
-    ];
+      ),
+    );
 
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
-  public function testFilterStringContains() {
+  function testFilterStringContains() {
     $view = Views::getView('test_view');
     $view->setDisplay();
 
     // Change the filtering
-    $view->displayHandlers->get('default')->overrideOption('filters', [
-      'name' => [
+    $view->displayHandlers->get('default')->overrideOption('filters', array(
+      'name' => array(
         'id' => 'name',
         'table' => 'views_test_data',
         'field' => 'name',
         'relationship' => 'none',
         'operator' => 'contains',
         'value' => 'ing',
-      ],
-    ]);
+      ),
+    ));
 
     $this->executeView($view);
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'Ringo',
-      ],
-    ];
+      ),
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
 
-  public function testFilterStringGroupedExposedContains() {
+  function testFilterStringGroupedExposedContains() {
     $filters = $this->getGroupedExposedFilters();
     $view = $this->getBasicPageView();
 
@@ -233,41 +233,41 @@ class FilterStringTest extends ViewsKernelTestBase {
 
     $this->executeView($view);
 
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'Ringo',
-      ],
-    ];
+      ),
+    );
 
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
 
-  public function testFilterStringWord() {
+  function testFilterStringWord() {
     $view = Views::getView('test_view');
     $view->setDisplay();
 
     // Change the filtering
-    $view->displayHandlers->get('default')->overrideOption('filters', [
-      'description' => [
+    $view->displayHandlers->get('default')->overrideOption('filters', array(
+      'description' => array(
         'id' => 'description',
         'table' => 'views_test_data',
         'field' => 'description',
         'relationship' => 'none',
         'operator' => 'word',
         'value' => 'actor',
-      ],
-    ]);
+      ),
+    ));
 
     $this->executeView($view);
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'George',
-      ],
-      [
+      ),
+      array(
         'name' => 'Ringo',
-      ],
-    ];
+      ),
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
     $view->destroy();
 
@@ -275,64 +275,28 @@ class FilterStringTest extends ViewsKernelTestBase {
     $view->setDisplay();
 
     // Change the filtering
-    $view->displayHandlers->get('default')->overrideOption('filters', [
-      'description' => [
+    $view->displayHandlers->get('default')->overrideOption('filters', array(
+      'description' => array(
         'id' => 'description',
         'table' => 'views_test_data',
         'field' => 'description',
         'relationship' => 'none',
         'operator' => 'allwords',
         'value' => 'Richard Starkey',
-      ],
-    ]);
+      ),
+    ));
 
     $this->executeView($view);
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'Ringo',
-      ],
-    ];
+      ),
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
-    $view->destroy();
-
-    $view = Views::getView('test_view');
-    $view->setDisplay();
-
-    // Change the filtering to a sting containing only illegal characters.
-    $view->displayHandlers->get('default')->overrideOption('filters', [
-      'description' => [
-        'id' => 'description',
-        'table' => 'views_test_data',
-        'field' => 'description',
-        'relationship' => 'none',
-        'operator' => 'allwords',
-        'value' => ':-)',
-      ],
-    ]);
-
-    $this->executeView($view);
-    $resultset = [
-      [
-        'name' => 'Ringo',
-      ],
-      [
-        'name' => 'John',
-      ],
-      [
-        'name' => 'George',
-      ],
-      [
-        'name' => 'Paul',
-      ],
-      [
-        'name' => 'Meredith',
-      ],
-    ];
-    $this->assertIdenticalResultset($view, $resultset);
   }
 
 
-  public function testFilterStringGroupedExposedWord() {
+  function testFilterStringGroupedExposedWord() {
     $filters = $this->getGroupedExposedFilters();
     $view = $this->getBasicPageView();
 
@@ -345,11 +309,11 @@ class FilterStringTest extends ViewsKernelTestBase {
 
     $this->executeView($view);
 
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'Ringo',
-      ],
-    ];
+      ),
+    );
 
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
     $view->destroy();
@@ -363,43 +327,43 @@ class FilterStringTest extends ViewsKernelTestBase {
     $view->displayHandlers->get('page_1')->overrideOption('filters', $filters);
 
     $this->executeView($view);
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'George',
-      ],
-      [
+      ),
+      array(
         'name' => 'Ringo',
-      ],
-    ];
+      ),
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
-  public function testFilterStringStarts() {
+  function testFilterStringStarts() {
     $view = Views::getView('test_view');
     $view->setDisplay();
 
     // Change the filtering
-    $view->displayHandlers->get('default')->overrideOption('filters', [
-      'description' => [
+    $view->displayHandlers->get('default')->overrideOption('filters', array(
+      'description' => array(
         'id' => 'description',
         'table' => 'views_test_data',
         'field' => 'description',
         'relationship' => 'none',
         'operator' => 'starts',
         'value' => 'George',
-      ],
-    ]);
+      ),
+    ));
 
     $this->executeView($view);
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'George',
-      ],
-    ];
+      ),
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
-  public function testFilterStringGroupedExposedStarts() {
+  function testFilterStringGroupedExposedStarts() {
     $filters = $this->getGroupedExposedFilters();
     $view = $this->getBasicPageView();
 
@@ -412,47 +376,47 @@ class FilterStringTest extends ViewsKernelTestBase {
 
     $this->executeView($view);
 
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'George',
-      ],
-    ];
+      ),
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
-  public function testFilterStringNotStarts() {
+  function testFilterStringNotStarts() {
     $view = Views::getView('test_view');
     $view->setDisplay();
 
     // Change the filtering
-    $view->displayHandlers->get('default')->overrideOption('filters', [
-      'description' => [
+    $view->displayHandlers->get('default')->overrideOption('filters', array(
+      'description' => array(
         'id' => 'description',
         'table' => 'views_test_data',
         'field' => 'description',
         'relationship' => 'none',
         'operator' => 'not_starts',
         'value' => 'George',
-      ],
-    ]);
+      ),
+    ));
 
     $this->executeView($view);
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'John',
-      ],
-      [
+      ),
+      array(
         'name' => 'Ringo',
-      ],
-      [
+      ),
+      array(
         'name' => 'Paul',
-      ],
+      ),
       // There is no Meredith returned because his description is empty
-    ];
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
-  public function testFilterStringGroupedExposedNotStarts() {
+  function testFilterStringGroupedExposedNotStarts() {
     $filters = $this->getGroupedExposedFilters();
     $view = $this->getBasicPageView();
 
@@ -465,50 +429,50 @@ class FilterStringTest extends ViewsKernelTestBase {
 
     $this->executeView($view);
 
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'John',
-      ],
-      [
+      ),
+      array(
         'name' => 'Ringo',
-      ],
-      [
+      ),
+      array(
         'name' => 'Paul',
-      ],
+      ),
       // There is no Meredith returned because his description is empty
-    ];
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
-  public function testFilterStringEnds() {
+  function testFilterStringEnds() {
     $view = Views::getView('test_view');
     $view->setDisplay();
 
     // Change the filtering
-    $view->displayHandlers->get('default')->overrideOption('filters', [
-      'description' => [
+    $view->displayHandlers->get('default')->overrideOption('filters', array(
+      'description' => array(
         'id' => 'description',
         'table' => 'views_test_data',
         'field' => 'description',
         'relationship' => 'none',
         'operator' => 'ends',
         'value' => 'Beatles.',
-      ],
-    ]);
+      ),
+    ));
 
     $this->executeView($view);
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'George',
-      ],
-      [
+      ),
+      array(
         'name' => 'Ringo',
-      ],
-    ];
+      ),
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
-  public function testFilterStringGroupedExposedEnds() {
+  function testFilterStringGroupedExposedEnds() {
     $filters = $this->getGroupedExposedFilters();
     $view = $this->getBasicPageView();
 
@@ -521,47 +485,47 @@ class FilterStringTest extends ViewsKernelTestBase {
 
     $this->executeView($view);
 
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'George',
-      ],
-      [
+      ),
+      array(
         'name' => 'Ringo',
-      ],
-    ];
+      ),
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
-  public function testFilterStringNotEnds() {
+  function testFilterStringNotEnds() {
     $view = Views::getView('test_view');
     $view->setDisplay();
 
     // Change the filtering
-    $view->displayHandlers->get('default')->overrideOption('filters', [
-      'description' => [
+    $view->displayHandlers->get('default')->overrideOption('filters', array(
+      'description' => array(
         'id' => 'description',
         'table' => 'views_test_data',
         'field' => 'description',
         'relationship' => 'none',
         'operator' => 'not_ends',
         'value' => 'Beatles.',
-      ],
-    ]);
+      ),
+    ));
 
     $this->executeView($view);
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'John',
-      ],
-      [
+      ),
+      array(
         'name' => 'Paul',
-      ],
+      ),
       // There is no Meredith returned because his description is empty
-    ];
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
-  public function testFilterStringGroupedExposedNotEnds() {
+  function testFilterStringGroupedExposedNotEnds() {
     $filters = $this->getGroupedExposedFilters();
     $view = $this->getBasicPageView();
 
@@ -574,49 +538,49 @@ class FilterStringTest extends ViewsKernelTestBase {
 
     $this->executeView($view);
 
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'John',
-      ],
-      [
+      ),
+      array(
         'name' => 'Paul',
-      ],
+      ),
       // There is no Meredith returned because his description is empty
-    ];
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
-  public function testFilterStringNot() {
+  function testFilterStringNot() {
     $view = Views::getView('test_view');
     $view->setDisplay();
 
     // Change the filtering
-    $view->displayHandlers->get('default')->overrideOption('filters', [
-      'description' => [
+    $view->displayHandlers->get('default')->overrideOption('filters', array(
+      'description' => array(
         'id' => 'description',
         'table' => 'views_test_data',
         'field' => 'description',
         'relationship' => 'none',
         'operator' => 'not',
         'value' => 'Beatles.',
-      ],
-    ]);
+      ),
+    ));
 
     $this->executeView($view);
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'John',
-      ],
-      [
+      ),
+      array(
         'name' => 'Paul',
-      ],
+      ),
       // There is no Meredith returned because his description is empty
-    ];
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
 
-  public function testFilterStringGroupedExposedNot() {
+  function testFilterStringGroupedExposedNot() {
     $filters = $this->getGroupedExposedFilters();
     $view = $this->getBasicPageView();
 
@@ -629,48 +593,48 @@ class FilterStringTest extends ViewsKernelTestBase {
 
     $this->executeView($view);
 
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'John',
-      ],
-      [
+      ),
+      array(
         'name' => 'Paul',
-      ],
+      ),
       // There is no Meredith returned because his description is empty
-    ];
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
 
   }
 
-  public function testFilterStringShorter() {
+  function testFilterStringShorter() {
     $view = Views::getView('test_view');
     $view->setDisplay();
 
     // Change the filtering
-    $view->displayHandlers->get('default')->overrideOption('filters', [
-      'name' => [
+    $view->displayHandlers->get('default')->overrideOption('filters', array(
+      'name' => array(
         'id' => 'name',
         'table' => 'views_test_data',
         'field' => 'name',
         'relationship' => 'none',
         'operator' => 'shorterthan',
         'value' => 5,
-      ],
-    ]);
+      ),
+    ));
 
     $this->executeView($view);
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'John',
-      ],
-      [
+      ),
+      array(
         'name' => 'Paul',
-      ],
-    ];
+      ),
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
-  public function testFilterStringGroupedExposedShorter() {
+  function testFilterStringGroupedExposedShorter() {
     $filters = $this->getGroupedExposedFilters();
     $view = $this->getBasicPageView();
 
@@ -682,43 +646,43 @@ class FilterStringTest extends ViewsKernelTestBase {
     $this->container->get('router.builder')->rebuild();
 
     $this->executeView($view);
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'John',
-      ],
-      [
+      ),
+      array(
         'name' => 'Paul',
-      ],
-    ];
+      ),
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
-  public function testFilterStringLonger() {
+  function testFilterStringLonger() {
     $view = Views::getView('test_view');
     $view->setDisplay();
 
     // Change the filtering
-    $view->displayHandlers->get('default')->overrideOption('filters', [
-      'name' => [
+    $view->displayHandlers->get('default')->overrideOption('filters', array(
+      'name' => array(
         'id' => 'name',
         'table' => 'views_test_data',
         'field' => 'name',
         'relationship' => 'none',
         'operator' => 'longerthan',
         'value' => 7,
-      ],
-    ]);
+      ),
+    ));
 
     $this->executeView($view);
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'Meredith',
-      ],
-    ];
+      ),
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
-  public function testFilterStringGroupedExposedLonger() {
+  function testFilterStringGroupedExposedLonger() {
     $filters = $this->getGroupedExposedFilters();
     $view = $this->getBasicPageView();
 
@@ -730,40 +694,40 @@ class FilterStringTest extends ViewsKernelTestBase {
     $this->container->get('router.builder')->rebuild();
 
     $this->executeView($view);
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'Meredith',
-      ],
-    ];
+      ),
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
 
-  public function testFilterStringEmpty() {
+  function testFilterStringEmpty() {
     $view = Views::getView('test_view');
     $view->setDisplay();
 
     // Change the filtering
-    $view->displayHandlers->get('default')->overrideOption('filters', [
-      'description' => [
+    $view->displayHandlers->get('default')->overrideOption('filters', array(
+      'description' => array(
         'id' => 'description',
         'table' => 'views_test_data',
         'field' => 'description',
         'relationship' => 'none',
         'operator' => 'empty',
-      ],
-    ]);
+      ),
+    ));
 
     $this->executeView($view);
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'Meredith',
-      ],
-    ];
+      ),
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
-  public function testFilterStringGroupedExposedEmpty() {
+  function testFilterStringGroupedExposedEmpty() {
     $filters = $this->getGroupedExposedFilters();
     $view = $this->getBasicPageView();
 
@@ -775,119 +739,119 @@ class FilterStringTest extends ViewsKernelTestBase {
     $this->container->get('router.builder')->rebuild();
 
     $this->executeView($view);
-    $resultset = [
-      [
+    $resultset = array(
+      array(
         'name' => 'Meredith',
-      ],
-    ];
+      ),
+    );
     $this->assertIdenticalResultset($view, $resultset, $this->columnMap);
   }
 
   protected function getGroupedExposedFilters() {
-    $filters = [
-      'name' => [
+    $filters = array(
+      'name' => array(
         'id' => 'name',
         'plugin_id' => 'string',
         'table' => 'views_test_data',
         'field' => 'name',
         'relationship' => 'none',
         'exposed' => TRUE,
-        'expose' => [
+        'expose' => array(
           'operator' => 'name_op',
           'label' => 'name',
           'identifier' => 'name',
-        ],
+        ),
         'is_grouped' => TRUE,
-        'group_info' => [
+        'group_info' => array(
           'label' => 'name',
           'identifier' => 'name',
           'default_group' => 'All',
-          'group_items' => [
-            1 => [
+          'group_items' => array(
+            1 => array(
               'title' => 'Is Ringo',
               'operator' => '=',
               'value' => 'Ringo',
-            ],
-            2 => [
+            ),
+            2 => array(
               'title' => 'Is not Ringo',
               'operator' => '!=',
               'value' => 'Ringo',
-            ],
-            3 => [
+            ),
+            3 => array(
               'title' => 'Contains ing',
               'operator' => 'contains',
               'value' => 'ing',
-            ],
-            4 => [
+            ),
+            4 => array(
               'title' => 'Shorter than 5 letters',
               'operator' => 'shorterthan',
               'value' => 5,
-            ],
-            5 => [
+            ),
+            5 => array(
               'title' => 'Longer than 7 letters',
               'operator' => 'longerthan',
               'value' => 7,
-            ],
-          ],
-        ],
-      ],
-      'description' => [
+            ),
+          ),
+        ),
+      ),
+      'description' => array(
         'id' => 'description',
         'plugin_id' => 'string',
         'table' => 'views_test_data',
         'field' => 'description',
         'relationship' => 'none',
         'exposed' => TRUE,
-        'expose' => [
+        'expose' => array(
           'operator' => 'description_op',
           'label' => 'description',
           'identifier' => 'description',
-        ],
+        ),
         'is_grouped' => TRUE,
-        'group_info' => [
+        'group_info' => array(
           'label' => 'description',
           'identifier' => 'description',
           'default_group' => 'All',
-          'group_items' => [
-            1 => [
+          'group_items' => array(
+            1 => array(
               'title' => 'Contains the word: Actor',
               'operator' => 'word',
               'value' => 'actor',
-            ],
-            2 => [
+            ),
+            2 => array(
               'title' => 'Starts with George',
               'operator' => 'starts',
               'value' => 'George',
-            ],
-            3 => [
+            ),
+            3 => array(
               'title' => 'Not Starts with: George',
               'operator' => 'not_starts',
               'value' => 'George',
-            ],
-            4 => [
+            ),
+            4 => array(
               'title' => 'Ends with: Beatles',
               'operator' => 'ends',
               'value' => 'Beatles.',
-            ],
-            5 => [
+            ),
+            5 => array(
               'title' => 'Not Ends with: Beatles',
               'operator' => 'not_ends',
               'value' => 'Beatles.',
-            ],
-            6 => [
+            ),
+            6 => array(
               'title' => 'Does not contain: Beatles',
               'operator' => 'not',
               'value' => 'Beatles.',
-            ],
-            7 => [
+            ),
+            7 => array(
               'title' => 'Empty description',
               'operator' => 'empty',
               'value' => '',
-            ],
-          ],
-        ],
-      ],
-    ];
+            ),
+          ),
+        ),
+      ),
+    );
     return $filters;
   }
 

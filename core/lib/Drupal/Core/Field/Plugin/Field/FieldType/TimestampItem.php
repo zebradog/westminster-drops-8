@@ -13,7 +13,7 @@ use Drupal\Core\TypedData\DataDefinition;
  *   id = "timestamp",
  *   label = @Translation("Timestamp"),
  *   description = @Translation("An entity field containing a UNIX timestamp value."),
- *   default_widget = "datetime_timestamp",
+ *   default_widget = "datetime_default",
  *   default_formatter = "timestamp",
  *   constraints = {
  *     "ComplexData" = {
@@ -44,13 +44,13 @@ class TimestampItem extends FieldItemBase {
    * {@inheritdoc}
    */
   public static function schema(FieldStorageDefinitionInterface $field_definition) {
-    return [
-      'columns' => [
-        'value' => [
+    return array(
+      'columns' => array(
+        'value' => array(
           'type' => 'int',
-        ],
-      ],
-    ];
+        ),
+      ),
+    );
   }
 
 }

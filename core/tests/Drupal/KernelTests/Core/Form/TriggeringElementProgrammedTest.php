@@ -25,27 +25,27 @@ class TriggeringElementProgrammedTest extends KernelTestBase implements FormInte
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['one'] = [
+    $form['one'] = array(
       '#type' => 'textfield',
       '#title' => 'One',
       '#required' => TRUE,
-    ];
-    $form['two'] = [
+    );
+    $form['two'] = array(
       '#type' => 'textfield',
       '#title' => 'Two',
       '#required' => TRUE,
-    ];
-    $form['actions'] = ['#type' => 'actions'];
+    );
+    $form['actions'] = array('#type' => 'actions');
     $user_input = $form_state->getUserInput();
-    $form['actions']['submit'] = [
+    $form['actions']['submit'] = array(
       '#type' => 'submit',
       '#value' => 'Save',
-      '#limit_validation_errors' => [
-        [$user_input['section']],
-      ],
+      '#limit_validation_errors' => array(
+        array($user_input['section']),
+      ),
       // Required for #limit_validation_errors.
-      '#submit' => [[$this, 'submitForm']],
-    ];
+      '#submit' => array(array($this, 'submitForm')),
+    );
     return $form;
   }
 
@@ -66,7 +66,7 @@ class TriggeringElementProgrammedTest extends KernelTestBase implements FormInte
   /**
    * Tests that #limit_validation_errors of the only submit button takes effect.
    */
-  public function testLimitValidationErrors() {
+  function testLimitValidationErrors() {
     // Programmatically submit the form.
     $form_state = new FormState();
     $form_state->setValue('section', 'one');

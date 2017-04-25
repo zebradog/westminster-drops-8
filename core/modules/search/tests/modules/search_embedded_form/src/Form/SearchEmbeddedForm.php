@@ -23,20 +23,20 @@ class SearchEmbeddedForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $count = \Drupal::state()->get('search_embedded_form.submit_count');
 
-    $form['name'] = [
+    $form['name'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Your name'),
       '#maxlength' => 255,
       '#default_value' => '',
       '#required' => TRUE,
-      '#description' => $this->t('Times form has been submitted: %count', ['%count' => $count]),
-    ];
+      '#description' => $this->t('Times form has been submitted: %count', array('%count' => $count)),
+    );
 
-    $form['actions'] = ['#type' => 'actions'];
-    $form['actions']['submit'] = [
+    $form['actions'] = array('#type' => 'actions');
+    $form['actions']['submit'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Send away'),
-    ];
+    );
 
     return $form;
   }

@@ -28,8 +28,8 @@ class InstallerServiceProvider implements ServiceProviderInterface, ServiceModif
     // Replace services with in-memory implementations.
     $definition = $container->getDefinition('cache_factory');
     $definition->setClass('Drupal\Core\Cache\MemoryBackendFactory');
-    $definition->setArguments([]);
-    $definition->setMethodCalls([]);
+    $definition->setArguments(array());
+    $definition->setMethodCalls(array());
     $container
       ->register('keyvalue', 'Drupal\Core\KeyValueStore\KeyValueMemoryFactory');
     $container

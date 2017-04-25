@@ -12,7 +12,7 @@ class KeyValueMemoryFactory implements KeyValueFactoryInterface {
    *
    * @var array
    */
-  protected $collections = [];
+  protected $collections = array();
 
   /**
    * {@inheritdoc}

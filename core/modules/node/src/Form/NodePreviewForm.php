@@ -72,18 +72,18 @@ class NodePreviewForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state, EntityInterface $node = NULL) {
     $view_mode = $node->preview_view_mode;
 
-    $query_options = ['query' => ['uuid' => $node->uuid()]];
+    $query_options = array('query' => array('uuid' => $node->uuid()));
     $query = $this->getRequest()->query;
     if ($query->has('destination')) {
       $query_options['query']['destination'] = $query->get('destination');
     }
 
-    $form['backlink'] = [
+    $form['backlink'] = array(
       '#type' => 'link',
       '#title' => $this->t('Back to content editing'),
       '#url' => $node->isNew() ? Url::fromRoute('node.add', ['node_type' => $node->bundle()]) : $node->urlInfo('edit-form'),
-      '#options' => ['attributes' => ['class' => ['node-preview-backlink']]] + $query_options,
-    ];
+      '#options' => array('attributes' => array('class' => array('node-preview-backlink'))) + $query_options,
+    );
 
     // Always show full as an option, even if the display is not enabled.
     $view_mode_options = ['full' => $this->t('Full')] + $this->entityManager->getViewModeOptionsByBundle('node', $node->bundle());
@@ -93,28 +93,28 @@ class NodePreviewForm extends FormBase {
     unset($view_mode_options['rss']);
     unset($view_mode_options['search_index']);
 
-    $form['uuid'] = [
+    $form['uuid'] = array(
       '#type' => 'value',
       '#value' => $node->uuid(),
-    ];
+    );
 
-    $form['view_mode'] = [
+    $form['view_mode'] = array(
       '#type' => 'select',
       '#title' => $this->t('View mode'),
       '#options' => $view_mode_options,
       '#default_value' => $view_mode,
-      '#attributes' => [
+      '#attributes' => array(
         'data-drupal-autosubmit' => TRUE,
-      ]
-    ];
+      )
+    );
 
-    $form['submit'] = [
+    $form['submit'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Switch'),
-      '#attributes' => [
-        'class' => ['js-hide'],
-      ],
-    ];
+      '#attributes' => array(
+        'class' => array('js-hide'),
+      ),
+    );
 
     return $form;
   }

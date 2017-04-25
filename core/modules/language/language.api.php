@@ -35,17 +35,17 @@
  * @ingroup language_negotiation
  */
 function hook_language_types_info() {
-  return [
-    'custom_language_type' => [
+  return array(
+    'custom_language_type' => array(
       'name' => t('Custom language'),
       'description' => t('A custom language type.'),
       'locked' => FALSE,
-    ],
-    'fixed_custom_language_type' => [
+    ),
+    'fixed_custom_language_type' => array(
       'locked' => TRUE,
-      'fixed' => ['custom_language_negotiation_method'],
-    ],
-  ];
+      'fixed' => array('custom_language_negotiation_method'),
+    ),
+  );
 }
 
 /**

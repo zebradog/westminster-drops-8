@@ -12,14 +12,14 @@ use Drupal\views\Views;
  */
 class HandlerAliasTest extends ViewsKernelTestBase {
 
-  public static $modules = ['user'];
+  public static $modules = array('user');
 
   /**
    * Views used by this test.
    *
    * @var array
    */
-  public static $testViews = ['test_filter', 'test_alias'];
+  public static $testViews = array('test_filter', 'test_alias');
 
   protected function setUp($import_test_views = TRUE) {
     parent::setUp();
@@ -45,16 +45,16 @@ class HandlerAliasTest extends ViewsKernelTestBase {
     $view->initDisplay();
 
     // Change the filtering.
-    $view->displayHandlers->get('default')->overrideOption('filters', [
-      'test_filter' => [
+    $view->displayHandlers->get('default')->overrideOption('filters', array(
+      'test_filter' => array(
         'id' => 'test_filter',
         'table' => 'views_test_data_alias',
         'field' => 'name_alias',
         'operator' => '=',
         'value' => 'John',
         'group' => 0,
-      ],
-    ]);
+      ),
+    ));
 
     $this->executeView($view);
 

@@ -5,9 +5,4 @@
  * Test module.
  */
 
-/**
- * Test function.
- */
-function module_handler_test_added_helper($arg) {
-  return $arg;
-}
+function module_handler_test_added_helper($arg) { return $arg; }

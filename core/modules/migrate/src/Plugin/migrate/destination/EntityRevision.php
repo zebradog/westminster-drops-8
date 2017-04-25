@@ -63,9 +63,9 @@ class EntityRevision extends EntityContentBase {
   /**
    * {@inheritdoc}
    */
-  protected function save(ContentEntityInterface $entity, array $old_destination_id_values = []) {
+  protected function save(ContentEntityInterface $entity, array $old_destination_id_values = array()) {
     $entity->save();
-    return [$entity->getRevisionId()];
+    return array($entity->getRevisionId());
   }
 
   /**

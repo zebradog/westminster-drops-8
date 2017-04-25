@@ -72,14 +72,14 @@ class SessionHandler extends AbstractProxy implements \SessionHandlerInterface {
     // manually.
     try {
       $request = $this->requestStack->getCurrentRequest();
-      $fields = [
+      $fields = array(
         'uid' => $request->getSession()->get('uid', 0),
         'hostname' => $request->getClientIP(),
         'session' => $value,
         'timestamp' => REQUEST_TIME,
-      ];
+      );
       $this->connection->merge('sessions')
-        ->keys(['sid' => Crypt::hashBase64($sid)])
+        ->keys(array('sid' => Crypt::hashBase64($sid)))
         ->fields($fields)
         ->execute();
       return TRUE;

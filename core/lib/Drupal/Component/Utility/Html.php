@@ -14,7 +14,7 @@ class Html {
    *
    * @var array
    */
-  protected static $classes = [];
+  protected static $classes = array();
 
   /**
    * An array of the initial IDs used in one request.
@@ -89,13 +89,13 @@ class Html {
    * @return string
    *   The cleaned identifier.
    */
-  public static function cleanCssIdentifier($identifier, array $filter = [
+  public static function cleanCssIdentifier($identifier, array $filter = array(
     ' ' => '-',
     '_' => '-',
     '/' => '-',
     '[' => '-',
     ']' => '',
-  ]) {
+  )) {
     // We could also use strtr() here but its much slower than str_replace(). In
     // order to keep '__' to stay '__' we first replace it with a different
     // placeholder after checking that it is not defined as a filter.
@@ -120,10 +120,10 @@ class Html {
     // We strip out any character not in the above list.
     $identifier = preg_replace('/[^\x{002D}\x{0030}-\x{0039}\x{0041}-\x{005A}\x{005F}\x{0061}-\x{007A}\x{00A1}-\x{FFFF}]/u', '', $identifier);
     // Identifiers cannot start with a digit, two hyphens, or a hyphen followed by a digit.
-    $identifier = preg_replace([
+    $identifier = preg_replace(array(
       '/^[0-9]/',
       '/^(-[0-9])|^(--)/'
-    ], ['_', '__'], $identifier);
+    ), array('_', '__'), $identifier);
     return $identifier;
   }
 
@@ -176,7 +176,7 @@ class Html {
     // @todo Remove all that code once we switch over to random IDs only,
     // see https://www.drupal.org/node/1090592.
     if (!isset(static::$seenIdsInit)) {
-      static::$seenIdsInit = [];
+      static::$seenIdsInit = array();
     }
     if (!isset(static::$seenIds)) {
       static::$seenIds = static::$seenIdsInit;
@@ -279,7 +279,7 @@ EOD;
     // PHP's \DOMDocument serialization adds extra whitespace when the markup
     // of the wrapping document contains newlines, so ensure we remove all
     // newlines before injecting the actual HTML body to be processed.
-    $document = strtr($document, ["\n" => '', '!html' => $html]);
+    $document = strtr($document, array("\n" => '', '!html' => $html));
 
     $dom = new \DOMDocument();
     // Ignore warnings during HTML soup loading.

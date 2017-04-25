@@ -105,7 +105,7 @@ trait CategorizingPluginManagerTrait {
   public function getGroupedDefinitions(array $definitions = NULL, $label_key = 'label') {
     /** @var \Drupal\Core\Plugin\CategorizingPluginManagerTrait|\Drupal\Component\Plugin\PluginManagerInterface $this */
     $definitions = $this->getSortedDefinitions(isset($definitions) ? $definitions : $this->getDefinitions(), $label_key);
-    $grouped_definitions = [];
+    $grouped_definitions = array();
     foreach ($definitions as $id => $definition) {
       $grouped_definitions[(string) $definition['category']][$id] = $definition;
     }

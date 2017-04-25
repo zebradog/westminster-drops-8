@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\Component\Serialization;
 
-use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Component\Serialization\YamlSymfony;
 
 /**
@@ -57,9 +56,9 @@ class YamlSymfonyTest extends YamlTestBase {
    * Tests that invalid YAML throws an exception.
    *
    * @covers ::decode
+   * @expectedException \Drupal\Component\Serialization\Exception\InvalidDataTypeException
    */
   public function testError() {
-    $this->setExpectedException(InvalidDataTypeException::class);
     YamlSymfony::decode('foo: [ads');
   }
 

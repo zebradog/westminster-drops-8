@@ -25,16 +25,16 @@ class EntityReferenceTaxonomyTermRssFormatter extends EntityReferenceFormatterBa
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $parent_entity = $items->getEntity();
-    $elements = [];
+    $elements = array();
 
     foreach ($this->getEntitiesToView($items, $langcode) as $delta => $entity) {
-      $parent_entity->rss_elements[] = [
+      $parent_entity->rss_elements[] = array(
         'key' => 'category',
         'value' => $entity->label(),
-        'attributes' => [
-          'domain' => $entity->id() ? \Drupal::url('entity.taxonomy_term.canonical', ['taxonomy_term' => $entity->id()], ['absolute' => TRUE]) : '',
-        ],
-      ];
+        'attributes' => array(
+          'domain' => $entity->id() ? \Drupal::url('entity.taxonomy_term.canonical', ['taxonomy_term' => $entity->id()], array('absolute' => TRUE)) : '',
+        ),
+      );
     }
 
     return $elements;

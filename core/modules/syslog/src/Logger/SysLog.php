@@ -63,7 +63,7 @@ class SysLog implements LoggerInterface {
   /**
    * {@inheritdoc}
    */
-  public function log($level, $message, array $context = []) {
+  public function log($level, $message, array $context = array()) {
     global $base_url;
 
     // Ensure we have a connection available.
@@ -73,7 +73,7 @@ class SysLog implements LoggerInterface {
     $message_placeholders = $this->parser->parseMessagePlaceholders($message, $context);
     $message = empty($message_placeholders) ? $message : strtr($message, $message_placeholders);
 
-    $entry = strtr($this->config->get('format'), [
+    $entry = strtr($this->config->get('format'), array(
       '!base_url' => $base_url,
       '!timestamp' => $context['timestamp'],
       '!type' => $context['channel'],
@@ -83,7 +83,7 @@ class SysLog implements LoggerInterface {
       '!uid' => $context['uid'],
       '!link' => strip_tags($context['link']),
       '!message' => strip_tags($message),
-    ]);
+    ));
 
     syslog($level, $entry);
   }

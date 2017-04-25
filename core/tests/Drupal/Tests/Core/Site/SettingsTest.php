@@ -16,7 +16,7 @@ class SettingsTest extends UnitTestCase {
    *
    * @var array
    */
-  protected $config = [];
+  protected $config = array();
 
   /**
    * The class under test.
@@ -29,11 +29,11 @@ class SettingsTest extends UnitTestCase {
    * @covers ::__construct
    */
   protected function setUp(){
-    $this->config = [
+    $this->config = array(
       'one' => '1',
       'two' => '2',
       'hash_salt' => $this->randomMachineName(),
-    ];
+    );
     $this->settings = new Settings($this->config);
   }
 
@@ -80,11 +80,12 @@ class SettingsTest extends UnitTestCase {
    * @covers ::getHashSalt
    *
    * @dataProvider providerTestGetHashSaltEmpty
+   *
+   * @expectedException \RuntimeException
    */
   public function testGetHashSaltEmpty(array $config) {
     // Re-create settings with no 'hash_salt' key.
     $settings = new Settings($config);
-    $this->setExpectedException(\RuntimeException::class);
     $settings->getHashSalt();
   }
 
@@ -94,20 +95,21 @@ class SettingsTest extends UnitTestCase {
    * @return array
    */
   public function providerTestGetHashSaltEmpty() {
-    return [
-      [[]],
-      [['hash_salt' => '']],
-      [['hash_salt' => NULL]],
-    ];
+    return array(
+      array(array()),
+      array(array('hash_salt' => '')),
+      array(array('hash_salt' => NULL)),
+    );
   }
 
   /**
    * Ensures settings cannot be serialized.
    *
    * @covers ::__sleep
+   *
+   * @expectedException \LogicException
    */
   public function testSerialize() {
-    $this->setExpectedException(\LogicException::class);
     serialize(new Settings([]));
   }
 
@@ -117,28 +119,11 @@ class SettingsTest extends UnitTestCase {
    * @covers ::getApcuPrefix
    */
   public function testGetApcuPrefix() {
-    $settings = new Settings(['hash_salt' => 123]);
+    $settings = new Settings(array('hash_salt' => 123));
     $this->assertNotEquals($settings::getApcuPrefix('cache_test', '/test/a'), $settings::getApcuPrefix('cache_test', '/test/b'));
 
-    $settings = new Settings(['hash_salt' => 123, 'apcu_ensure_unique_prefix' => FALSE]);
+    $settings = new Settings(array('hash_salt' => 123, 'apcu_ensure_unique_prefix' => FALSE));
     $this->assertNotEquals($settings::getApcuPrefix('cache_test', '/test/a'), $settings::getApcuPrefix('cache_test', '/test/b'));
-  }
-
-  /**
-   * Tests that an exception is thrown when settings are not initialized yet.
-   *
-   * @covers ::getInstance
-   */
-  public function testGetInstanceReflection() {
-    $settings = new Settings([]);
-
-    $class = new \ReflectionClass(Settings::class);
-    $instace_property = $class->getProperty("instance");
-    $instace_property->setAccessible(TRUE);
-    $instace_property->setValue(NULL);
-
-    $this->setExpectedException(\BadMethodCallException::class);
-    $settings->getInstance();
   }
 
 }

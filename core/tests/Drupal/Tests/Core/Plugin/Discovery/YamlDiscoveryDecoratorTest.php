@@ -24,37 +24,37 @@ class YamlDiscoveryDecoratorTest extends UnitTestCase {
    *
    * @var array
    */
-  protected $expectedKeys = [
+  protected $expectedKeys = array(
     'test_1' => 'test_1_a',
     'another_provider_1' => 'test_1_b',
     'another_provider_2' => 'test_2_a',
     'test_2' => 'test_2_b',
     'decorated_1' => 'decorated_test_1',
     'decorated_2' => 'decorated_test_2',
-  ];
+  );
 
   protected function setUp() {
     parent::setUp();
 
     $base_path = __DIR__ . '/Fixtures';
     // Set up the directories to search.
-    $directories = [
+    $directories = array(
       'test_1' => $base_path . '/test_1',
       'test_2' => $base_path . '/test_2',
-    ];
+    );
 
-    $definitions = [
-      'decorated_test_1' => [
+    $definitions = array(
+      'decorated_test_1' => array(
         'id' => 'decorated_test_1',
         'name' => 'Decorated test 1',
         'provider' => 'decorated_1',
-      ],
-      'decorated_test_2' => [
+      ),
+      'decorated_test_2' => array(
         'id' => 'decorated_test_2',
         'name' => 'Decorated test 1',
         'provider' => 'decorated_2',
-      ],
-    ];
+      ),
+    );
 
     $decorated = $this->getMock('Drupal\Component\Plugin\Discovery\DiscoveryInterface');
     $decorated->expects($this->once())
@@ -78,7 +78,7 @@ class YamlDiscoveryDecoratorTest extends UnitTestCase {
     }
 
     foreach ($definitions as $id => $definition) {
-      foreach (['name', 'id', 'provider'] as $key) {
+      foreach (array('name', 'id', 'provider') as $key) {
         $this->assertArrayHasKey($key, $definition);
       }
       $this->assertEquals($id, $definition['id']);

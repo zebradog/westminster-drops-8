@@ -5,7 +5,6 @@ namespace Drupal\simpletest\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\RendererInterface;
-use Drupal\simpletest\TestDiscovery;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -21,19 +20,11 @@ class SimpletestTestForm extends FormBase {
   protected $renderer;
 
   /**
-   * The test discovery service.
-   *
-   * @var \Drupal\simpletest\TestDiscovery
-   */
-  protected $testDiscovery;
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('renderer'),
-      $container->get('test_discovery')
+      $container->get('renderer')
     );
   }
 
@@ -42,12 +33,9 @@ class SimpletestTestForm extends FormBase {
    *
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
-   * @param \Drupal\simpletest\TestDiscovery $test_discovery
-   *   The test discovery service.
    */
-  public function __construct(RendererInterface $renderer, TestDiscovery $test_discovery) {
+  public function __construct(RendererInterface $renderer) {
     $this->renderer = $renderer;
-    $this->testDiscovery = $test_discovery;
   }
 
   /**
@@ -61,24 +49,24 @@ class SimpletestTestForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['actions'] = ['#type' => 'actions'];
-    $form['actions']['submit'] = [
+    $form['actions'] = array('#type' => 'actions');
+    $form['actions']['submit'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Run tests'),
       '#tableselect' => TRUE,
       '#button_type' => 'primary',
-    ];
-    $form['clean'] = [
+    );
+    $form['clean'] = array(
       '#type' => 'fieldset',
       '#title' => $this->t('Clean test environment'),
       '#description' => $this->t('Remove tables with the prefix "simpletest" and temporary directories that are left over from tests that crashed. This is intended for developers when creating tests.'),
       '#weight' => 200,
-    ];
-    $form['clean']['op'] = [
+    );
+    $form['clean']['op'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Clean environment'),
-      '#submit' => ['simpletest_clean_environment'],
-    ];
+      '#submit' => array('simpletest_clean_environment'),
+    );
 
     // Do not needlessly re-execute a full test discovery if the user input
     // already contains an explicit list of test classes to run.
@@ -88,43 +76,43 @@ class SimpletestTestForm extends FormBase {
     }
 
     // JavaScript-only table filters.
-    $form['filters'] = [
+    $form['filters'] = array(
       '#type' => 'container',
-      '#attributes' => [
-        'class' => ['table-filter', 'js-show'],
-      ],
-    ];
-    $form['filters']['text'] = [
+      '#attributes' => array(
+        'class' => array('table-filter', 'js-show'),
+      ),
+    );
+    $form['filters']['text'] = array(
       '#type' => 'search',
       '#title' => $this->t('Search'),
       '#size' => 30,
       '#placeholder' => $this->t('Enter test name…'),
-      '#attributes' => [
-        'class' => ['table-filter-text'],
+      '#attributes' => array(
+        'class' => array('table-filter-text'),
         'data-table' => '#simpletest-test-form',
         'autocomplete' => 'off',
         'title' => $this->t('Enter at least 3 characters of the test name or description to filter by.'),
-      ],
-    ];
+      ),
+    );
 
-    $form['tests'] = [
+    $form['tests'] = array(
       '#type' => 'table',
       '#id' => 'simpletest-form-table',
       '#tableselect' => TRUE,
-      '#header' => [
-        ['data' => $this->t('Test'), 'class' => ['simpletest-test-label']],
-        ['data' => $this->t('Description'), 'class' => ['simpletest-test-description']],
-      ],
+      '#header' => array(
+        array('data' => $this->t('Test'), 'class' => array('simpletest-test-label')),
+        array('data' => $this->t('Description'), 'class' => array('simpletest-test-description')),
+      ),
       '#empty' => $this->t('No tests to display.'),
-      '#attached' => [
-        'library' => [
+      '#attached' => array(
+        'library' => array(
           'simpletest/drupal.simpletest',
-        ],
-      ],
-    ];
+        ),
+      ),
+    );
 
     // Define the images used to expand/collapse the test groups.
-    $image_collapsed = [
+    $image_collapsed = array(
       '#theme' => 'image',
       '#uri' => 'core/misc/menu-collapsed.png',
       '#width' => '7',
@@ -132,8 +120,8 @@ class SimpletestTestForm extends FormBase {
       '#alt' => $this->t('Expand'),
       '#title' => $this->t('Expand'),
       '#suffix' => '<a href="#" class="simpletest-collapse">(' . $this->t('Expand') . ')</a>',
-    ];
-    $image_extended = [
+    );
+    $image_extended = array(
       '#theme' => 'image',
       '#uri' => 'core/misc/menu-expanded.png',
       '#width' => '7',
@@ -141,18 +129,18 @@ class SimpletestTestForm extends FormBase {
       '#alt' => $this->t('Collapse'),
       '#title' => $this->t('Collapse'),
       '#suffix' => '<a href="#" class="simpletest-collapse">(' . $this->t('Collapse') . ')</a>',
-    ];
+    );
     $form['tests']['#attached']['drupalSettings']['simpleTest']['images'] = [
       (string) $this->renderer->renderPlain($image_collapsed),
       (string) $this->renderer->renderPlain($image_extended),
     ];
 
     // Generate the list of tests arranged by group.
-    $groups = $this->testDiscovery->getTestClasses();
+    $groups = simpletest_test_get_all();
     foreach ($groups as $group => $tests) {
-      $form['tests'][$group] = [
-        '#attributes' => ['class' => ['simpletest-group']],
-      ];
+      $form['tests'][$group] = array(
+        '#attributes' => array('class' => array('simpletest-group')),
+      );
 
       // Make the class name safe for output on the page by replacing all
       // non-word/decimal characters with a dash (-).
@@ -160,47 +148,47 @@ class SimpletestTestForm extends FormBase {
 
       // Override tableselect column with custom selector for this group.
       // This group-select-all checkbox is injected via JavaScript.
-      $form['tests'][$group]['select'] = [
-        '#wrapper_attributes' => [
+      $form['tests'][$group]['select'] = array(
+        '#wrapper_attributes' => array(
           'id' => $group_class,
-          'class' => ['simpletest-group-select-all'],
-        ],
-      ];
-      $form['tests'][$group]['title'] = [
+          'class' => array('simpletest-group-select-all'),
+        ),
+      );
+      $form['tests'][$group]['title'] = array(
         // Expand/collapse image.
         '#prefix' => '<div class="simpletest-image" id="simpletest-test-group-' . $group_class . '"></div>',
         '#markup' => '<label for="' . $group_class . '-group-select-all">' . $group . '</label>',
-        '#wrapper_attributes' => [
-          'class' => ['simpletest-group-label'],
-        ],
-      ];
-      $form['tests'][$group]['description'] = [
+        '#wrapper_attributes' => array(
+          'class' => array('simpletest-group-label'),
+        ),
+      );
+      $form['tests'][$group]['description'] = array(
         '#markup' => '&nbsp;',
-        '#wrapper_attributes' => [
-          'class' => ['simpletest-group-description'],
-        ],
-      ];
+        '#wrapper_attributes' => array(
+          'class' => array('simpletest-group-description'),
+        ),
+      );
 
       // Cycle through each test within the current group.
       foreach ($tests as $class => $info) {
-        $form['tests'][$class] = [
-          '#attributes' => ['class' => [$group_class . '-test', 'js-hide']],
-        ];
-        $form['tests'][$class]['title'] = [
+        $form['tests'][$class] = array(
+          '#attributes' => array('class' => array($group_class . '-test', 'js-hide')),
+        );
+        $form['tests'][$class]['title'] = array(
           '#type' => 'label',
           '#title' => '\\' . $info['name'],
-          '#wrapper_attributes' => [
-            'class' => ['simpletest-test-label', 'table-filter-text-source'],
-          ],
-        ];
-        $form['tests'][$class]['description'] = [
+          '#wrapper_attributes' => array(
+            'class' => array('simpletest-test-label', 'table-filter-text-source'),
+          ),
+        );
+        $form['tests'][$class]['description'] = array(
           '#prefix' => '<div class="description">',
           '#plain_text' => $info['description'],
           '#suffix' => '</div>',
-          '#wrapper_attributes' => [
-            'class' => ['simpletest-test-description', 'table-filter-text-source'],
-          ],
-        ];
+          '#wrapper_attributes' => array(
+            'class' => array('simpletest-test-description', 'table-filter-text-source'),
+          ),
+        );
       }
     }
 
@@ -212,7 +200,7 @@ class SimpletestTestForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     // Test discovery does not run upon form submission.
-    $this->testDiscovery->registerTestNamespaces();
+    simpletest_classloader_register();
 
     // This form accepts arbitrary user input for 'tests'.
     // An invalid value will cause the $class_name lookup below to die with a
@@ -233,7 +221,7 @@ class SimpletestTestForm extends FormBase {
       $test_id = simpletest_run_tests($tests_list, 'drupal');
       $form_state->setRedirect(
         'simpletest.result_form',
-        ['test_id' => $test_id]
+        array('test_id' => $test_id)
       );
     }
   }

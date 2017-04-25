@@ -26,7 +26,7 @@ require_once __DIR__ . '/locale.translation.inc';
  * @return array
  *   Batch definition array.
  */
-function locale_translation_batch_update_build($projects = [], $langcodes = [], $options = []) {
+function locale_translation_batch_update_build($projects = array(), $langcodes = array(), $options = array()) {
   module_load_include('compare.inc', 'locale');
   $projects = $projects ? $projects : array_keys(locale_translation_get_projects());
   $langcodes = $langcodes ? $langcodes : array_keys(locale_translatable_language_list());
@@ -38,14 +38,14 @@ function locale_translation_batch_update_build($projects = [], $langcodes = [], 
   // Download and import translations.
   $operations = array_merge($operations, _locale_translation_fetch_operations($projects, $langcodes, $options));
 
-  $batch = [
+  $batch = array(
     'operations' => $operations,
     'title' => t('Updating translations'),
     'progress_message' => '',
     'error_message' => t('Error importing translation files'),
     'finished' => 'locale_translation_batch_fetch_finished',
     'file' => drupal_get_path('module', 'locale') . '/locale.batch.inc',
-  ];
+  );
   return $batch;
 }
 
@@ -63,18 +63,18 @@ function locale_translation_batch_update_build($projects = [], $langcodes = [], 
  * @return array
  *   Batch definition array.
  */
-function locale_translation_batch_fetch_build($projects = [], $langcodes = [], $options = []) {
+function locale_translation_batch_fetch_build($projects = array(), $langcodes = array(), $options = array()) {
   $projects = $projects ? $projects : array_keys(locale_translation_get_projects());
   $langcodes = $langcodes ? $langcodes : array_keys(locale_translatable_language_list());
 
-  $batch = [
+  $batch = array(
     'operations' => _locale_translation_fetch_operations($projects, $langcodes, $options),
     'title' => t('Updating translations.'),
     'progress_message' => '',
     'error_message' => t('Error importing translation files'),
     'finished' => 'locale_translation_batch_fetch_finished',
     'file' => drupal_get_path('module', 'locale') . '/locale.batch.inc',
-  ];
+  );
   return $batch;
 }
 
@@ -93,14 +93,14 @@ function locale_translation_batch_fetch_build($projects = [], $langcodes = [], $
  *   Array of batch operations.
  */
 function _locale_translation_fetch_operations($projects, $langcodes, $options) {
-  $operations = [];
+  $operations = array();
 
   foreach ($projects as $project) {
     foreach ($langcodes as $langcode) {
       if (locale_translation_use_remote_source()) {
-        $operations[] = ['locale_translation_batch_fetch_download', [$project, $langcode]];
+        $operations[] = array('locale_translation_batch_fetch_download', array($project, $langcode));
       }
-      $operations[] = ['locale_translation_batch_fetch_import', [$project, $langcode, $options]];
+      $operations[] = array('locale_translation_batch_fetch_import', array($project, $langcode, $options));
     }
   }
 

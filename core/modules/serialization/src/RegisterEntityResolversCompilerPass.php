@@ -19,7 +19,7 @@ class RegisterEntityResolversCompilerPass implements CompilerPassInterface {
    */
   public function process(ContainerBuilder $container) {
     $definition = $container->getDefinition('serializer.entity_resolver');
-    $resolvers = [];
+    $resolvers = array();
 
     // Retrieve registered Normalizers and Encoders from the container.
     foreach ($container->findTaggedServiceIds('entity_resolver') as $id => $attributes) {
@@ -29,7 +29,7 @@ class RegisterEntityResolversCompilerPass implements CompilerPassInterface {
 
     // Add the registered concrete EntityResolvers to the ChainEntityResolver.
     foreach ($this->sort($resolvers) as $resolver) {
-      $definition->addMethodCall('addResolver', [$resolver]);
+      $definition->addMethodCall('addResolver', array($resolver));
     }
   }
 
@@ -48,7 +48,7 @@ class RegisterEntityResolversCompilerPass implements CompilerPassInterface {
    *   to low priority.
    */
   protected function sort($services) {
-    $sorted = [];
+    $sorted = array();
     krsort($services);
 
     // Flatten the array.

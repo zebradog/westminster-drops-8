@@ -14,7 +14,7 @@ class UnmanagedMoveTest extends FileTestBase {
   /**
    * Move a normal file.
    */
-  public function testNormal() {
+  function testNormal() {
     // Create a file for testing
     $uri = $this->createUri();
 
@@ -45,7 +45,7 @@ class UnmanagedMoveTest extends FileTestBase {
   /**
    * Try to move a missing file.
    */
-  public function testMissing() {
+  function testMissing() {
     // Move non-existent file.
     $new_filepath = file_unmanaged_move($this->randomMachineName(), $this->randomMachineName());
     $this->assertFalse($new_filepath, 'Moving a missing file fails.');
@@ -54,7 +54,7 @@ class UnmanagedMoveTest extends FileTestBase {
   /**
    * Try to move a file onto itself.
    */
-  public function testOverwriteSelf() {
+  function testOverwriteSelf() {
     // Create a file for testing.
     $uri = $this->createUri();
 

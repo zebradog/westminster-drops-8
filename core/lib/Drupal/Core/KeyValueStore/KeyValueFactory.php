@@ -37,7 +37,7 @@ class KeyValueFactory implements KeyValueFactoryInterface {
    *
    * @var array
    */
-  protected $stores = [];
+  protected $stores = array();
 
   /**
    * var \Symfony\Component\DependencyInjection\ContainerInterface
@@ -50,7 +50,7 @@ class KeyValueFactory implements KeyValueFactoryInterface {
    * @param array $options
    *   (optional) Collection-specific storage override options.
    */
-  public function __construct(ContainerInterface $container, array $options = []) {
+  function __construct(ContainerInterface $container, array $options = array()) {
     $this->container = $container;
     $this->options = $options;
   }

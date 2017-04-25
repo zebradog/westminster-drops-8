@@ -19,10 +19,10 @@ class EntityTypeWithoutLanguageFormTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  public static $modules = array(
     'language',
     'language_test',
-  ];
+  );
 
   /**
    * {@inheritdoc}
@@ -31,9 +31,9 @@ class EntityTypeWithoutLanguageFormTest extends WebTestBase {
     parent::setUp();
 
     // Create and log in administrative user.
-    $admin_user = $this->drupalCreateUser([
+    $admin_user = $this->drupalCreateUser(array(
       'administer languages',
-    ]);
+    ));
     $this->drupalLogin($admin_user);
   }
 

@@ -212,7 +212,7 @@ class EntityRevision extends RealEntityRevision {
   /**
    * Allow public access for testing.
    */
-  public function save(ContentEntityInterface $entity, array $old_destination_id_values = []) {
+  public function save(ContentEntityInterface $entity, array $old_destination_id_values = array()) {
     return parent::save($entity, $old_destination_id_values);
   }
 

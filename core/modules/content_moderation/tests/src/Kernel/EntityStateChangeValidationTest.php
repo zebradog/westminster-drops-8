@@ -6,7 +6,6 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
-use Drupal\workflows\Entity\Workflow;
 
 /**
  * @coversDefaultClass \Drupal\content_moderation\Plugin\Validation\Constraint\ModerationStateConstraintValidator
@@ -24,7 +23,6 @@ class EntityStateChangeValidationTest extends KernelTestBase {
     'system',
     'language',
     'content_translation',
-    'workflows',
   ];
 
   /**
@@ -49,23 +47,20 @@ class EntityStateChangeValidationTest extends KernelTestBase {
     $node_type = NodeType::create([
       'type' => 'example',
     ]);
+    $node_type->setThirdPartySetting('content_moderation', 'enabled', TRUE);
     $node_type->save();
-    $workflow = Workflow::load('editorial');
-    $workflow->getTypePlugin()->addEntityTypeAndBundle('node', 'example');
-    $workflow->save();
-
     $node = Node::create([
       'type' => 'example',
       'title' => 'Test title',
     ]);
-    $node->moderation_state->value = 'draft';
+    $node->moderation_state->target_id = 'draft';
     $node->save();
 
-    $node->moderation_state->value = 'published';
+    $node->moderation_state->target_id = 'published';
     $this->assertCount(0, $node->validate());
     $node->save();
 
-    $this->assertEquals('published', $node->moderation_state->value);
+    $this->assertEquals('published', $node->moderation_state->entity->id());
   }
 
   /**
@@ -77,19 +72,16 @@ class EntityStateChangeValidationTest extends KernelTestBase {
     $node_type = NodeType::create([
       'type' => 'example',
     ]);
+    $node_type->setThirdPartySetting('content_moderation', 'enabled', TRUE);
     $node_type->save();
-    $workflow = Workflow::load('editorial');
-    $workflow->getTypePlugin()->addEntityTypeAndBundle('node', 'example');
-    $workflow->save();
-
     $node = Node::create([
       'type' => 'example',
       'title' => 'Test title',
     ]);
-    $node->moderation_state->value = 'draft';
+    $node->moderation_state->target_id = 'draft';
     $node->save();
 
-    $node->moderation_state->value = 'archived';
+    $node->moderation_state->target_id = 'archived';
     $violations = $node->validate();
     $this->assertCount(1, $violations);
 
@@ -114,9 +106,12 @@ class EntityStateChangeValidationTest extends KernelTestBase {
     $nid = $node->id();
 
     // Enable moderation for our node type.
-    $workflow = Workflow::load('editorial');
-    $workflow->getTypePlugin()->addEntityTypeAndBundle('node', 'example');
-    $workflow->save();
+    /** @var NodeType $node_type */
+    $node_type = NodeType::load('example');
+    $node_type->setThirdPartySetting('content_moderation', 'enabled', TRUE);
+    $node_type->setThirdPartySetting('content_moderation', 'allowed_moderation_states', ['draft', 'published']);
+    $node_type->setThirdPartySetting('content_moderation', 'default_moderation_state', 'draft');
+    $node_type->save();
 
     $node = Node::load($nid);
 
@@ -160,9 +155,12 @@ class EntityStateChangeValidationTest extends KernelTestBase {
     $node_fr->save();
 
     // Enable moderation for our node type.
-    $workflow = Workflow::load('editorial');
-    $workflow->getTypePlugin()->addEntityTypeAndBundle('node', 'example');
-    $workflow->save();
+    /** @var NodeType $node_type */
+    $node_type = NodeType::load('example');
+    $node_type->setThirdPartySetting('content_moderation', 'enabled', TRUE);
+    $node_type->setThirdPartySetting('content_moderation', 'allowed_moderation_states', ['draft', 'published']);
+    $node_type->setThirdPartySetting('content_moderation', 'default_moderation_state', 'draft');
+    $node_type->save();
 
     // Reload the French version of the node.
     $node = Node::load($nid);

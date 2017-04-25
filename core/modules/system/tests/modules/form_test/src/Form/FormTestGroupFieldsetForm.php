@@ -21,20 +21,20 @@ class FormTestGroupFieldsetForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, $required = FALSE) {
-    $form['fieldset'] = [
+    $form['fieldset'] = array(
       '#type' => 'fieldset',
       '#title' => 'Fieldset',
       '#required' => !empty($required),
-    ];
-    $form['meta'] = [
+    );
+    $form['meta'] = array(
       '#type' => 'container',
       '#title' => 'Group element',
       '#group' => 'fieldset',
-    ];
-    $form['meta']['element'] = [
+    );
+    $form['meta']['element'] = array(
       '#type' => 'textfield',
       '#title' => 'Nest in container element',
-    ];
+    );
     return $form;
   }
 

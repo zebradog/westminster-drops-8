@@ -21,7 +21,7 @@ class CompatibilityFixTest extends KernelTestBase {
     require_once \Drupal::root() . '/core/includes/update.inc';
   }
 
-  public function testFixCompatibility() {
+  function testFixCompatibility() {
     $extension_config = \Drupal::configFactory()->getEditable('core.extension');
 
     // Add an incompatible/non-existent module to the config.

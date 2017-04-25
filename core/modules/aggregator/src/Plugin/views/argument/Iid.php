@@ -50,7 +50,7 @@ class Iid extends NumericArgument {
    * {@inheritdoc}
    */
   public function titleQuery() {
-    $titles = [];
+    $titles = array();
 
     $items = $this->entityManager->getStorage('aggregator_item')->loadMultiple($this->value);
     foreach ($items as $feed) {

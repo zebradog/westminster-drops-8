@@ -17,14 +17,14 @@ class RowPluginTest extends NodeTestBase {
    *
    * @var array
    */
-  public static $modules = ['node'];
+  public static $modules = array('node');
 
   /**
    * Views used by this test.
    *
    * @var array
    */
-  public static $testViews = ['test_node_row_plugin'];
+  public static $testViews = array('test_node_row_plugin');
 
   /**
    * Contains all nodes used by this test.
@@ -36,21 +36,21 @@ class RowPluginTest extends NodeTestBase {
   protected function setUp() {
     parent::setUp();
 
-    $this->drupalCreateContentType(['type' => 'article']);
+    $this->drupalCreateContentType(array('type' => 'article'));
 
     // Create two nodes.
     for ($i = 0; $i < 2; $i++) {
       $this->nodes[] = $this->drupalCreateNode(
-        [
+        array(
           'type' => 'article',
-          'body' => [
-            [
+          'body' => array(
+            array(
               'value' => $this->randomMachineName(42),
               'format' => filter_default_format(),
               'summary' => $this->randomMachineName(),
-            ],
-          ],
-        ]
+            ),
+          ),
+        )
       );
     }
   }

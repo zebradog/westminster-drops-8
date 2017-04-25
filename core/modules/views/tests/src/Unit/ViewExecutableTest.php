@@ -182,6 +182,8 @@ class ViewExecutableTest extends UnitTestCase {
   }
 
   /**
+   * @expectedException \InvalidArgumentException
+   *
    * @covers ::getUrl
    */
   public function testGetUrlWithoutRouterDisplay() {
@@ -191,7 +193,6 @@ class ViewExecutableTest extends UnitTestCase {
       ->willReturn($this->displayHandler);
     $this->executable->display_handler = $this->displayHandler;
 
-    $this->setExpectedException(\InvalidArgumentException::class);
     $this->executable->getUrl();
   }
 
@@ -475,7 +476,7 @@ class ViewExecutableTest extends UnitTestCase {
    *   Returns the view executable and default display.
    */
   protected function setupBaseViewAndDisplay() {
-    $config = [
+    $config = array(
       'id' => 'test_view',
       'tag' => 'OnE, TWO, and three',
       'display' => [
@@ -485,7 +486,7 @@ class ViewExecutableTest extends UnitTestCase {
           'display_title' => 'Default',
         ],
       ],
-    ];
+    );
 
     $storage = new View($config, 'view');
     $view = new ViewExecutable($storage, $this->user, $this->viewsData, $this->routeProvider);
@@ -515,7 +516,7 @@ class ViewExecutableTest extends UnitTestCase {
       $view->$type = [];
     }
 
-    return [$view, $display];
+    return array($view, $display);
   }
 
   /**

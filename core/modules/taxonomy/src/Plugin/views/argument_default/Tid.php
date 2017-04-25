@@ -96,11 +96,11 @@ class Tid extends ArgumentDefaultPluginBase implements CacheableDependencyInterf
   protected function defineOptions() {
     $options = parent::defineOptions();
 
-    $options['term_page'] = ['default' => TRUE];
-    $options['node'] = ['default' => FALSE];
-    $options['anyall'] = ['default' => ','];
-    $options['limit'] = ['default' => FALSE];
-    $options['vids'] = ['default' => []];
+    $options['term_page'] = array('default' => TRUE);
+    $options['node'] = array('default' => FALSE);
+    $options['anyall'] = array('default' => ',');
+    $options['limit'] = array('default' => FALSE);
+    $options['vids'] = array('default' => array());
 
     return $options;
   }
@@ -109,67 +109,67 @@ class Tid extends ArgumentDefaultPluginBase implements CacheableDependencyInterf
    * {@inheritdoc}
    */
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
-    $form['term_page'] = [
+    $form['term_page'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Load default filter from term page'),
       '#default_value' => $this->options['term_page'],
-    ];
-    $form['node'] = [
+    );
+    $form['node'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Load default filter from node page, that\'s good for related taxonomy blocks'),
       '#default_value' => $this->options['node'],
-    ];
+    );
 
-    $form['limit'] = [
+    $form['limit'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Limit terms by vocabulary'),
       '#default_value' => $this->options['limit'],
-      '#states' => [
-        'visible' => [
-          ':input[name="options[argument_default][taxonomy_tid][node]"]' => ['checked' => TRUE],
-        ],
-      ],
-    ];
+      '#states' => array(
+        'visible' => array(
+          ':input[name="options[argument_default][taxonomy_tid][node]"]' => array('checked' => TRUE),
+        ),
+      ),
+    );
 
-    $options = [];
+    $options = array();
     $vocabularies = $this->vocabularyStorage->loadMultiple();
     foreach ($vocabularies as $voc) {
       $options[$voc->id()] = $voc->label();
     }
 
-    $form['vids'] = [
+    $form['vids'] = array(
       '#type' => 'checkboxes',
       '#title' => $this->t('Vocabularies'),
       '#options' => $options,
       '#default_value' => $this->options['vids'],
-      '#states' => [
-        'visible' => [
-          ':input[name="options[argument_default][taxonomy_tid][limit]"]' => ['checked' => TRUE],
-          ':input[name="options[argument_default][taxonomy_tid][node]"]' => ['checked' => TRUE],
-        ],
-      ],
-    ];
+      '#states' => array(
+        'visible' => array(
+          ':input[name="options[argument_default][taxonomy_tid][limit]"]' => array('checked' => TRUE),
+          ':input[name="options[argument_default][taxonomy_tid][node]"]' => array('checked' => TRUE),
+        ),
+      ),
+    );
 
-    $form['anyall'] = [
+    $form['anyall'] = array(
       '#type' => 'radios',
       '#title' => $this->t('Multiple-value handling'),
       '#default_value' => $this->options['anyall'],
-      '#options' => [
+      '#options' => array(
         ',' => $this->t('Filter to items that share all terms'),
         '+' => $this->t('Filter to items that share any term'),
-      ],
-      '#states' => [
-        'visible' => [
-          ':input[name="options[argument_default][taxonomy_tid][node]"]' => ['checked' => TRUE],
-        ],
-      ],
-    ];
+      ),
+      '#states' => array(
+        'visible' => array(
+          ':input[name="options[argument_default][taxonomy_tid][node]"]' => array('checked' => TRUE),
+        ),
+      ),
+    );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function submitOptionsForm(&$form, FormStateInterface $form_state, &$options = []) {
+  public function submitOptionsForm(&$form, FormStateInterface $form_state, &$options = array()) {
     // Filter unselected items so we don't unnecessarily store giant arrays.
     $options['vids'] = array_filter($options['vids']);
   }
@@ -188,7 +188,7 @@ class Tid extends ArgumentDefaultPluginBase implements CacheableDependencyInterf
     if (!empty($this->options['node'])) {
       // Just check, if a node could be detected.
       if (($node = $this->routeMatch->getParameter('node')) && $node instanceof NodeInterface) {
-        $taxonomy = [];
+        $taxonomy = array();
         foreach ($node->getFieldDefinitions() as $field) {
           if ($field->getType() == 'entity_reference' && $field->getSetting('target_type') == 'taxonomy_term') {
             $taxonomy_terms = $node->{$field->getName()}->referencedEntities();
@@ -199,7 +199,7 @@ class Tid extends ArgumentDefaultPluginBase implements CacheableDependencyInterf
           }
         }
         if (!empty($this->options['limit'])) {
-          $tids = [];
+          $tids = array();
           // filter by vocabulary
           foreach ($taxonomy as $tid => $vocab) {
             if (!empty($this->options['vids'][$vocab])) {

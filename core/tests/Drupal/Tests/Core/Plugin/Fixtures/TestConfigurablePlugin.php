@@ -25,14 +25,14 @@ class TestConfigurablePlugin extends PluginBase implements ConfigurablePluginInt
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return [];
+    return array();
   }
 
   /**
    * {@inheritdoc}
    */
   public function calculateDependencies() {
-    return [];
+    return array();
   }
 
 }

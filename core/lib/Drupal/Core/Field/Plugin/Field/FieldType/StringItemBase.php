@@ -16,9 +16,9 @@ abstract class StringItemBase extends FieldItemBase {
    * {@inheritdoc}
    */
   public static function defaultStorageSettings() {
-    return [
+    return array(
       'case_sensitive' => FALSE,
-    ] + parent::defaultStorageSettings();
+    ) + parent::defaultStorageSettings();
   }
 
   /**

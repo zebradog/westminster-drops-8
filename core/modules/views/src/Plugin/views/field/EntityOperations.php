@@ -83,9 +83,9 @@ class EntityOperations extends FieldPluginBase {
   public function defineOptions() {
     $options = parent::defineOptions();
 
-    $options['destination'] = [
+    $options['destination'] = array(
       'default' => TRUE,
-    ];
+    );
 
     return $options;
   }
@@ -96,12 +96,12 @@ class EntityOperations extends FieldPluginBase {
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
 
-    $form['destination'] = [
+    $form['destination'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Include destination'),
       '#description' => $this->t('Include a <code>destination</code> parameter in the link to return the user to the original view upon completing the link action.'),
       '#default_value' => $this->options['destination'],
-    ];
+    );
   }
 
   /**
@@ -113,15 +113,15 @@ class EntityOperations extends FieldPluginBase {
     if ($this->options['destination']) {
       foreach ($operations as &$operation) {
         if (!isset($operation['query'])) {
-          $operation['query'] = [];
+          $operation['query'] = array();
         }
         $operation['query'] += $this->getDestinationArray();
       }
     }
-    $build = [
+    $build = array(
       '#type' => 'operations',
       '#links' => $operations,
-    ];
+    );
 
     return $build;
   }

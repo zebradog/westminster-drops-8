@@ -25,7 +25,7 @@ class Tags {
     preg_match_all($regexp, $tags, $matches);
     $typed_tags = array_unique($matches[1]);
 
-    $tags = [];
+    $tags = array();
     foreach ($typed_tags as $tag) {
       // If a user has escaped a term (to demonstrate that it is a group,
       // or includes a comma or quote character), we remove the escape
@@ -65,7 +65,7 @@ class Tags {
    *   The imploded string.
    */
   public static function implode($tags) {
-    $encoded_tags = [];
+    $encoded_tags = array();
     foreach ($tags as $tag) {
       $encoded_tags[] = self::encode($tag);
     }

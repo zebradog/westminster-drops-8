@@ -32,12 +32,12 @@ class LanguageConditionTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'language'];
+  public static $modules = array('system', 'language');
 
   protected function setUp() {
     parent::setUp();
 
-    $this->installConfig(['language']);
+    $this->installConfig(array('language'));
     // Setup Italian.
     ConfigurableLanguage::createFromLangcode('it')->save();
 
@@ -52,14 +52,14 @@ class LanguageConditionTest extends KernelTestBase {
     // language.
     $language = \Drupal::languageManager()->getLanguage('en');
     $condition = $this->manager->createInstance('language')
-      ->setConfig('langcodes', ['en' => 'en', 'it' => 'it'])
+      ->setConfig('langcodes', array('en' => 'en', 'it' => 'it'))
       ->setContextValue('language', $language);
     $this->assertTrue($condition->execute(), 'Language condition passes as expected.');
     // Check for the proper summary.
     $this->assertEqual($condition->summary(), 'The language is English, Italian.');
 
     // Change to Italian only.
-    $condition->setConfig('langcodes', ['it' => 'it']);
+    $condition->setConfig('langcodes', array('it' => 'it'));
     $this->assertFalse($condition->execute(), 'Language condition fails as expected.');
     // Check for the proper summary.
     $this->assertEqual($condition->summary(), 'The language is Italian.');
@@ -74,7 +74,7 @@ class LanguageConditionTest extends KernelTestBase {
     $language = \Drupal::languageManager()->getLanguage('it');
 
     $condition = $this->manager->createInstance('language')
-      ->setConfig('langcodes', ['en' => 'en', 'it' => 'it'])
+      ->setConfig('langcodes', array('en' => 'en', 'it' => 'it'))
       ->setContextValue('language', $language);
 
     $this->assertTrue($condition->execute(), 'Language condition passes as expected.');
@@ -82,7 +82,7 @@ class LanguageConditionTest extends KernelTestBase {
     $this->assertEqual($condition->summary(), 'The language is English, Italian.');
 
     // Change to Italian only.
-    $condition->setConfig('langcodes', ['it' => 'it']);
+    $condition->setConfig('langcodes', array('it' => 'it'));
     $this->assertTrue($condition->execute(), 'Language condition passes as expected.');
     // Check for the proper summary.
     $this->assertEqual($condition->summary(), 'The language is Italian.');

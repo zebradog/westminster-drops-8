@@ -3,7 +3,6 @@
 namespace Drupal\views\Plugin\views\argument;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Plugin\Context\ContextDefinition;
 
 /**
  * Basic argument handler for arguments that are numeric. Incorporates
@@ -30,8 +29,8 @@ class NumericArgument extends ArgumentPluginBase {
   protected function defineOptions() {
     $options = parent::defineOptions();
 
-    $options['break_phrase'] = ['default' => FALSE];
-    $options['not'] = ['default' => FALSE];
+    $options['break_phrase'] = array('default' => FALSE);
+    $options['not'] = array('default' => FALSE);
 
     return $options;
   }
@@ -40,24 +39,24 @@ class NumericArgument extends ArgumentPluginBase {
     parent::buildOptionsForm($form, $form_state);
 
     // allow + for or, , for and
-    $form['break_phrase'] = [
+    $form['break_phrase'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Allow multiple values'),
       '#description' => $this->t('If selected, users can enter multiple values in the form of 1+2+3 (for OR) or 1,2,3 (for AND).'),
       '#default_value' => !empty($this->options['break_phrase']),
       '#group' => 'options][more',
-    ];
+    );
 
-    $form['not'] = [
+    $form['not'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Exclude'),
       '#description' => $this->t('If selected, the numbers entered for the filter will be excluded rather than limiting the view.'),
       '#default_value' => !empty($this->options['not']),
       '#group' => 'options][more',
-    ];
+    );
   }
 
-  public function title() {
+  function title() {
     if (!$this->argument) {
       return !empty($this->definition['empty field name']) ? $this->definition['empty field name'] : $this->t('Uncategorized');
     }
@@ -68,7 +67,7 @@ class NumericArgument extends ArgumentPluginBase {
       $this->operator = $break->operator;
     }
     else {
-      $this->value = [$this->argument];
+      $this->value = array($this->argument);
       $this->operator = 'or';
     }
 
@@ -76,7 +75,7 @@ class NumericArgument extends ArgumentPluginBase {
       return !empty($this->definition['empty field name']) ? $this->definition['empty field name'] : $this->t('Uncategorized');
     }
 
-    if ($this->value === [-1]) {
+    if ($this->value === array(-1)) {
       return !empty($this->definition['invalid input']) ? $this->definition['invalid input'] : $this->t('Invalid input');
     }
 
@@ -101,7 +100,7 @@ class NumericArgument extends ArgumentPluginBase {
       $this->operator = $break->operator;
     }
     else {
-      $this->value = [$this->argument];
+      $this->value = array($this->argument);
     }
 
     $placeholder = $this->placeholder();
@@ -110,11 +109,11 @@ class NumericArgument extends ArgumentPluginBase {
     if (count($this->value) > 1) {
       $operator = empty($this->options['not']) ? 'IN' : 'NOT IN';
       $placeholder .= '[]';
-      $this->query->addWhereExpression(0, "$this->tableAlias.$this->realField $operator($placeholder) $null_check", [$placeholder => $this->value]);
+      $this->query->addWhereExpression(0, "$this->tableAlias.$this->realField $operator($placeholder) $null_check", array($placeholder => $this->value));
     }
     else {
       $operator = empty($this->options['not']) ? '=' : '!=';
-      $this->query->addWhereExpression(0, "$this->tableAlias.$this->realField $operator $placeholder $null_check", [$placeholder => $this->argument]);
+      $this->query->addWhereExpression(0, "$this->tableAlias.$this->realField $operator $placeholder $null_check", array($placeholder => $this->argument));
     }
   }
 
@@ -122,20 +121,7 @@ class NumericArgument extends ArgumentPluginBase {
    * {@inheritdoc}
    */
   public function getSortName() {
-    return $this->t('Numerical', [], ['context' => 'Sort order']);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getContextDefinition() {
-    if ($context_definition = parent::getContextDefinition()) {
-      return $context_definition;
-    }
-
-    // If the parent does not provide a context definition through the
-    // validation plugin, fall back to the integer type.
-    return new ContextDefinition('integer', $this->adminLabel(), FALSE);
+    return $this->t('Numerical', array(), array('context' => 'Sort order'));
   }
 
 }

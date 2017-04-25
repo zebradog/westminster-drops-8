@@ -70,7 +70,7 @@ class File extends ContentEntityBase implements FileInterface {
    *
    * @see file_url_transform_relative()
    */
-  public function url($rel = 'canonical', $options = []) {
+  public function url($rel = 'canonical', $options = array()) {
     return file_create_url($this->getFileUri());
   }
 

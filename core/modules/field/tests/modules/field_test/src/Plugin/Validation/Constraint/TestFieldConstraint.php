@@ -19,7 +19,7 @@ class TestFieldConstraint extends NotEqualTo {
    * {@inheritdoc}
    */
   public function getRequiredOptions() {
-    return ['value'];
+    return array('value');
   }
 
   /**

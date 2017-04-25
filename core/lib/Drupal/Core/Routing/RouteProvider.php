@@ -2,7 +2,6 @@
 
 namespace Drupal\Core\Routing;
 
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
@@ -48,7 +47,7 @@ class RouteProvider implements PreloadableRouteProviderInterface, PagedRouteProv
    *
    * @var \Symfony\Component\Routing\Route[]
    */
-  protected $routes = [];
+  protected $routes = array();
 
   /**
    * A cache of already-loaded serialized routes, keyed by route name.
@@ -140,9 +139,7 @@ class RouteProvider implements PreloadableRouteProviderInterface, PagedRouteProv
    *
    * @return \Symfony\Component\Routing\RouteCollection with all urls that
    *      could potentially match $request. Empty collection if nothing can
-   *      match. The collection will be sorted from highest to lowest fit (match
-   *      of path parts) and then in ascending order by route name for routes
-   *      with the same fit.
+   *      match.
    */
   public function getRouteCollectionForRequest(Request $request) {
     // Cache both the system path as well as route parameters and matching
@@ -185,7 +182,7 @@ class RouteProvider implements PreloadableRouteProviderInterface, PagedRouteProv
    *   Thrown if there is no route with that name in this repository.
    */
   public function getRouteByName($name) {
-    $routes = $this->getRoutesByNames([$name]);
+    $routes = $this->getRoutesByNames(array($name));
     if (empty($routes)) {
       throw new RouteNotFoundException(sprintf('Route "%s" does not exist.', $name));
     }
@@ -210,7 +207,7 @@ class RouteProvider implements PreloadableRouteProviderInterface, PagedRouteProv
       }
       else {
         try {
-          $result = $this->connection->query('SELECT name, route FROM {' . $this->connection->escapeTable($this->tableName) . '} WHERE name IN ( :names[] )', [':names[]' => $routes_to_load]);
+          $result = $this->connection->query('SELECT name, route FROM {' . $this->connection->escapeTable($this->tableName) . '} WHERE name IN ( :names[] )', array(':names[]' => $routes_to_load));
           $routes = $result->fetchAllKeyed();
 
           $this->cache->set($cid, $routes, Cache::PERMANENT, ['routes']);
@@ -252,14 +249,14 @@ class RouteProvider implements PreloadableRouteProviderInterface, PagedRouteProv
    */
   protected function getCandidateOutlines(array $parts) {
     $number_parts = count($parts);
-    $ancestors = [];
+    $ancestors = array();
     $length = $number_parts - 1;
     $end = (1 << $number_parts) - 1;
 
     // The highest possible mask is a 1 bit for every part of the path. We will
     // check every value down from there to generate a possible outline.
     if ($number_parts == 1) {
-      $masks = [1];
+      $masks = array(1);
     }
     elseif ($number_parts <= 3 && $number_parts > 0) {
       // Optimization - don't query the state system for short paths. This also
@@ -269,11 +266,11 @@ class RouteProvider implements PreloadableRouteProviderInterface, PagedRouteProv
     }
     elseif ($number_parts <= 0) {
       // No path can match, short-circuit the process.
-      $masks = [];
+      $masks = array();
     }
     else {
       // Get the actual patterns that exist out of state.
-      $masks = (array) $this->state->get('routing.menu_masks.' . $this->tableName, []);
+      $masks = (array) $this->state->get('routing.menu_masks.' . $this->tableName, array());
     }
 
     // Only examine patterns that actually exist as router items (the masks).
@@ -320,20 +317,15 @@ class RouteProvider implements PreloadableRouteProviderInterface, PagedRouteProv
    * Get all routes which match a certain pattern.
    *
    * @param string $path
-   *   The route pattern to search for.
+   *   The route pattern to search for (contains % as placeholders).
    *
    * @return \Symfony\Component\Routing\RouteCollection
-   *   Returns a route collection of matching routes. The collection may be
-   *   empty and will be sorted from highest to lowest fit (match of path parts)
-   *   and then in ascending order by route name for routes with the same fit.
+   *   Returns a route collection of matching routes.
    */
   protected function getRoutesByPath($path) {
     // Split the path up on the slashes, ignoring multiple slashes in a row
-    // or leading or trailing slashes. Convert to lower case here so we can
-    // have a case-insensitive match from the incoming path to the lower case
-    // pattern outlines from \Drupal\Core\Routing\RouteCompiler::compile().
-    // @see \Drupal\Core\Routing\CompiledRoute::__construct()
-    $parts = preg_split('@/+@', Unicode::strtolower($path), NULL, PREG_SPLIT_NO_EMPTY);
+    // or leading or trailing slashes.
+    $parts = preg_split('@/+@', $path, NULL, PREG_SPLIT_NO_EMPTY);
 
     $collection = new RouteCollection();
 
@@ -346,18 +338,17 @@ class RouteProvider implements PreloadableRouteProviderInterface, PagedRouteProv
     // trailing wildcard parts as long as the pattern matches, since we
     // dump the route pattern without those optional parts.
     try {
-      $routes = $this->connection->query("SELECT name, route, fit FROM {" . $this->connection->escapeTable($this->tableName) . "} WHERE pattern_outline IN ( :patterns[] ) AND number_parts >= :count_parts", [
+      $routes = $this->connection->query("SELECT name, route, fit FROM {" . $this->connection->escapeTable($this->tableName) . "} WHERE pattern_outline IN ( :patterns[] ) AND number_parts >= :count_parts", array(
         ':patterns[]' => $ancestors, ':count_parts' => count($parts),
-      ])
+      ))
         ->fetchAll(\PDO::FETCH_ASSOC);
     }
     catch (\Exception $e) {
       $routes = [];
     }
 
-    // We sort by fit and name in PHP to avoid a SQL filesort and avoid any
-    // difference in the sorting behavior of SQL back-ends.
-    usort($routes, [$this, 'routeProviderRouteCompare']);
+    // We sort by fit and name in PHP to avoid a SQL filesort.
+    usort($routes, array($this, 'routeProviderRouteCompare'));
 
     foreach ($routes as $row) {
       $collection->add($row['name'], unserialize($row['route']));
@@ -389,16 +380,16 @@ class RouteProvider implements PreloadableRouteProviderInterface, PagedRouteProv
    * {@inheritdoc}
    */
   public function reset() {
-    $this->routes  = [];
-    $this->serializedRoutes = [];
+    $this->routes  = array();
+    $this->serializedRoutes = array();
     $this->cacheTagInvalidator->invalidateTags(['routes']);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
-    $events[RoutingEvents::FINISHED][] = ['reset'];
+  static function getSubscribedEvents() {
+    $events[RoutingEvents::FINISHED][] = array('reset');
     return $events;
   }
 

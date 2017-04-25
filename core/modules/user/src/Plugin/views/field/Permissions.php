@@ -66,7 +66,7 @@ class Permissions extends PrerenderList {
   public function init(ViewExecutable $view, DisplayPluginBase $display, array &$options = NULL) {
     parent::init($view, $display, $options);
 
-    $this->additional_fields['uid'] = ['table' => 'users_field_data', 'field' => 'uid'];
+    $this->additional_fields['uid'] = array('table' => 'users_field_data', 'field' => 'uid');
   }
 
   public function query() {
@@ -75,11 +75,12 @@ class Permissions extends PrerenderList {
   }
 
   public function preRender(&$values) {
-    $this->items = [];
+    $uids = array();
+    $this->items = array();
 
     $permission_names = \Drupal::service('user.permissions')->getPermissions();
 
-    $rids = [];
+    $rids = array();
     foreach ($values as $result) {
       $user_rids = $this->getEntity($result)->getRoles();
       $uid = $this->getValue($result);
@@ -99,13 +100,15 @@ class Permissions extends PrerenderList {
         }
       }
 
-      foreach ($this->items as &$permission) {
-        ksort($permission);
+      foreach ($uids as $uid) {
+        if (isset($this->items[$uid])) {
+          ksort($this->items[$uid]);
+        }
       }
     }
   }
 
-  public function render_item($count, $item) {
+  function render_item($count, $item) {
     return $item['permission'];
   }
 

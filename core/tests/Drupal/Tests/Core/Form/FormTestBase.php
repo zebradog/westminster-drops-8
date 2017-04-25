@@ -163,7 +163,7 @@ abstract class FormTestBase extends UnitTestCase {
       ->getMock();
     $this->elementInfo->expects($this->any())
       ->method('getInfo')
-      ->will($this->returnCallback([$this, 'getInfo']));
+      ->will($this->returnCallback(array($this, 'getInfo')));
 
     $this->csrfToken = $this->getMockBuilder('Drupal\Core\Access\CsrfTokenGenerator')
       ->disableOriginalConstructor()
@@ -184,8 +184,8 @@ abstract class FormTestBase extends UnitTestCase {
       ->setMethods(NULL)
       ->getMock();
     $this->formSubmitter = $this->getMockBuilder('Drupal\Core\Form\FormSubmitter')
-      ->setConstructorArgs([$this->requestStack, $this->urlGenerator])
-      ->setMethods(['batchGet', 'drupalInstallationAttempted'])
+      ->setConstructorArgs(array($this->requestStack, $this->urlGenerator))
+      ->setMethods(array('batchGet', 'drupalInstallationAttempted'))
       ->getMock();
     $this->root = dirname(dirname(substr(__DIR__, 0, -strlen(__NAMESPACE__))));
 
@@ -290,25 +290,25 @@ abstract class FormTestBase extends UnitTestCase {
     $types['hidden'] = [
       '#input' => TRUE,
     ];
-    $types['token'] = [
+    $types['token'] = array(
       '#input' => TRUE,
-    ];
-    $types['value'] = [
+    );
+    $types['value'] = array(
       '#input' => TRUE,
-    ];
-    $types['radios'] = [
+    );
+    $types['radios'] = array(
       '#input' => TRUE,
-    ];
-    $types['textfield'] = [
+    );
+    $types['textfield'] = array(
       '#input' => TRUE,
-    ];
-    $types['submit'] = [
+    );
+    $types['submit'] = array(
       '#input' => TRUE,
       '#name' => 'op',
       '#is_button' => TRUE,
-    ];
+    );
     if (!isset($types[$type])) {
-      $types[$type] = [];
+      $types[$type] = array();
     }
     return $types[$type];
   }

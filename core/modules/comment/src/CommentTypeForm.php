@@ -71,32 +71,32 @@ class CommentTypeForm extends EntityForm {
 
     $comment_type = $this->entity;
 
-    $form['label'] = [
+    $form['label'] = array(
       '#type' => 'textfield',
       '#title' => t('Label'),
       '#maxlength' => 255,
       '#default_value' => $comment_type->label(),
       '#required' => TRUE,
-    ];
-    $form['id'] = [
+    );
+    $form['id'] = array(
       '#type' => 'machine_name',
       '#default_value' => $comment_type->id(),
-      '#machine_name' => [
+      '#machine_name' => array(
         'exists' => '\Drupal\comment\Entity\CommentType::load',
-      ],
+      ),
       '#maxlength' => EntityTypeInterface::BUNDLE_MAX_LENGTH,
       '#disabled' => !$comment_type->isNew(),
-    ];
+    );
 
-    $form['description'] = [
+    $form['description'] = array(
       '#type' => 'textarea',
       '#default_value' => $comment_type->getDescription(),
       '#description' => t('Describe this comment type. The text will be displayed on the <em>Comment types</em> administration overview page.'),
       '#title' => t('Description'),
-    ];
+    );
 
     if ($comment_type->isNew()) {
-      $options = [];
+      $options = array();
       foreach ($this->entityManager->getDefinitions() as $entity_type) {
         // Only expose entities that have field UI enabled, only those can
         // get comment fields added in the UI.
@@ -104,47 +104,47 @@ class CommentTypeForm extends EntityForm {
           $options[$entity_type->id()] = $entity_type->getLabel();
         }
       }
-      $form['target_entity_type_id'] = [
+      $form['target_entity_type_id'] = array(
         '#type' => 'select',
         '#default_value' => $comment_type->getTargetEntityTypeId(),
         '#title' => t('Target entity type'),
         '#options' => $options,
         '#description' => t('The target entity type can not be changed after the comment type has been created.')
-      ];
+      );
     }
     else {
-      $form['target_entity_type_id_display'] = [
+      $form['target_entity_type_id_display'] = array(
         '#type' => 'item',
         '#markup' => $this->entityManager->getDefinition($comment_type->getTargetEntityTypeId())->getLabel(),
         '#title' => t('Target entity type'),
-      ];
+      );
     }
 
     if ($this->moduleHandler->moduleExists('content_translation')) {
-      $form['language'] = [
+      $form['language'] = array(
         '#type' => 'details',
         '#title' => t('Language settings'),
         '#group' => 'additional_settings',
-      ];
+      );
 
       $language_configuration = ContentLanguageSettings::loadByEntityTypeBundle('comment', $comment_type->id());
-      $form['language']['language_configuration'] = [
+      $form['language']['language_configuration'] = array(
         '#type' => 'language_configuration',
-        '#entity_information' => [
+        '#entity_information' => array(
           'entity_type' => 'comment',
           'bundle' => $comment_type->id(),
-        ],
+        ),
         '#default_value' => $language_configuration,
-      ];
+      );
 
       $form['#submit'][] = 'language_configuration_element_submit';
     }
 
-    $form['actions'] = ['#type' => 'actions'];
-    $form['actions']['submit'] = [
+    $form['actions'] = array('#type' => 'actions');
+    $form['actions']['submit'] = array(
       '#type' => 'submit',
       '#value' => t('Save'),
-    ];
+    );
 
     return $form;
   }
@@ -158,13 +158,13 @@ class CommentTypeForm extends EntityForm {
 
     $edit_link = $this->entity->link($this->t('Edit'));
     if ($status == SAVED_UPDATED) {
-      drupal_set_message(t('Comment type %label has been updated.', ['%label' => $comment_type->label()]));
-      $this->logger->notice('Comment type %label has been updated.', ['%label' => $comment_type->label(), 'link' => $edit_link]);
+      drupal_set_message(t('Comment type %label has been updated.', array('%label' => $comment_type->label())));
+      $this->logger->notice('Comment type %label has been updated.', array('%label' => $comment_type->label(), 'link' => $edit_link));
     }
     else {
       $this->commentManager->addBodyField($comment_type->id());
-      drupal_set_message(t('Comment type %label has been added.', ['%label' => $comment_type->label()]));
-      $this->logger->notice('Comment type %label has been added.', ['%label' => $comment_type->label(), 'link' => $edit_link]);
+      drupal_set_message(t('Comment type %label has been added.', array('%label' => $comment_type->label())));
+      $this->logger->notice('Comment type %label has been added.', array('%label' => $comment_type->label(), 'link' => $edit_link));
     }
 
     $form_state->setRedirectUrl($comment_type->urlInfo('collection'));

@@ -32,10 +32,10 @@ class SetFormCommand implements CommandInterface {
    * {@inheritdoc}
    */
   public function render() {
-    return [
+    return array(
       'command' => 'viewsSetForm',
       'url' => $this->url,
-    ];
+    );
   }
 
 }

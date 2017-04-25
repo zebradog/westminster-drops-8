@@ -46,14 +46,8 @@ class RouteCompiler extends SymfonyRouteCompiler implements RouteCompilerInterfa
       $fit,
       $pattern_outline,
       $num_parts,
-
-      // The following parameters are what Symfony uses in
-      // \Symfony\Component\Routing\Matcher\UrlMatcher::matchCollection().
-
-      // Set the static prefix to an empty string since it is redundant to
-      // the matching in \Drupal\Core\Routing\RouteProvider::getRoutesByPath()
-      // and by skipping it we more easily make the routing case-insensitive.
-      '',
+      // These are the Symfony compiled parts.
+      $symfony_compiled->getStaticPrefix(),
       $symfony_compiled->getRegex(),
       $symfony_compiled->getTokens(),
       $symfony_compiled->getPathVariables(),
@@ -61,14 +55,14 @@ class RouteCompiler extends SymfonyRouteCompiler implements RouteCompilerInterfa
       $symfony_compiled->getHostTokens(),
       $symfony_compiled->getHostVariables(),
       $symfony_compiled->getVariables()
-    );
+      );
   }
 
   /**
    * Returns the pattern outline.
    *
    * The pattern outline is the path pattern but normalized so that all
-   * placeholders are the string '%'.
+   * placeholders are equal strings and default values are removed.
    *
    * @param string $path
    *   The path for which we want the normalized outline.

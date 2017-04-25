@@ -29,7 +29,7 @@ class DefaultLanguageItem extends LanguageItem {
       $langcode = $this->getDefaultLangcode($entity);
     }
     // Always notify otherwise default langcode will not be set correctly.
-    $this->setValue(['value' => $langcode], TRUE);
+    $this->setValue(array('value' => $langcode), TRUE);
     return $this;
   }
 

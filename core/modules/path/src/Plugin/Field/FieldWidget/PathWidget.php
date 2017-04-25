@@ -26,47 +26,47 @@ class PathWidget extends WidgetBase {
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
     $entity = $items->getEntity();
-    $path = [];
+    $path = array();
     if (!$entity->isNew()) {
-      $conditions = ['source' => '/' . $entity->urlInfo()->getInternalPath()];
+      $conditions = array('source' => '/' . $entity->urlInfo()->getInternalPath());
       if ($items->getLangcode() != LanguageInterface::LANGCODE_NOT_SPECIFIED) {
         $conditions['langcode'] = $items->getLangcode();
       }
       $path = \Drupal::service('path.alias_storage')->load($conditions);
       if ($path === FALSE) {
-        $path = [];
+        $path = array();
       }
     }
-    $path += [
+    $path += array(
       'pid' => NULL,
       'source' => !$entity->isNew() ? '/' . $entity->urlInfo()->getInternalPath() : NULL,
       'alias' => '',
       'langcode' => $items->getLangcode(),
-    ];
+    );
 
-    $element += [
-      '#element_validate' => [[get_class($this), 'validateFormElement']],
-    ];
-    $element['alias'] = [
+    $element += array(
+      '#element_validate' => array(array(get_class($this), 'validateFormElement')),
+    );
+    $element['alias'] = array(
       '#type' => 'textfield',
       '#title' => $element['#title'],
       '#default_value' => $path['alias'],
       '#required' => $element['#required'],
       '#maxlength' => 255,
       '#description' => $this->t('Specify an alternative path by which this data can be accessed. For example, type "/about" when writing an about page.'),
-    ];
-    $element['pid'] = [
+    );
+    $element['pid'] = array(
       '#type' => 'value',
       '#value' => $path['pid'],
-    ];
-    $element['source'] = [
+    );
+    $element['source'] = array(
       '#type' => 'value',
       '#value' => $path['source'],
-    ];
-    $element['langcode'] = [
+    );
+    $element['langcode'] = array(
       '#type' => 'value',
       '#value' => $path['langcode'],
-    ];
+    );
     return $element;
   }
 

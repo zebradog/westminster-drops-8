@@ -22,26 +22,26 @@ class ViewDuplicateForm extends ViewFormBase {
   public function form(array $form, FormStateInterface $form_state) {
     parent::form($form, $form_state);
 
-    $form['#title'] = $this->t('Duplicate of @label', ['@label' => $this->entity->label()]);
+    $form['#title'] = $this->t('Duplicate of @label', array('@label' => $this->entity->label()));
 
-    $form['label'] = [
+    $form['label'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('View name'),
       '#required' => TRUE,
       '#size' => 32,
       '#maxlength' => 255,
-      '#default_value' => $this->t('Duplicate of @label', ['@label' => $this->entity->label()]),
-    ];
-    $form['id'] = [
+      '#default_value' => $this->t('Duplicate of @label', array('@label' => $this->entity->label())),
+    );
+    $form['id'] = array(
       '#type' => 'machine_name',
       '#maxlength' => 128,
-      '#machine_name' => [
+      '#machine_name' => array(
         'exists' => '\Drupal\views\Views::getView',
-        'source' => ['label'],
-      ],
+        'source' => array('label'),
+      ),
       '#default_value' => '',
       '#description' => $this->t('A unique machine-readable name for this View. It must only contain lowercase letters, numbers, and underscores.'),
-    ];
+    );
 
     return $form;
   }
@@ -50,10 +50,10 @@ class ViewDuplicateForm extends ViewFormBase {
    * {@inheritdoc}
    */
   protected function actions(array $form, FormStateInterface $form_state) {
-    $actions['submit'] = [
+    $actions['submit'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Duplicate'),
-    ];
+    );
     return $actions;
   }
 

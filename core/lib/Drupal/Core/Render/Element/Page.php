@@ -15,10 +15,10 @@ class Page extends RenderElement {
    * {@inheritdoc}
    */
   public function getInfo() {
-    return [
+    return array(
       '#theme' => 'page',
       '#title' => '',
-    ];
+    );
   }
 
 }

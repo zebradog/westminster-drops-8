@@ -33,13 +33,13 @@ class MigrateStatusTest extends MigrateTestBase {
     $this->assertIdentical($status, MigrationInterface::STATUS_IDLE);
 
     // Test setting and retrieving all known status values.
-    $status_list = [
+    $status_list = array(
       MigrationInterface::STATUS_IDLE,
       MigrationInterface::STATUS_IMPORTING,
       MigrationInterface::STATUS_ROLLING_BACK,
       MigrationInterface::STATUS_STOPPING,
       MigrationInterface::STATUS_DISABLED,
-    ];
+    );
     foreach ($status_list as $status) {
       $migration->setStatus($status);
       $this->assertIdentical($migration->getStatus(), $status);

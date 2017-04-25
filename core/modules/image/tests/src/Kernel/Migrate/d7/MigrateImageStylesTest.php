@@ -17,7 +17,7 @@ class MigrateImageStylesTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['image'];
+  public static $modules = array('image');
 
   /**
    * {@inheritdoc}

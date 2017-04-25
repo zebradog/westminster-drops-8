@@ -57,18 +57,18 @@ class BackendCompilerPassTest extends UnitTestCase {
    * @return array
    */
   public function providerTestProcess() {
-    $data = [];
+    $data = array();
     // Add a container with no set default_backend.
     $prefix = __NAMESPACE__ . '\\ServiceClass';
     $service = (new Definition($prefix . 'Default'))->addTag('backend_overridable');
     $container = $this->getMysqlContainer($service);
 
-    $data[] = [$prefix . 'Default', $container];
+    $data[] = array($prefix . 'Default', $container);
 
     // Set the default_backend so the mysql service should be used.
     $container = $this->getMysqlContainer($service);
     $container->setParameter('default_backend', 'mysql');
-    $data[] = [$prefix . 'Mysql', $container];
+    $data[] = array($prefix . 'Mysql', $container);
 
     // Configure a manual alias for the service, so ensure that it is not
     // overridden by the default backend.
@@ -76,16 +76,16 @@ class BackendCompilerPassTest extends UnitTestCase {
     $container->setParameter('default_backend', 'mysql');
     $container->setDefinition('mariadb.service', new Definition($prefix . 'MariaDb'));
     $container->setAlias('service', new Alias('mariadb.service'));
-    $data[] = [$prefix . 'MariaDb', $container];
+    $data[] = array($prefix . 'MariaDb', $container);
 
     // Check the database driver is the default.
     $container = $this->getSqliteContainer($service);
-    $data[] = [$prefix . 'Sqlite', $container];
+    $data[] = array($prefix . 'Sqlite', $container);
 
     // Test the opt out.
     $container = $this->getSqliteContainer($service);
     $container->setParameter('default_backend', '');
-    $data[] = [$prefix . 'Default', $container];
+    $data[] = array($prefix . 'Default', $container);
 
     return $data;
   }

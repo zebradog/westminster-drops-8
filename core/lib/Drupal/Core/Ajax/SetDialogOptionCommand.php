@@ -52,12 +52,12 @@ class SetDialogOptionCommand implements CommandInterface {
    * {@inheritdoc}
    */
   public function render() {
-    return [
+    return array(
       'command' => 'setDialogOption',
       'selector' => $this->selector,
       'optionName' => $this->optionName,
       'optionValue' => $this->optionValue,
-    ];
+    );
   }
 
 }

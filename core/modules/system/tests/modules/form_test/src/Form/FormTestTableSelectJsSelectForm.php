@@ -19,19 +19,19 @@ class FormTestTableSelectJsSelectForm extends FormTestTableSelectFormBase {
   public function buildForm(array $form, FormStateInterface $form_state, $test_action = NULL) {
     switch ($test_action) {
       case 'multiple-true-default':
-        $options = ['#multiple' => TRUE];
+        $options = array('#multiple' => TRUE);
         break;
 
       case 'multiple-false-default':
-        $options = ['#multiple' => FALSE];
+        $options = array('#multiple' => FALSE);
         break;
 
       case 'multiple-true-no-advanced-select':
-        $options = ['#multiple' => TRUE, '#js_select' => FALSE];
+        $options = array('#multiple' => TRUE, '#js_select' => FALSE);
         break;
 
       case 'multiple-false-advanced-select':
-        $options = ['#multiple' => FALSE, '#js_select' => TRUE];
+        $options = array('#multiple' => FALSE, '#js_select' => TRUE);
         break;
     }
 

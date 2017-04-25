@@ -1,8 +1,6 @@
 <?php
 
 namespace Drupal\Tests\migrate\Unit\process;
-use Drupal\migrate\MigrateSkipProcessException;
-use Drupal\migrate\MigrateSkipRowException;
 use Drupal\migrate\Plugin\migrate\process\SkipOnEmpty;
 
 /**
@@ -15,10 +13,10 @@ class SkipOnEmptyTest extends MigrateProcessTestCase {
 
   /**
    * @covers ::process
+   * @expectedException \Drupal\migrate\MigrateSkipProcessException
    */
   public function testProcessSkipsOnEmpty() {
     $configuration['method'] = 'process';
-    $this->setExpectedException(MigrateSkipProcessException::class);
     (new SkipOnEmpty($configuration, 'skip_on_empty', []))
       ->transform('', $this->migrateExecutable, $this->row, 'destinationproperty');
   }
@@ -35,10 +33,10 @@ class SkipOnEmptyTest extends MigrateProcessTestCase {
 
   /**
    * @covers ::row
+   * @expectedException \Drupal\migrate\MigrateSkipRowException
    */
   public function testRowSkipsOnEmpty() {
     $configuration['method'] = 'row';
-    $this->setExpectedException(MigrateSkipRowException::class);
     (new SkipOnEmpty($configuration, 'skip_on_empty', []))
       ->transform('', $this->migrateExecutable, $this->row, 'destinationproperty');
   }

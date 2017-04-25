@@ -173,7 +173,7 @@ abstract class QueryPluginBase extends PluginBase implements CacheableDependency
 
     // Create an empty group
     if (empty($groups[$group])) {
-      $groups[$group] = ['conditions' => [], 'args' => []];
+      $groups[$group] = array('conditions' => array(), 'args' => array());
     }
 
     $groups[$group]['type'] = strtoupper($type);
@@ -199,7 +199,7 @@ abstract class QueryPluginBase extends PluginBase implements CacheableDependency
    *
    * Query plugins that don't support entities can leave the method empty.
    */
-  public function loadEntities(&$results) {}
+  function loadEntities(&$results) {}
 
   /**
    * Returns a Unix timestamp to database native timestamp expression.
@@ -261,19 +261,19 @@ abstract class QueryPluginBase extends PluginBase implements CacheableDependency
    */
   public function getEntityTableInfo() {
     // Start with the base table.
-    $entity_tables = [];
+    $entity_tables = array();
     $views_data = Views::viewsData();
     $base_table = $this->view->storage->get('base_table');
     $base_table_data = $views_data->get($base_table);
 
     if (isset($base_table_data['table']['entity type'])) {
-      $entity_tables[$base_table_data['table']['entity type']] = [
+      $entity_tables[$base_table_data['table']['entity type']] = array(
         'base' => $base_table,
         'alias' => $base_table,
         'relationship_id' => 'none',
         'entity_type' => $base_table_data['table']['entity type'],
         'revision' => $base_table_data['table']['entity revision'],
-      ];
+      );
 
       // Include the entity provider.
       if (!empty($base_table_data['table']['provider'])) {
@@ -293,13 +293,13 @@ abstract class QueryPluginBase extends PluginBase implements CacheableDependency
           continue;
         }
 
-        $entity_tables[$relationship_id . '__' . $relationship->tableAlias] = [
+        $entity_tables[$relationship_id . '__' . $relationship->tableAlias] = array(
           'base' => $relationship->definition['base'],
           'relationship_id' => $relationship_id,
           'alias' => $relationship->alias,
           'entity_type' => $table_data['table']['entity type'],
           'revision' => $table_data['table']['entity revision'],
-        ];
+        );
 
         // Include the entity provider.
         if (!empty($table_data['table']['provider'])) {

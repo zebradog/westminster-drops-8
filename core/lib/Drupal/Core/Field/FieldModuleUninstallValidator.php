@@ -3,7 +3,6 @@
 namespace Drupal\Core\Field;
 
 use Drupal\Core\Entity\EntityManagerInterface;
-use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Entity\FieldableEntityStorageInterface;
 use Drupal\Core\Extension\ModuleUninstallValidatorInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -35,7 +34,7 @@ class FieldModuleUninstallValidator implements ModuleUninstallValidatorInterface
    * {@inheritdoc}
    */
   public function validate($module_name) {
-    $reasons = [];
+    $reasons = array();
 
     // We skip fields provided by the Field module as it implements field
     // purging.
@@ -44,15 +43,15 @@ class FieldModuleUninstallValidator implements ModuleUninstallValidatorInterface
         // We skip entity types defined by the module as there must be no
         // content to be able to uninstall them anyway.
         // See \Drupal\Core\Entity\ContentUninstallValidator.
-        if ($entity_type->getProvider() != $module_name && $entity_type->entityClassImplements(FieldableEntityInterface::class)) {
+        if ($entity_type->getProvider() != $module_name && $entity_type->isSubclassOf('\Drupal\Core\Entity\FieldableEntityInterface')) {
           foreach ($this->entityManager->getFieldStorageDefinitions($entity_type_id) as $storage_definition) {
             if ($storage_definition->getProvider() == $module_name) {
               $storage = $this->entityManager->getStorage($entity_type_id);
               if ($storage instanceof FieldableEntityStorageInterface && $storage->countFieldData($storage_definition, TRUE)) {
-                $reasons[] = $this->t('There is data for the field @field-name on entity type @entity_type', [
+                $reasons[] = $this->t('There is data for the field @field-name on entity type @entity_type', array(
                   '@field-name' => $storage_definition->getName(),
                   '@entity_type' => $entity_type->getLabel(),
-                ]);
+                ));
               }
             }
           }

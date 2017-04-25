@@ -13,7 +13,6 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Context\CacheContextsManager;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Form\EnforcedResponseException;
-use Drupal\Core\Form\Exception\BrokenPostRequestException;
 use Drupal\Core\Form\FormBuilder;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormInterface;
@@ -53,12 +52,19 @@ class FormBuilderTest extends FormTestBase {
 
   /**
    * Tests the getFormId() method with a string based form ID.
+   *
+   * @expectedException \InvalidArgumentException
+   * @expectedExceptionMessage The form argument foo is not a valid form.
    */
   public function testGetFormIdWithString() {
     $form_arg = 'foo';
+
+    $clean_form_state = new FormState();
     $form_state = new FormState();
-    $this->setExpectedException(\InvalidArgumentException::class, 'The form argument foo is not a valid form.');
-    $this->formBuilder->getFormId($form_arg, $form_state);
+    $form_id = $this->formBuilder->getFormId($form_arg, $form_state);
+
+    $this->assertSame($form_arg, $form_id);
+    $this->assertSame($clean_form_state, $form_state);
   }
 
   /**
@@ -165,10 +171,10 @@ class FormBuilderTest extends FormTestBase {
    * Provides test data for testHandleFormStateResponse().
    */
   public function formStateResponseProvider() {
-    return [
-      ['Symfony\Component\HttpFoundation\Response', 'response'],
-      ['Symfony\Component\HttpFoundation\RedirectResponse', 'redirect'],
-    ];
+    return array(
+      array('Symfony\Component\HttpFoundation\Response', 'response'),
+      array('Symfony\Component\HttpFoundation\RedirectResponse', 'redirect'),
+    );
   }
 
   /**
@@ -212,11 +218,17 @@ class FormBuilderTest extends FormTestBase {
 
   /**
    * Tests the getForm() method with a string based form ID.
+   *
+   * @expectedException \InvalidArgumentException
+   * @expectedExceptionMessage The form argument test_form_id is not a valid form.
    */
   public function testGetFormWithString() {
     $form_id = 'test_form_id';
-    $this->setExpectedException(\InvalidArgumentException::class, 'The form argument test_form_id is not a valid form.');
-    $this->formBuilder->getForm($form_id);
+    $expected_form = $form_id();
+
+    $form = $this->formBuilder->getForm($form_id);
+    $this->assertFormElement($expected_form, $form, 'test');
+    $this->assertSame('test-form-id', $form['#id']);
   }
 
   /**
@@ -239,7 +251,7 @@ class FormBuilderTest extends FormTestBase {
   public function testGetFormWithClassString() {
     $form_id = '\Drupal\Tests\Core\Form\TestForm';
     $object = new TestForm();
-    $form = [];
+    $form = array();
     $form_state = new FormState();
     $expected_form = $object->buildForm($form, $form_state);
 
@@ -250,11 +262,17 @@ class FormBuilderTest extends FormTestBase {
 
   /**
    * Tests the buildForm() method with a string based form ID.
+   *
+   * @expectedException \InvalidArgumentException
+   * @expectedExceptionMessage The form argument test_form_id is not a valid form.
    */
   public function testBuildFormWithString() {
     $form_id = 'test_form_id';
-    $this->setExpectedException(\InvalidArgumentException::class, 'The form argument test_form_id is not a valid form.');
-    $this->formBuilder->getForm($form_id);
+    $expected_form = $form_id();
+
+    $form = $this->formBuilder->getForm($form_id);
+    $this->assertFormElement($expected_form, $form, 'test');
+    $this->assertArrayHasKey('#id', $form);
   }
 
   /**
@@ -263,7 +281,7 @@ class FormBuilderTest extends FormTestBase {
   public function testBuildFormWithClassString() {
     $form_id = '\Drupal\Tests\Core\Form\TestForm';
     $object = new TestForm();
-    $form = [];
+    $form = array();
     $form_state = new FormState();
     $expected_form = $object->buildForm($form, $form_state);
 
@@ -529,6 +547,8 @@ class FormBuilderTest extends FormTestBase {
 
   /**
    * @covers ::buildForm
+   *
+   * @expectedException \Drupal\Core\Form\Exception\BrokenPostRequestException
    */
   public function testExceededFileSize() {
     $request = new Request([FormBuilderInterface::AJAX_FORM_REQUEST => TRUE]);
@@ -545,7 +565,6 @@ class FormBuilderTest extends FormTestBase {
     $form_arg = $this->getMockForm('test_form_id');
     $form_state = new FormState();
 
-    $this->setExpectedException(BrokenPostRequestException::class);
     $this->formBuilder->buildForm($form_arg, $form_state);
   }
 
@@ -867,7 +886,7 @@ class FormBuilderTest extends FormTestBase {
    *
    * @return array
    */
-  public function providerTestFormTokenCacheability() {
+  function providerTestFormTokenCacheability() {
     return [
       'token:none,authenticated:true' => [NULL, TRUE, ['contexts' => ['user.roles:authenticated']], ['max-age' => 0], 'post'],
       'token:none,authenticated:false' => [NULL, FALSE, ['contexts' => ['user.roles:authenticated']], NULL, 'post'],

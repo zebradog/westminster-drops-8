@@ -2,10 +2,8 @@
 
 namespace Drupal\KernelTests\Core\Theme;
 
-use Drupal\Component\Utility\Crypt;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Site\Settings;
-use Drupal\Core\Template\TwigPhpStorageCache;
 use Drupal\KernelTests\KernelTestBase;
 
 /**
@@ -21,7 +19,7 @@ class TwigEnvironmentTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['system'];
+  public static $modules = array('system');
 
   /**
    * Tests inline templates.
@@ -32,15 +30,15 @@ class TwigEnvironmentTest extends KernelTestBase {
     /** @var \Drupal\Core\Template\TwigEnvironment $environment */
     $environment = \Drupal::service('twig');
     $this->assertEqual($environment->renderInline('test-no-context'), 'test-no-context');
-    $this->assertEqual($environment->renderInline('test-with-context {{ llama }}', ['llama' => 'muuh']), 'test-with-context muuh');
+    $this->assertEqual($environment->renderInline('test-with-context {{ llama }}', array('llama' => 'muuh')), 'test-with-context muuh');
 
-    $element = [];
+    $element = array();
     $unsafe_string = '<script>alert(\'Danger! High voltage!\');</script>';
-    $element['test'] = [
+    $element['test'] = array(
       '#type' => 'inline_template',
       '#template' => 'test-with-context <label>{{ unsafe_content }}</label>',
-      '#context' => ['unsafe_content' => $unsafe_string],
-    ];
+      '#context' => array('unsafe_content' => $unsafe_string),
+    );
     $this->assertEqual($renderer->renderRoot($element), 'test-with-context <label>' . Html::escape($unsafe_string) . '</label>');
 
     // Enable twig_auto_reload and twig_debug.
@@ -52,12 +50,12 @@ class TwigEnvironmentTest extends KernelTestBase {
     $this->container = \Drupal::service('kernel')->rebuildContainer();
     \Drupal::setContainer($this->container);
 
-    $element = [];
-    $element['test'] = [
+    $element = array();
+    $element['test'] = array(
       '#type' => 'inline_template',
       '#template' => 'test-with-context {{ llama }}',
-      '#context' => ['llama' => 'muuh'],
-    ];
+      '#context' => array('llama' => 'muuh'),
+    );
     $element_copy = $element;
     // Render it twice so that twig caching is triggered.
     $this->assertEqual($renderer->renderRoot($element), 'test-with-context muuh');
@@ -85,11 +83,11 @@ class TwigEnvironmentTest extends KernelTestBase {
     $this->assertEqual($renderer->renderRoot($element_copy), $expected);
 
     $name = '{# inline_template_start #}' . $element['test']['#template'];
-    $prefix = $environment->getTwigCachePrefix();
+    $hash = $this->container->getParameter('twig_extension_hash');
 
     $cache = $environment->getCache();
     $class = $environment->getTemplateClass($name);
-    $expected = $prefix . '_inline-template_' . substr(Crypt::hashBase64($class), 0, TwigPhpStorageCache::SUFFIX_SUBSTRING_LENGTH);
+    $expected = $hash . '_inline-template' . '_' . hash('sha256', $class);
     $this->assertEqual($expected, $cache->generateKey($name, $class));
   }
 
@@ -101,7 +99,7 @@ class TwigEnvironmentTest extends KernelTestBase {
     $environment = \Drupal::service('twig');
 
     try {
-      $environment->loadTemplate('this-template-does-not-exist.html.twig')->render([]);
+      $environment->loadTemplate('this-template-does-not-exist.html.twig')->render(array());
       $this->fail('Did not throw an exception as expected.');
     }
     catch (\Twig_Error_Loader $e) {
@@ -117,20 +115,6 @@ class TwigEnvironmentTest extends KernelTestBase {
     // Note: Later we refetch the twig service in order to bypass its internal
     // static cache.
     $environment = \Drupal::service('twig');
-
-    // A template basename greater than the constant
-    // TwigPhpStorageCache::SUFFIX_SUBSTRING_LENGTH should get truncated.
-    $cache = $environment->getCache();
-    $long_name = 'core/modules/system/templates/block--system-messages-block.html.twig';
-    $this->assertGreaterThan(TwigPhpStorageCache::SUFFIX_SUBSTRING_LENGTH, strlen(basename($long_name)));
-    $class = $environment->getTemplateClass($long_name);
-    $key = $cache->generateKey($long_name, $class);
-    $prefix = $environment->getTwigCachePrefix();
-    // The key should consist of the prefix, an underscore, and two strings
-    // each truncated to length TwigPhpStorageCache::SUFFIX_SUBSTRING_LENGTH
-    // separated by an underscore.
-    $expected = strlen($prefix) + 2 + 2 * TwigPhpStorageCache::SUFFIX_SUBSTRING_LENGTH;
-    $this->assertEquals($expected, strlen($key));
 
     $original_filename = $environment->getCacheFilename('core/modules/system/templates/container.html.twig');
     \Drupal::getContainer()->set('twig', NULL);

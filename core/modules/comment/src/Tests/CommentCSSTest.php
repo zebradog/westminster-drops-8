@@ -18,32 +18,32 @@ class CommentCSSTest extends CommentTestBase {
     parent::setUp();
 
     // Allow anonymous users to see comments.
-    user_role_grant_permissions(RoleInterface::ANONYMOUS_ID, [
+    user_role_grant_permissions(RoleInterface::ANONYMOUS_ID, array(
       'access comments',
       'access content'
-    ]);
+    ));
   }
 
   /**
    * Tests CSS classes on comments.
    */
-  public function testCommentClasses() {
+  function testCommentClasses() {
     // Create all permutations for comments, users, and nodes.
-    $parameters = [
-      'node_uid' => [0, $this->webUser->id()],
-      'comment_uid' => [0, $this->webUser->id(), $this->adminUser->id()],
-      'comment_status' => [CommentInterface::PUBLISHED, CommentInterface::NOT_PUBLISHED],
-      'user' => ['anonymous', 'authenticated', 'admin'],
-    ];
+    $parameters = array(
+      'node_uid' => array(0, $this->webUser->id()),
+      'comment_uid' => array(0, $this->webUser->id(), $this->adminUser->id()),
+      'comment_status' => array(CommentInterface::PUBLISHED, CommentInterface::NOT_PUBLISHED),
+      'user' => array('anonymous', 'authenticated', 'admin'),
+    );
     $permutations = $this->generatePermutations($parameters);
 
     foreach ($permutations as $case) {
       // Create a new node.
-      $node = $this->drupalCreateNode(['type' => 'article', 'uid' => $case['node_uid']]);
+      $node = $this->drupalCreateNode(array('type' => 'article', 'uid' => $case['node_uid']));
 
       // Add a comment.
       /** @var \Drupal\comment\CommentInterface $comment */
-      $comment = Comment::create([
+      $comment = Comment::create(array(
         'entity_id' => $node->id(),
         'entity_type' => 'node',
         'field_name' => 'comment',
@@ -51,8 +51,8 @@ class CommentCSSTest extends CommentTestBase {
         'status' => $case['comment_status'],
         'subject' => $this->randomMachineName(),
         'language' => LanguageInterface::LANGCODE_NOT_SPECIFIED,
-        'comment_body' => [LanguageInterface::LANGCODE_NOT_SPECIFIED => [$this->randomMachineName()]],
-      ]);
+        'comment_body' => array(LanguageInterface::LANGCODE_NOT_SPECIFIED => array($this->randomMachineName())),
+      ));
       $comment->save();
 
       // Adjust the current/viewing user.

@@ -21,117 +21,117 @@ class FunctionsTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = ['router_test'];
+  public static $modules = array('router_test');
 
   /**
    * Tests item-list.html.twig.
    */
-  public function testItemList() {
+  function testItemList() {
     // Verify that empty items produce no output.
-    $variables = [];
+    $variables = array();
     $expected = '';
     $this->assertThemeOutput('item_list', $variables, $expected, 'Empty %callback generates no output.');
 
     // Verify that empty items with title produce no output.
-    $variables = [];
+    $variables = array();
     $variables['title'] = 'Some title';
     $expected = '';
     $this->assertThemeOutput('item_list', $variables, $expected, 'Empty %callback with title generates no output.');
 
     // Verify that empty items produce the empty string.
-    $variables = [];
+    $variables = array();
     $variables['empty'] = 'No items found.';
     $expected = '<div class="item-list">No items found.</div>';
     $this->assertThemeOutput('item_list', $variables, $expected, 'Empty %callback generates empty string.');
 
     // Verify that empty items produce the empty string with title.
-    $variables = [];
+    $variables = array();
     $variables['title'] = 'Some title';
     $variables['empty'] = 'No items found.';
     $expected = '<div class="item-list"><h3>Some title</h3>No items found.</div>';
     $this->assertThemeOutput('item_list', $variables, $expected, 'Empty %callback generates empty string with title.');
 
     // Verify that title set to 0 is output.
-    $variables = [];
+    $variables = array();
     $variables['title'] = 0;
     $variables['empty'] = 'No items found.';
     $expected = '<div class="item-list"><h3>0</h3>No items found.</div>';
     $this->assertThemeOutput('item_list', $variables, $expected, '%callback with title set to 0 generates a title.');
 
     // Verify that title set to a render array is output.
-    $variables = [];
-    $variables['title'] = [
+    $variables = array();
+    $variables['title'] = array(
       '#markup' => '<span>Render array</span>',
-    ];
+    );
     $variables['empty'] = 'No items found.';
     $expected = '<div class="item-list"><h3><span>Render array</span></h3>No items found.</div>';
     $this->assertThemeOutput('item_list', $variables, $expected, '%callback with title set to a render array generates a title.');
 
     // Verify that empty text is not displayed when there are list items.
-    $variables = [];
+    $variables = array();
     $variables['title'] = 'Some title';
     $variables['empty'] = 'No items found.';
-    $variables['items'] = ['Un', 'Deux', 'Trois'];
+    $variables['items'] = array('Un', 'Deux', 'Trois');
     $expected = '<div class="item-list"><h3>Some title</h3><ul><li>Un</li><li>Deux</li><li>Trois</li></ul></div>';
     $this->assertThemeOutput('item_list', $variables, $expected, '%callback does not print empty text when there are list items.');
 
     // Verify nested item lists.
-    $variables = [];
+    $variables = array();
     $variables['title'] = 'Some title';
-    $variables['attributes'] = [
+    $variables['attributes'] = array(
       'id' => 'parentlist',
-    ];
-    $variables['items'] = [
+    );
+    $variables['items'] = array(
       // A plain string value forms an own item.
       'a',
       // Items can be fully-fledged render arrays with their own attributes.
-      [
-        '#wrapper_attributes' => [
+      array(
+        '#wrapper_attributes' => array(
           'id' => 'item-id-b',
-        ],
+        ),
         '#markup' => 'b',
-        'childlist' => [
+        'childlist' => array(
           '#theme' => 'item_list',
-          '#attributes' => ['id' => 'blist'],
+          '#attributes' => array('id' => 'blist'),
           '#list_type' => 'ol',
-          '#items' => [
+          '#items' => array(
             'ba',
-            [
+            array(
               '#markup' => 'bb',
-              '#wrapper_attributes' => ['class' => ['item-class-bb']],
-            ],
-          ],
-        ],
-      ],
+              '#wrapper_attributes' => array('class' => array('item-class-bb')),
+            ),
+          ),
+        ),
+      ),
       // However, items can also be child #items.
-      [
+      array(
         '#markup' => 'c',
-        'childlist' => [
-          '#attributes' => ['id' => 'clist'],
+        'childlist' => array(
+          '#attributes' => array('id' => 'clist'),
           'ca',
-          [
+          array(
             '#markup' => 'cb',
-            '#wrapper_attributes' => ['class' => ['item-class-cb']],
-            'children' => [
+            '#wrapper_attributes' => array('class' => array('item-class-cb')),
+            'children' => array(
               'cba',
               'cbb',
-            ],
-          ],
+            ),
+          ),
           'cc',
-        ],
-      ],
+        ),
+      ),
       // Use #markup to be able to specify #wrapper_attributes.
-      [
+      array(
         '#markup' => 'd',
-        '#wrapper_attributes' => ['id' => 'item-id-d'],
-      ],
+        '#wrapper_attributes' => array('id' => 'item-id-d'),
+      ),
       // An empty item with attributes.
-      [
-        '#wrapper_attributes' => ['id' => 'item-id-e'],
-      ],
+      array(
+        '#wrapper_attributes' => array('id' => 'item-id-e'),
+      ),
       // Lastly, another plain string item.
       'f',
-    ];
+    );
 
     $inner_b = '<div class="item-list"><ol id="blist">';
     $inner_b .= '<li>ba</li>';
@@ -166,52 +166,52 @@ class FunctionsTest extends WebTestBase {
   /**
    * Tests links.html.twig.
    */
-  public function testLinks() {
+  function testLinks() {
     // Turn off the query for the
     // \Drupal\Core\Utility\LinkGeneratorInterface::generate() method to compare
     // the active link correctly.
     $original_query = \Drupal::request()->query->all();
-    \Drupal::request()->query->replace([]);
+    \Drupal::request()->query->replace(array());
     // Verify that empty variables produce no output.
-    $variables = [];
+    $variables = array();
     $expected = '';
     $this->assertThemeOutput('links', $variables, $expected, 'Empty %callback generates no output.');
 
-    $variables = [];
+    $variables = array();
     $variables['heading'] = 'Some title';
     $expected = '';
     $this->assertThemeOutput('links', $variables, $expected, 'Empty %callback with heading generates no output.');
 
     // Verify that a list of links is properly rendered.
-    $variables = [];
-    $variables['attributes'] = ['id' => 'somelinks'];
-    $variables['links'] = [
-      'a link' => [
+    $variables = array();
+    $variables['attributes'] = array('id' => 'somelinks');
+    $variables['links'] = array(
+      'a link' => array(
         'title' => 'A <link>',
         'url' => Url::fromUri('base:a/link'),
-      ],
-      'plain text' => [
+      ),
+      'plain text' => array(
         'title' => 'Plain "text"',
-      ],
-      'html text' => [
-        'title' => SafeMarkup::format('<span class="unescaped">@text</span>', ['@text' => 'potentially unsafe text that <should> be escaped']),
-      ],
-      'front page' => [
+      ),
+      'html text' => array(
+        'title' => SafeMarkup::format('<span class="unescaped">@text</span>', array('@text' => 'potentially unsafe text that <should> be escaped')),
+      ),
+      'front page' => array(
         'title' => 'Front page',
         'url' => Url::fromRoute('<front>'),
-      ],
-      'router-test' => [
+      ),
+      'router-test' => array(
         'title' => 'Test route',
         'url' => Url::fromRoute('router_test.1'),
-      ],
-      'query-test' => [
+      ),
+      'query-test' => array(
         'title' => 'Query test route',
         'url' => Url::fromRoute('router_test.1'),
-        'query' => [
+        'query' => array(
           'key' => 'value',
-        ]
-      ],
-    ];
+        )
+      ),
+    );
 
     $expected_links = '';
     $expected_links .= '<ul id="somelinks">';
@@ -220,7 +220,7 @@ class FunctionsTest extends WebTestBase {
     $expected_links .= '<li class="html-text"><span class="unescaped">' . Html::escape('potentially unsafe text that <should> be escaped') . '</span></li>';
     $expected_links .= '<li class="front-page"><a href="' . Url::fromRoute('<front>')->toString() . '">' . Html::escape('Front page') . '</a></li>';
     $expected_links .= '<li class="router-test"><a href="' . \Drupal::urlGenerator()->generate('router_test.1') . '">' . Html::escape('Test route') . '</a></li>';
-    $query = ['key' => 'value'];
+    $query = array('key' => 'value');
     $expected_links .= '<li class="query-test"><a href="' . \Drupal::urlGenerator()->generate('router_test.1', $query) . '">' . Html::escape('Query test route') . '</a></li>';
     $expected_links .= '</ul>';
 
@@ -234,25 +234,25 @@ class FunctionsTest extends WebTestBase {
     \Drupal::request()->query->replace($original_query);
 
     // Verify that passing an array as heading works (core support).
-    $variables['heading'] = [
+    $variables['heading'] = array(
       'text' => 'Links heading',
       'level' => 'h3',
-      'attributes' => ['class' => ['heading']],
-    ];
+      'attributes' => array('class' => array('heading')),
+    );
     $expected_heading = '<h3 class="heading">Links heading</h3>';
     $expected = $expected_heading . $expected_links;
     $this->assertThemeOutput('links', $variables, $expected);
 
     // Verify that passing attributes for the heading works.
-    $variables['heading'] = ['text' => 'Links heading', 'level' => 'h3', 'attributes' => ['id' => 'heading']];
+    $variables['heading'] = array('text' => 'Links heading', 'level' => 'h3', 'attributes' => array('id' => 'heading'));
     $expected_heading = '<h3 id="heading">Links heading</h3>';
     $expected = $expected_heading . $expected_links;
     $this->assertThemeOutput('links', $variables, $expected);
 
     // Verify that passing attributes for the links work.
-    $variables['links']['plain text']['attributes'] = [
-      'class' => ['a/class'],
-    ];
+    $variables['links']['plain text']['attributes'] = array(
+      'class' => array('a/class'),
+    );
     $expected_links = '';
     $expected_links .= '<ul id="somelinks">';
     $expected_links .= '<li class="a-link"><a href="' . Url::fromUri('base:a/link')->toString() . '">' . Html::escape('A <link>') . '</a></li>';
@@ -260,14 +260,14 @@ class FunctionsTest extends WebTestBase {
     $expected_links .= '<li class="html-text"><span class="unescaped">' . Html::escape('potentially unsafe text that <should> be escaped') . '</span></li>';
     $expected_links .= '<li class="front-page"><a href="' . Url::fromRoute('<front>')->toString() . '">' . Html::escape('Front page') . '</a></li>';
     $expected_links .= '<li class="router-test"><a href="' . \Drupal::urlGenerator()->generate('router_test.1') . '">' . Html::escape('Test route') . '</a></li>';
-    $query = ['key' => 'value'];
+    $query = array('key' => 'value');
     $expected_links .= '<li class="query-test"><a href="' . \Drupal::urlGenerator()->generate('router_test.1', $query) . '">' . Html::escape('Query test route') . '</a></li>';
     $expected_links .= '</ul>';
     $expected = $expected_heading . $expected_links;
     $this->assertThemeOutput('links', $variables, $expected);
 
     // Verify the data- attributes for setting the "active" class on links.
-    \Drupal::currentUser()->setAccount(new UserSession(['uid' => 1]));
+    \Drupal::currentUser()->setAccount(new UserSession(array('uid' => 1)));
     $variables['set_active_class'] = TRUE;
     $expected_links = '';
     $expected_links .= '<ul id="somelinks">';
@@ -276,7 +276,7 @@ class FunctionsTest extends WebTestBase {
     $expected_links .= '<li class="html-text"><span class="unescaped">' . Html::escape('potentially unsafe text that <should> be escaped') . '</span></li>';
     $expected_links .= '<li data-drupal-link-system-path="&lt;front&gt;" class="front-page"><a href="' . Url::fromRoute('<front>')->toString() . '" data-drupal-link-system-path="&lt;front&gt;">' . Html::escape('Front page') . '</a></li>';
     $expected_links .= '<li data-drupal-link-system-path="router_test/test1" class="router-test"><a href="' . \Drupal::urlGenerator()->generate('router_test.1') . '" data-drupal-link-system-path="router_test/test1">' . Html::escape('Test route') . '</a></li>';
-    $query = ['key' => 'value'];
+    $query = array('key' => 'value');
     $encoded_query = Html::escape(Json::encode($query));
     $expected_links .= '<li data-drupal-link-query="' . $encoded_query . '" data-drupal-link-system-path="router_test/test1" class="query-test"><a href="' . \Drupal::urlGenerator()->generate('router_test.1', $query) . '" data-drupal-link-query="' . $encoded_query . '" data-drupal-link-system-path="router_test/test1">' . Html::escape('Query test route') . '</a></li>';
     $expected_links .= '</ul>';
@@ -287,7 +287,7 @@ class FunctionsTest extends WebTestBase {
   /**
    * Tests links.html.twig using links with indexed keys.
    */
-  public function testIndexedKeyedLinks() {
+  function testIndexedKeyedLinks() {
     // Turn off the query for the
     // \Drupal\Core\Utility\LinkGeneratorInterface::generate() method to compare
     // the active link correctly.
@@ -306,33 +306,33 @@ class FunctionsTest extends WebTestBase {
     // Verify that a list of links is properly rendered.
     $variables = [];
     $variables['attributes'] = ['id' => 'somelinks'];
-    $variables['links'] = [
-      [
+    $variables['links'] = array(
+      array(
         'title' => 'A <link>',
         'url' => Url::fromUri('base:a/link'),
-      ],
-      [
+      ),
+      array(
         'title' => 'Plain "text"',
-      ],
-      [
-        'title' => SafeMarkup::format('<span class="unescaped">@text</span>', ['@text' => 'potentially unsafe text that <should> be escaped']),
-      ],
-      [
+      ),
+      array(
+        'title' => SafeMarkup::format('<span class="unescaped">@text</span>', array('@text' => 'potentially unsafe text that <should> be escaped')),
+      ),
+      array(
         'title' => 'Front page',
         'url' => Url::fromRoute('<front>'),
-      ],
-      [
+      ),
+      array(
         'title' => 'Test route',
         'url' => Url::fromRoute('router_test.1'),
-      ],
-      [
+      ),
+      array(
         'title' => 'Query test route',
         'url' => Url::fromRoute('router_test.1'),
-        'query' => [
+        'query' => array(
           'key' => 'value',
-        ]
-      ],
-    ];
+        )
+      ),
+    );
 
     $expected_links = '';
     $expected_links .= '<ul id="somelinks">';
@@ -388,7 +388,7 @@ class FunctionsTest extends WebTestBase {
     $this->assertThemeOutput('links', $variables, $expected);
 
     // Verify the data- attributes for setting the "active" class on links.
-    \Drupal::currentUser()->setAccount(new UserSession(['uid' => 1]));
+    \Drupal::currentUser()->setAccount(new UserSession(array('uid' => 1)));
     $variables['set_active_class'] = TRUE;
     $expected_links = '';
     $expected_links .= '<ul id="somelinks">';
@@ -408,58 +408,58 @@ class FunctionsTest extends WebTestBase {
   /**
    * Test the use of drupal_pre_render_links() on a nested array of links.
    */
-  public function testDrupalPreRenderLinks() {
+  function testDrupalPreRenderLinks() {
     // Define the base array to be rendered, containing a variety of different
     // kinds of links.
-    $base_array = [
+    $base_array = array(
       '#theme' => 'links',
-      '#pre_render' => ['drupal_pre_render_links'],
-      '#links' => [
-        'parent_link' => [
+      '#pre_render' => array('drupal_pre_render_links'),
+      '#links' => array(
+        'parent_link' => array(
           'title' => 'Parent link original',
           'url' => Url::fromRoute('router_test.1'),
-        ],
-      ],
-      'first_child' => [
+        ),
+      ),
+      'first_child' => array(
         '#theme' => 'links',
-        '#links' => [
+        '#links' => array(
           // This should be rendered if 'first_child' is rendered separately,
           // but ignored if the parent is being rendered (since it duplicates
           // one of the parent's links).
-          'parent_link' => [
+          'parent_link' => array(
             'title' => 'Parent link copy',
             'url' => Url::fromRoute('router_test.6'),
-          ],
+          ),
           // This should always be rendered.
-          'first_child_link' => [
+          'first_child_link' => array(
             'title' => 'First child link',
             'url' => Url::fromRoute('router_test.7'),
-          ],
-        ],
-      ],
+          ),
+        ),
+      ),
       // This should always be rendered as part of the parent.
-      'second_child' => [
+      'second_child' => array(
         '#theme' => 'links',
-        '#links' => [
-          'second_child_link' => [
+        '#links' => array(
+          'second_child_link' => array(
             'title' => 'Second child link',
             'url' => Url::fromRoute('router_test.8'),
-          ],
-        ],
-      ],
+          ),
+        ),
+      ),
       // This should never be rendered, since the user does not have access to
       // it.
-      'third_child' => [
+      'third_child' => array(
         '#theme' => 'links',
-        '#links' => [
-          'third_child_link' => [
+        '#links' => array(
+          'third_child_link' => array(
             'title' => 'Third child link',
             'url' => Url::fromRoute('router_test.9'),
-          ],
-        ],
+          ),
+        ),
         '#access' => FALSE,
-      ],
-    ];
+      ),
+    );
 
     // Start with a fresh copy of the base array, and try rendering the entire
     // thing. We expect a single <ul> with appropriate links contained within
@@ -506,9 +506,9 @@ class FunctionsTest extends WebTestBase {
   /**
    * Tests theme_image().
    */
-  public function testImage() {
+  function testImage() {
     // Test that data URIs work with theme_image().
-    $variables = [];
+    $variables = array();
     $variables['uri'] = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==';
     $variables['alt'] = 'Data URI image of a red dot';
     $expected = '<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==" alt="Data URI image of a red dot" />' . "\n";

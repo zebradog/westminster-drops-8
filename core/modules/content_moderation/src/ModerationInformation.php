@@ -4,7 +4,6 @@ namespace Drupal\content_moderation;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
@@ -21,23 +20,15 @@ class ModerationInformation implements ModerationInformationInterface {
   protected $entityTypeManager;
 
   /**
-   * The bundle information service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
-   */
-  protected $bundleInfo;
-
-  /**
    * Creates a new ModerationInformation instance.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info
-   *   The bundle information service.
+   * @param \Drupal\Core\Session\AccountInterface $current_user
+   *   The current user.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityTypeBundleInfoInterface $bundle_info) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
     $this->entityTypeManager = $entity_type_manager;
-    $this->bundleInfo = $bundle_info;
   }
 
   /**
@@ -63,8 +54,10 @@ class ModerationInformation implements ModerationInformationInterface {
    */
   public function shouldModerateEntitiesOfBundle(EntityTypeInterface $entity_type, $bundle) {
     if ($this->canModerateEntitiesOfEntityType($entity_type)) {
-      $bundles = $this->bundleInfo->getBundleInfo($entity_type->id());
-      return isset($bundles[$bundle]['workflow']);
+      $bundle_entity = $this->entityTypeManager->getStorage($entity_type->getBundleEntityType())->load($bundle);
+      if ($bundle_entity) {
+        return $bundle_entity->getThirdPartySetting('content_moderation', 'enabled', FALSE);
+      }
     }
     return FALSE;
   }
@@ -130,22 +123,10 @@ class ModerationInformation implements ModerationInformationInterface {
    * {@inheritdoc}
    */
   public function isLiveRevision(ContentEntityInterface $entity) {
-    $workflow = $this->getWorkflowForEntity($entity);
     return $this->isLatestRevision($entity)
       && $entity->isDefaultRevision()
-      && $entity->moderation_state->value
-      && $workflow->getState($entity->moderation_state->value)->isPublishedState();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getWorkflowForEntity(ContentEntityInterface $entity) {
-    $bundles = $this->bundleInfo->getBundleInfo($entity->getEntityTypeId());
-    if (isset($bundles[$entity->bundle()]['workflow'])) {
-      return $this->entityTypeManager->getStorage('workflow')->load($bundles[$entity->bundle()]['workflow']);
-    };
-    return NULL;
+      && $entity->moderation_state->entity
+      && $entity->moderation_state->entity->isPublishedState();
   }
 
 }

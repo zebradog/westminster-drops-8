@@ -108,7 +108,7 @@ abstract class TermResourceTestBase extends EntityResourceTestBase {
       ],
       'changed' => [
         [
-          'value' => $this->entity->getChangedTime(),
+          'value' => '123456789',
         ],
       ],
       'default_langcode' => [
@@ -135,28 +135,6 @@ abstract class TermResourceTestBase extends EntityResourceTestBase {
         ],
       ],
     ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function getExpectedUnauthorizedAccessMessage($method) {
-    if ($this->config('rest.settings')->get('bc_entity_resource_permissions')) {
-      return parent::getExpectedUnauthorizedAccessMessage($method);
-    }
-
-    switch ($method) {
-      case 'GET':
-        return "The 'access content' permission is required.";
-      case 'POST':
-        return "The 'administer taxonomy' permission is required.";
-      case 'PATCH':
-        return "The following permissions are required: 'edit terms in camelids' OR 'administer taxonomy'.";
-      case 'DELETE':
-        return "The following permissions are required: 'delete terms in camelids' OR 'administer taxonomy'.";
-      default:
-        return parent::getExpectedUnauthorizedAccessMessage($method);
-    }
   }
 
 }

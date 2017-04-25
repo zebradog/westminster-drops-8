@@ -14,7 +14,7 @@ abstract class EntityStorageBase extends EntityHandlerBase implements EntityStor
    *
    * @var array
    */
-  protected $entities = [];
+  protected $entities = array();
 
   /**
    * Entity type ID for this storage.
@@ -105,7 +105,7 @@ abstract class EntityStorageBase extends EntityHandlerBase implements EntityStor
    * {@inheritdoc}
    */
   public function loadUnchanged($id) {
-    $this->resetCache([$id]);
+    $this->resetCache(array($id));
     return $this->load($id);
   }
 
@@ -119,7 +119,7 @@ abstract class EntityStorageBase extends EntityHandlerBase implements EntityStor
       }
     }
     else {
-      $this->entities = [];
+      $this->entities = array();
     }
   }
 
@@ -133,7 +133,7 @@ abstract class EntityStorageBase extends EntityHandlerBase implements EntityStor
    *   Array of entities from the entity cache.
    */
   protected function getFromStaticCache(array $ids) {
-    $entities = [];
+    $entities = array();
     // Load any available entities from the internal cache.
     if ($this->entityType->isStaticallyCacheable() && !empty($this->entities)) {
       $entities += array_intersect_key($this->entities, array_flip($ids));
@@ -164,15 +164,15 @@ abstract class EntityStorageBase extends EntityHandlerBase implements EntityStor
    */
   protected function invokeHook($hook, EntityInterface $entity) {
     // Invoke the hook.
-    $this->moduleHandler()->invokeAll($this->entityTypeId . '_' . $hook, [$entity]);
+    $this->moduleHandler()->invokeAll($this->entityTypeId . '_' . $hook, array($entity));
     // Invoke the respective entity-level hook.
-    $this->moduleHandler()->invokeAll('entity_' . $hook, [$entity]);
+    $this->moduleHandler()->invokeAll('entity_' . $hook, array($entity));
   }
 
   /**
    * {@inheritdoc}
    */
-  public function create(array $values = []) {
+  public function create(array $values = array()) {
     $entity_class = $this->entityClass;
     $entity_class::preCreate($this, $values);
 
@@ -209,7 +209,7 @@ abstract class EntityStorageBase extends EntityHandlerBase implements EntityStor
    * {@inheritdoc}
    */
   public function load($id) {
-    $entities = $this->loadMultiple([$id]);
+    $entities = $this->loadMultiple(array($id));
     return isset($entities[$id]) ? $entities[$id] : NULL;
   }
 
@@ -217,7 +217,7 @@ abstract class EntityStorageBase extends EntityHandlerBase implements EntityStor
    * {@inheritdoc}
    */
   public function loadMultiple(array $ids = NULL) {
-    $entities = [];
+    $entities = array();
 
     // Create a new variable which is either a prepared version of the $ids
     // array for later comparison with the entity cache, or FALSE if no $ids
@@ -317,7 +317,7 @@ abstract class EntityStorageBase extends EntityHandlerBase implements EntityStor
    *   An array of entity objects implementing the EntityInterface.
    */
   protected function mapFromStorageRecords(array $records) {
-    $entities = [];
+    $entities = array();
     foreach ($records as $record) {
       $entity = new $this->entityClass($record, $this->entityTypeId);
       $entities[$entity->id()] = $entity;
@@ -460,7 +460,7 @@ abstract class EntityStorageBase extends EntityHandlerBase implements EntityStor
    *   Specifies whether the entity is being updated or created.
    */
   protected function doPostSave(EntityInterface $entity, $update) {
-    $this->resetCache([$entity->id()]);
+    $this->resetCache(array($entity->id()));
 
     // The entity is no longer new.
     $entity->enforceIsNew(FALSE);
@@ -496,12 +496,12 @@ abstract class EntityStorageBase extends EntityHandlerBase implements EntityStor
   /**
    * {@inheritdoc}
    */
-  public function loadByProperties(array $values = []) {
+  public function loadByProperties(array $values = array()) {
     // Build a query to fetch the entity IDs.
     $entity_query = $this->getQuery();
     $this->buildPropertyQuery($entity_query, $values);
     $result = $entity_query->execute();
-    return $result ? $this->loadMultiple($result) : [];
+    return $result ? $this->loadMultiple($result) : array();
   }
 
   /**

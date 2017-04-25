@@ -15,7 +15,7 @@ class EmptyStatementTest extends UnitTestCase {
   /**
    * Tests that the empty result set behaves as empty.
    */
-  public function testEmpty() {
+  function testEmpty() {
     $result = new StatementEmpty();
 
     $this->assertTrue($result instanceof StatementInterface, 'Class implements expected interface');
@@ -25,7 +25,7 @@ class EmptyStatementTest extends UnitTestCase {
   /**
    * Tests that the empty result set iterates safely.
    */
-  public function testEmptyIteration() {
+  function testEmptyIteration() {
     $result = new StatementEmpty();
     $this->assertSame(0, iterator_count($result), 'Empty result set should not iterate.');
   }
@@ -33,10 +33,10 @@ class EmptyStatementTest extends UnitTestCase {
   /**
    * Tests that the empty result set mass-fetches in an expected way.
    */
-  public function testEmptyFetchAll() {
+  function testEmptyFetchAll() {
     $result = new StatementEmpty();
 
-    $this->assertEquals($result->fetchAll(), [], 'Empty array returned from empty result set.');
+    $this->assertEquals($result->fetchAll(), array(), 'Empty array returned from empty result set.');
   }
 
 }

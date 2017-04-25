@@ -18,29 +18,29 @@ class XssUnitTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['filter', 'system'];
+  public static $modules = array('filter', 'system');
 
   protected function setUp() {
     parent::setUp();
-    $this->installConfig(['system']);
+    $this->installConfig(array('system'));
   }
 
   /**
    * Tests t() functionality.
    */
-  public function testT() {
+  function testT() {
     $text = t('Simple text');
     $this->assertEqual($text, 'Simple text', 't leaves simple text alone.');
-    $text = t('Escaped text: @value', ['@value' => '<script>']);
+    $text = t('Escaped text: @value', array('@value' => '<script>'));
     $this->assertEqual($text, 'Escaped text: &lt;script&gt;', 't replaces and escapes string.');
-    $text = t('Placeholder text: %value', ['%value' => '<script>']);
+    $text = t('Placeholder text: %value', array('%value' => '<script>'));
     $this->assertEqual($text, 'Placeholder text: <em class="placeholder">&lt;script&gt;</em>', 't replaces, escapes and themes string.');
   }
 
   /**
    * Checks that harmful protocols are stripped.
    */
-  public function testBadProtocolStripping() {
+  function testBadProtocolStripping() {
     // Ensure that check_url() strips out harmful protocols, and encodes for
     // HTML.
     // Ensure \Drupal\Component\Utility\UrlHelper::stripDangerousProtocols() can

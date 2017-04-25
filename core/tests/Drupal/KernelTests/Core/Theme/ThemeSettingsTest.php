@@ -18,7 +18,7 @@ class ThemeSettingsTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['system'];
+  public static $modules = array('system');
 
   /**
    * List of discovered themes.
@@ -30,7 +30,7 @@ class ThemeSettingsTest extends KernelTestBase {
   protected function setUp() {
     parent::setUp();
     // Theme settings rely on System module's system.theme.global configuration.
-    $this->installConfig(['system']);
+    $this->installConfig(array('system'));
 
     if (!isset($this->availableThemes)) {
       $discovery = new ExtensionDiscovery(\Drupal::root());
@@ -41,22 +41,22 @@ class ThemeSettingsTest extends KernelTestBase {
   /**
    * Tests that $theme.settings are imported and used as default theme settings.
    */
-  public function testDefaultConfig() {
+  function testDefaultConfig() {
     $name = 'test_basetheme';
     $path = $this->availableThemes[$name]->getPath();
     $this->assertTrue(file_exists("$path/" . InstallStorage::CONFIG_INSTALL_DIRECTORY . "/$name.settings.yml"));
-    $this->container->get('theme_handler')->install([$name]);
+    $this->container->get('theme_handler')->install(array($name));
     $this->assertIdentical(theme_get_setting('base', $name), 'only');
   }
 
   /**
    * Tests that the $theme.settings default config file is optional.
    */
-  public function testNoDefaultConfig() {
+  function testNoDefaultConfig() {
     $name = 'stark';
     $path = $this->availableThemes[$name]->getPath();
     $this->assertFalse(file_exists("$path/" . InstallStorage::CONFIG_INSTALL_DIRECTORY . "/$name.settings.yml"));
-    $this->container->get('theme_handler')->install([$name]);
+    $this->container->get('theme_handler')->install(array($name));
     $this->assertNotNull(theme_get_setting('features.favicon', $name));
   }
 

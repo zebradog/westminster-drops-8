@@ -17,29 +17,29 @@ class FilterLanguageTest extends LanguageTestBase {
    *
    * @var array
    */
-  public static $testViews = ['test_view'];
+  public static $testViews = array('test_view');
 
   /**
    * Tests the language filter.
    */
   public function testFilter() {
     $view = Views::getView('test_view');
-    foreach (['en' => 'John', 'xx-lolspeak' => 'George'] as $langcode => $name) {
+    foreach (array('en' => 'John', 'xx-lolspeak' => 'George') as $langcode => $name) {
       $view->setDisplay();
-      $view->displayHandlers->get('default')->overrideOption('filters', [
-        'langcode' => [
+      $view->displayHandlers->get('default')->overrideOption('filters', array(
+        'langcode' => array(
           'id' => 'langcode',
           'table' => 'views_test_data',
           'field' => 'langcode',
-          'value' => [$langcode],
-        ],
-      ]);
+          'value' => array($langcode),
+        ),
+      ));
       $this->executeView($view);
 
-      $expected = [[
+      $expected = array(array(
         'name' => $name,
-      ]];
-      $this->assertIdenticalResultset($view, $expected, ['views_test_data_name' => 'name']);
+      ));
+      $this->assertIdenticalResultset($view, $expected, array('views_test_data_name' => 'name'));
 
       $expected = [
         '***LANGUAGE_site_default***',

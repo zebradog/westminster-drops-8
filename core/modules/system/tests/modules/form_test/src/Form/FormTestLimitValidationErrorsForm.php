@@ -21,62 +21,62 @@ class FormTestLimitValidationErrorsForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['title'] = [
+    $form['title'] = array(
       '#type' => 'textfield',
       '#title' => 'Title',
       '#required' => TRUE,
-    ];
+    );
 
-    $form['test'] = [
+    $form['test'] = array(
       '#title' => 'Test',
       '#type' => 'textfield',
-      '#element_validate' => ['::elementValidateLimitValidationErrors'],
-    ];
-    $form['test_numeric_index'] = [
+      '#element_validate' => array('::elementValidateLimitValidationErrors'),
+    );
+    $form['test_numeric_index'] = array(
       '#tree' => TRUE,
-    ];
-    $form['test_numeric_index'][0] = [
+    );
+    $form['test_numeric_index'][0] = array(
       '#title' => 'Test (numeric index)',
       '#type' => 'textfield',
-      '#element_validate' => ['::elementValidateLimitValidationErrors'],
-    ];
+      '#element_validate' => array('::elementValidateLimitValidationErrors'),
+    );
 
-    $form['test_substring'] = [
+    $form['test_substring'] = array(
       '#tree' => TRUE,
-    ];
-    $form['test_substring']['foo'] = [
+    );
+    $form['test_substring']['foo'] = array(
       '#title' => 'Test (substring) foo',
       '#type' => 'textfield',
-      '#element_validate' => ['::elementValidateLimitValidationErrors'],
-    ];
-    $form['test_substring']['foobar'] = [
+      '#element_validate' => array('::elementValidateLimitValidationErrors'),
+    );
+    $form['test_substring']['foobar'] = array(
       '#title' => 'Test (substring) foobar',
       '#type' => 'textfield',
-      '#element_validate' => ['::elementValidateLimitValidationErrors'],
-    ];
+      '#element_validate' => array('::elementValidateLimitValidationErrors'),
+    );
 
-    $form['actions']['partial'] = [
+    $form['actions']['partial'] = array(
       '#type' => 'submit',
-      '#limit_validation_errors' => [['test']],
-      '#submit' => ['::partialSubmitForm'],
+      '#limit_validation_errors' => array(array('test')),
+      '#submit' => array('::partialSubmitForm'),
       '#value' => t('Partial validate'),
-    ];
-    $form['actions']['partial_numeric_index'] = [
+    );
+    $form['actions']['partial_numeric_index'] = array(
       '#type' => 'submit',
-      '#limit_validation_errors' => [['test_numeric_index', 0]],
-      '#submit' => ['::partialSubmitForm'],
+      '#limit_validation_errors' => array(array('test_numeric_index', 0)),
+      '#submit' => array('::partialSubmitForm'),
       '#value' => t('Partial validate (numeric index)'),
-    ];
-    $form['actions']['substring'] = [
+    );
+    $form['actions']['substring'] = array(
       '#type' => 'submit',
-      '#limit_validation_errors' => [['test_substring', 'foo']],
-      '#submit' => ['::partialSubmitForm'],
+      '#limit_validation_errors' => array(array('test_substring', 'foo')),
+      '#submit' => array('::partialSubmitForm'),
       '#value' => t('Partial validate (substring)'),
-    ];
-    $form['actions']['full'] = [
+    );
+    $form['actions']['full'] = array(
       '#type' => 'submit',
       '#value' => t('Full validate'),
-    ];
+    );
     return $form;
   }
 
@@ -85,7 +85,7 @@ class FormTestLimitValidationErrorsForm extends FormBase {
    */
   public function elementValidateLimitValidationErrors($element, FormStateInterface $form_state) {
     if ($element['#value'] == 'invalid') {
-      $form_state->setError($element, t('@label element is invalid', ['@label' => $element['#title']]));
+      $form_state->setError($element, t('@label element is invalid', array('@label' => $element['#title'])));
     }
   }
 

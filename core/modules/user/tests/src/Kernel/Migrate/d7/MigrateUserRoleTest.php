@@ -45,7 +45,6 @@ class MigrateUserRoleTest extends MigrateDrupal7TestBase {
         ->condition('rid', $original_rid)
         ->execute()
         ->fetchCol();
-      sort($permissions);
       $this->assertIdentical($permissions, $entity->getPermissions());
     }
   }

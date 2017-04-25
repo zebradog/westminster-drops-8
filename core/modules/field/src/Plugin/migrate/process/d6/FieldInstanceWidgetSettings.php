@@ -41,41 +41,41 @@ class FieldInstanceWidgetSettings extends ProcessPluginBase {
     $size = isset($widget_settings['size']) ? $widget_settings['size'] : 60;
     $rows = isset($widget_settings['rows']) ? $widget_settings['rows'] : 5;
 
-    $settings = [
-      'text_textfield' => [
+    $settings = array(
+      'text_textfield' => array(
         'size' => $size,
         'placeholder' => '',
-      ],
-      'text_textarea' => [
+      ),
+      'text_textarea' => array(
         'rows' => $rows,
         'placeholder' => '',
-      ],
-      'number' => [
+      ),
+      'number' => array(
         'placeholder' => '',
-      ],
-      'email_textfield' => [
+      ),
+      'email_textfield' => array(
         'placeholder' => '',
-      ],
-      'link' => [
+      ),
+      'link' => array(
         'placeholder_url' => '',
         'placeholder_title' => '',
-      ],
-      'filefield_widget' => [
+      ),
+      'filefield_widget' => array(
         'progress_indicator' => $progress,
-      ],
-      'imagefield_widget' => [
+      ),
+      'imagefield_widget' => array(
         'progress_indicator' => $progress,
         'preview_image_style' => 'thumbnail',
-      ],
-      'optionwidgets_onoff' => [
+      ),
+      'optionwidgets_onoff' => array(
         'display_label' => FALSE,
-      ],
-      'phone_textfield' => [
+      ),
+      'phone_textfield' => array(
         'placeholder' => '',
-      ],
-    ];
+      ),
+    );
 
-    return isset($settings[$widget_type]) ? $settings[$widget_type] : [];
+    return isset($settings[$widget_type]) ? $settings[$widget_type] : array();
   }
 
 }

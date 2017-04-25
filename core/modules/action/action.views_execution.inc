@@ -9,12 +9,12 @@
  * Implements hook_views_form_substitutions().
  */
 function action_views_form_substitutions() {
-  $select_all = [
+  $select_all = array(
     '#type' => 'checkbox',
     '#default_value' => FALSE,
-    '#attributes' => ['class' => ['action-table-select-all']],
-  ];
-  return [
+    '#attributes' => array('class' => array('action-table-select-all')),
+  );
+  return array(
     '<!--action-bulk-form-select-all-->' => drupal_render($select_all),
-  ];
+  );
 }

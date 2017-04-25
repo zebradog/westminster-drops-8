@@ -50,7 +50,7 @@ class MenuTreeParameters {
    *
    * @var string[]
    */
-  public $expandedParents = [];
+  public $expandedParents = array();
 
   /**
    * The IDs from the currently active menu link to the root of the whole tree.
@@ -62,7 +62,7 @@ class MenuTreeParameters {
    *
    * @var string[]
    */
-  public $activeTrail = [];
+  public $activeTrail = array();
 
   /**
    * The conditions used to restrict which links are loaded.
@@ -71,7 +71,7 @@ class MenuTreeParameters {
    *
    * @var array
    */
-  public $conditions = [];
+  public $conditions = array();
 
   /**
    * Sets a root for menu tree loading.
@@ -170,7 +170,7 @@ class MenuTreeParameters {
       $this->conditions[$definition_field] = $value;
     }
     else {
-      $this->conditions[$definition_field] = [$value, $operator];
+      $this->conditions[$definition_field] = array($value, $operator);
     }
     return $this;
   }

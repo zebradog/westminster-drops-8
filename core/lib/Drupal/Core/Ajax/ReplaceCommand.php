@@ -24,13 +24,13 @@ class ReplaceCommand extends InsertCommand {
    */
   public function render() {
 
-    return [
+    return array(
       'command' => 'insert',
       'method' => 'replaceWith',
       'selector' => $this->selector,
       'data' => $this->getRenderedContent(),
       'settings' => $this->settings,
-    ];
+    );
   }
 
 }

@@ -9,7 +9,6 @@ use Drupal\Component\Utility\Crypt;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\SafeMarkup;
 use Drupal\Component\Utility\Unicode;
-use Drupal\Core\Config\BootstrapConfigStorageFactory;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\Render\Markup;
 use Drupal\Component\Render\MarkupInterface;
@@ -85,9 +84,6 @@ const DRUPAL_EXTENSION_NAME_MAX_LENGTH = 50;
  *
  * @see http://php.net/manual/reserved.variables.server.php
  * @see http://php.net/manual/function.time.php
- *
- * @deprecated in Drupal 8.3.0, will be removed before Drupal 9.0.0.
- *   Use \Drupal::time()->getRequestTime();
  */
 define('REQUEST_TIME', (int) $_SERVER['REQUEST_TIME']);
 
@@ -197,7 +193,7 @@ function config_get_config_directory($type) {
 function drupal_get_filename($type, $name, $filename = NULL) {
   // The location of files will not change during the request, so do not use
   // drupal_static().
-  static $files = [];
+  static $files = array();
 
   // Type 'core' only exists to simplify application-level logic; it always maps
   // to the /core directory, whereas $name is ignored. It is only requested via
@@ -213,7 +209,7 @@ function drupal_get_filename($type, $name, $filename = NULL) {
     $type = 'module';
   }
   if (!isset($files[$type])) {
-    $files[$type] = [];
+    $files[$type] = array();
   }
 
   if (isset($filename)) {
@@ -233,11 +229,11 @@ function drupal_get_filename($type, $name, $filename = NULL) {
     // system_rebuild_module_data() and
     // \Drupal\Core\Extension\ThemeHandlerInterface::rebuildThemeData().
     if (!isset($files[$type][$name]) && \Drupal::hasService('state')) {
-      $files[$type] += \Drupal::state()->get('system.' . $type . '.files', []);
+      $files[$type] += \Drupal::state()->get('system.' . $type . '.files', array());
     }
     // If still unknown, create a user-level error message.
     if (!isset($files[$type][$name])) {
-      trigger_error(SafeMarkup::format('The following @type is missing from the file system: @name', ['@type' => $type, '@name' => $name]), E_USER_WARNING);
+      trigger_error(SafeMarkup::format('The following @type is missing from the file system: @name', array('@type' => $type, '@name' => $name)), E_USER_WARNING);
     }
   }
 
@@ -301,7 +297,7 @@ function drupal_get_path($type, $name) {
  *
  * @ingroup sanitization
  */
-function t($string, array $args = [], array $options = []) {
+function t($string, array $args = array(), array $options = array()) {
   return new TranslatableMarkup($string, $args, $options);
 }
 
@@ -376,7 +372,7 @@ function drupal_validate_utf8($text) {
  *
  * @see \Drupal\Core\Utility\Error::decodeException()
  */
-function watchdog_exception($type, Exception $exception, $message = NULL, $variables = [], $severity = RfcLogLevel::ERROR, $link = NULL) {
+function watchdog_exception($type, Exception $exception, $message = NULL, $variables = array(), $severity = RfcLogLevel::ERROR, $link = NULL) {
 
   // Use a default value if $message is not set.
   if (empty($message)) {
@@ -447,7 +443,7 @@ function watchdog_exception($type, Exception $exception, $message = NULL, $varia
 function drupal_set_message($message = NULL, $type = 'status', $repeat = FALSE) {
   if (isset($message)) {
     if (!isset($_SESSION['messages'][$type])) {
-      $_SESSION['messages'][$type] = [];
+      $_SESSION['messages'][$type] = array();
     }
 
     // Convert strings which are safe to the simplest Markup objects.
@@ -501,7 +497,7 @@ function drupal_get_messages($type = NULL, $clear_queue = TRUE) {
         unset($_SESSION['messages'][$type]);
       }
       if (isset($messages[$type])) {
-        return [$type => $messages[$type]];
+        return array($type => $messages[$type]);
       }
     }
     else {
@@ -511,7 +507,7 @@ function drupal_get_messages($type = NULL, $clear_queue = TRUE) {
       return $messages;
     }
   }
-  return [];
+  return array();
 }
 
 /**
@@ -728,20 +724,12 @@ function drupal_installation_attempted() {
  * When this function is called during Drupal's initial installation process,
  * the name of the profile that's about to be installed is stored in the global
  * installation state. At all other times, the "install_profile" setting will be
- * available in container as a parameter.
+ * available in settings.php.
  *
- * @return string|null
+ * @return string|null $profile
  *   The name of the installation profile or NULL if no installation profile is
  *   currently active. This is the case for example during the first steps of
  *   the installer or during unit tests.
- *
- * @deprecated in Drupal 8.3.0, will be removed before Drupal 9.0.0.
- *   Use the install_profile container parameter or \Drupal::installProfile()
- *   instead. If you are accessing the value before it is written to
- *   configuration during the installer use the $install_state global. If you
- *   need to access the value before container is available you can use
- *   BootstrapConfigStorageFactory to load the value directly from
- *   configuration.
  */
 function drupal_get_profile() {
   global $install_state;
@@ -756,18 +744,8 @@ function drupal_get_profile() {
     }
   }
   else {
-    if (\Drupal::hasContainer()) {
-      $profile = \Drupal::installProfile();
-    }
-    else {
-      $profile = BootstrapConfigStorageFactory::getDatabaseStorage()->read('core.extension')['profile'];
-    }
-
-    // A BC layer just in in case this only exists in Settings. Introduced in
-    // Drupal 8.3.x and will be removed before Drupal 9.0.0.
-    if (empty($profile)) {
-      $profile = Settings::get('install_profile');
-    }
+    // Fall back to NULL, if there is no 'install_profile' setting.
+    $profile = Settings::get('install_profile');
   }
 
   return $profile;
@@ -899,7 +877,7 @@ function drupal_classloader_register($name, $path) {
  * @see drupal_static_reset()
  */
 function &drupal_static($name, $default_value = NULL, $reset = FALSE) {
-  static $data = [], $default = [];
+  static $data = array(), $default = array();
   // First check if dealing with a previously defined static variable.
   if (isset($data[$name]) || array_key_exists($name, $data)) {
     // Non-NULL $name and both $data[$name] and $default[$name] statics exist.
@@ -978,7 +956,7 @@ function drupal_placeholder($text) {
 function &drupal_register_shutdown_function($callback = NULL) {
   // We cannot use drupal_static() here because the static cache is reset during
   // batch processing, which breaks batch handling.
-  static $callbacks = [];
+  static $callbacks = array();
 
   if (isset($callback)) {
     // Only register the internal shutdown function once.
@@ -989,7 +967,7 @@ function &drupal_register_shutdown_function($callback = NULL) {
     // Remove $callback from the arguments.
     unset($args[0]);
     // Save callback and arguments
-    $callbacks[] = ['callback' => $callback, 'arguments' => $args];
+    $callbacks[] = array('callback' => $callback, 'arguments' => $args);
   }
   return $callbacks;
 }

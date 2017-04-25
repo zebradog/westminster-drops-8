@@ -49,9 +49,9 @@ abstract class ChangeUserRoleBase extends ConfigurableActionBase implements Cont
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return [
+    return array(
       'rid' => '',
-    ];
+    );
   }
 
   /**
@@ -60,13 +60,13 @@ abstract class ChangeUserRoleBase extends ConfigurableActionBase implements Cont
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $roles = user_role_names(TRUE);
     unset($roles[RoleInterface::AUTHENTICATED_ID]);
-    $form['rid'] = [
+    $form['rid'] = array(
       '#type' => 'radios',
       '#title' => t('Role'),
       '#options' => $roles,
       '#default_value' => $this->configuration['rid'],
       '#required' => TRUE,
-    ];
+    );
     return $form;
   }
 

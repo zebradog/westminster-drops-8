@@ -21,7 +21,7 @@ class MigrateAccessTest extends WebTestBase {
   /**
    * Tests that only user 1 can access the migrate UI.
    */
-  public function testAccess() {
+  protected function testAccess() {
     $this->drupalLogin($this->rootUser);
     $this->drupalGet('upgrade');
     $this->assertResponse(200);

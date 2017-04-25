@@ -26,7 +26,7 @@ class TaxonomyQueryAlterTest extends WebTestBase {
   public function testTaxonomyQueryAlter() {
     // Create a new vocabulary and add a few terms to it.
     $vocabulary = $this->createVocabulary();
-    $terms = [];
+    $terms = array();
     for ($i = 0; $i < 5; $i++) {
       $terms[$i] = $this->createTerm($vocabulary);
     }

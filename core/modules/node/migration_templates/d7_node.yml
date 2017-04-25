@@ -8,10 +8,7 @@ source:
 process:
   # If you are using this file to build a custom migration consider removing
   # the nid and vid fields to allow incremental migrations.
-  # In D7, nodes always have a tnid, but it's zero for untranslated nodes.
-  # We normalize it to equal the nid in that case.
-  # @see \Drupal\node\Plugin\migrate\source\d7\Node::prepareRow().
-  nid: tnid
+  nid: nid
   vid: vid
   langcode:
     plugin: default_value

@@ -29,28 +29,28 @@ class Llama extends PluginBase implements CKEditorPluginInterface {
   /**
    * {@inheritdoc}
    */
-  public function getDependencies(Editor $editor) {
-    return [];
+  function getDependencies(Editor $editor) {
+    return array();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getLibraries(Editor $editor) {
-    return [];
+  function getLibraries(Editor $editor) {
+    return array();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function isInternal() {
+  function isInternal() {
     return FALSE;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getFile() {
+  function getFile() {
     return drupal_get_path('module', 'ckeditor_test') . '/js/llama.js';
   }
 
@@ -58,7 +58,7 @@ class Llama extends PluginBase implements CKEditorPluginInterface {
    * {@inheritdoc}
    */
   public function getConfig(Editor $editor) {
-    return [];
+    return array();
   }
 
 }

@@ -21,23 +21,23 @@ class UnformattedSummary extends DefaultSummary {
 
   protected function defineOptions() {
     $options = parent::defineOptions();
-    $options['inline'] = ['default' => FALSE];
-    $options['separator'] = ['default' => ''];
+    $options['inline'] = array('default' => FALSE);
+    $options['separator'] = array('default' => '');
     return $options;
   }
 
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
-    $form['inline'] = [
+    $form['inline'] = array(
       '#type' => 'checkbox',
       '#default_value' => !empty($this->options['inline']),
       '#title' => $this->t('Display items inline'),
-    ];
-    $form['separator'] = [
+    );
+    $form['separator'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Separator'),
       '#default_value' => $this->options['separator'],
-    ];
+    );
   }
 
 }

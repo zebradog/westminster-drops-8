@@ -12,7 +12,7 @@ abstract class ConditionFundamentals {
    *
    * @var array
    */
-  protected $conditions = [];
+  protected $conditions = array();
 
   /**
    * The conjunction of this condition group. The value is one of the following:
@@ -36,7 +36,7 @@ abstract class ConditionFundamentals {
    *
    * @var array
    */
-  protected $namespaces = [];
+  protected $namespaces = array();
 
   /**
    * Constructs a Condition object.

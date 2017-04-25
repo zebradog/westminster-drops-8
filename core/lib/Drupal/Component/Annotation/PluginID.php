@@ -22,11 +22,11 @@ class PluginID extends AnnotationBase {
    * {@inheritdoc}
    */
   public function get() {
-    return [
+    return array(
       'id' => $this->value,
       'class' => $this->class,
       'provider' => $this->provider,
-    ];
+    );
   }
 
   /**

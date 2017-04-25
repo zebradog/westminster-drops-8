@@ -50,7 +50,7 @@ class LanguagesCacheContext implements CalculatedCacheContextInterface {
    */
   public function getContext($type = NULL) {
     if ($type === NULL) {
-      $context_parts = [];
+      $context_parts = array();
       if ($this->languageManager->isMultilingual()) {
         foreach ($this->languageManager->getLanguageTypes() as $type) {
           $context_parts[] = $this->languageManager->getCurrentLanguage($type)->getId();

@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\Core\Plugin\Discovery;
 
-use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Plugin\Discovery\HookDiscovery;
 use Drupal\Tests\UnitTestCase;
 
@@ -43,7 +42,7 @@ class HookDiscoveryTest extends UnitTestCase {
     $this->moduleHandler->expects($this->once())
       ->method('getImplementations')
       ->with('test_plugin')
-      ->will($this->returnValue([]));
+      ->will($this->returnValue(array()));
 
     $this->assertCount(0, $this->hookDiscovery->getDefinitions());
   }
@@ -57,7 +56,7 @@ class HookDiscoveryTest extends UnitTestCase {
     $this->moduleHandler->expects($this->once())
       ->method('getImplementations')
       ->with('test_plugin')
-      ->will($this->returnValue(['hook_discovery_test', 'hook_discovery_test2']));
+      ->will($this->returnValue(array('hook_discovery_test', 'hook_discovery_test2')));
 
     $this->moduleHandler->expects($this->at(1))
       ->method('invoke')
@@ -90,14 +89,14 @@ class HookDiscoveryTest extends UnitTestCase {
     $this->moduleHandler->expects($this->exactly(4))
       ->method('getImplementations')
       ->with('test_plugin')
-      ->will($this->returnValue(['hook_discovery_test', 'hook_discovery_test2']));
+      ->will($this->returnValue(array('hook_discovery_test', 'hook_discovery_test2')));
 
     $this->moduleHandler->expects($this->any())
       ->method('invoke')
-      ->will($this->returnValueMap([
-          ['hook_discovery_test', 'test_plugin', [], $this->hookDiscoveryTestTestPlugin()],
-          ['hook_discovery_test2', 'test_plugin', [], $this->hookDiscoveryTest2TestPlugin()],
-        ]
+      ->will($this->returnValueMap(array(
+          array('hook_discovery_test', 'test_plugin', array(), $this->hookDiscoveryTestTestPlugin()),
+          array('hook_discovery_test2', 'test_plugin', array(), $this->hookDiscoveryTest2TestPlugin()),
+        )
       ));
 
     $this->assertNull($this->hookDiscovery->getDefinition('test_non_existant', FALSE));
@@ -119,26 +118,27 @@ class HookDiscoveryTest extends UnitTestCase {
    * Tests the getDefinition method with an unknown plugin ID.
    *
    * @see \Drupal\Core\Plugin\Discovery::getDefinition()
+   *
+   * @expectedException \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function testGetDefinitionWithUnknownID() {
     $this->moduleHandler->expects($this->once())
       ->method('getImplementations')
-      ->will($this->returnValue([]));
+      ->will($this->returnValue(array()));
 
-    $this->setExpectedException(PluginNotFoundException::class);
     $this->hookDiscovery->getDefinition('test_non_existant', TRUE);
   }
 
   protected function hookDiscoveryTestTestPlugin() {
-    return [
-      'test_id_1' => ['class' => 'Drupal\plugin_test\Plugin\plugin_test\fruit\Apple'],
-      'test_id_2' => ['class' => 'Drupal\plugin_test\Plugin\plugin_test\fruit\Orange'],
-    ];
+    return array(
+      'test_id_1' => array('class' => 'Drupal\plugin_test\Plugin\plugin_test\fruit\Apple'),
+      'test_id_2' => array('class' => 'Drupal\plugin_test\Plugin\plugin_test\fruit\Orange'),
+    );
   }
   protected function hookDiscoveryTest2TestPlugin() {
-    return [
-      'test_id_3' => ['class' => 'Drupal\plugin_test\Plugin\plugin_test\fruit\Cherry'],
-    ];
+    return array(
+      'test_id_3' => array('class' => 'Drupal\plugin_test\Plugin\plugin_test\fruit\Cherry'),
+    );
   }
 
 }

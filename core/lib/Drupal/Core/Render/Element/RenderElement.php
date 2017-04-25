@@ -126,10 +126,10 @@ abstract class RenderElement extends PluginBase implements ElementInterface {
   /**
    * {@inheritdoc}
    */
-  public static function setAttributes(&$element, $class = []) {
+  public static function setAttributes(&$element, $class = array()) {
     if (!empty($class)) {
       if (!isset($element['#attributes']['class'])) {
-        $element['#attributes']['class'] = [];
+        $element['#attributes']['class'] = array();
       }
       $element['#attributes']['class'] = array_merge($element['#attributes']['class'], $class);
     }
@@ -398,7 +398,7 @@ abstract class RenderElement extends PluginBase implements ElementInterface {
 
       // Convert a simple #ajax['progress'] string into an array.
       if (isset($settings['progress']) && is_string($settings['progress'])) {
-        $settings['progress'] = ['type' => $settings['progress']];
+        $settings['progress'] = array('type' => $settings['progress']);
       }
       // Change progress path to a full URL.
       if (isset($settings['progress']['url']) && $settings['progress']['url'] instanceof Url) {

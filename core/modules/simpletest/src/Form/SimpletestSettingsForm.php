@@ -29,56 +29,56 @@ class SimpletestSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('simpletest.settings');
-    $form['general'] = [
+    $form['general'] = array(
       '#type' => 'details',
       '#title' => $this->t('General'),
       '#open' => TRUE,
-    ];
-    $form['general']['simpletest_clear_results'] = [
+    );
+    $form['general']['simpletest_clear_results'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Clear results after each complete test suite run'),
       '#description' => $this->t('By default SimpleTest will clear the results after they have been viewed on the results page, but in some cases it may be useful to leave the results in the database. The results can then be viewed at <em>admin/config/development/testing/results/[test_id]</em>. The test ID can be found in the database, simpletest table, or kept track of when viewing the results the first time. Additionally, some modules may provide more analysis or features that require this setting to be disabled.'),
       '#default_value' => $config->get('clear_results'),
-    ];
-    $form['general']['simpletest_verbose'] = [
+    );
+    $form['general']['simpletest_verbose'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Provide verbose information when running tests'),
       '#description' => $this->t('The verbose data will be printed along with the standard assertions and is useful for debugging. The verbose data will be erased between each test suite run. The verbose data output is very detailed and should only be used when debugging.'),
       '#default_value' => $config->get('verbose'),
-    ];
+    );
 
-    $form['httpauth'] = [
+    $form['httpauth'] = array(
       '#type' => 'details',
       '#title' => $this->t('HTTP authentication'),
       '#description' => $this->t('HTTP auth settings to be used by the SimpleTest browser during testing. Useful when the site requires basic HTTP authentication.'),
-    ];
-    $form['httpauth']['simpletest_httpauth_method'] = [
+    );
+    $form['httpauth']['simpletest_httpauth_method'] = array(
       '#type' => 'select',
       '#title' => $this->t('Method'),
-      '#options' => [
+      '#options' => array(
         CURLAUTH_BASIC => $this->t('Basic'),
         CURLAUTH_DIGEST => $this->t('Digest'),
         CURLAUTH_GSSNEGOTIATE => $this->t('GSS negotiate'),
         CURLAUTH_NTLM => $this->t('NTLM'),
         CURLAUTH_ANY => $this->t('Any'),
         CURLAUTH_ANYSAFE => $this->t('Any safe'),
-      ],
+      ),
       '#default_value' => $config->get('httpauth.method'),
-    ];
+    );
     $username = $config->get('httpauth.username');
     $password = $config->get('httpauth.password');
-    $form['httpauth']['simpletest_httpauth_username'] = [
+    $form['httpauth']['simpletest_httpauth_username'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Username'),
       '#default_value' => $username,
-    ];
+    );
     if (!empty($username) && !empty($password)) {
       $form['httpauth']['simpletest_httpauth_username']['#description'] = $this->t('Leave this blank to delete both the existing username and password.');
     }
-    $form['httpauth']['simpletest_httpauth_password'] = [
+    $form['httpauth']['simpletest_httpauth_password'] = array(
       '#type' => 'password',
       '#title' => $this->t('Password'),
-    ];
+    );
     if ($password) {
       $form['httpauth']['simpletest_httpauth_password']['#description'] = $this->t('To change the password, enter the new password here.');
     }

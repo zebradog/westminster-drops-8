@@ -2,7 +2,6 @@
 
 namespace Drupal\Core\Routing;
 
-use Drupal\Component\Utility\Unicode;
 use Symfony\Component\Routing\CompiledRoute as SymfonyCompiledRoute;
 
 /**
@@ -62,14 +61,11 @@ class CompiledRoute extends SymfonyCompiledRoute {
    * @param array $variables
    *   An array of variables (variables defined in the path and in the host patterns)
    */
-  public function __construct($fit, $pattern_outline, $num_parts, $staticPrefix, $regex, array $tokens, array $pathVariables, $hostRegex = NULL, array $hostTokens = [], array $hostVariables = [], array $variables = []) {
+  public function __construct($fit, $pattern_outline, $num_parts, $staticPrefix, $regex, array $tokens, array $pathVariables, $hostRegex = NULL, array $hostTokens = array(), array $hostVariables = array(), array $variables = array()) {
     parent::__construct($staticPrefix, $regex, $tokens, $pathVariables, $hostRegex, $hostTokens, $hostVariables, $variables);
 
     $this->fit = $fit;
-    // Support case-insensitive route matching by ensuring the pattern outline
-    // is lowercase.
-    // @see \Drupal\Core\Routing\RouteProvider::getRoutesByPath()
-    $this->patternOutline = Unicode::strtolower($pattern_outline);
+    $this->patternOutline = $pattern_outline;
     $this->numParts = $num_parts;
   }
 

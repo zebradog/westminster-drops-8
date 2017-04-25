@@ -9,6 +9,11 @@ use Drupal\rest\Entity\RestResourceConfig;
 use Drupal\rest\RestResourceConfigInterface;
 
 /**
+ * @addtogroup updates-8.1.x-to-8.2.x
+ * @{
+ */
+
+/**
  * Create REST resource configuration entities.
  *
  * @see rest_update_8201()
@@ -61,3 +66,8 @@ function rest_post_update_resource_granularity() {
     }
   }
 }
+
+
+/**
+ * @} End of "addtogroup updates-8.1.x-to-8.2.x".
+ */

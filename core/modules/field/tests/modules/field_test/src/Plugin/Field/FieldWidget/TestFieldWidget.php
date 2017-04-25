@@ -27,24 +27,24 @@ class TestFieldWidget extends WidgetBase {
    * {@inheritdoc}
    */
   public static function defaultSettings() {
-    return [
+    return array(
       'test_widget_setting' => 'dummy test string',
       'role' => 'anonymous',
       'role2' => 'anonymous',
-    ] + parent::defaultSettings();
+    ) + parent::defaultSettings();
   }
 
   /**
    * {@inheritdoc}
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
-    $element['test_widget_setting'] = [
+    $element['test_widget_setting'] = array(
       '#type' => 'textfield',
       '#title' => t('Field test field widget setting'),
       '#description' => t('A dummy form element to simulate field widget setting.'),
       '#default_value' => $this->getSetting('test_widget_setting'),
       '#required' => FALSE,
-    ];
+    );
     return $element;
   }
 
@@ -52,8 +52,8 @@ class TestFieldWidget extends WidgetBase {
    * {@inheritdoc}
    */
   public function settingsSummary() {
-    $summary = [];
-    $summary[] = t('@setting: @value', ['@setting' => 'test_widget_setting', '@value' => $this->getSetting('test_widget_setting')]);
+    $summary = array();
+    $summary[] = t('@setting: @value', array('@setting' => 'test_widget_setting', '@value' => $this->getSetting('test_widget_setting')));
     return $summary;
   }
 
@@ -61,11 +61,11 @@ class TestFieldWidget extends WidgetBase {
    * {@inheritdoc}
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
-    $element += [
+    $element += array(
       '#type' => 'textfield',
       '#default_value' => isset($items[$delta]->value) ? $items[$delta]->value : '',
-    ];
-    return ['value' => $element];
+    );
+    return array('value' => $element);
   }
 
   /**

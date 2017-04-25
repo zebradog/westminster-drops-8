@@ -33,10 +33,10 @@ class ShowButtonsCommand implements CommandInterface {
    * {@inheritdoc}
    */
   public function render() {
-    return [
+    return array(
       'command' => 'viewsShowButtons',
       'changed' => $this->changed,
-    ];
+    );
   }
 
 }

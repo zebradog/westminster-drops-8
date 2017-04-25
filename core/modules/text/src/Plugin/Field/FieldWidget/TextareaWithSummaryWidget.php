@@ -23,11 +23,11 @@ class TextareaWithSummaryWidget extends TextareaWidget {
    * {@inheritdoc}
    */
   public static function defaultSettings() {
-    return [
+    return array(
       'rows' => '9',
       'summary_rows' => '3',
       'placeholder' => '',
-    ] + parent::defaultSettings();
+    ) + parent::defaultSettings();
   }
 
   /**
@@ -35,14 +35,13 @@ class TextareaWithSummaryWidget extends TextareaWidget {
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
     $element = parent::settingsForm($form, $form_state);
-    $element['summary_rows'] = [
+    $element['summary_rows'] = array(
       '#type' => 'number',
       '#title' => t('Summary rows'),
       '#default_value' => $this->getSetting('summary_rows'),
-      '#description' => $element['rows']['#description'],
       '#required' => TRUE,
       '#min' => 1,
-    ];
+    );
     return $element;
   }
 
@@ -52,7 +51,7 @@ class TextareaWithSummaryWidget extends TextareaWidget {
   public function settingsSummary() {
     $summary = parent::settingsSummary();
 
-    $summary[] = t('Number of summary rows: @rows', ['@rows' => $this->getSetting('summary_rows')]);
+    $summary[] = t('Number of summary rows: @rows', array('@rows' => $this->getSetting('summary_rows')));
 
     return $summary;
   }
@@ -60,24 +59,24 @@ class TextareaWithSummaryWidget extends TextareaWidget {
   /**
    * {@inheritdoc}
    */
-  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+  function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
 
     $display_summary = $items[$delta]->summary || $this->getFieldSetting('display_summary');
-    $element['summary'] = [
+    $element['summary'] = array(
       '#type' => $display_summary ? 'textarea' : 'value',
       '#default_value' => $items[$delta]->summary,
       '#title' => t('Summary'),
       '#rows' => $this->getSetting('summary_rows'),
       '#description' => t('Leave blank to use trimmed value of full text as the summary.'),
-      '#attached' => [
-        'library' => ['text/drupal.text'],
-      ],
-      '#attributes' => ['class' => ['js-text-summary', 'text-summary']],
+      '#attached' => array(
+        'library' => array('text/drupal.text'),
+      ),
+      '#attributes' => array('class' => array('js-text-summary', 'text-summary')),
       '#prefix' => '<div class="js-text-summary-wrapper text-summary-wrapper">',
       '#suffix' => '</div>',
       '#weight' => -10,
-    ];
+    );
 
     return $element;
   }

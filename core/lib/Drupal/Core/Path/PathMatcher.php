@@ -66,19 +66,19 @@ class PathMatcher implements PathMatcherInterface {
 
     if (!isset($this->regexes[$patterns])) {
       // Convert path settings to a regular expression.
-      $to_replace = [
+      $to_replace = array(
         // Replace newlines with a logical 'or'.
         '/(\r\n?|\n)/',
         // Quote asterisks.
         '/\\\\\*/',
         // Quote <front> keyword.
         '/(^|\|)\\\\<front\\\\>($|\|)/',
-      ];
-      $replacements = [
+      );
+      $replacements = array(
         '|',
         '.*',
         '\1' . preg_quote($this->getFrontPagePath(), '/') . '\2',
-      ];
+      );
       $patterns_quoted = preg_quote($patterns, '/');
       $this->regexes[$patterns] = '/^(' . preg_replace($to_replace, $replacements, $patterns_quoted) . ')$/';
     }

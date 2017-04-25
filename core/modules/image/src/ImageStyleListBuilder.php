@@ -33,15 +33,15 @@ class ImageStyleListBuilder extends ConfigEntityListBuilder {
    * {@inheritdoc}
    */
   public function getDefaultOperations(EntityInterface $entity) {
-    $flush = [
+    $flush = array(
       'title' => t('Flush'),
       'weight' => 200,
       'url' => $entity->urlInfo('flush-form'),
-    ];
+    );
 
-    return parent::getDefaultOperations($entity) + [
+    return parent::getDefaultOperations($entity) + array(
       'flush' => $flush,
-    ];
+    );
   }
 
   /**

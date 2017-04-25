@@ -121,6 +121,9 @@ class ArgumentsResolverTest extends UnitTestCase {
    * Tests getArgument() with a wildcard parameter with no typehint.
    *
    * Without the typehint, the wildcard object will not be passed to the callable.
+   *
+   * @expectedException \RuntimeException
+   * @expectedExceptionMessage requires a value for the "$route" argument.
    */
   public function testGetWildcardArgumentNoTypehint() {
     $a = $this->getMock('\Drupal\Tests\Component\Utility\TestInterface1');
@@ -128,8 +131,8 @@ class ArgumentsResolverTest extends UnitTestCase {
     $resolver = new ArgumentsResolver([], [], $wildcards);
 
     $callable = function($route) {};
-    $this->setExpectedException(\RuntimeException::class, 'requires a value for the "$route" argument.');
-    $resolver->getArguments($callable);
+    $arguments = $resolver->getArguments($callable);
+    $this->assertNull($arguments);
   }
 
   /**
@@ -149,6 +152,9 @@ class ArgumentsResolverTest extends UnitTestCase {
 
   /**
    * Tests handleUnresolvedArgument() for a scalar argument.
+   *
+   * @expectedException \RuntimeException
+   * @expectedExceptionMessage requires a value for the "$foo" argument.
    */
   public function testHandleNotUpcastedArgument() {
     $objects = ['foo' => 'bar'];
@@ -156,19 +162,22 @@ class ArgumentsResolverTest extends UnitTestCase {
     $resolver = new ArgumentsResolver($scalars, $objects, []);
 
     $callable = function(\stdClass $foo) {};
-    $this->setExpectedException(\RuntimeException::class, 'requires a value for the "$foo" argument.');
-    $resolver->getArguments($callable);
+    $arguments = $resolver->getArguments($callable);
+    $this->assertNull($arguments);
   }
 
   /**
    * Tests handleUnresolvedArgument() for missing arguments.
    *
+   * @expectedException \RuntimeException
+   * @expectedExceptionMessage requires a value for the "$foo" argument.
+   *
    * @dataProvider providerTestHandleUnresolvedArgument
    */
   public function testHandleUnresolvedArgument($callable) {
     $resolver = new ArgumentsResolver([], [], []);
-    $this->setExpectedException(\RuntimeException::class, 'requires a value for the "$foo" argument.');
-    $resolver->getArguments($callable);
+    $arguments = $resolver->getArguments($callable);
+    $this->assertNull($arguments);
   }
 
   /**

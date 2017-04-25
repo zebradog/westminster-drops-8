@@ -38,37 +38,37 @@ class SearchPageForm extends EntityForm {
     $plugin = $this->entity->getPlugin();
     $form_state->set('search_page_id', $this->entity->id());
 
-    $form['basic'] = [
+    $form['basic'] = array(
       '#type' => 'container',
-      '#attributes' => [
-        'class' => ['container-inline'],
-      ],
-    ];
-    $form['basic']['keys'] = [
+      '#attributes' => array(
+        'class' => array('container-inline'),
+      ),
+    );
+    $form['basic']['keys'] = array(
       '#type' => 'search',
       '#title' => $this->t('Enter your keywords'),
       '#default_value' => $plugin->getKeywords(),
       '#size' => 30,
       '#maxlength' => 255,
-    ];
+    );
 
     // processed_keys is used to coordinate keyword passing between other forms
     // that hook into the basic search form.
-    $form['basic']['processed_keys'] = [
+    $form['basic']['processed_keys'] = array(
       '#type' => 'value',
       '#value' => '',
-    ];
-    $form['basic']['submit'] = [
+    );
+    $form['basic']['submit'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Search'),
-    ];
+    );
 
-    $form['help_link'] = [
+    $form['help_link'] = array(
       '#type' => 'link',
       '#url' => new Url('search.help_' . $this->entity->id()),
       '#title' => $this->t('Search help'),
-      '#options' => ['attributes' => ['class' => 'search-help-link']],
-    ];
+      '#options' => array('attributes' => array('class' => 'search-help-link')),
+    );
 
     // Allow the plugin to add to or alter the search form.
     $plugin->searchFormAlter($form, $form_state);
@@ -81,7 +81,7 @@ class SearchPageForm extends EntityForm {
    */
   protected function actions(array $form, FormStateInterface $form_state) {
     // The submit button is added in the form directly.
-    return [];
+    return array();
   }
 
   /**
@@ -97,8 +97,8 @@ class SearchPageForm extends EntityForm {
     $route = 'search.view_' . $form_state->get('search_page_id');
     $form_state->setRedirect(
       $route,
-      [],
-      ['query' => $query]
+      array(),
+      array('query' => $query)
     );
   }
 

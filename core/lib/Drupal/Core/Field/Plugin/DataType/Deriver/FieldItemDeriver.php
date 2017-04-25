@@ -16,7 +16,7 @@ class FieldItemDeriver implements ContainerDeriverInterface {
    *
    * @var array
    */
-  protected $derivatives = [];
+  protected $derivatives = array();
 
   /**
    * The base plugin ID this derivative is for.

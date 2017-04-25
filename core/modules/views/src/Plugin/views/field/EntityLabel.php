@@ -23,7 +23,7 @@ class EntityLabel extends FieldPluginBase {
    *
    * @var array
    */
-  protected $loadedReferencers = [];
+  protected $loadedReferencers = array();
 
   /**
    * EntityManager class.
@@ -75,7 +75,7 @@ class EntityLabel extends FieldPluginBase {
    */
   protected function defineOptions() {
     $options = parent::defineOptions();
-    $options['link_to_entity'] = ['default' => FALSE];
+    $options['link_to_entity'] = array('default' => FALSE);
     return $options;
   }
 
@@ -83,12 +83,12 @@ class EntityLabel extends FieldPluginBase {
    * {@inheritdoc}
    */
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
-    $form['link_to_entity'] = [
+    $form['link_to_entity'] = array(
       '#title' => $this->t('Link to entity'),
       '#description' => $this->t('Make entity label a link to entity page.'),
       '#type' => 'checkbox',
       '#default_value' => !empty($this->options['link_to_entity']),
-    ];
+    );
     parent::buildOptionsForm($form, $form_state);
   }
 
@@ -128,7 +128,7 @@ class EntityLabel extends FieldPluginBase {
   public function preRender(&$values) {
     parent::preRender($values);
 
-    $entity_ids_per_type = [];
+    $entity_ids_per_type = array();
     foreach ($values as $value) {
       if ($type = $this->getValue($value, 'type')) {
         $entity_ids_per_type[$type][] = $this->getValue($value);

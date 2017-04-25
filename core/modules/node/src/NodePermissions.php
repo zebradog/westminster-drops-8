@@ -22,7 +22,7 @@ class NodePermissions {
    *   @see \Drupal\user\PermissionHandlerInterface::getPermissions()
    */
   public function nodeTypePermissions() {
-    $perms = [];
+    $perms = array();
     // Generate node permissions for all node types.
     foreach (NodeType::loadMultiple() as $type) {
       $perms += $this->buildPermissions($type);
@@ -42,36 +42,36 @@ class NodePermissions {
    */
   protected function buildPermissions(NodeType $type) {
     $type_id = $type->id();
-    $type_params = ['%type_name' => $type->label()];
+    $type_params = array('%type_name' => $type->label());
 
-    return [
-      "create $type_id content" => [
+    return array(
+      "create $type_id content" => array(
         'title' => $this->t('%type_name: Create new content', $type_params),
-      ],
-      "edit own $type_id content" => [
+      ),
+      "edit own $type_id content" => array(
         'title' => $this->t('%type_name: Edit own content', $type_params),
-      ],
-      "edit any $type_id content" => [
+      ),
+      "edit any $type_id content" => array(
         'title' => $this->t('%type_name: Edit any content', $type_params),
-      ],
-      "delete own $type_id content" => [
+      ),
+      "delete own $type_id content" => array(
         'title' => $this->t('%type_name: Delete own content', $type_params),
-      ],
-      "delete any $type_id content" => [
+      ),
+      "delete any $type_id content" => array(
         'title' => $this->t('%type_name: Delete any content', $type_params),
-      ],
-      "view $type_id revisions" => [
+      ),
+      "view $type_id revisions" => array(
         'title' => $this->t('%type_name: View revisions', $type_params),
-      ],
-      "revert $type_id revisions" => [
+      ),
+      "revert $type_id revisions" => array(
         'title' => $this->t('%type_name: Revert revisions', $type_params),
         'description' => t('Role requires permission <em>view revisions</em> and <em>edit rights</em> for nodes in question, or <em>administer nodes</em>.'),
-      ],
-      "delete $type_id revisions" => [
+      ),
+      "delete $type_id revisions" => array(
         'title' => $this->t('%type_name: Delete revisions', $type_params),
         'description' => $this->t('Role requires permission to <em>view revisions</em> and <em>delete rights</em> for nodes in question, or <em>administer nodes</em>.'),
-      ],
-    ];
+      ),
+    );
   }
 
 }

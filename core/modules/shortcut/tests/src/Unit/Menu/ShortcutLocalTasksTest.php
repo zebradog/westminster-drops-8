@@ -12,10 +12,10 @@ use Drupal\Tests\Core\Menu\LocalTaskIntegrationTestBase;
 class ShortcutLocalTasksTest extends LocalTaskIntegrationTestBase {
 
   protected function setUp() {
-    $this->directoryList = [
+    $this->directoryList = array(
       'shortcut' => 'core/modules/shortcut',
       'user' => 'core/modules/user',
-    ];
+    );
     parent::setUp();
   }
 
@@ -25,9 +25,9 @@ class ShortcutLocalTasksTest extends LocalTaskIntegrationTestBase {
    * @dataProvider getShortcutPageRoutes
    */
   public function testShortcutPageLocalTasks($route) {
-    $tasks = [
-      0 => ['shortcut.set_switch', 'entity.user.canonical', 'entity.user.edit_form'],
-    ];
+    $tasks = array(
+      0 => array('shortcut.set_switch', 'entity.user.canonical', 'entity.user.edit_form',),
+    );
     $this->assertLocalTasks($route, $tasks);
   }
 
@@ -35,11 +35,11 @@ class ShortcutLocalTasksTest extends LocalTaskIntegrationTestBase {
    * Provides a list of routes to test.
    */
   public function getShortcutPageRoutes() {
-    return [
-      ['entity.user.canonical'],
-      ['entity.user.edit_form'],
-      ['shortcut.set_switch'],
-    ];
+    return array(
+      array('entity.user.canonical'),
+      array('entity.user.edit_form'),
+      array('shortcut.set_switch'),
+    );
   }
 
 }

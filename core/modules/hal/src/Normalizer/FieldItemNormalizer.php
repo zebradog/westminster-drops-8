@@ -20,15 +20,8 @@ class FieldItemNormalizer extends NormalizerBase {
   /**
    * {@inheritdoc}
    */
-  public function normalize($field_item, $format = NULL, array $context = []) {
-    $values = [];
-    // We normalize each individual property, so each can do their own casting,
-    // if needed.
-    /** @var \Drupal\Core\TypedData\TypedDataInterface $property */
-    foreach ($field_item as $property_name => $property) {
-      $values[$property_name] = $this->serializer->normalize($property, $format, $context);
-    }
-
+  public function normalize($field_item, $format = NULL, array $context = array()) {
+    $values = $field_item->toArray();
     if (isset($context['langcode'])) {
       $values['lang'] = $context['langcode'];
     }
@@ -38,15 +31,15 @@ class FieldItemNormalizer extends NormalizerBase {
     // FieldNormalizer. This is necessary for the EntityReferenceItemNormalizer
     // to be able to place values in the '_links' array.
     $field = $field_item->getParent();
-    return [
-      $field->getName() => [$values],
-    ];
+    return array(
+      $field->getName() => array($values),
+    );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function denormalize($data, $class, $format = NULL, array $context = []) {
+  public function denormalize($data, $class, $format = NULL, array $context = array()) {
     if (!isset($context['target_instance'])) {
       throw new InvalidArgumentException('$context[\'target_instance\'] must be set to denormalize with the FieldItemNormalizer');
     }

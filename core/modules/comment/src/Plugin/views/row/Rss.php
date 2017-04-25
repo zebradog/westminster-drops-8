@@ -40,7 +40,7 @@ class Rss extends RssPluginBase {
   protected $entityTypeId = 'comment';
 
   public function preRender($result) {
-    $cids = [];
+    $cids = array();
 
     foreach ($result as $row) {
       $cids[] = $row->cid;
@@ -79,23 +79,23 @@ class Rss extends RssPluginBase {
       return;
     }
 
-    $comment->link = $comment->url('canonical', ['absolute' => TRUE]);
-    $comment->rss_namespaces = [];
-    $comment->rss_elements = [
-      [
+    $comment->link = $comment->url('canonical', array('absolute' => TRUE));
+    $comment->rss_namespaces = array();
+    $comment->rss_elements = array(
+      array(
         'key' => 'pubDate',
         'value' => gmdate('r', $comment->getCreatedTime()),
-      ],
-      [
+      ),
+      array(
         'key' => 'dc:creator',
         'value' => $comment->getAuthorName(),
-      ],
-      [
+      ),
+      array(
         'key' => 'guid',
         'value' => 'comment ' . $comment->id() . ' at ' . $base_url,
-        'attributes' => ['isPermaLink' => 'false'],
-      ],
-    ];
+        'attributes' => array('isPermaLink' => 'false'),
+      ),
+    );
 
     // The comment gets built and modules add to or modify
     // $comment->rss_elements and $comment->rss_namespaces.
@@ -118,12 +118,12 @@ class Rss extends RssPluginBase {
     $item->elements = &$comment->rss_elements;
     $item->cid = $comment->id();
 
-    $build = [
+    $build = array(
       '#theme' => $this->themeFunctions(),
       '#view' => $this->view,
       '#options' => $this->options,
       '#row' => $item,
-    ];
+    );
     return $build;
   }
 

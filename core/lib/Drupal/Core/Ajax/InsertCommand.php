@@ -66,13 +66,13 @@ class InsertCommand implements CommandInterface, CommandWithAttachedAssetsInterf
    */
   public function render() {
 
-    return [
+    return array(
       'command' => 'insert',
       'method' => NULL,
       'selector' => $this->selector,
       'data' => $this->getRenderedContent(),
       'settings' => $this->settings,
-    ];
+    );
   }
 
 }

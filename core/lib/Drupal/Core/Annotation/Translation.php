@@ -74,12 +74,12 @@ class Translation extends AnnotationBase {
    */
   public function __construct(array $values) {
     $string = $values['value'];
-    $arguments = isset($values['arguments']) ? $values['arguments'] : [];
-    $options = [];
+    $arguments = isset($values['arguments']) ? $values['arguments'] : array();
+    $options = array();
     if (!empty($values['context'])) {
-      $options = [
+      $options = array(
         'context' => $values['context'],
-      ];
+      );
     }
     $this->translation = new TranslatableMarkup($string, $arguments, $options);
   }

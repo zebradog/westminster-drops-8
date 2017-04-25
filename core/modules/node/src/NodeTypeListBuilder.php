@@ -18,10 +18,10 @@ class NodeTypeListBuilder extends ConfigEntityListBuilder {
    */
   public function buildHeader() {
     $header['title'] = t('Name');
-    $header['description'] = [
+    $header['description'] = array(
       'data' => t('Description'),
-      'class' => [RESPONSIVE_PRIORITY_MEDIUM],
-    ];
+      'class' => array(RESPONSIVE_PRIORITY_MEDIUM),
+    );
     return $header + parent::buildHeader();
   }
 
@@ -29,10 +29,10 @@ class NodeTypeListBuilder extends ConfigEntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-    $row['title'] = [
+    $row['title'] = array(
       'data' => $entity->label(),
-      'class' => ['menu-label'],
-    ];
+      'class' => array('menu-label'),
+    );
     $row['description']['data'] = ['#markup' => $entity->getDescription()];
     return $row + parent::buildRow($entity);
   }

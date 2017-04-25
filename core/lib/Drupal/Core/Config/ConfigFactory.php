@@ -43,7 +43,7 @@ class ConfigFactory implements ConfigFactoryInterface, EventSubscriberInterface 
    *
    * @var \Drupal\Core\Config\Config[]
    */
-  protected $cache = [];
+  protected $cache = array();
 
   /**
    * The typed config manager.
@@ -57,7 +57,7 @@ class ConfigFactory implements ConfigFactoryInterface, EventSubscriberInterface 
    *
    * @var \Drupal\Core\Config\ConfigFactoryOverrideInterface[]
    */
-  protected $configFactoryOverrides = [];
+  protected $configFactoryOverrides = array();
 
   /**
    * Constructs the Config factory.
@@ -101,7 +101,7 @@ class ConfigFactory implements ConfigFactoryInterface, EventSubscriberInterface 
    *   A configuration object.
    */
   protected function doGet($name, $immutable = TRUE) {
-    if ($config = $this->doLoadMultiple([$name], $immutable)) {
+    if ($config = $this->doLoadMultiple(array($name), $immutable)) {
       return $config[$name];
     }
     else {
@@ -111,7 +111,7 @@ class ConfigFactory implements ConfigFactoryInterface, EventSubscriberInterface 
 
       if ($immutable) {
         // Get and apply any overrides.
-        $overrides = $this->loadOverrides([$name]);
+        $overrides = $this->loadOverrides(array($name));
         if (isset($overrides[$name])) {
           $config->setModuleOverride($overrides[$name]);
         }
@@ -148,7 +148,7 @@ class ConfigFactory implements ConfigFactoryInterface, EventSubscriberInterface 
    *   List of successfully loaded configuration objects, keyed by name.
    */
   protected function doLoadMultiple(array $names, $immutable = TRUE) {
-    $list = [];
+    $list = array();
 
     foreach ($names as $key => $name) {
       $cache_key = $this->getConfigCacheKey($name, $immutable);
@@ -161,7 +161,7 @@ class ConfigFactory implements ConfigFactoryInterface, EventSubscriberInterface 
     // Pre-load remaining configuration files.
     if (!empty($names)) {
       // Initialise override information.
-      $module_overrides = [];
+      $module_overrides = array();
       $storage_data = $this->storage->readMultiple($names);
 
       if ($immutable && !empty($storage_data)) {
@@ -202,11 +202,11 @@ class ConfigFactory implements ConfigFactoryInterface, EventSubscriberInterface 
    *   An array of overrides keyed by the configuration object name.
    */
   protected function loadOverrides(array $names) {
-    $overrides = [];
+    $overrides = array();
     foreach ($this->configFactoryOverrides as $override) {
       // Existing overrides take precedence since these will have been added
       // by events with a higher priority.
-      $overrides = NestedArray::mergeDeepArray([$override->loadOverrides($names), $overrides], TRUE);
+      $overrides = NestedArray::mergeDeepArray(array($override->loadOverrides($names), $overrides), TRUE);
     }
     return $overrides;
   }
@@ -236,7 +236,7 @@ class ConfigFactory implements ConfigFactoryInterface, EventSubscriberInterface 
       }
     }
     else {
-      $this->cache = [];
+      $this->cache = array();
     }
 
     // Clear the static list cache if supported by the storage.
@@ -317,7 +317,7 @@ class ConfigFactory implements ConfigFactoryInterface, EventSubscriberInterface 
    * {@inheritdoc}
    */
   public function clearStaticCache() {
-    $this->cache = [];
+    $this->cache = array();
     return $this;
   }
 
@@ -365,9 +365,9 @@ class ConfigFactory implements ConfigFactoryInterface, EventSubscriberInterface 
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
-    $events[ConfigEvents::SAVE][] = ['onConfigSave', 255];
-    $events[ConfigEvents::DELETE][] = ['onConfigDelete', 255];
+  static function getSubscribedEvents() {
+    $events[ConfigEvents::SAVE][] = array('onConfigSave', 255);
+    $events[ConfigEvents::DELETE][] = array('onConfigDelete', 255);
     return $events;
   }
 

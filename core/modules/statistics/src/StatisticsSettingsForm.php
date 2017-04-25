@@ -65,17 +65,17 @@ class StatisticsSettingsForm extends ConfigFormBase {
     $config = $this->config('statistics.settings');
 
     // Content counter settings.
-    $form['content'] = [
+    $form['content'] = array(
       '#type' => 'details',
       '#title' => t('Content viewing counter settings'),
       '#open' => TRUE,
-    ];
-    $form['content']['statistics_count_content_views'] = [
+    );
+    $form['content']['statistics_count_content_views'] = array(
       '#type' => 'checkbox',
       '#title' => t('Count content views'),
       '#default_value' => $config->get('count_content_views'),
       '#description' => t('Increment a counter each time content is viewed.'),
-    ];
+    );
 
     return parent::buildForm($form, $form_state);
   }

@@ -19,15 +19,11 @@ class DateRangeWidgetBase extends DateTimeWidgetBase {
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
-
-    // Wrap all of the select elements with a fieldset.
-    $element['#theme_wrappers'][] = 'fieldset';
-
     $element['#element_validate'][] = [$this, 'validateStartEnd'];
-    $element['value']['#title'] = $this->t('Start date');
+    $element['value']['#title'] = $this->t('Start');
 
     $element['end_value'] = [
-      '#title' => $this->t('End date'),
+      '#title' => $this->t('End'),
     ] + $element['value'];
 
     if ($items[$delta]->start_date) {
@@ -133,7 +129,7 @@ class DateRangeWidgetBase extends DateTimeWidgetBase {
     $end_date = $element['end_value']['#value']['object'];
 
     if ($start_date instanceof DrupalDateTime && $end_date instanceof DrupalDateTime) {
-      if ($start_date->getTimestamp() !== $end_date->getTimestamp()) {
+      if ($start_date->format('U') !== $end_date->format('U')) {
         $interval = $start_date->diff($end_date);
         if ($interval->invert === 1) {
           $form_state->setError($element, $this->t('The @title end date cannot be before the start date', ['@title' => $element['#title']]));

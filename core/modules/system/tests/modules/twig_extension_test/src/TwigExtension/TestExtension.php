@@ -2,11 +2,12 @@
 
 namespace Drupal\twig_extension_test\TwigExtension;
 
+use Drupal\Core\Template\TwigExtension;
 
 /**
  * A test Twig extension that adds a custom function and a custom filter.
  */
-class TestExtension extends \Twig_Extension {
+class TestExtension extends TwigExtension {
 
   /**
    * Generates a list of all Twig functions that this extension defines.
@@ -21,9 +22,9 @@ class TestExtension extends \Twig_Extension {
    *   The value is a standard PHP callback that defines what the function does.
    */
   public function getFunctions() {
-    return [
-      'testfunc' => new \Twig_Function_Function(['Drupal\twig_extension_test\TwigExtension\TestExtension', 'testFunction']),
-    ];
+    return array(
+      'testfunc' => new \Twig_Function_Function(array('Drupal\twig_extension_test\TwigExtension\TestExtension', 'testFunction')),
+    );
   }
 
   /**
@@ -39,9 +40,9 @@ class TestExtension extends \Twig_Extension {
    *   The value is a standard PHP callback that defines what the filter does.
    */
   public function getFilters() {
-    return [
-      'testfilter' => new \Twig_Filter_Function(['Drupal\twig_extension_test\TwigExtension\TestExtension', 'testFilter']),
-    ];
+    return array(
+      'testfilter' => new \Twig_Filter_Function(array('Drupal\twig_extension_test\TwigExtension\TestExtension', 'testFilter')),
+    );
   }
 
   /**
@@ -93,7 +94,7 @@ class TestExtension extends \Twig_Extension {
    * @see \Drupal\system\Tests\Theme\TwigExtensionTest::testTwigExtensionFilter()
    */
   public static function testFilter($string) {
-    return str_replace(['animal'], ['plant'], $string);
+    return str_replace(array('animal'), array('plant'), $string);
   }
 
 }

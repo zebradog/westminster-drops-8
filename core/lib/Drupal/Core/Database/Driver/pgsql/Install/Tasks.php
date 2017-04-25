@@ -4,6 +4,7 @@ namespace Drupal\Core\Database\Driver\pgsql\Install;
 
 use Drupal\Core\Database\Database;
 use Drupal\Core\Database\Install\Tasks as InstallTasks;
+use Drupal\Core\Database\Driver\pgsql\Connection;
 use Drupal\Core\Database\DatabaseNotFoundException;
 
 /**
@@ -20,22 +21,22 @@ class Tasks extends InstallTasks {
    * Constructs a \Drupal\Core\Database\Driver\pgsql\Install\Tasks object.
    */
   public function __construct() {
-    $this->tasks[] = [
+    $this->tasks[] = array(
       'function' => 'checkEncoding',
-      'arguments' => [],
-    ];
-    $this->tasks[] = [
+      'arguments' => array(),
+    );
+    $this->tasks[] = array(
       'function' => 'checkBinaryOutput',
-      'arguments' => [],
-    ];
-    $this->tasks[] = [
+      'arguments' => array(),
+    );
+    $this->tasks[] = array(
       'function' => 'checkStandardConformingStrings',
-      'arguments' => [],
-    ];
-    $this->tasks[] = [
+      'arguments' => array(),
+    );
+    $this->tasks[] = array(
       'function' => 'initializeDatabase',
-      'arguments' => [],
-    ];
+      'arguments' => array(),
+    );
   }
 
   /**
@@ -65,7 +66,7 @@ class Tasks extends InstallTasks {
     }
     catch (\Exception $e) {
       // Attempt to create the database if it is not found.
-      if ($e instanceof DatabaseNotFoundException) {
+      if ($e->getCode() == Connection::DATABASE_NOT_FOUND) {
         // Remove the database string from connection info.
         $connection_info = Database::getConnectionInfo();
         $database = $connection_info['default']['database'];
@@ -94,13 +95,13 @@ class Tasks extends InstallTasks {
         catch (DatabaseNotFoundException $e) {
           // Still no dice; probably a permission issue. Raise the error to the
           // installer.
-          $this->fail(t('Database %database not found. The server reports the following message when attempting to create the database: %error.', ['%database' => $database, '%error' => $e->getMessage()]));
+          $this->fail(t('Database %database not found. The server reports the following message when attempting to create the database: %error.', array('%database' => $database, '%error' => $e->getMessage())));
         }
       }
       else {
         // Database connection failed for some other reason than the database
         // not existing.
-        $this->fail(t('Failed to connect to your database server. The server reports the following message: %error.<ul><li>Is the database server running?</li><li>Does the database exist, and have you entered the correct database name?</li><li>Have you entered the correct username and password?</li><li>Have you entered the correct database hostname?</li></ul>', ['%error' => $e->getMessage()]));
+        $this->fail(t('Failed to connect to your database server. The server reports the following message: %error.<ul><li>Is the database server running?</li><li>Does the database exist, and have you entered the correct database name?</li><li>Have you entered the correct username and password?</li><li>Have you entered the correct database hostname?</li></ul>', array('%error' => $e->getMessage())));
         return FALSE;
       }
     }
@@ -116,10 +117,10 @@ class Tasks extends InstallTasks {
         $this->pass(t('Database is encoded in UTF-8'));
       }
       else {
-        $this->fail(t('The %driver database must use %encoding encoding to work with Drupal. Recreate the database with %encoding encoding. See <a href="INSTALL.pgsql.txt">INSTALL.pgsql.txt</a> for more details.', [
+        $this->fail(t('The %driver database must use %encoding encoding to work with Drupal. Recreate the database with %encoding encoding. See <a href="INSTALL.pgsql.txt">INSTALL.pgsql.txt</a> for more details.', array(
           '%encoding' => 'UTF8',
           '%driver' => $this->name(),
-        ]));
+        )));
       }
     }
     catch (\Exception $e) {
@@ -132,7 +133,7 @@ class Tasks extends InstallTasks {
    *
    * Unserializing does not work on Postgresql 9 when bytea_output is 'hex'.
    */
-  public function checkBinaryOutput() {
+  function checkBinaryOutput() {
     // PostgreSQL < 9 doesn't support bytea_output, so verify we are running
     // at least PostgreSQL 9.
     $database_connection = Database::getConnection();
@@ -161,12 +162,12 @@ class Tasks extends InstallTasks {
         // Recheck, if it fails, finally just rely on the end user to do the
         // right thing.
         if (!$this->checkBinaryOutputSuccess()) {
-          $replacements = [
+          $replacements = array(
             '%setting' => 'bytea_output',
             '%current_value' => 'hex',
             '%needed_value' => 'escape',
             '@query' => $query,
-          ];
+          );
           $this->fail(t("The %setting setting is currently set to '%current_value', but needs to be '%needed_value'. Change this by running the following query: <code>@query</code>", $replacements));
         }
       }
@@ -214,12 +215,12 @@ class Tasks extends InstallTasks {
       // Recheck, if it fails, finally just rely on the end user to do the
       // right thing.
       if (!$this->checkStandardConformingStringsSuccess()) {
-        $replacements = [
+        $replacements = array(
           '%setting' => 'standard_conforming_strings',
           '%current_value' => 'off',
           '%needed_value' => 'on',
           '@query' => $query,
-        ];
+        );
         $this->fail(t("The %setting setting is currently set to '%current_value', but needs to be '%needed_value'. Change this by running the following query: <code>@query</code>", $replacements));
       }
     }
@@ -236,7 +237,7 @@ class Tasks extends InstallTasks {
   /**
    * Make PostgreSQL Drupal friendly.
    */
-  public function initializeDatabase() {
+  function initializeDatabase() {
     // We create some functions using global names instead of prefixing them
     // like we do with table names. This is so that we don't double up if more
     // than one instance of Drupal is running on a single database. We therefore

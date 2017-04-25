@@ -13,7 +13,6 @@ use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldTypePluginManagerInterface;
-use Drupal\migrate\MigrateException;
 use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Plugin\migrate\destination\EntityContentBase;
 use Drupal\migrate\Plugin\MigrateIdMapInterface;
@@ -85,6 +84,8 @@ class EntityContentBaseTest extends UnitTestCase {
    * Test row skipping when we can't get an entity to save.
    *
    * @covers ::import
+   * @expectedException \Drupal\migrate\MigrateException
+   * @expectedExceptionMessage Unable to get entity
    */
   public function testImportEntityLoadFailure() {
     $bundles = [];
@@ -95,12 +96,14 @@ class EntityContentBaseTest extends UnitTestCase {
       $this->entityManager->reveal(),
       $this->prophesize(FieldTypePluginManagerInterface::class)->reveal());
     $destination->setEntity(FALSE);
-    $this->setExpectedException(MigrateException::class, 'Unable to get entity');
     $destination->import(new Row());
   }
 
   /**
    * Test that translation destination fails for untranslatable entities.
+   *
+   * @expectedException \Drupal\migrate\MigrateException
+   * @expectedExceptionMessage This entity type does not support translation
    */
   public function testUntranslatable() {
     // An entity type without a language.
@@ -122,7 +125,6 @@ class EntityContentBaseTest extends UnitTestCase {
       $this->entityManager->reveal(),
       $this->prophesize(FieldTypePluginManagerInterface::class)->reveal()
     );
-    $this->setExpectedException(MigrateException::class, 'This entity type does not support translation');
     $destination->getIds();
   }
 

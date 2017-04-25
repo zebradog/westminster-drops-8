@@ -46,14 +46,14 @@ class ListElement implements ElementInterface {
    * {@inheritdoc}
    */
   public function getTranslationBuild(LanguageInterface $source_language, LanguageInterface $translation_language, $source_config, $translation_config, array $parents, $base_key = NULL) {
-    $build = [];
+    $build = array();
     foreach ($this->element as $key => $element) {
-      $sub_build = [];
+      $sub_build = array();
       $element_key = isset($base_key) ? "$base_key.$key" : $key;
       $definition = $element->getDataDefinition();
 
       if ($form_element = ConfigTranslationFormBase::createFormElement($element)) {
-        $element_parents = array_merge($parents, [$key]);
+        $element_parents = array_merge($parents, array($key));
         $sub_build += $form_element->getTranslationBuild($source_language, $translation_language, $source_config[$key], $translation_config[$key], $element_parents, $element_key);
 
         if (empty($sub_build)) {
@@ -62,13 +62,13 @@ class ListElement implements ElementInterface {
 
         // Build the sub-structure and include it with a wrapper in the form if
         // there are any translatable elements there.
-        $build[$key] = [];
+        $build[$key] = array();
         if ($element instanceof TraversableTypedDataInterface) {
-          $build[$key] = [
+          $build[$key] = array(
             '#type' => 'details',
             '#title' => $this->getGroupTitle($definition, $sub_build),
             '#open' => empty($base_key),
-          ];
+          );
         }
         $build[$key] += $sub_build;
       }

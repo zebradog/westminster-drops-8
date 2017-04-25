@@ -29,72 +29,72 @@ class VariableTest extends UnitTestCase {
    *     - The variable to export.
    */
   public function providerTestExport() {
-    return [
+    return array(
       // Array.
-      [
+      array(
         'array()',
-        [],
-      ],
-      [
+        array(),
+      ),
+      array(
         // non-associative.
         "array(\n  1,\n  2,\n  3,\n  4,\n)",
-        [1, 2, 3, 4],
-      ],
-      [
+        array(1, 2, 3, 4),
+      ),
+      array(
         // associative.
         "array(\n  'a' => 1,\n)",
-        ['a' => 1],
-      ],
+        array('a' => 1),
+      ),
       // Bool.
-      [
+      array(
         'TRUE',
         TRUE,
-      ],
-      [
+      ),
+      array(
         'FALSE',
         FALSE,
-      ],
+      ),
       // Strings.
-      [
+      array(
         "'string'",
         'string',
-      ],
-      [
+      ),
+      array(
         '"\n\r\t"',
         "\n\r\t",
-      ],
-      [
+      ),
+      array(
         // 2 backslashes. \\
         "'\\'",
         '\\',
-      ],
-      [
+      ),
+      array(
         // Double-quote "
         "'\"'",
         "\"",
-      ],
-      [
+      ),
+      array(
         // Single-quote '
         '"\'"',
         "'",
-      ],
-      [
+      ),
+      array(
         // Quotes with $ symbols.
         '"\$settings[\'foo\']"',
         '$settings[\'foo\']',
-      ],
+      ),
       // Object.
-      [
+      array(
         // A stdClass object.
         '(object) array()',
         new \stdClass(),
-      ],
-      [
+      ),
+      array(
         // A not-stdClass object.
         "Drupal\Tests\Component\Utility\StubVariableTestClass::__set_state(array(\n))",
         new StubVariableTestClass(),
-      ],
-    ];
+      ),
+    );
   }
 
   /**

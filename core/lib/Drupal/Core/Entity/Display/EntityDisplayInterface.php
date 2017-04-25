@@ -54,7 +54,7 @@ interface EntityDisplayInterface extends ConfigEntityInterface, EntityWithPlugin
    *
    * @return $this
    */
-  public function setComponent($name, array $options = []);
+  public function setComponent($name, array $options = array());
 
   /**
    * Sets a component to be hidden.

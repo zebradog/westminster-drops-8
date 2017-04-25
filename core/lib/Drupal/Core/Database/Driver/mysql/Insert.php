@@ -18,7 +18,7 @@ class Insert extends QueryInsert {
     // pass it back, as any remaining options are irrelevant.
     if (empty($this->fromQuery)) {
       $max_placeholder = 0;
-      $values = [];
+      $values = array();
       foreach ($this->insertValues as $insert_values) {
         foreach ($insert_values as $value) {
           $values[':db_insert_placeholder_' . $max_placeholder++] = $value;
@@ -32,7 +32,7 @@ class Insert extends QueryInsert {
     $last_insert_id = $this->connection->query((string) $this, $values, $this->queryOptions);
 
     // Re-initialize the values array so that we can re-use this query.
-    $this->insertValues = [];
+    $this->insertValues = array();
 
     return $last_insert_id;
   }

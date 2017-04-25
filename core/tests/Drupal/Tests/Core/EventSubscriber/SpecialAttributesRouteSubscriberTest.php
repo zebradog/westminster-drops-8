@@ -89,6 +89,9 @@ class SpecialAttributesRouteSubscriberTest extends UnitTestCase {
    *   The route to check.
    *
    * @dataProvider providerTestOnRouteBuildingInvalidVariables
+   * @expectedException \PHPUnit_Framework_Error_Warning
+   * @expectedExceptionMessage uses reserved variable names
+   *
    * @covers ::onAlterRoutes
    */
   public function testOnRouteBuildingInvalidVariables(Route $route) {
@@ -97,7 +100,6 @@ class SpecialAttributesRouteSubscriberTest extends UnitTestCase {
 
     $event = new RouteBuildEvent($route_collection, 'test');
     $subscriber = new SpecialAttributesRouteSubscriber();
-    $this->setExpectedException(\PHPUnit_Framework_Error_Warning::class, 'uses reserved variable names');
     $subscriber->onAlterRoutes($event);
   }
 

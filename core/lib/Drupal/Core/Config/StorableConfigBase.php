@@ -55,7 +55,7 @@ abstract class StorableConfigBase extends ConfigBase {
    *
    * @var array
    */
-  protected $originalData = [];
+  protected $originalData = array();
 
   /**
    * Saves the configuration object.

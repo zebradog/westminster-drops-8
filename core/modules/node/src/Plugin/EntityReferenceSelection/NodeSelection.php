@@ -4,7 +4,6 @@ namespace Drupal\node\Plugin\EntityReferenceSelection;
 
 use Drupal\Core\Entity\Plugin\EntityReferenceSelection\DefaultSelection;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\node\NodeInterface;
 
 /**
  * Provides specific access control for the node entity type.
@@ -39,7 +38,7 @@ class NodeSelection extends DefaultSelection {
     // modules in use on the site. As long as one access control module is there,
     // it is supposed to handle this check.
     if (!$this->currentUser->hasPermission('bypass node access') && !count($this->moduleHandler->getImplementations('node_grants'))) {
-      $query->condition('status', NodeInterface::PUBLISHED);
+      $query->condition('status', NODE_PUBLISHED);
     }
     return $query;
   }

@@ -21,7 +21,7 @@ class LocaleProjectStorage implements LocaleProjectStorageInterface {
    *
    * @var array
    */
-  protected $cache = [];
+  protected $cache = array();
 
   /**
    * Cache status flag.
@@ -36,7 +36,7 @@ class LocaleProjectStorage implements LocaleProjectStorageInterface {
    * @param \Drupal\Core\KeyValueStore\KeyValueFactoryInterface $key_value_factory
    *   The key value store to use.
    */
-  public function __construct(KeyValueFactoryInterface $key_value_factory) {
+  function __construct(KeyValueFactoryInterface $key_value_factory) {
     $this->keyValueStore = $key_value_factory->get('locale.project');
   }
 
@@ -44,7 +44,7 @@ class LocaleProjectStorage implements LocaleProjectStorageInterface {
    * {@inheritdoc}
    */
   public function get($key, $default = NULL) {
-    $values = $this->getMultiple([$key]);
+    $values = $this->getMultiple(array($key));
     return isset($values[$key]) ? $values[$key] : $default;
   }
 
@@ -52,8 +52,8 @@ class LocaleProjectStorage implements LocaleProjectStorageInterface {
    * {@inheritdoc}
    */
   public function getMultiple(array $keys) {
-    $values = [];
-    $load = [];
+    $values = array();
+    $load = array();
     foreach ($keys as $key) {
       // Check if we have a value in the cache.
       if (isset($this->cache[$key])) {
@@ -87,7 +87,7 @@ class LocaleProjectStorage implements LocaleProjectStorageInterface {
    * {@inheritdoc}
    */
   public function set($key, $value) {
-    $this->setMultiple([$key => $value]);
+    $this->setMultiple(array($key => $value));
   }
 
   /**
@@ -104,7 +104,7 @@ class LocaleProjectStorage implements LocaleProjectStorageInterface {
    * {@inheritdoc}
    */
   public function delete($key) {
-    $this->deleteMultiple([$key]);
+    $this->deleteMultiple(array($key));
   }
 
   /**
@@ -121,7 +121,7 @@ class LocaleProjectStorage implements LocaleProjectStorageInterface {
    * {@inheritdoc}
    */
   public function resetCache() {
-    $this->cache = [];
+    $this->cache = array();
     static::$all = FALSE;
   }
 

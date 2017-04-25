@@ -33,7 +33,7 @@ class TextFormatterTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['text'];
+  public static $modules = array('text');
 
   /**
    * {@inheritdoc}
@@ -41,23 +41,23 @@ class TextFormatterTest extends EntityKernelTestBase {
   protected function setUp() {
     parent::setUp();
 
-    FilterFormat::create([
+    FilterFormat::create(array(
       'format' => 'my_text_format',
       'name' => 'My text format',
-      'filters' => [
-        'filter_autop' => [
+      'filters' => array(
+        'filter_autop' => array(
           'module' => 'filter',
           'status' => TRUE,
-        ],
-      ],
-    ])->save();
+        ),
+      ),
+    ))->save();
 
-    FieldStorageConfig::create([
+    FieldStorageConfig::create(array(
       'field_name' => 'formatted_text',
       'entity_type' => $this->entityType,
       'type' => 'text',
-      'settings' => [],
-    ])->save();
+      'settings' => array(),
+    ))->save();
     FieldConfig::create([
       'entity_type' => $this->entityType,
       'bundle' => $this->bundle,
@@ -70,28 +70,28 @@ class TextFormatterTest extends EntityKernelTestBase {
    * Tests all text field formatters.
    */
   public function testFormatters() {
-    $formatters = [
+    $formatters = array(
       'text_default',
       'text_trimmed',
       'text_summary_or_trimmed',
-    ];
+    );
 
     // Create the entity to be referenced.
     $entity = $this->container->get('entity_type.manager')
       ->getStorage($this->entityType)
-      ->create(['name' => $this->randomMachineName()]);
-    $entity->formatted_text = [
+      ->create(array('name' => $this->randomMachineName()));
+    $entity->formatted_text = array(
       'value' => 'Hello, world!',
       'format' => 'my_text_format',
-    ];
+    );
     $entity->save();
 
     foreach ($formatters as $formatter) {
       // Verify the text field formatter's render array.
-      $build = $entity->get('formatted_text')->view(['type' => $formatter]);
+      $build = $entity->get('formatted_text')->view(array('type' => $formatter));
       \Drupal::service('renderer')->renderRoot($build[0]);
       $this->assertEqual($build[0]['#markup'], "<p>Hello, world!</p>\n");
-      $this->assertEqual($build[0]['#cache']['tags'], FilterFormat::load('my_text_format')->getCacheTags(), format_string('The @formatter formatter has the expected cache tags when formatting a formatted text field.', ['@formatter' => $formatter]));
+      $this->assertEqual($build[0]['#cache']['tags'], FilterFormat::load('my_text_format')->getCacheTags(), format_string('The @formatter formatter has the expected cache tags when formatting a formatted text field.', array('@formatter' => $formatter)));
     }
   }
 

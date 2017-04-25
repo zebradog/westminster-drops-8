@@ -41,19 +41,19 @@ class Details extends RenderElement {
    */
   public function getInfo() {
     $class = get_class($this);
-    return [
+    return array(
       '#open' => FALSE,
       '#value' => NULL,
-      '#process' => [
-        [$class, 'processGroup'],
-        [$class, 'processAjaxForm'],
-      ],
-      '#pre_render' => [
-        [$class, 'preRenderDetails'],
-        [$class, 'preRenderGroup'],
-      ],
-      '#theme_wrappers' => ['details'],
-    ];
+      '#process' => array(
+        array($class, 'processGroup'),
+        array($class, 'processAjaxForm'),
+      ),
+      '#pre_render' => array(
+        array($class, 'preRenderDetails'),
+        array($class, 'preRenderGroup'),
+      ),
+      '#theme_wrappers' => array('details'),
+    );
   }
 
   /**
@@ -67,17 +67,15 @@ class Details extends RenderElement {
    *   The modified element.
    */
   public static function preRenderDetails($element) {
-    Element::setAttributes($element, ['id']);
+    Element::setAttributes($element, array('id'));
 
     // The .js-form-wrapper class is required for #states to treat details like
     // containers.
-    static::setAttributes($element, ['js-form-wrapper', 'form-wrapper']);
+    static::setAttributes($element, array('js-form-wrapper', 'form-wrapper'));
 
     // Collapsible details.
     $element['#attached']['library'][] = 'core/drupal.collapse';
-
-    // Open the detail if specified or if a child has an error.
-    if (!empty($element['#open']) || !empty($element['#children_errors'])) {
+    if (!empty($element['#open'])) {
       $element['#attributes']['open'] = 'open';
     }
 

@@ -50,7 +50,7 @@ class UserData implements UserDataInterface {
     }
     // If $module and $uid was passed, return the name/value pairs.
     elseif (isset($uid)) {
-      $return = [];
+      $return = array();
       foreach ($result as $record) {
         $return[$record->name] = ($record->serialized ? unserialize($record->value) : $record->value);
       }
@@ -58,7 +58,7 @@ class UserData implements UserDataInterface {
     }
     // If $module and $name was passed, return the uid/value pairs.
     elseif (isset($name)) {
-      $return = [];
+      $return = array();
       foreach ($result as $record) {
         $return[$record->uid] = ($record->serialized ? unserialize($record->value) : $record->value);
       }
@@ -66,7 +66,7 @@ class UserData implements UserDataInterface {
     }
     // If only $module was passed, return data keyed by uid and name.
     else {
-      $return = [];
+      $return = array();
       foreach ($result as $record) {
         $return[$record->uid][$record->name] = ($record->serialized ? unserialize($record->value) : $record->value);
       }
@@ -84,15 +84,15 @@ class UserData implements UserDataInterface {
       $serialized = 1;
     }
     $this->connection->merge('users_data')
-      ->keys([
+      ->keys(array(
         'uid' => $uid,
         'module' => $module,
         'name' => $name,
-      ])
-      ->fields([
+      ))
+      ->fields(array(
         'value' => $value,
         'serialized' => $serialized,
-      ])
+      ))
       ->execute();
   }
 

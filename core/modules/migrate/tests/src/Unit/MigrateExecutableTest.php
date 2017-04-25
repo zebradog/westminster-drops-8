@@ -3,7 +3,6 @@
 namespace Drupal\Tests\migrate\Unit;
 
 use Drupal\Component\Utility\Html;
-use Drupal\migrate\Plugin\MigrateProcessInterface;
 use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Plugin\MigrateIdMapInterface;
 use Drupal\migrate\MigrateException;
@@ -41,9 +40,9 @@ class MigrateExecutableTest extends MigrateTestCase {
    *
    * @var array
    */
-  protected $migrationConfiguration = [
+  protected $migrationConfiguration = array(
     'id' => 'test',
-  ];
+  );
 
   /**
    * {@inheritdoc}
@@ -92,12 +91,12 @@ class MigrateExecutableTest extends MigrateTestCase {
 
     $row->expects($this->once())
       ->method('getSourceIdValues')
-      ->will($this->returnValue(['id' => 'test']));
+      ->will($this->returnValue(array('id' => 'test')));
 
     $this->idMap->expects($this->once())
       ->method('lookupDestinationId')
-      ->with(['id' => 'test'])
-      ->will($this->returnValue(['test']));
+      ->with(array('id' => 'test'))
+      ->will($this->returnValue(array('test')));
 
     $source->expects($this->once())
       ->method('current')
@@ -107,13 +106,13 @@ class MigrateExecutableTest extends MigrateTestCase {
 
     $this->migration->expects($this->once())
       ->method('getProcessPlugins')
-      ->will($this->returnValue([]));
+      ->will($this->returnValue(array()));
 
     $destination = $this->getMock('Drupal\migrate\Plugin\MigrateDestinationInterface');
     $destination->expects($this->once())
       ->method('import')
-      ->with($row, ['test'])
-      ->will($this->returnValue(['id' => 'test']));
+      ->with($row, array('test'))
+      ->will($this->returnValue(array('id' => 'test')));
 
     $this->migration
       ->method('getDestinationPlugin')
@@ -134,12 +133,12 @@ class MigrateExecutableTest extends MigrateTestCase {
 
     $row->expects($this->once())
       ->method('getSourceIdValues')
-      ->will($this->returnValue(['id' => 'test']));
+      ->will($this->returnValue(array('id' => 'test')));
 
     $this->idMap->expects($this->once())
       ->method('lookupDestinationId')
-      ->with(['id' => 'test'])
-      ->will($this->returnValue(['test']));
+      ->with(array('id' => 'test'))
+      ->will($this->returnValue(array('test')));
 
     $source->expects($this->once())
       ->method('current')
@@ -149,12 +148,12 @@ class MigrateExecutableTest extends MigrateTestCase {
 
     $this->migration->expects($this->once())
       ->method('getProcessPlugins')
-      ->will($this->returnValue([]));
+      ->will($this->returnValue(array()));
 
     $destination = $this->getMock('Drupal\migrate\Plugin\MigrateDestinationInterface');
     $destination->expects($this->once())
       ->method('import')
-      ->with($row, ['test'])
+      ->with($row, array('test'))
       ->will($this->returnValue(TRUE));
 
     $this->migration
@@ -179,7 +178,7 @@ class MigrateExecutableTest extends MigrateTestCase {
 
     $row->expects($this->once())
       ->method('getSourceIdValues')
-      ->will($this->returnValue(['id' => 'test']));
+      ->will($this->returnValue(array('id' => 'test')));
 
     $source->expects($this->once())
       ->method('current')
@@ -189,13 +188,13 @@ class MigrateExecutableTest extends MigrateTestCase {
 
     $this->migration->expects($this->once())
       ->method('getProcessPlugins')
-      ->will($this->returnValue([]));
+      ->will($this->returnValue(array()));
 
     $destination = $this->getMock('Drupal\migrate\Plugin\MigrateDestinationInterface');
     $destination->expects($this->once())
       ->method('import')
-      ->with($row, ['test'])
-      ->will($this->returnValue([]));
+      ->with($row, array('test'))
+      ->will($this->returnValue(array()));
 
     $this->migration
       ->method('getDestinationPlugin')
@@ -203,7 +202,7 @@ class MigrateExecutableTest extends MigrateTestCase {
 
     $this->idMap->expects($this->once())
       ->method('saveIdMapping')
-      ->with($row, [], MigrateIdMapInterface::STATUS_FAILED, NULL);
+      ->with($row, array(), MigrateIdMapInterface::STATUS_FAILED, NULL);
 
     $this->idMap->expects($this->once())
       ->method('messageCount')
@@ -214,8 +213,8 @@ class MigrateExecutableTest extends MigrateTestCase {
 
     $this->idMap->expects($this->once())
       ->method('lookupDestinationId')
-      ->with(['id' => 'test'])
-      ->will($this->returnValue(['test']));
+      ->with(array('id' => 'test'))
+      ->will($this->returnValue(array('test')));
 
     $this->message->expects($this->once())
       ->method('display')
@@ -239,7 +238,7 @@ class MigrateExecutableTest extends MigrateTestCase {
 
     $row->expects($this->once())
       ->method('getSourceIdValues')
-      ->will($this->returnValue(['id' => 'test']));
+      ->will($this->returnValue(array('id' => 'test')));
 
     $source->expects($this->once())
       ->method('current')
@@ -249,12 +248,12 @@ class MigrateExecutableTest extends MigrateTestCase {
 
     $this->migration->expects($this->once())
       ->method('getProcessPlugins')
-      ->will($this->returnValue([]));
+      ->will($this->returnValue(array()));
 
     $destination = $this->getMock('Drupal\migrate\Plugin\MigrateDestinationInterface');
     $destination->expects($this->once())
       ->method('import')
-      ->with($row, ['test'])
+      ->with($row, array('test'))
       ->will($this->throwException(new MigrateException($exception_message)));
 
     $this->migration
@@ -263,15 +262,15 @@ class MigrateExecutableTest extends MigrateTestCase {
 
     $this->idMap->expects($this->once())
       ->method('saveIdMapping')
-      ->with($row, [], MigrateIdMapInterface::STATUS_FAILED, NULL);
+      ->with($row, array(), MigrateIdMapInterface::STATUS_FAILED, NULL);
 
     $this->idMap->expects($this->once())
       ->method('saveMessage');
 
     $this->idMap->expects($this->once())
       ->method('lookupDestinationId')
-      ->with(['id' => 'test'])
-      ->will($this->returnValue(['test']));
+      ->with(array('id' => 'test'))
+      ->will($this->returnValue(array('test')));
 
     $this->assertSame(MigrationInterface::RESULT_COMPLETED, $this->executable->import());
   }
@@ -291,7 +290,7 @@ class MigrateExecutableTest extends MigrateTestCase {
 
     $row->expects($this->once())
       ->method('getSourceIdValues')
-      ->willReturn(['id' => 'test']);
+      ->willReturn(array('id' => 'test'));
 
     $source->expects($this->once())
       ->method('current')
@@ -313,7 +312,7 @@ class MigrateExecutableTest extends MigrateTestCase {
 
     $this->idMap->expects($this->once())
       ->method('saveIdMapping')
-      ->with($row, [], MigrateIdMapInterface::STATUS_FAILED, NULL);
+      ->with($row, array(), MigrateIdMapInterface::STATUS_FAILED, NULL);
 
     $this->idMap->expects($this->once())
       ->method('saveMessage');
@@ -337,7 +336,7 @@ class MigrateExecutableTest extends MigrateTestCase {
 
     $row->expects($this->once())
       ->method('getSourceIdValues')
-      ->will($this->returnValue(['id' => 'test']));
+      ->will($this->returnValue(array('id' => 'test')));
 
     $source->expects($this->once())
       ->method('current')
@@ -347,12 +346,12 @@ class MigrateExecutableTest extends MigrateTestCase {
 
     $this->migration->expects($this->once())
       ->method('getProcessPlugins')
-      ->will($this->returnValue([]));
+      ->will($this->returnValue(array()));
 
     $destination = $this->getMock('Drupal\migrate\Plugin\MigrateDestinationInterface');
     $destination->expects($this->once())
       ->method('import')
-      ->with($row, ['test'])
+      ->with($row, array('test'))
       ->will($this->throwException(new \Exception($exception_message)));
 
     $this->migration
@@ -361,15 +360,15 @@ class MigrateExecutableTest extends MigrateTestCase {
 
     $this->idMap->expects($this->once())
       ->method('saveIdMapping')
-      ->with($row, [], MigrateIdMapInterface::STATUS_FAILED, NULL);
+      ->with($row, array(), MigrateIdMapInterface::STATUS_FAILED, NULL);
 
     $this->idMap->expects($this->once())
       ->method('saveMessage');
 
     $this->idMap->expects($this->once())
       ->method('lookupDestinationId')
-      ->with(['id' => 'test'])
-      ->will($this->returnValue(['test']));
+      ->with(array('id' => 'test'))
+      ->will($this->returnValue(array('test')));
 
     $this->message->expects($this->once())
       ->method('display')
@@ -382,15 +381,15 @@ class MigrateExecutableTest extends MigrateTestCase {
    * Tests the processRow method.
    */
   public function testProcessRow() {
-    $expected = [
+    $expected = array(
       'test' => 'test destination',
       'test1' => 'test1 destination'
-    ];
+    );
     foreach ($expected as $key => $value) {
       $plugins[$key][0] = $this->getMock('Drupal\migrate\Plugin\MigrateProcessInterface');
       $plugins[$key][0]->expects($this->once())
         ->method('getPluginDefinition')
-        ->will($this->returnValue([]));
+        ->will($this->returnValue(array()));
       $plugins[$key][0]->expects($this->once())
         ->method('transform')
         ->will($this->returnValue($value));
@@ -414,29 +413,10 @@ class MigrateExecutableTest extends MigrateTestCase {
     $this->migration->expects($this->once())
       ->method('getProcessPlugins')
       ->with(NULL)
-      ->will($this->returnValue(['test' => []]));
+      ->will($this->returnValue(array('test' => array())));
     $row = new Row();
     $this->executable->processRow($row);
-    $this->assertSame($row->getDestination(), []);
-  }
-
-  /**
-   * Tests the processRow pipeline exception.
-   */
-  public function testProcessRowPipelineException() {
-    $row = new Row();
-    $plugin = $this->prophesize(MigrateProcessInterface::class);
-    $plugin->getPluginDefinition()->willReturn(['handle_multiples' => FALSE]);
-    $plugin->transform(NULL, $this->executable, $row, 'destination_id')
-      ->willReturn('transform_return_string');
-    $plugin->multiple()->willReturn(TRUE);
-    $plugin->getPluginId()->willReturn('plugin_id');
-    $plugin = $plugin->reveal();
-    $plugins['destination_id'] = [$plugin, $plugin];
-    $this->migration->method('getProcessPlugins')->willReturn($plugins);
-
-    $this->setExpectedException(MigrateException::class, 'Pipeline failed at plugin_id plugin for destination destination_id: transform_return_string received instead of an array,');
-    $this->executable->processRow($row);
+    $this->assertSame($row->getDestination(), array());
   }
 
   /**

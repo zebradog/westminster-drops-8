@@ -96,7 +96,6 @@ class UserMultipleCancelConfirm extends ConfirmFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     // Retrieve the accounts to be canceled from the temp store.
-    /* @var \Drupal\user\Entity\User[] $accounts */
     $accounts = $this->tempStoreFactory
       ->get('user_user_operations_cancel')
       ->get($this->currentUser()->id());
@@ -105,31 +104,26 @@ class UserMultipleCancelConfirm extends ConfirmFormBase {
     }
 
     $root = NULL;
-    $names = [];
-    $form['accounts'] = ['#tree' => TRUE];
+    $form['accounts'] = array('#prefix' => '<ul>', '#suffix' => '</ul>', '#tree' => TRUE);
     foreach ($accounts as $account) {
       $uid = $account->id();
-      $names[$uid] = $account->label();
       // Prevent user 1 from being canceled.
       if ($uid <= 1) {
         $root = intval($uid) === 1 ? $account : $root;
         continue;
       }
-      $form['accounts'][$uid] = [
+      $form['accounts'][$uid] = array(
         '#type' => 'hidden',
         '#value' => $uid,
-      ];
+        '#prefix' => '<li>',
+        '#suffix' => $account->label() . "</li>\n",
+      );
     }
-
-    $form['account']['names'] = [
-      '#theme' => 'item_list',
-      '#items' => $names,
-    ];
 
     // Output a notice that user 1 cannot be canceled.
     if (isset($root)) {
       $redirect = (count($accounts) == 1);
-      $message = $this->t('The user account %name cannot be canceled.', ['%name' => $root->label()]);
+      $message = $this->t('The user account %name cannot be canceled.', array('%name' => $root->label()));
       drupal_set_message($message, $redirect ? 'error' : 'warning');
       // If only user 1 was selected, redirect to the overview.
       if ($redirect) {
@@ -137,30 +131,30 @@ class UserMultipleCancelConfirm extends ConfirmFormBase {
       }
     }
 
-    $form['operation'] = ['#type' => 'hidden', '#value' => 'cancel'];
+    $form['operation'] = array('#type' => 'hidden', '#value' => 'cancel');
 
-    $form['user_cancel_method'] = [
+    $form['user_cancel_method'] = array(
       '#type' => 'radios',
       '#title' => $this->t('When cancelling these accounts'),
-    ];
+    );
 
     $form['user_cancel_method'] += user_cancel_methods();
 
     // Allow to send the account cancellation confirmation mail.
-    $form['user_cancel_confirm'] = [
+    $form['user_cancel_confirm'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Require email confirmation to cancel account'),
       '#default_value' => FALSE,
       '#description' => $this->t('When enabled, the user must confirm the account cancellation via email.'),
-    ];
+    );
     // Also allow to send account canceled notification mail, if enabled.
-    $form['user_cancel_notify'] = [
+    $form['user_cancel_notify'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Notify user when account is canceled'),
       '#default_value' => FALSE,
       '#access' => $this->config('user.settings')->get('notify.status_canceled'),
       '#description' => $this->t('When enabled, the user will receive an email notification after the account has been canceled.'),
-    ];
+    );
 
     $form = parent::buildForm($form, $form_state);
 
@@ -183,7 +177,7 @@ class UserMultipleCancelConfirm extends ConfirmFormBase {
         }
         // Prevent user administrators from deleting themselves without confirmation.
         if ($uid == $current_user_id) {
-          $admin_form_mock = [];
+          $admin_form_mock = array();
           $admin_form_state = $form_state;
           $admin_form_state->unsetValue('user_cancel_confirm');
           // The $user global is not a complete user entity, so load the full

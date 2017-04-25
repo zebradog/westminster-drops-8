@@ -83,7 +83,7 @@ class Config extends DestinationBase implements ContainerFactoryPluginInterface,
   /**
    * {@inheritdoc}
    */
-  public function import(Row $row, array $old_destination_id_values = []) {
+  public function import(Row $row, array $old_destination_id_values = array()) {
     if ($this->isTranslationDestination()) {
       $this->config = $this->language_manager->getLanguageConfigOverride($row->getDestinationProperty('langcode'), $this->config->getName());
     }

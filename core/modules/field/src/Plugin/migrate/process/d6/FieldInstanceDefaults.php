@@ -20,7 +20,7 @@ class FieldInstanceDefaults extends ProcessPluginBase {
    */
   public function transform($value, MigrateExecutableInterface $migrate_executable, Row $row, $destination_property) {
     list($widget_type, $widget_settings) = $value;
-    $default = [];
+    $default = array();
 
     switch ($widget_type) {
       case 'text_textfield':
@@ -58,7 +58,7 @@ class FieldInstanceDefaults extends ProcessPluginBase {
         break;
     }
     if (!empty($default)) {
-      $default = [$default];
+      $default = array($default);
     }
     return $default;
   }

@@ -21,7 +21,7 @@ class EditForm extends PathFormBase {
    * {@inheritdoc}
    */
   protected function buildPath($pid) {
-    return $this->aliasStorage->load(['pid' => $pid]);
+    return $this->aliasStorage->load(array('pid' => $pid));
   }
 
   /**
@@ -31,27 +31,27 @@ class EditForm extends PathFormBase {
     $form = parent::buildForm($form, $form_state, $pid);
 
     $form['#title'] = $this->path['alias'];
-    $form['pid'] = [
+    $form['pid'] = array(
       '#type' => 'hidden',
       '#value' => $this->path['pid'],
-    ];
+    );
 
-    $url = new Url('path.delete', [
+    $url = new Url('path.delete', array(
       'pid' => $this->path['pid'],
-    ]);
+    ));
 
     if ($this->getRequest()->query->has('destination')) {
       $url->setOption('query', $this->getDestinationArray());
     }
 
-    $form['actions']['delete'] = [
+    $form['actions']['delete'] = array(
       '#type' => 'link',
       '#title' => $this->t('Delete'),
       '#url' => $url,
-      '#attributes' => [
-        'class' => ['button', 'button--danger'],
-      ],
-    ];
+      '#attributes' => array(
+        'class' => array('button', 'button--danger'),
+      ),
+    );
 
     return $form;
   }

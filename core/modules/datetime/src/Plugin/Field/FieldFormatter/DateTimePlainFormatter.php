@@ -22,7 +22,7 @@ class DateTimePlainFormatter extends DateTimeFormatterBase {
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
-    $elements = [];
+    $elements = array();
 
     foreach ($items as $delta => $item) {
       $output = '';

@@ -3,7 +3,6 @@
 namespace Drupal\Core\Render\Element;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Render\Element;
 
 /**
@@ -31,16 +30,16 @@ class Actions extends Container {
    */
   public function getInfo() {
     $class = get_class($this);
-    return [
-      '#process' => [
+    return array(
+      '#process' => array(
         // @todo Move this to #pre_render.
-        [$class, 'preRenderActionsDropbutton'],
-        [$class, 'processActions'],
-        [$class, 'processContainer'],
-      ],
+        array($class, 'preRenderActionsDropbutton'),
+        array($class, 'processActions'),
+        array($class, 'processContainer'),
+      ),
       '#weight' => 100,
-      '#theme_wrappers' => ['container'],
-    ];
+      '#theme_wrappers' => array('container'),
+    );
   }
 
   /**
@@ -87,27 +86,23 @@ class Actions extends Container {
    *   into new #type 'dropbutton' elements.
    */
   public static function preRenderActionsDropbutton(&$element, FormStateInterface $form_state, &$complete_form) {
-    $dropbuttons = [];
+    $dropbuttons = array();
     foreach (Element::children($element, TRUE) as $key) {
       if (isset($element[$key]['#dropbutton'])) {
         $dropbutton = $element[$key]['#dropbutton'];
         // If there is no dropbutton for this button group yet, create one.
         if (!isset($dropbuttons[$dropbutton])) {
-          $dropbuttons[$dropbutton] = [
+          $dropbuttons[$dropbutton] = array(
             '#type' => 'dropbutton',
-          ];
+          );
         }
         // Add this button to the corresponding dropbutton.
         // @todo Change #type 'dropbutton' to be based on item-list.html.twig
         //   instead of links.html.twig to avoid this preemptive rendering.
         $button = \Drupal::service('renderer')->renderPlain($element[$key]);
-        $dropbuttons[$dropbutton]['#links'][$key] = [
+        $dropbuttons[$dropbutton]['#links'][$key] = array(
           'title' => $button,
-        ];
-        // Merge metadata like drupalSettings.
-        BubbleableMetadata::createFromRenderArray($dropbuttons[$dropbutton])
-          ->merge(BubbleableMetadata::createFromRenderArray($element[$key]))
-          ->applyTo($dropbuttons[$dropbutton]);
+        );
       }
     }
     // @todo For now, all dropbuttons appear first. Consider to invent a more

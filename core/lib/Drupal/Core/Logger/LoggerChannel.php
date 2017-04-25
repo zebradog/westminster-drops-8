@@ -46,7 +46,7 @@ class LoggerChannel implements LoggerChannelInterface {
    *
    * @var array
    */
-  protected $levelTranslation = [
+  protected $levelTranslation = array(
     LogLevel::EMERGENCY => RfcLogLevel::EMERGENCY,
     LogLevel::ALERT => RfcLogLevel::ALERT,
     LogLevel::CRITICAL => RfcLogLevel::CRITICAL,
@@ -55,14 +55,14 @@ class LoggerChannel implements LoggerChannelInterface {
     LogLevel::NOTICE => RfcLogLevel::NOTICE,
     LogLevel::INFO => RfcLogLevel::INFO,
     LogLevel::DEBUG => RfcLogLevel::DEBUG,
-  ];
+  );
 
   /**
    * An array of arrays of \Psr\Log\LoggerInterface keyed by priority.
    *
    * @var array
    */
-  protected $loggers = [];
+  protected $loggers = array();
 
   /**
    * The request stack object.
@@ -91,14 +91,14 @@ class LoggerChannel implements LoggerChannelInterface {
   /**
    * {@inheritdoc}
    */
-  public function log($level, $message, array $context = []) {
+  public function log($level, $message, array $context = array()) {
     if ($this->callDepth == self::MAX_CALL_DEPTH) {
       return;
     }
     $this->callDepth++;
 
     // Merge in defaults.
-    $context += [
+    $context += array(
       'channel' => $this->channel,
       'link' => '',
       'user' => NULL,
@@ -107,7 +107,7 @@ class LoggerChannel implements LoggerChannelInterface {
       'referer' => '',
       'ip' => '',
       'timestamp' => time(),
-    ];
+    );
     // Some context values are only available when in a request context.
     if ($this->requestStack && $request = $this->requestStack->getCurrentRequest()) {
       $context['request_uri'] = $request->getUri();
@@ -174,7 +174,7 @@ class LoggerChannel implements LoggerChannelInterface {
    *   An array of sorted loggers by priority.
    */
   protected function sortLoggers() {
-    $sorted = [];
+    $sorted = array();
     krsort($this->loggers);
 
     foreach ($this->loggers as $loggers) {

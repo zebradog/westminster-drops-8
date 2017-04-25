@@ -101,7 +101,7 @@ class MainContentViewSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  static function getSubscribedEvents() {
     $events[KernelEvents::VIEW][] = ['onViewRenderArray'];
 
     return $events;

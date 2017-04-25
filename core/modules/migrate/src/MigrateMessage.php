@@ -14,10 +14,10 @@ class MigrateMessage implements MigrateMessageInterface {
    *
    * @var array
    */
-  protected $map = [
+  protected $map = array(
     'status' => RfcLogLevel::INFO,
     'error' => RfcLogLevel::ERROR,
-  ];
+  );
 
   /**
    * {@inheritdoc}

@@ -22,21 +22,21 @@ class FormTestUrlForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['url'] = [
+    $form['url'] = array(
       '#type' => 'url',
       '#title' => 'Optional URL',
       '#description' => 'An optional URL field.',
-    ];
-    $form['url_required'] = [
+    );
+    $form['url_required'] = array(
       '#type' => 'url',
       '#title' => 'Required URL',
       '#description' => 'A required URL field.',
       '#required' => TRUE,
-    ];
-    $form['submit'] = [
+    );
+    $form['submit'] = array(
       '#type' => 'submit',
       '#value' => 'Submit',
-    ];
+    );
     return $form;
   }
 

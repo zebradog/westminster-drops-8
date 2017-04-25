@@ -2,7 +2,6 @@
 
 namespace Drupal\forum\Tests\Views;
 
-use Drupal\node\NodeInterface;
 use Drupal\views\Views;
 use Drupal\views\Tests\ViewTestBase;
 use Drupal\views\Tests\ViewTestData;
@@ -19,19 +18,19 @@ class ForumIntegrationTest extends ViewTestBase {
    *
    * @var array
    */
-  public static $modules = ['forum_test_views'];
+  public static $modules = array('forum_test_views');
 
   /**
    * Views used by this test.
    *
    * @var array
    */
-  public static $testViews = ['test_forum_index'];
+  public static $testViews = array('test_forum_index');
 
   protected function setUp() {
     parent::setUp();
 
-    ViewTestData::createTestViews(get_class($this), ['forum_test_views']);
+    ViewTestData::createTestViews(get_class($this), array('forum_test_views'));
   }
 
 
@@ -41,25 +40,25 @@ class ForumIntegrationTest extends ViewTestBase {
   public function testForumIntegration() {
     // Create a forum.
     $entity_manager = $this->container->get('entity.manager');
-    $term = $entity_manager->getStorage('taxonomy_term')->create(['vid' => 'forums', 'name' => $this->randomMachineName()]);
+    $term = $entity_manager->getStorage('taxonomy_term')->create(array('vid' => 'forums', 'name' => $this->randomMachineName()));
     $term->save();
 
     $comment_storage = $entity_manager->getStorage('comment');
 
     // Create some nodes which are part of this forum with some comments.
-    $nodes = [];
+    $nodes = array();
     for ($i = 0; $i < 3; $i++) {
-      $node = $this->drupalCreateNode(['type' => 'forum', 'taxonomy_forums' => [$term->id()], 'sticky' => $i == 0 ? NodeInterface::STICKY : NodeInterface::NOT_STICKY]);
+      $node = $this->drupalCreateNode(array('type' => 'forum', 'taxonomy_forums' => array($term->id()), 'sticky' => $i == 0 ? NODE_STICKY : NODE_NOT_STICKY));
       $nodes[] = $node;
     }
 
-    $account = $this->drupalCreateUser(['skip comment approval']);
+    $account = $this->drupalCreateUser(array('skip comment approval'));
     $this->drupalLogin($account);
 
-    $comments = [];
+    $comments = array();
     foreach ($nodes as $index => $node) {
       for ($i = 0; $i <= $index; $i++) {
-        $comment = $comment_storage->create(['entity_type' => 'node', 'entity_id' => $node->id(), 'field_name' => 'comment_forum']);
+        $comment = $comment_storage->create(array('entity_type' => 'node', 'entity_id' => $node->id(), 'field_name' => 'comment_forum'));
         $comment->save();
         $comments[$comment->get('entity_id')->target_id][$comment->id()] = $comment;
       }
@@ -68,27 +67,27 @@ class ForumIntegrationTest extends ViewTestBase {
     $view = Views::getView('test_forum_index');
     $this->executeView($view);
 
-    $expected_result = [];
-    $expected_result[] = [
+    $expected_result = array();
+    $expected_result[] = array(
       'nid' => $nodes[0]->id(),
-      'sticky' => NodeInterface::STICKY,
+      'sticky' => NODE_STICKY,
       'comment_count' => 1.
-    ];
-    $expected_result[] = [
+    );
+    $expected_result[] = array(
       'nid' => $nodes[1]->id(),
-      'sticky' => NodeInterface::NOT_STICKY,
+      'sticky' => NODE_NOT_STICKY,
       'comment_count' => 2.
-    ];
-    $expected_result[] = [
+    );
+    $expected_result[] = array(
       'nid' => $nodes[2]->id(),
-      'sticky' => NodeInterface::NOT_STICKY,
+      'sticky' => NODE_NOT_STICKY,
       'comment_count' => 3.
-    ];
-    $column_map = [
+    );
+    $column_map = array(
       'nid' => 'nid',
       'forum_index_sticky' => 'sticky',
       'forum_index_comment_count' => 'comment_count',
-    ];
+    );
     $this->assertIdenticalResultset($view, $expected_result, $column_map);
   }
 

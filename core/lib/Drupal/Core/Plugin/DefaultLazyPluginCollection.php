@@ -33,7 +33,7 @@ class DefaultLazyPluginCollection extends LazyPluginCollection {
    *   An associative array containing the initial configuration for each plugin
    *   in the collection, keyed by plugin instance ID.
    */
-  protected $configurations = [];
+  protected $configurations = array();
 
   /**
    * The key within the plugin configuration that contains the plugin ID.
@@ -47,7 +47,7 @@ class DefaultLazyPluginCollection extends LazyPluginCollection {
    *
    * @var array
    */
-  protected $originalOrder = [];
+  protected $originalOrder = array();
 
   /**
    * Constructs a new DefaultLazyPluginCollection object.
@@ -58,7 +58,7 @@ class DefaultLazyPluginCollection extends LazyPluginCollection {
    *   (optional) An associative array containing the initial configuration for
    *   each plugin in the collection, keyed by plugin instance ID.
    */
-  public function __construct(PluginManagerInterface $manager, array $configurations = []) {
+  public function __construct(PluginManagerInterface $manager, array $configurations = array()) {
     $this->manager = $manager;
     $this->configurations = $configurations;
 
@@ -74,7 +74,7 @@ class DefaultLazyPluginCollection extends LazyPluginCollection {
    * {@inheritdoc}
    */
   protected function initializePlugin($instance_id) {
-    $configuration = isset($this->configurations[$instance_id]) ? $this->configurations[$instance_id] : [];
+    $configuration = isset($this->configurations[$instance_id]) ? $this->configurations[$instance_id] : array();
     if (!isset($configuration[$this->pluginKey])) {
       throw new PluginNotFoundException($instance_id);
     }
@@ -87,7 +87,7 @@ class DefaultLazyPluginCollection extends LazyPluginCollection {
    * @return $this
    */
   public function sort() {
-    uasort($this->instanceIDs, [$this, 'sortHelper']);
+    uasort($this->instanceIDs, array($this, 'sortHelper'));
     return $this;
   }
 
@@ -104,7 +104,7 @@ class DefaultLazyPluginCollection extends LazyPluginCollection {
    * {@inheritdoc}
    */
   public function getConfiguration() {
-    $instances = [];
+    $instances = array();
     // Store the current order of the instances.
     $current_order = $this->instanceIDs;
     // Reorder the instances to match the original order, adding new instances

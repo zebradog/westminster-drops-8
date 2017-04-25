@@ -3,7 +3,7 @@
 namespace Drupal\hal\Normalizer;
 
 use Drupal\Core\Entity\FieldableEntityInterface;
-use Drupal\hal\LinkManager\LinkManagerInterface;
+use Drupal\rest\LinkManager\LinkManagerInterface;
 use Drupal\serialization\EntityResolver\EntityResolverInterface;
 use Drupal\serialization\EntityResolver\UuidReferenceInterface;
 
@@ -22,7 +22,7 @@ class EntityReferenceItemNormalizer extends FieldItemNormalizer implements UuidR
   /**
    * The hypermedia link manager.
    *
-   * @var \Drupal\hal\LinkManager\LinkManagerInterface
+   * @var \Drupal\rest\LinkManager\LinkManagerInterface
    */
   protected $linkManager;
 
@@ -36,7 +36,7 @@ class EntityReferenceItemNormalizer extends FieldItemNormalizer implements UuidR
   /**
    * Constructs an EntityReferenceItemNormalizer object.
    *
-   * @param \Drupal\hal\LinkManager\LinkManagerInterface $link_manager
+   * @param \Drupal\rest\LinkManager\LinkManagerInterface $link_manager
    *   The hypermedia link manager.
    * @param \Drupal\serialization\EntityResolver\EntityResolverInterface $entity_Resolver
    *   The entity resolver.
@@ -49,7 +49,7 @@ class EntityReferenceItemNormalizer extends FieldItemNormalizer implements UuidR
   /**
    * {@inheritdoc}
    */
-  public function normalize($field_item, $format = NULL, array $context = []) {
+  public function normalize($field_item, $format = NULL, array $context = array()) {
     /** @var $field_item \Drupal\Core\Field\FieldItemInterface */
     $target_entity = $field_item->get('entity')->getValue();
 
@@ -64,7 +64,7 @@ class EntityReferenceItemNormalizer extends FieldItemNormalizer implements UuidR
     // will include the langcode.
     $langcode = isset($context['langcode']) ? $context['langcode'] : NULL;
     unset($context['langcode']);
-    $context['included_fields'] = ['uuid'];
+    $context['included_fields'] = array('uuid');
 
     // Normalize the target entity.
     $embedded = $this->serializer->normalize($target_entity, $format, $context);
@@ -81,14 +81,14 @@ class EntityReferenceItemNormalizer extends FieldItemNormalizer implements UuidR
     $field_name = $field_item->getParent()->getName();
     $entity = $field_item->getEntity();
     $field_uri = $this->linkManager->getRelationUri($entity->getEntityTypeId(), $entity->bundle(), $field_name, $context);
-    return [
-      '_links' => [
-        $field_uri => [$link],
-      ],
-      '_embedded' => [
-        $field_uri => [$embedded],
-      ],
-    ];
+    return array(
+      '_links' => array(
+        $field_uri => array($link),
+      ),
+      '_embedded' => array(
+        $field_uri => array($embedded),
+      ),
+    );
   }
 
   /**
@@ -100,7 +100,7 @@ class EntityReferenceItemNormalizer extends FieldItemNormalizer implements UuidR
     $target_type = $field_definition->getSetting('target_type');
     $id = $this->entityResolver->resolve($this, $data, $target_type);
     if (isset($id)) {
-      return ['target_id' => $id];
+      return array('target_id' => $id);
     }
     return NULL;
   }

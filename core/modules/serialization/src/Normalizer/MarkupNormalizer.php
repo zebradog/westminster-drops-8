@@ -12,12 +12,12 @@ class MarkupNormalizer extends NormalizerBase {
    *
    * @var array
    */
-  protected $supportedInterfaceOrClass = ['Drupal\Component\Render\MarkupInterface'];
+  protected $supportedInterfaceOrClass = array('Drupal\Component\Render\MarkupInterface');
 
   /**
    * {@inheritdoc}
    */
-  public function normalize($object, $format = NULL, array $context = []) {
+  public function normalize($object, $format = NULL, array $context = array()) {
     return (string) $object;
   }
 

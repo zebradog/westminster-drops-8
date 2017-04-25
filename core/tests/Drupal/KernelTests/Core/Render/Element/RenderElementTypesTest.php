@@ -18,11 +18,11 @@ class RenderElementTypesTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'router_test'];
+  public static $modules = array('system', 'router_test');
 
   protected function setUp() {
     parent::setUp();
-    $this->installConfig(['system']);
+    $this->installConfig(array('system'));
     \Drupal::service('router.builder')->rebuild();
   }
 
@@ -51,141 +51,141 @@ class RenderElementTypesTest extends KernelTestBase {
   /**
    * Tests system #type 'container'.
    */
-  public function testContainer() {
+  function testContainer() {
     // Basic container with no attributes.
-    $this->assertElements([
+    $this->assertElements(array(
       '#type' => 'container',
       '#markup' => 'foo',
-    ], "<div>foo</div>\n", "#type 'container' with no HTML attributes");
+    ), "<div>foo</div>\n", "#type 'container' with no HTML attributes");
 
     // Container with a class.
-    $this->assertElements([
+    $this->assertElements(array(
       '#type' => 'container',
       '#markup' => 'foo',
-      '#attributes' => [
-        'class' => ['bar'],
-      ],
-    ], '<div class="bar">foo</div>' . "\n", "#type 'container' with a class HTML attribute");
+      '#attributes' => array(
+        'class' => array('bar'),
+      ),
+    ), '<div class="bar">foo</div>' . "\n", "#type 'container' with a class HTML attribute");
 
     // Container with children.
-    $this->assertElements([
+    $this->assertElements(array(
       '#type' => 'container',
-      'child' => [
+      'child' => array(
         '#markup' => 'foo',
-      ],
-    ], "<div>foo</div>\n", "#type 'container' with child elements");
+      ),
+    ), "<div>foo</div>\n", "#type 'container' with child elements");
   }
 
   /**
    * Tests system #type 'html_tag'.
    */
-  public function testHtmlTag() {
+  function testHtmlTag() {
     // Test void element.
-    $this->assertElements([
+    $this->assertElements(array(
       '#type' => 'html_tag',
       '#tag' => 'meta',
       '#value' => 'ignored',
-      '#attributes' => [
+      '#attributes' => array(
         'name' => 'description',
         'content' => 'Drupal test',
-      ],
-    ], '<meta name="description" content="Drupal test" />' . "\n", "#type 'html_tag', void element renders properly");
+      ),
+    ), '<meta name="description" content="Drupal test" />' . "\n", "#type 'html_tag', void element renders properly");
 
     // Test non-void element.
-    $this->assertElements([
+    $this->assertElements(array(
       '#type' => 'html_tag',
       '#tag' => 'section',
       '#value' => 'value',
-      '#attributes' => [
-        'class' => ['unicorns'],
-      ],
-    ], '<section class="unicorns">value</section>' . "\n", "#type 'html_tag', non-void element renders properly");
+      '#attributes' => array(
+        'class' => array('unicorns'),
+      ),
+    ), '<section class="unicorns">value</section>' . "\n", "#type 'html_tag', non-void element renders properly");
 
     // Test empty void element tag.
-    $this->assertElements([
+    $this->assertElements(array(
       '#type' => 'html_tag',
       '#tag' => 'link',
-    ], "<link />\n", "#type 'html_tag' empty void element renders properly");
+    ), "<link />\n", "#type 'html_tag' empty void element renders properly");
 
     // Test empty non-void element tag.
-    $this->assertElements([
+    $this->assertElements(array(
       '#type' => 'html_tag',
       '#tag' => 'section',
-    ], "<section></section>\n", "#type 'html_tag' empty non-void element renders properly");
+    ), "<section></section>\n", "#type 'html_tag' empty non-void element renders properly");
   }
 
   /**
    * Tests system #type 'more_link'.
    */
-  public function testMoreLink() {
-    $elements = [
-      [
+  function testMoreLink() {
+    $elements = array(
+      array(
         'name' => "#type 'more_link' anchor tag generation without extra classes",
-        'value' => [
+        'value' => array(
           '#type' => 'more_link',
           '#url' => Url::fromUri('https://www.drupal.org'),
-        ],
+        ),
         'expected' => '//div[@class="more-link"]/a[@href="https://www.drupal.org" and text()="More"]',
-      ],
-      [
+      ),
+      array(
         'name' => "#type 'more_link' anchor tag generation with different link text",
-        'value' => [
+        'value' => array(
           '#type' => 'more_link',
           '#url' => Url::fromUri('https://www.drupal.org'),
           '#title' => 'More Titles',
-        ],
+        ),
         'expected' => '//div[@class="more-link"]/a[@href="https://www.drupal.org" and text()="More Titles"]',
-      ],
-      [
+      ),
+      array(
         'name' => "#type 'more_link' anchor tag generation with attributes on wrapper",
-        'value' => [
+        'value' => array(
           '#type' => 'more_link',
           '#url' => Url::fromUri('https://www.drupal.org'),
-          '#theme_wrappers' => [
-            'container' => [
-              '#attributes' => [
+          '#theme_wrappers' => array(
+            'container' => array(
+              '#attributes' => array(
                 'title' => 'description',
-                'class' => ['more-link', 'drupal', 'test'],
-              ],
-            ],
-          ],
-        ],
+                'class' => array('more-link', 'drupal', 'test'),
+              ),
+            ),
+          ),
+        ),
         'expected' => '//div[@title="description" and contains(@class, "more-link") and contains(@class, "drupal") and contains(@class, "test")]/a[@href="https://www.drupal.org" and text()="More"]',
-      ],
-      [
+      ),
+      array(
         'name' => "#type 'more_link' anchor tag with a relative path",
-        'value' => [
+        'value' => array(
           '#type' => 'more_link',
           '#url' => Url::fromRoute('router_test.1'),
-        ],
+        ),
         'expected' => '//div[@class="more-link"]/a[@href="' . Url::fromRoute('router_test.1')->toString() . '" and text()="More"]',
-      ],
-      [
+      ),
+      array(
         'name' => "#type 'more_link' anchor tag with a route",
-        'value' => [
+        'value' => array(
           '#type' => 'more_link',
           '#url' => Url::fromRoute('router_test.1'),
-        ],
+        ),
         'expected' => '//div[@class="more-link"]/a[@href="' . \Drupal::urlGenerator()->generate('router_test.1') . '" and text()="More"]',
-      ],
-      [
+      ),
+      array(
         'name' => "#type 'more_link' anchor tag with an absolute path",
-        'value' => [
+        'value' => array(
           '#type' => 'more_link',
           '#url' => Url::fromRoute('system.admin_content'),
-          '#options' => ['absolute' => TRUE],
-        ],
+          '#options' => array('absolute' => TRUE),
+        ),
         'expected' => '//div[@class="more-link"]/a[@href="' . Url::fromRoute('system.admin_content')->setAbsolute()->toString() . '" and text()="More"]',
-      ],
-      [
+      ),
+      array(
         'name' => "#type 'more_link' anchor tag to the front page",
-        'value' => [
+        'value' => array(
           '#type' => 'more_link',
           '#url' => Url::fromRoute('<front>'),
-        ],
+        ),
         'expected' => '//div[@class="more-link"]/a[@href="' . Url::fromRoute('<front>')->toString() . '" and text()="More"]',
-      ],
-    ];
+      ),
+    );
 
     foreach ($elements as $element) {
       $xml = new \SimpleXMLElement(\Drupal::service('renderer')->renderRoot($element['value']));
@@ -197,26 +197,26 @@ class RenderElementTypesTest extends KernelTestBase {
   /**
    * Tests system #type 'system_compact_link'.
    */
-  public function testSystemCompactLink() {
-    $elements = [
-      [
+  function testSystemCompactLink() {
+    $elements = array(
+      array(
         'name' => "#type 'system_compact_link' when admin compact mode is off",
-        'value' => [
+        'value' => array(
           '#type' => 'system_compact_link',
-        ],
+        ),
         'expected' => '//div[@class="compact-link"]/a[contains(@href, "admin/compact/on?") and text()="Hide descriptions"]',
-      ],
-      [
+      ),
+      array(
         'name' => "#type 'system_compact_link' when adding extra attributes",
-        'value' => [
+        'value' => array(
           '#type' => 'system_compact_link',
-          '#attributes' => [
-            'class' => ['kittens-rule'],
-          ],
-        ],
+          '#attributes' => array(
+            'class' => array('kittens-rule'),
+          ),
+        ),
         'expected' => '//div[@class="compact-link"]/a[contains(@href, "admin/compact/on?") and @class="kittens-rule" and text()="Hide descriptions"]',
-      ],
-    ];
+      ),
+    );
 
     foreach ($elements as $element) {
       $xml = new \SimpleXMLElement(\Drupal::service('renderer')->renderRoot($element['value']));
@@ -227,13 +227,13 @@ class RenderElementTypesTest extends KernelTestBase {
     // Set admin compact mode on for additional tests.
     \Drupal::request()->cookies->set('Drupal_visitor_admin_compact_mode', TRUE);
 
-    $element = [
+    $element = array(
       'name' => "#type 'system_compact_link' when admin compact mode is on",
-      'value' => [
+      'value' => array(
         '#type' => 'system_compact_link',
-      ],
+      ),
       'expected' => '//div[@class="compact-link"]/a[contains(@href, "admin/compact?") and text()="Show descriptions"]',
-    ];
+    );
 
     $xml = new \SimpleXMLElement(\Drupal::service('renderer')->renderRoot($element['value']));
     $result = $xml->xpath($element['expected']);

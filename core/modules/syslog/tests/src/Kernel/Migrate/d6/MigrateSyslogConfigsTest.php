@@ -2,7 +2,7 @@
 
 namespace Drupal\Tests\syslog\Kernel\Migrate\d6;
 
-use Drupal\Tests\SchemaCheckTestTrait;
+use Drupal\config\Tests\SchemaCheckTestTrait;
 use Drupal\Tests\migrate_drupal\Kernel\d6\MigrateDrupal6TestBase;
 
 /**
@@ -17,7 +17,7 @@ class MigrateSyslogConfigsTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['syslog'];
+  public static $modules = array('syslog');
 
   /**
    * {@inheritdoc}

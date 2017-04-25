@@ -19,7 +19,7 @@ class LinkGenerationTest extends KernelTestBase {
   /**
    * Tests how hook_link_alter() can affect escaping of the link text.
    */
-  public function testHookLinkAlter() {
+  function testHookLinkAlter() {
     $url = Url::fromUri('http://example.com');
     $renderer = \Drupal::service('renderer');
 

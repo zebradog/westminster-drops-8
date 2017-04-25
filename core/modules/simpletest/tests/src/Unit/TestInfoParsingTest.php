@@ -10,7 +10,6 @@ namespace Drupal\Tests\simpletest\Unit;
 use Composer\Autoload\ClassLoader;
 use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\simpletest\Exception\MissingGroupException;
 use Drupal\simpletest\TestDiscovery;
 use Drupal\Tests\UnitTestCase;
 use org\bovigo\vfs\vfsStream;
@@ -236,6 +235,8 @@ class TestInfoParsingTest extends UnitTestCase {
 
   /**
    * @covers ::getTestInfo
+   * @expectedException \Drupal\simpletest\Exception\MissingGroupException
+   * @expectedExceptionMessage Missing @group annotation in Drupal\KernelTests\field\BulkDeleteTest
    */
   public function testTestInfoParserMissingGroup() {
     $classname = 'Drupal\KernelTests\field\BulkDeleteTest';
@@ -244,7 +245,6 @@ class TestInfoParsingTest extends UnitTestCase {
  * Bulk delete storages and fields, and clean up afterwards.
  */
 EOT;
-    $this->setExpectedException(MissingGroupException::class, 'Missing @group annotation in Drupal\KernelTests\field\BulkDeleteTest');
     TestDiscovery::getTestInfo($classname, $doc_comment);
   }
 

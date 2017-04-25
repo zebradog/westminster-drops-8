@@ -22,9 +22,6 @@ use Drupal\Core\Cache\Cache;
  *   label = @Translation("Image"),
  *   field_types = {
  *     "image"
- *   },
- *   quickedit = {
- *     "editor" = "image"
  *   }
  * )
  */
@@ -63,8 +60,6 @@ class ImageFormatter extends ImageFormatterBase implements ContainerFactoryPlugi
    *   Any third party settings settings.
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user.
-   * @param \Drupal\Core\Entity\EntityStorageInterface $image_style_storage
-   *   The image style storage.
    */
   public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, AccountInterface $current_user, EntityStorageInterface $image_style_storage) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
@@ -93,10 +88,10 @@ class ImageFormatter extends ImageFormatterBase implements ContainerFactoryPlugi
    * {@inheritdoc}
    */
   public static function defaultSettings() {
-    return [
+    return array(
       'image_style' => '',
       'image_link' => '',
-    ] + parent::defaultSettings();
+    ) + parent::defaultSettings();
   }
 
   /**
@@ -118,17 +113,17 @@ class ImageFormatter extends ImageFormatterBase implements ContainerFactoryPlugi
         '#access' => $this->currentUser->hasPermission('administer image styles')
       ],
     ];
-    $link_types = [
+    $link_types = array(
       'content' => t('Content'),
       'file' => t('File'),
-    ];
-    $element['image_link'] = [
+    );
+    $element['image_link'] = array(
       '#title' => t('Link image to'),
       '#type' => 'select',
       '#default_value' => $this->getSetting('image_link'),
       '#empty_option' => t('Nothing'),
       '#options' => $link_types,
-    ];
+    );
 
     return $element;
   }
@@ -137,7 +132,7 @@ class ImageFormatter extends ImageFormatterBase implements ContainerFactoryPlugi
    * {@inheritdoc}
    */
   public function settingsSummary() {
-    $summary = [];
+    $summary = array();
 
     $image_styles = image_style_options(FALSE);
     // Unset possible 'No defined styles' option.
@@ -146,16 +141,16 @@ class ImageFormatter extends ImageFormatterBase implements ContainerFactoryPlugi
     // their styles in code.
     $image_style_setting = $this->getSetting('image_style');
     if (isset($image_styles[$image_style_setting])) {
-      $summary[] = t('Image style: @style', ['@style' => $image_styles[$image_style_setting]]);
+      $summary[] = t('Image style: @style', array('@style' => $image_styles[$image_style_setting]));
     }
     else {
       $summary[] = t('Original image');
     }
 
-    $link_types = [
+    $link_types = array(
       'content' => t('Linked to content'),
       'file' => t('Linked to file'),
-    ];
+    );
     // Display this setting only if image is linked.
     $image_link_setting = $this->getSetting('image_link');
     if (isset($link_types[$image_link_setting])) {
@@ -169,7 +164,7 @@ class ImageFormatter extends ImageFormatterBase implements ContainerFactoryPlugi
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
-    $elements = [];
+    $elements = array();
     $files = $this->getEntitiesToView($items, $langcode);
 
     // Early opt-out if the field is empty.
@@ -219,17 +214,17 @@ class ImageFormatter extends ImageFormatterBase implements ContainerFactoryPlugi
       $item_attributes = $item->_attributes;
       unset($item->_attributes);
 
-      $elements[$delta] = [
+      $elements[$delta] = array(
         '#theme' => 'image_formatter',
         '#item' => $item,
         '#item_attributes' => $item_attributes,
         '#image_style' => $image_style_setting,
         '#url' => $url,
-        '#cache' => [
+        '#cache' => array(
           'tags' => $cache_tags,
           'contexts' => $cache_contexts,
-        ],
-      ];
+        ),
+      );
     }
 
     return $elements;

@@ -14,7 +14,7 @@ class ExposedFormCache {
    *
    * @var array
    */
-  protected $cache = [];
+  protected $cache = array();
 
   /**
    * Save the Views exposed form for later use.
@@ -56,7 +56,7 @@ class ExposedFormCache {
    * Rests the form cache.
    */
   public function reset() {
-    $this->cache = [];
+    $this->cache = array();
   }
 
 }

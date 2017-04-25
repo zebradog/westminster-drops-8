@@ -88,7 +88,7 @@ abstract class ViewFormBase extends EntityForm {
     $executable = $view->getExecutable();
     $executable->initDisplay();
     $display_id = $this->displayID;
-    $tabs = [];
+    $tabs = array();
 
     // Create a tab for each display.
     foreach ($view->get('display') as $id => $display) {
@@ -99,15 +99,15 @@ abstract class ViewFormBase extends EntityForm {
         continue;
       }
 
-      $tabs[$id] = [
+      $tabs[$id] = array(
         '#theme' => 'menu_local_task',
         '#weight' => $display['position'],
-        '#link' => [
+        '#link' => array(
           'title' => $this->getDisplayLabel($view, $id),
-          'localized_options' => [],
+          'localized_options' => array(),
           'url' => $view->urlInfo('edit-display-form')->setRouteParameter('display_id', $id),
-        ],
-      ];
+        ),
+      );
       if (!empty($display['deleted'])) {
         $tabs[$id]['#link']['localized_options']['attributes']['class'][] = 'views-display-deleted-link';
       }

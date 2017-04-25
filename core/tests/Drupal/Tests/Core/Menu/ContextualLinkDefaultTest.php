@@ -25,7 +25,7 @@ class ContextualLinkDefaultTest extends UnitTestCase {
    *
    * @var array
    */
-  protected $config = [];
+  protected $config = array();
 
   /**
    * The used plugin ID.
@@ -39,9 +39,9 @@ class ContextualLinkDefaultTest extends UnitTestCase {
    *
    * @var array
    */
-  protected $pluginDefinition = [
+  protected $pluginDefinition = array(
     'id' => 'contextual_link_default',
-  ];
+  );
 
   /**
    * The mocked translator.
@@ -80,7 +80,7 @@ class ContextualLinkDefaultTest extends UnitTestCase {
    */
   public function testGetTitleWithContext() {
     $title = 'Example';
-    $this->pluginDefinition['title'] = (new TranslatableMarkup($title, [], ['context' => 'context'], $this->stringTranslation));
+    $this->pluginDefinition['title'] = (new TranslatableMarkup($title, array(), array('context' => 'context'), $this->stringTranslation));
     $this->stringTranslation->expects($this->once())
       ->method('translateString')
       ->with($this->pluginDefinition['title'])
@@ -95,7 +95,7 @@ class ContextualLinkDefaultTest extends UnitTestCase {
    */
   public function testGetTitleWithTitleArguments() {
     $title = 'Example @test';
-    $this->pluginDefinition['title'] = (new TranslatableMarkup($title, ['@test' => 'value'], [], $this->stringTranslation));
+    $this->pluginDefinition['title'] = (new TranslatableMarkup($title, array('@test' => 'value'), [], $this->stringTranslation));
     $this->stringTranslation->expects($this->once())
       ->method('translateString')
       ->with($this->pluginDefinition['title'])
@@ -129,7 +129,7 @@ class ContextualLinkDefaultTest extends UnitTestCase {
   /**
    * @covers ::getOptions
    */
-  public function testGetOptions($options = ['key' => 'value']) {
+  public function testGetOptions($options = array('key' => 'value')) {
     $this->pluginDefinition['options'] = $options;
     $this->setupContextualLinkDefault();
 

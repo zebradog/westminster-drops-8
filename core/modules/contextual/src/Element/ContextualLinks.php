@@ -18,19 +18,19 @@ class ContextualLinks extends RenderElement {
    */
   public function getInfo() {
     $class = get_class($this);
-    return [
-      '#pre_render' => [
-        [$class, 'preRenderLinks'],
-      ],
+    return array(
+      '#pre_render' => array(
+        array($class, 'preRenderLinks'),
+      ),
       '#theme' => 'links__contextual',
-      '#links' => [],
-      '#attributes' => ['class' => ['contextual-links']],
-      '#attached' => [
-        'library' => [
+      '#links' => array(),
+      '#attributes' => array('class' => array('contextual-links')),
+      '#attached' => array(
+        'library' => array(
           'contextual/drupal.contextual-links',
-        ],
-      ],
-    ];
+        ),
+      ),
+    );
   }
 
   /**
@@ -60,26 +60,26 @@ class ContextualLinks extends RenderElement {
    */
   public static function preRenderLinks(array $element) {
     // Retrieve contextual menu links.
-    $items = [];
+    $items = array();
 
     $contextual_links_manager = static::contextualLinkManager();
 
     foreach ($element['#contextual_links'] as $group => $args) {
-      $args += [
-        'route_parameters' => [],
-        'metadata' => [],
-      ];
+      $args += array(
+        'route_parameters' => array(),
+        'metadata' => array(),
+      );
       $items += $contextual_links_manager->getContextualLinksArrayByGroup($group, $args['route_parameters'], $args['metadata']);
     }
 
     // Transform contextual links into parameters suitable for links.html.twig.
-    $links = [];
+    $links = array();
     foreach ($items as $class => $item) {
       $class = Html::getClass($class);
-      $links[$class] = [
+      $links[$class] = array(
         'title' => $item['title'],
         'url' => Url::fromRoute(isset($item['route_name']) ? $item['route_name'] : '', isset($item['route_parameters']) ? $item['route_parameters'] : []),
-      ];
+      );
     }
     $element['#links'] = $links;
 

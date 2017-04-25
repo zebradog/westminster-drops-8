@@ -102,36 +102,36 @@ class CKEditor extends EditorBase implements ContainerFactoryPluginInterface {
    * {@inheritdoc}
    */
   public function getDefaultSettings() {
-    return [
-      'toolbar' => [
-        'rows' => [
+    return array(
+      'toolbar' => array(
+        'rows' => array(
           // Button groups.
-          [
-            [
-              'name' => $this->t('Formatting'),
-              'items' => ['Bold', 'Italic'],
-            ],
-            [
-              'name' => $this->t('Links'),
-              'items' => ['DrupalLink', 'DrupalUnlink'],
-            ],
-            [
-              'name' => $this->t('Lists'),
-              'items' => ['BulletedList', 'NumberedList'],
-            ],
-            [
-              'name' => $this->t('Media'),
-              'items' => ['Blockquote', 'DrupalImage'],
-            ],
-            [
-              'name' => $this->t('Tools'),
-              'items' => ['Source'],
-            ],
-          ],
-        ],
-      ],
+          array(
+            array(
+              'name' => t('Formatting'),
+              'items' => array('Bold', 'Italic',),
+            ),
+            array(
+              'name' => t('Links'),
+              'items' => array('DrupalLink', 'DrupalUnlink',),
+            ),
+            array(
+              'name' => t('Lists'),
+              'items' => array('BulletedList', 'NumberedList',),
+            ),
+            array(
+              'name' => t('Media'),
+              'items' => array('Blockquote', 'DrupalImage',),
+            ),
+            array(
+              'name' => t('Tools'),
+              'items' => array('Source',),
+            ),
+          ),
+        ),
+      ),
       'plugins' => ['language' => ['language_list' => 'un']],
-    ];
+    );
   }
 
   /**
@@ -140,39 +140,39 @@ class CKEditor extends EditorBase implements ContainerFactoryPluginInterface {
   public function settingsForm(array $form, FormStateInterface $form_state, Editor $editor) {
     $settings = $editor->getSettings();
 
-    $ckeditor_settings_toolbar = [
+    $ckeditor_settings_toolbar = array(
       '#theme' => 'ckeditor_settings_toolbar',
       '#editor' => $editor,
       '#plugins' => $this->ckeditorPluginManager->getButtons(),
-    ];
-    $form['toolbar'] = [
+    );
+    $form['toolbar'] = array(
       '#type' => 'container',
-      '#attached' => [
-        'library' => ['ckeditor/drupal.ckeditor.admin'],
+      '#attached' => array(
+        'library' => array('ckeditor/drupal.ckeditor.admin'),
         'drupalSettings' => [
           'ckeditor' => [
             'toolbarAdmin' => (string) $this->renderer->renderPlain($ckeditor_settings_toolbar),
           ],
         ],
-      ],
-      '#attributes' => ['class' => ['ckeditor-toolbar-configuration']],
-    ];
+      ),
+      '#attributes' => array('class' => array('ckeditor-toolbar-configuration')),
+    );
 
-    $form['toolbar']['button_groups'] = [
+    $form['toolbar']['button_groups'] = array(
       '#type' => 'textarea',
-      '#title' => $this->t('Toolbar buttons'),
+      '#title' => t('Toolbar buttons'),
       '#default_value' => json_encode($settings['toolbar']['rows']),
-      '#attributes' => ['class' => ['ckeditor-toolbar-textarea']],
-    ];
+      '#attributes' => array('class' => array('ckeditor-toolbar-textarea')),
+    );
 
     // CKEditor plugin settings, if any.
-    $form['plugin_settings'] = [
+    $form['plugin_settings'] = array(
       '#type' => 'vertical_tabs',
-      '#title' => $this->t('CKEditor plugin settings'),
-      '#attributes' => [
+      '#title' => t('CKEditor plugin settings'),
+      '#attributes' => array(
         'id' => 'ckeditor-plugin-settings',
-      ],
-    ];
+      ),
+    );
     $this->ckeditorPluginManager->injectPluginSettingsForm($form, $form_state, $editor);
     if (count(Element::children($form['plugins'])) === 0) {
       unset($form['plugins']);
@@ -186,7 +186,7 @@ class CKEditor extends EditorBase implements ContainerFactoryPluginInterface {
     // settings to be updated accordingly.
     // Get a list of all external plugins and their corresponding files.
     $plugins = array_keys($this->ckeditorPluginManager->getDefinitions());
-    $all_external_plugins = [];
+    $all_external_plugins = array();
     foreach ($plugins as $plugin_id) {
       $plugin = $this->ckeditorPluginManager->createInstance($plugin_id);
       if (!$plugin->isInternal()) {
@@ -196,37 +196,37 @@ class CKEditor extends EditorBase implements ContainerFactoryPluginInterface {
     // Get a list of all buttons that are provided by all plugins.
     $all_buttons = array_reduce($this->ckeditorPluginManager->getButtons(), function($result, $item) {
       return array_merge($result, array_keys($item));
-    }, []);
+    }, array());
     // Build a fake Editor object, which we'll use to generate JavaScript
     // settings for this fake Editor instance.
-    $fake_editor = Editor::create([
+    $fake_editor = Editor::create(array(
       'format' => $editor->id(),
       'editor' => 'ckeditor',
-      'settings' => [
+      'settings' => array(
         // Single toolbar row, single button group, all existing buttons.
-        'toolbar' => [
-         'rows' => [
-           0 => [
-             0 => [
+        'toolbar' => array(
+         'rows' => array(
+           0 => array(
+             0 => array(
                'name' => 'All existing buttons',
                'items' => $all_buttons,
-             ]
-           ]
-         ],
-        ],
+             )
+           )
+         ),
+        ),
         'plugins' => $settings['plugins'],
-      ],
-    ]);
+      ),
+    ));
     $config = $this->getJSSettings($fake_editor);
     // Remove the ACF configuration that is generated based on filter settings,
     // because otherwise we cannot retrieve per-feature metadata.
     unset($config['allowedContent']);
-    $form['hidden_ckeditor'] = [
+    $form['hidden_ckeditor'] = array(
       '#markup' => '<div id="ckeditor-hidden" class="hidden"></div>',
-      '#attached' => [
+      '#attached' => array(
         'drupalSettings' => ['ckeditor' => ['hiddenCKEditorConfig' => $config]],
-      ],
-    ];
+      ),
+    );
 
     return $form;
   }
@@ -238,7 +238,7 @@ class CKEditor extends EditorBase implements ContainerFactoryPluginInterface {
     // Modify the toolbar settings by reference. The values in
     // $form_state->getValue(array('editor', 'settings')) will be saved directly
     // by editor_form_filter_admin_format_submit().
-    $toolbar_settings = &$form_state->getValue(['editor', 'settings', 'toolbar']);
+    $toolbar_settings = &$form_state->getValue(array('editor', 'settings', 'toolbar'));
 
     // The rows key is not built into the form structure, so decode the button
     // groups data into this new key and remove the button_groups key.
@@ -246,8 +246,8 @@ class CKEditor extends EditorBase implements ContainerFactoryPluginInterface {
     unset($toolbar_settings['button_groups']);
 
     // Remove the plugin settings' vertical tabs state; no need to save that.
-    if ($form_state->hasValue(['editor', 'settings', 'plugins'])) {
-      $form_state->unsetValue(['editor', 'settings', 'plugin_settings']);
+    if ($form_state->hasValue(array('editor', 'settings', 'plugins'))) {
+      $form_state->unsetValue(array('editor', 'settings', 'plugin_settings'));
     }
   }
 
@@ -255,7 +255,7 @@ class CKEditor extends EditorBase implements ContainerFactoryPluginInterface {
    * {@inheritdoc}
    */
   public function getJSSettings(Editor $editor) {
-    $settings = [];
+    $settings = array();
 
     // Get the settings for all enabled plugins, even the internal ones.
     $enabled_plugins = array_keys($this->ckeditorPluginManager->getEnabledPluginFiles($editor, TRUE));
@@ -279,7 +279,7 @@ class CKEditor extends EditorBase implements ContainerFactoryPluginInterface {
 
     // Next, set the most fundamental CKEditor settings.
     $external_plugin_files = $this->ckeditorPluginManager->getEnabledPluginFiles($editor);
-    $settings += [
+    $settings += array(
       'toolbar' => $this->buildToolbarJSSetting($editor),
       'contentsCss' => $this->buildContentsCssJSSetting($editor),
       'extraPlugins' => implode(',', array_keys($external_plugin_files)),
@@ -290,15 +290,15 @@ class CKEditor extends EditorBase implements ContainerFactoryPluginInterface {
       // styles.js by default.
       // See http://dev.ckeditor.com/ticket/9992#comment:9.
       'stylesSet' => FALSE,
-    ];
+    );
 
     // Finally, set Drupal-specific CKEditor settings.
     $root_relative_file_url = function ($uri) {
       return file_url_transform_relative(file_create_url($uri));
     };
-    $settings += [
+    $settings += array(
       'drupalExternalPlugins' => array_map($root_relative_file_url, $external_plugin_files),
-    ];
+    );
 
     // Parse all CKEditor plugin JavaScript files for translations.
     if ($this->moduleHandler->moduleExists('locale')) {
@@ -326,7 +326,7 @@ class CKEditor extends EditorBase implements ContainerFactoryPluginInterface {
       $langcodes = $langcode_cache->data;
     }
     if (empty($langcodes)) {
-      $langcodes = [];
+      $langcodes = array();
       // Collect languages included with CKEditor based on file listing.
       $files = scandir('core/assets/vendor/ckeditor/lang');
       foreach ($files as $file) {
@@ -341,7 +341,7 @@ class CKEditor extends EditorBase implements ContainerFactoryPluginInterface {
     // Get language mapping if available to map to Drupal language codes.
     // This is configurable in the user interface and not expensive to get, so
     // we don't include it in the cached language list.
-    $language_mappings = $this->moduleHandler->moduleExists('language') ? language_get_browser_drupal_langcode_mappings() : [];
+    $language_mappings = $this->moduleHandler->moduleExists('language') ? language_get_browser_drupal_langcode_mappings() : array();
     foreach ($langcodes as $langcode) {
       // If this language code is available in a Drupal mapping, use that to
       // compute a possibility for matching from the Drupal langcode to the
@@ -363,9 +363,9 @@ class CKEditor extends EditorBase implements ContainerFactoryPluginInterface {
    * {@inheritdoc}
    */
   public function getLibraries(Editor $editor) {
-    $libraries = [
+    $libraries = array(
       'ckeditor/drupal.ckeditor',
-    ];
+    );
 
     // Get the required libraries for any enabled plugins.
     $enabled_plugins = array_keys($this->ckeditorPluginManager->getEnabledPluginFiles($editor));
@@ -389,7 +389,7 @@ class CKEditor extends EditorBase implements ContainerFactoryPluginInterface {
    *   An array containing the "toolbar" configuration.
    */
   public function buildToolbarJSSetting(Editor $editor) {
-    $toolbar = [];
+    $toolbar = array();
 
     $settings = $editor->getSettings();
     foreach ($settings['toolbar']['rows'] as $row) {
@@ -412,15 +412,15 @@ class CKEditor extends EditorBase implements ContainerFactoryPluginInterface {
    *   An array containing the "contentsCss" configuration.
    */
   public function buildContentsCssJSSetting(Editor $editor) {
-    $css = [
+    $css = array(
       drupal_get_path('module', 'ckeditor') . '/css/ckeditor-iframe.css',
       drupal_get_path('module', 'system') . '/css/components/align.module.css',
-    ];
+    );
     $this->moduleHandler->alter('ckeditor_css', $css, $editor);
     // Get a list of all enabled plugins' iframe instance CSS files.
     $plugins_css = array_reduce($this->ckeditorPluginManager->getCssFiles($editor), function($result, $item) {
       return array_merge($result, array_values($item));
-    }, []);
+    }, array());
     $css = array_merge($css, $plugins_css);
     $css = array_merge($css, _ckeditor_theme_css());
     $css = array_map('file_create_url', $css);

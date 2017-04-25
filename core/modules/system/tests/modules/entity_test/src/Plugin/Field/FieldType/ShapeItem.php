@@ -21,9 +21,9 @@ class ShapeItem extends FieldItemBase {
    * {@inheritdoc}
    */
   public static function defaultStorageSettings() {
-    return [
+    return array(
       'foreign_key_name' => 'shape',
-    ] + parent::defaultStorageSettings();
+    ) + parent::defaultStorageSettings();
   }
 
   /**
@@ -43,30 +43,30 @@ class ShapeItem extends FieldItemBase {
    * {@inheritdoc}
    */
   public static function schema(FieldStorageDefinitionInterface $field_definition) {
-    $foreign_keys = [];
+    $foreign_keys = array();
     // The 'foreign keys' key is not always used in tests.
     if ($field_definition->getSetting('foreign_key_name')) {
-      $foreign_keys['foreign keys'] = [
+      $foreign_keys['foreign keys'] = array(
         // This is a dummy foreign key definition, references a table that
         // doesn't exist, but that's not a problem.
-        $field_definition->getSetting('foreign_key_name') => [
+        $field_definition->getSetting('foreign_key_name') => array(
           'table' => $field_definition->getSetting('foreign_key_name'),
-          'columns' => [$field_definition->getSetting('foreign_key_name') => 'id'],
-        ],
-      ];
+          'columns' => array($field_definition->getSetting('foreign_key_name') => 'id'),
+        ),
+      );
     }
-    return [
-      'columns' => [
-        'shape' => [
+    return array(
+      'columns' => array(
+        'shape' => array(
           'type' => 'varchar',
           'length' => 32,
-        ],
-        'color' => [
+        ),
+        'color' => array(
           'type' => 'varchar',
           'length' => 32,
-        ],
-      ],
-    ] + $foreign_keys;
+        ),
+      ),
+    ) + $foreign_keys;
   }
 
   /**

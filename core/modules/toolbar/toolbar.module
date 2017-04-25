@@ -20,7 +20,7 @@ function toolbar_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     case 'help.page.toolbar':
       $output = '<h3>' . t('About') . '</h3>';
-      $output .= '<p>' . t('The Toolbar module provides a toolbar for site administrators, which displays tabs and trays provided by the Toolbar module itself and other modules. For more information, see the <a href=":toolbar_docs">online documentation for the Toolbar module</a>.', [':toolbar_docs' => 'https://www.drupal.org/documentation/modules/toolbar']) . '</p>';
+      $output .= '<p>' . t('The Toolbar module provides a toolbar for site administrators, which displays tabs and trays provided by the Toolbar module itself and other modules. For more information, see the <a href=":toolbar_docs">online documentation for the Toolbar module</a>.', array(':toolbar_docs' => 'https://www.drupal.org/documentation/modules/toolbar')) . '</p>';
       $output .= '<h4>' . t('Terminology') . '</h4>';
       $output .= '<dl>';
       $output .= '<dt>' . t('Tabs') . '</dt>';
@@ -36,13 +36,13 @@ function toolbar_help($route_name, RouteMatchInterface $route_match) {
  * Implements hook_theme().
  */
 function toolbar_theme($existing, $type, $theme, $path) {
-  $items['toolbar'] = [
+  $items['toolbar'] = array(
     'render element' => 'element',
-  ];
-  $items['menu__toolbar'] = [
+  );
+  $items['menu__toolbar'] = array(
     'base hook' => 'menu',
-    'variables' => ['items' => [], 'attributes' => []],
-  ];
+    'variables' => array('items' => array(), 'attributes' => array()),
+  );
 
   return $items;
 }
@@ -53,14 +53,14 @@ function toolbar_theme($existing, $type, $theme, $path) {
  * Add admin toolbar to the top of the page automatically.
  */
 function toolbar_page_top(array &$page_top) {
-  $page_top['toolbar'] = [
+  $page_top['toolbar'] = array(
     '#type' => 'toolbar',
     '#access' => \Drupal::currentUser()->hasPermission('access toolbar'),
     '#cache' => [
       'keys' => ['toolbar'],
       'contexts' => ['user.permissions'],
     ],
-  ];
+  );
 }
 
 /**
@@ -83,9 +83,9 @@ function template_preprocess_toolbar(&$variables) {
 
   // Prepare the trays and tabs for each toolbar item as well as the remainder
   // variable that will hold any non-tray, non-tab elements.
-  $variables['trays'] = [];
-  $variables['tabs'] = [];
-  $variables['remainder'] = [];
+  $variables['trays'] = array();
+  $variables['tabs'] = array();
+  $variables['remainder'] = array();
   foreach (Element::children($element) as $key) {
     // Early rendering to collect the wrapper attributes from
     // ToolbarItem elements.
@@ -94,14 +94,14 @@ function template_preprocess_toolbar(&$variables) {
     }
     // Add the tray.
     if (isset($element[$key]['tray'])) {
-      $attributes = [];
+      $attributes = array();
       if (!empty($element[$key]['tray']['#wrapper_attributes'])) {
         $attributes = $element[$key]['tray']['#wrapper_attributes'];
       }
-      $variables['trays'][$key] = [
+      $variables['trays'][$key] = array(
         'links' => $element[$key]['tray'],
         'attributes' => new Attribute($attributes),
-      ];
+      );
       if (array_key_exists('#heading', $element[$key]['tray'])) {
         $variables['trays'][$key]['label'] = $element[$key]['tray']['#heading'];
       }
@@ -109,22 +109,22 @@ function template_preprocess_toolbar(&$variables) {
 
     // Add the tab.
     if (isset($element[$key]['tab'])) {
-      $attributes = [];
+      $attributes = array();
       // Pass the wrapper attributes along.
       if (!empty($element[$key]['#wrapper_attributes'])) {
         $attributes = $element[$key]['#wrapper_attributes'];
       }
 
-      $variables['tabs'][$key] = [
+      $variables['tabs'][$key] = array(
         'link' => $element[$key]['tab'],
         'attributes' => new Attribute($attributes),
-      ];
+      );
     }
 
     // Add other non-tray, non-tab child elements to the remainder variable for
     // later rendering.
     foreach (Element::children($element[$key]) as $child_key) {
-      if (!in_array($child_key, ['tray', 'tab'])) {
+      if (!in_array($child_key, array('tray', 'tab'))) {
         $variables['remainder'][$key][$child_key] = $element[$key][$child_key];
       }
     }
@@ -136,28 +136,28 @@ function template_preprocess_toolbar(&$variables) {
  */
 function toolbar_toolbar() {
   // The 'Home' tab is a simple link, with no corresponding tray.
-  $items['home'] = [
+  $items['home'] = array(
     '#type' => 'toolbar_item',
-    'tab' => [
+    'tab' => array(
       '#type' => 'link',
       '#title' => t('Back to site'),
       '#url' => Url::fromRoute('<front>'),
-      '#attributes' => [
+      '#attributes' => array(
         'title' => t('Return to site content'),
-        'class' => ['toolbar-icon', 'toolbar-icon-escape-admin'],
+        'class' => array('toolbar-icon', 'toolbar-icon-escape-admin'),
         'data-toolbar-escape-admin' => TRUE,
-      ],
-    ],
-    '#wrapper_attributes' => [
-      'class' => ['hidden', 'home-toolbar-tab'],
-    ],
-    '#attached' => [
-      'library' => [
+      ),
+    ),
+    '#wrapper_attributes' => array(
+      'class' => array('hidden', 'home-toolbar-tab'),
+    ),
+    '#attached' => array(
+      'library' => array(
         'toolbar/toolbar.escapeAdmin',
-      ],
-    ],
+      ),
+    ),
     '#weight' => -20,
-  ];
+  );
 
   // To conserve bandwidth, we only include the top-level links in the HTML.
   // The subtrees are fetched through a JSONP script that is generated at the
@@ -171,38 +171,38 @@ function toolbar_toolbar() {
 
   // The administration element has a link that is themed to correspond to
   // a toolbar tray. The tray contains the full administrative menu of the site.
-  $items['administration'] = [
+  $items['administration'] = array(
     '#type' => 'toolbar_item',
-    'tab' => [
+    'tab' => array(
       '#type' => 'link',
       '#title' => t('Manage'),
       '#url' => Url::fromRoute('system.admin'),
-      '#attributes' => [
+      '#attributes' => array(
         'title' => t('Admin menu'),
-        'class' => ['toolbar-icon', 'toolbar-icon-menu'],
+        'class' => array('toolbar-icon', 'toolbar-icon-menu'),
         // A data attribute that indicates to the client to defer loading of
         // the admin menu subtrees until this tab is activated. Admin menu
         // subtrees will not render to the DOM if this attribute is removed.
         // The value of the attribute is intentionally left blank. Only the
         // presence of the attribute is necessary.
         'data-drupal-subtrees' => '',
-      ],
-    ],
-    'tray' => [
+      ),
+    ),
+    'tray' => array(
       '#heading' => t('Administration menu'),
       '#attached' => $subtrees_attached,
-      'toolbar_administration' => [
-        '#pre_render' => [
+      'toolbar_administration' => array(
+        '#pre_render' => array(
           'toolbar_prerender_toolbar_administration_tray',
-        ],
+        ),
         '#type' => 'container',
-        '#attributes' => [
-          'class' => ['toolbar-menu-administration'],
-        ],
-      ],
-    ],
+        '#attributes' => array(
+          'class' => array('toolbar-menu-administration'),
+        ),
+      ),
+    ),
     '#weight' => -15,
-  ];
+  );
   $hash_cacheability->applyTo($items['administration']);
 
   return $items;
@@ -228,11 +228,11 @@ function toolbar_prerender_toolbar_administration_tray(array $element) {
   $parameters->setMinDepth(2)->setMaxDepth(2)->onlyEnabledLinks();
   // @todo Make the menu configurable in https://www.drupal.org/node/1869638.
   $tree = $menu_tree->load('admin', $parameters);
-  $manipulators = [
-    ['callable' => 'menu.default_tree_manipulators:checkAccess'],
-    ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
-    ['callable' => 'toolbar_menu_navigation_links'],
-  ];
+  $manipulators = array(
+    array('callable' => 'menu.default_tree_manipulators:checkAccess'),
+    array('callable' => 'menu.default_tree_manipulators:generateIndexAndSort'),
+    array('callable' => 'toolbar_menu_navigation_links'),
+  );
   $tree = $menu_tree->transform($tree, $manipulators);
   $element['administration_menu'] = $menu_tree->build($tree);
   return $element;
@@ -262,7 +262,7 @@ function toolbar_menu_navigation_links(array $tree) {
       $id = substr(Crypt::hashBase64($url->getUri()), 0, 16);
     }
     else {
-      $id = str_replace(['.', '<', '>'], ['-', '', ''], $url->getRouteName());
+      $id = str_replace(array('.', '<', '>'), array('-', '', ''), $url->getRouteName());
     }
 
     // Get the non-localized title to make the icon class.
@@ -270,7 +270,7 @@ function toolbar_menu_navigation_links(array $tree) {
 
     $element->options['attributes']['id'] = 'toolbar-link-' . $id;
     $element->options['attributes']['class'][] = 'toolbar-icon';
-    $element->options['attributes']['class'][] = 'toolbar-icon-' . strtolower(str_replace(['.', ' ', '_'], ['-', '-', '-'], $definition['id']));
+    $element->options['attributes']['class'][] = 'toolbar-icon-' . strtolower(str_replace(array('.', ' ', '_'), array('-', '-', '-'), $definition['id']));
     $element->options['attributes']['title'] = $link->getDescription();
   }
   return $tree;
@@ -310,13 +310,13 @@ function _toolbar_do_get_rendered_subtrees(array $data) {
   $parameters->setMinDepth(2)->setMaxDepth(4)->onlyEnabledLinks();
   // @todo Make the menu configurable in https://www.drupal.org/node/1869638.
   $tree = $menu_tree->load('admin', $parameters);
-  $manipulators = [
-    ['callable' => 'menu.default_tree_manipulators:checkAccess'],
-    ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
-    ['callable' => 'toolbar_menu_navigation_links'],
-  ];
+  $manipulators = array(
+    array('callable' => 'menu.default_tree_manipulators:checkAccess'),
+    array('callable' => 'menu.default_tree_manipulators:generateIndexAndSort'),
+    array('callable' => 'toolbar_menu_navigation_links'),
+  );
   $tree = $menu_tree->transform($tree, $manipulators);
-  $subtrees = [];
+  $subtrees = array();
   // Calculated the combined cacheability of all subtrees.
   $cacheability = new CacheableMetadata();
   foreach ($tree as $element) {
@@ -333,7 +333,7 @@ function _toolbar_do_get_rendered_subtrees(array $data) {
     // Many routes have dots as route name, while some special ones like <front>
     // have <> characters in them.
     $url = $link->getUrlObject();
-    $id = str_replace(['.', '<', '>'], ['-', '', '' ], $url->isRouted() ? $url->getRouteName() : $url->getUri());
+    $id = str_replace(array('.', '<', '>'), array('-', '', '' ), $url->isRouted() ? $url->getRouteName() : $url->getUri());
 
     $subtrees[$id] = $output;
   }

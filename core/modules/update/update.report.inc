@@ -23,36 +23,36 @@ function template_preprocess_update_report(&$variables) {
 
   $last = \Drupal::state()->get('update.last_check') ?: 0;
 
-  $variables['last_checked'] = [
+  $variables['last_checked'] = array(
     '#theme' => 'update_last_check',
     '#last' => $last,
     // Attach the library to a variable that gets printed always.
-    '#attached' => [
-      'library' => [
+    '#attached' => array(
+      'library' => array(
         'update/drupal.update.admin',
-      ],
-    ]
-  ];
+      ),
+    )
+  );
 
   // For no project update data, populate no data message.
   if (empty($data)) {
     $variables['no_updates_message'] = _update_no_data();
   }
 
-  $rows = [];
+  $rows = array();
 
   foreach ($data as $project) {
-    $project_status = [
+    $project_status = array(
       '#theme' => 'update_project_status',
       '#project' => $project,
-    ];
+    );
 
     // Build project rows.
     if (!isset($rows[$project['project_type']])) {
-      $rows[$project['project_type']] = [
+      $rows[$project['project_type']] = array(
         '#type' => 'table',
-        '#attributes' => ['class' => ['update']],
-      ];
+        '#attributes' => array('class' => array('update')),
+      );
     }
     $row_key = !empty($project['title']) ? Unicode::strtolower($project['title']) : Unicode::strtolower($project['name']);
 
@@ -62,7 +62,7 @@ function template_preprocess_update_report(&$variables) {
     // Add project status class attribute to the table row.
     switch ($project['status']) {
       case UPDATE_CURRENT:
-        $rows[$project['project_type']][$row_key]['#attributes'] = ['class' => ['color-success']];
+        $rows[$project['project_type']][$row_key]['#attributes'] = array('class' => array('color-success'));
         break;
       case UPDATE_UNKNOWN:
       case UPDATE_FETCH_PENDING:
@@ -70,32 +70,32 @@ function template_preprocess_update_report(&$variables) {
       case UPDATE_NOT_SECURE:
       case UPDATE_REVOKED:
       case UPDATE_NOT_SUPPORTED:
-        $rows[$project['project_type']][$row_key]['#attributes'] = ['class' => ['color-error']];
+        $rows[$project['project_type']][$row_key]['#attributes'] = array('class' => array('color-error'));
         break;
       case UPDATE_NOT_CHECKED:
       case UPDATE_NOT_CURRENT:
       default:
-        $rows[$project['project_type']][$row_key]['#attributes'] = ['class' => ['color-warning']];
+        $rows[$project['project_type']][$row_key]['#attributes'] = array('class' => array('color-warning'));
         break;
     }
   }
 
-  $project_types = [
+  $project_types = array(
     'core' => t('Drupal core'),
     'module' => t('Modules'),
     'theme' => t('Themes'),
     'module-disabled' => t('Uninstalled modules'),
     'theme-disabled' => t('Uninstalled themes'),
-  ];
+  );
 
-  $variables['project_types'] = [];
+  $variables['project_types'] = array();
   foreach ($project_types as $type_name => $type_label) {
     if (!empty($rows[$type_name])) {
       ksort($rows[$type_name]);
-      $variables['project_types'][] = [
+      $variables['project_types'][] = array(
         'label' => $type_label,
         'table' => $rows[$type_name],
-      ];
+      );
     }
   }
 }
@@ -124,9 +124,9 @@ function template_preprocess_update_project_status(&$variables) {
 
   $variables['existing_version'] = $project['existing_version'];
 
-  $versions_inner = [];
-  $security_class = [];
-  $version_class = [];
+  $versions_inner = array();
+  $security_class = array();
+  $version_class = array();
   if (isset($project['recommended'])) {
     if ($project['status'] != UPDATE_CURRENT || $project['existing_version'] !== $project['recommended']) {
 
@@ -156,57 +156,57 @@ function template_preprocess_update_project_status(&$variables) {
         ) {
           $version_class[] = 'project-update__version--recommended-strong';
         }
-        $versions_inner[] = [
+        $versions_inner[] = array(
           '#theme' => 'update_version',
           '#version' => $project['releases'][$project['recommended']],
           '#title' => t('Recommended version:'),
-          '#attributes' => ['class' => $version_class],
-        ];
+          '#attributes' => array('class' => $version_class),
+        );
       }
 
       // Now, print any security updates.
       if (!empty($project['security updates'])) {
         $security_class[] = 'version-security';
         foreach ($project['security updates'] as $security_update) {
-          $versions_inner[] = [
+          $versions_inner[] = array(
             '#theme' => 'update_version',
             '#version' => $security_update,
             '#title' => t('Security update:'),
-            '#attributes' => ['class' => $security_class],
-          ];
+            '#attributes' => array('class' => $security_class),
+          );
         }
       }
     }
 
     if ($project['recommended'] !== $project['latest_version']) {
-      $versions_inner[] = [
+      $versions_inner[] = array(
         '#theme' => 'update_version',
         '#version' => $project['releases'][$project['latest_version']],
         '#title' => t('Latest version:'),
-        '#attributes' => ['class' => ['version-latest']],
-      ];
+        '#attributes' => array('class' => array('version-latest')),
+      );
     }
     if ($project['install_type'] == 'dev'
       && $project['status'] != UPDATE_CURRENT
       && isset($project['dev_version'])
       && $project['recommended'] !== $project['dev_version']) {
-      $versions_inner[] = [
+      $versions_inner[] = array(
         '#theme' => 'update_version',
         '#version' => $project['releases'][$project['dev_version']],
         '#title' => t('Development version:'),
-        '#attributes' => ['class' => ['version-latest']],
-      ];
+        '#attributes' => array('class' => array('version-latest')),
+      );
     }
   }
 
   if (isset($project['also'])) {
     foreach ($project['also'] as $also) {
-      $versions_inner[] = [
+      $versions_inner[] = array(
         '#theme' => 'update_version',
         '#version' => $project['releases'][$also],
         '#title' => t('Also available:'),
-        '#attributes' => ['class' => ['version-also-available']],
-      ];
+        '#attributes' => array('class' => array('version-also-available')),
+      );
     }
   }
 
@@ -222,10 +222,10 @@ function template_preprocess_update_project_status(&$variables) {
   sort($project['includes']);
   $variables['includes'] = $project['includes'];
 
-  $variables['extras'] = [];
+  $variables['extras'] = array();
   if (!empty($project['extra'])) {
     foreach ($project['extra'] as $value) {
-      $extra_item = [];
+      $extra_item = array();
       $extra_item['attributes'] = new Attribute();
       $extra_item['label'] = $value['label'];
       $extra_item['data'] = [
@@ -285,12 +285,12 @@ function template_preprocess_update_project_status(&$variables) {
       break;
   }
 
-  $variables['status']['icon'] = [
+  $variables['status']['icon'] = array(
     '#theme' => 'image',
     '#width' => 18,
     '#height' => 18,
     '#uri' => $uri,
     '#alt' => $text,
     '#title' => $text,
-  ];
+  );
 }

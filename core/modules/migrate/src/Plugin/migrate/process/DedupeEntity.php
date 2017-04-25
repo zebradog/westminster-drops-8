@@ -2,7 +2,7 @@
 
 namespace Drupal\migrate\Plugin\migrate\process;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\migrate\Plugin\MigrationInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -22,11 +22,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class DedupeEntity extends DedupeBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The entity storage.
+   * The entity query factory.
    *
-   * @var \Drupal\Core\Entity\EntityStorageInterface
+   * @var \Drupal\Core\Entity\Query\QueryFactoryInterface
    */
-  protected $entityStorage;
+  protected $entityQueryFactory;
 
   /**
    * The current migration.
@@ -38,10 +38,10 @@ class DedupeEntity extends DedupeBase implements ContainerFactoryPluginInterface
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration, QueryFactory $entity_query_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->migration = $migration;
-    $this->entityStorage = $entity_type_manager->getStorage($this->configuration['entity_type']);
+    $this->entityQueryFactory = $entity_query_factory;
   }
 
   /**
@@ -53,7 +53,7 @@ class DedupeEntity extends DedupeBase implements ContainerFactoryPluginInterface
       $plugin_id,
       $plugin_definition,
       $migration,
-      $container->get('entity_type.manager')
+      $container->get('entity.query')
     );
   }
 
@@ -63,7 +63,8 @@ class DedupeEntity extends DedupeBase implements ContainerFactoryPluginInterface
   protected function exists($value) {
     // Plugins are cached so for every run we need a new query object.
     $query = $this
-      ->entityStorage->getQuery()
+      ->entityQueryFactory
+      ->get($this->configuration['entity_type'], 'AND')
       ->condition($this->configuration['field'], $value);
     if (!empty($this->configuration['migrated'])) {
       // Check if each entity is in the ID map.

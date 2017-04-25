@@ -93,7 +93,7 @@ class FieldConfigListBuilder extends ConfigEntityListBuilder {
 
     // Sort the entities using the entity class's sort() method.
     // See \Drupal\Core\Config\Entity\ConfigEntityBase::sort().
-    uasort($entities, [$this->entityType->getClass(), 'sort']);
+    uasort($entities, array($this->entityType->getClass(), 'sort'));
     return $entities;
   }
 
@@ -101,14 +101,14 @@ class FieldConfigListBuilder extends ConfigEntityListBuilder {
    * {@inheritdoc}
    */
   public function buildHeader() {
-    $header = [
+    $header = array(
       'label' => $this->t('Label'),
-      'field_name' => [
+      'field_name' => array(
         'data' => $this->t('Machine name'),
-        'class' => [RESPONSIVE_PRIORITY_MEDIUM],
-      ],
+        'class' => array(RESPONSIVE_PRIORITY_MEDIUM),
+      ),
       'field_type' => $this->t('Field type'),
-    ];
+    );
     return $header + parent::buildHeader();
   }
 
@@ -118,31 +118,31 @@ class FieldConfigListBuilder extends ConfigEntityListBuilder {
   public function buildRow(EntityInterface $field_config) {
     /** @var \Drupal\field\FieldConfigInterface $field_config */
     $field_storage = $field_config->getFieldStorageDefinition();
-    $route_parameters = [
+    $route_parameters = array(
       'field_config' => $field_config->id(),
-    ] + FieldUI::getRouteBundleParameter($this->entityManager->getDefinition($this->targetEntityTypeId), $this->targetBundle);
+    ) + FieldUI::getRouteBundleParameter($this->entityManager->getDefinition($this->targetEntityTypeId), $this->targetBundle);
 
-    $row = [
+    $row = array(
       'id' => Html::getClass($field_config->getName()),
-      'data' => [
+      'data' => array(
         'label' => $field_config->getLabel(),
         'field_name' => $field_config->getName(),
-        'field_type' => [
-          'data' => [
+        'field_type' => array(
+          'data' => array(
             '#type' => 'link',
             '#title' => $this->fieldTypeManager->getDefinitions()[$field_storage->getType()]['label'],
             '#url' => Url::fromRoute("entity.field_config.{$this->targetEntityTypeId}_storage_edit_form", $route_parameters),
-            '#options' => ['attributes' => ['title' => $this->t('Edit field settings.')]],
-          ],
-        ],
-      ],
-    ];
+            '#options' => array('attributes' => array('title' => $this->t('Edit field settings.'))),
+          ),
+        ),
+      ),
+    );
 
     // Add the operations.
     $row['data'] = $row['data'] + parent::buildRow($field_config);
 
     if ($field_storage->isLocked()) {
-      $row['data']['operations'] = ['data' => ['#markup' => $this->t('Locked')]];
+      $row['data']['operations'] = array('data' => array('#markup' => $this->t('Locked')));
       $row['class'][] = 'menu-disabled';
     }
 
@@ -157,26 +157,26 @@ class FieldConfigListBuilder extends ConfigEntityListBuilder {
     $operations = parent::getDefaultOperations($entity);
 
     if ($entity->access('update') && $entity->hasLinkTemplate("{$entity->getTargetEntityTypeId()}-field-edit-form")) {
-      $operations['edit'] = [
+      $operations['edit'] = array(
         'title' => $this->t('Edit'),
         'weight' => 10,
         'url' => $entity->urlInfo("{$entity->getTargetEntityTypeId()}-field-edit-form"),
-      ];
+      );
     }
     if ($entity->access('delete') && $entity->hasLinkTemplate("{$entity->getTargetEntityTypeId()}-field-delete-form")) {
-      $operations['delete'] = [
+      $operations['delete'] = array(
         'title' => $this->t('Delete'),
         'weight' => 100,
         'url' => $entity->urlInfo("{$entity->getTargetEntityTypeId()}-field-delete-form"),
-      ];
+      );
     }
 
-    $operations['storage-settings'] = [
+    $operations['storage-settings'] = array(
       'title' => $this->t('Storage settings'),
       'weight' => 20,
-      'attributes' => ['title' => $this->t('Edit storage settings.')],
+      'attributes' => array('title' => $this->t('Edit storage settings.')),
       'url' => $entity->urlInfo("{$entity->getTargetEntityTypeId()}-storage-edit-form"),
-    ];
+    );
     $operations['edit']['attributes']['title'] = $this->t('Edit field settings.');
     $operations['delete']['attributes']['title'] = $this->t('Delete field.');
 

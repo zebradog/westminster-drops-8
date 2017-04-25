@@ -40,17 +40,17 @@ class EntityCrudHookTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['block', 'block_test', 'entity_crud_hook_test', 'file', 'taxonomy', 'node', 'comment'];
+  public static $modules = array('block', 'block_test', 'entity_crud_hook_test', 'file', 'taxonomy', 'node', 'comment');
 
-  protected $ids = [];
+  protected $ids = array();
 
   protected function setUp() {
     parent::setUp();
 
-    $this->installSchema('user', ['users_data']);
-    $this->installSchema('file', ['file_usage']);
-    $this->installSchema('node', ['node_access']);
-    $this->installSchema('comment', ['comment_entity_statistics']);
+    $this->installSchema('user', array('users_data'));
+    $this->installSchema('file', array('file_usage'));
+    $this->installSchema('node', array('node_access'));
+    $this->installSchema('comment', array('comment_entity_statistics'));
     $this->installConfig(['node', 'comment']);
   }
 
@@ -64,7 +64,7 @@ class EntityCrudHookTest extends EntityKernelTestBase {
    *   An array of plain-text messages in the order they should appear.
    */
   protected function assertHookMessageOrder($messages) {
-    $positions = [];
+    $positions = array();
     foreach ($messages as $message) {
       // Verify that each message is found and record its position.
       $position = array_search($message, $GLOBALS['entity_crud_hook_test']);
@@ -83,55 +83,55 @@ class EntityCrudHookTest extends EntityKernelTestBase {
    * Tests hook invocations for CRUD operations on blocks.
    */
   public function testBlockHooks() {
-    $entity = Block::create([
+    $entity = Block::create(array(
       'id' => 'stark_test_html',
       'plugin' => 'test_html',
       'theme' => 'stark',
-    ]);
+    ));
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_block_create called',
       'entity_crud_hook_test_entity_create called for type block',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $entity->save();
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_block_presave called',
       'entity_crud_hook_test_entity_presave called for type block',
       'entity_crud_hook_test_block_insert called',
       'entity_crud_hook_test_entity_insert called for type block',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $entity = Block::load($entity->id());
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_entity_load called for type block',
       'entity_crud_hook_test_block_load called',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $entity->label = 'New label';
     $entity->save();
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_block_presave called',
       'entity_crud_hook_test_entity_presave called for type block',
       'entity_crud_hook_test_block_update called',
       'entity_crud_hook_test_entity_update called for type block',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $entity->delete();
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_block_predelete called',
       'entity_crud_hook_test_entity_predelete called for type block',
       'entity_crud_hook_test_block_delete called',
       'entity_crud_hook_test_entity_delete called for type block',
-    ]);
+    ));
   }
 
   /**
@@ -158,9 +158,9 @@ class EntityCrudHookTest extends EntityKernelTestBase {
     ]);
     $node->save();
     $nid = $node->id();
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
 
-    $comment = Comment::create([
+    $comment = Comment::create(array(
       'cid' => NULL,
       'pid' => 0,
       'entity_id' => $nid,
@@ -172,51 +172,51 @@ class EntityCrudHookTest extends EntityKernelTestBase {
       'changed' => REQUEST_TIME,
       'status' => 1,
       'langcode' => LanguageInterface::LANGCODE_NOT_SPECIFIED,
-    ]);
+    ));
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_comment_create called',
       'entity_crud_hook_test_entity_create called for type comment',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $comment->save();
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_comment_presave called',
       'entity_crud_hook_test_entity_presave called for type comment',
       'entity_crud_hook_test_comment_insert called',
       'entity_crud_hook_test_entity_insert called for type comment',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $comment = Comment::load($comment->id());
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_entity_load called for type comment',
       'entity_crud_hook_test_comment_load called',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $comment->setSubject('New subject');
     $comment->save();
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_comment_presave called',
       'entity_crud_hook_test_entity_presave called for type comment',
       'entity_crud_hook_test_comment_update called',
       'entity_crud_hook_test_entity_update called for type comment',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $comment->delete();
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_comment_predelete called',
       'entity_crud_hook_test_entity_predelete called for type comment',
       'entity_crud_hook_test_comment_delete called',
       'entity_crud_hook_test_entity_delete called for type comment',
-    ]);
+    ));
   }
 
   /**
@@ -239,49 +239,49 @@ class EntityCrudHookTest extends EntityKernelTestBase {
       'changed' => REQUEST_TIME,
     ]);
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_file_create called',
       'entity_crud_hook_test_entity_create called for type file',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $file->save();
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_file_presave called',
       'entity_crud_hook_test_entity_presave called for type file',
       'entity_crud_hook_test_file_insert called',
       'entity_crud_hook_test_entity_insert called for type file',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $file = File::load($file->id());
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_entity_load called for type file',
       'entity_crud_hook_test_file_load called',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $file->setFilename('new.entity_crud_hook_test.file');
     $file->save();
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_file_presave called',
       'entity_crud_hook_test_entity_presave called for type file',
       'entity_crud_hook_test_file_update called',
       'entity_crud_hook_test_entity_update called for type file',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $file->delete();
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_file_predelete called',
       'entity_crud_hook_test_entity_predelete called for type file',
       'entity_crud_hook_test_file_delete called',
       'entity_crud_hook_test_entity_delete called for type file',
-    ]);
+    ));
   }
 
   /**
@@ -302,49 +302,49 @@ class EntityCrudHookTest extends EntityKernelTestBase {
       'changed' => REQUEST_TIME,
     ]);
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_node_create called',
       'entity_crud_hook_test_entity_create called for type node',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $node->save();
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_node_presave called',
       'entity_crud_hook_test_entity_presave called for type node',
       'entity_crud_hook_test_node_insert called',
       'entity_crud_hook_test_entity_insert called for type node',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $node = Node::load($node->id());
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_entity_load called for type node',
       'entity_crud_hook_test_node_load called',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $node->title = 'New title';
     $node->save();
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_node_presave called',
       'entity_crud_hook_test_entity_presave called for type node',
       'entity_crud_hook_test_node_update called',
       'entity_crud_hook_test_entity_update called for type node',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $node->delete();
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_node_predelete called',
       'entity_crud_hook_test_entity_predelete called for type node',
       'entity_crud_hook_test_node_delete called',
       'entity_crud_hook_test_entity_delete called for type node',
-    ]);
+    ));
   }
 
   /**
@@ -361,7 +361,7 @@ class EntityCrudHookTest extends EntityKernelTestBase {
       'module' => 'entity_crud_hook_test',
     ]);
     $vocabulary->save();
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
 
     $term = Term::create([
       'vid' => $vocabulary->id(),
@@ -371,49 +371,49 @@ class EntityCrudHookTest extends EntityKernelTestBase {
       'format' => 1,
     ]);
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_taxonomy_term_create called',
       'entity_crud_hook_test_entity_create called for type taxonomy_term',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $term->save();
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_taxonomy_term_presave called',
       'entity_crud_hook_test_entity_presave called for type taxonomy_term',
       'entity_crud_hook_test_taxonomy_term_insert called',
       'entity_crud_hook_test_entity_insert called for type taxonomy_term',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $term = Term::load($term->id());
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_entity_load called for type taxonomy_term',
       'entity_crud_hook_test_taxonomy_term_load called',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $term->setName('New name');
     $term->save();
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_taxonomy_term_presave called',
       'entity_crud_hook_test_entity_presave called for type taxonomy_term',
       'entity_crud_hook_test_taxonomy_term_update called',
       'entity_crud_hook_test_entity_update called for type taxonomy_term',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $term->delete();
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_taxonomy_term_predelete called',
       'entity_crud_hook_test_entity_predelete called for type taxonomy_term',
       'entity_crud_hook_test_taxonomy_term_delete called',
       'entity_crud_hook_test_entity_delete called for type taxonomy_term',
-    ]);
+    ));
   }
 
   /**
@@ -430,49 +430,49 @@ class EntityCrudHookTest extends EntityKernelTestBase {
       'module' => 'entity_crud_hook_test',
     ]);
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_taxonomy_vocabulary_create called',
       'entity_crud_hook_test_entity_create called for type taxonomy_vocabulary',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $vocabulary->save();
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_taxonomy_vocabulary_presave called',
       'entity_crud_hook_test_entity_presave called for type taxonomy_vocabulary',
       'entity_crud_hook_test_taxonomy_vocabulary_insert called',
       'entity_crud_hook_test_entity_insert called for type taxonomy_vocabulary',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $vocabulary = Vocabulary::load($vocabulary->id());
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_entity_load called for type taxonomy_vocabulary',
       'entity_crud_hook_test_taxonomy_vocabulary_load called',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $vocabulary->set('name', 'New name');
     $vocabulary->save();
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_taxonomy_vocabulary_presave called',
       'entity_crud_hook_test_entity_presave called for type taxonomy_vocabulary',
       'entity_crud_hook_test_taxonomy_vocabulary_update called',
       'entity_crud_hook_test_entity_update called for type taxonomy_vocabulary',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $vocabulary->delete();
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_taxonomy_vocabulary_predelete called',
       'entity_crud_hook_test_entity_predelete called for type taxonomy_vocabulary',
       'entity_crud_hook_test_taxonomy_vocabulary_delete called',
       'entity_crud_hook_test_entity_delete called for type taxonomy_vocabulary',
-    ]);
+    ));
   }
 
   /**
@@ -487,58 +487,58 @@ class EntityCrudHookTest extends EntityKernelTestBase {
       'language' => 'en',
     ]);
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_user_create called',
       'entity_crud_hook_test_entity_create called for type user',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $account->save();
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_user_presave called',
       'entity_crud_hook_test_entity_presave called for type user',
       'entity_crud_hook_test_user_insert called',
       'entity_crud_hook_test_entity_insert called for type user',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     User::load($account->id());
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_entity_load called for type user',
       'entity_crud_hook_test_user_load called',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     $account->name = 'New name';
     $account->save();
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_user_presave called',
       'entity_crud_hook_test_entity_presave called for type user',
       'entity_crud_hook_test_user_update called',
       'entity_crud_hook_test_entity_update called for type user',
-    ]);
+    ));
 
-    $GLOBALS['entity_crud_hook_test'] = [];
+    $GLOBALS['entity_crud_hook_test'] = array();
     user_delete($account->id());
 
-    $this->assertHookMessageOrder([
+    $this->assertHookMessageOrder(array(
       'entity_crud_hook_test_user_predelete called',
       'entity_crud_hook_test_entity_predelete called for type user',
       'entity_crud_hook_test_user_delete called',
       'entity_crud_hook_test_entity_delete called for type user',
-    ]);
+    ));
   }
 
   /**
    * Tests rollback from failed entity save.
    */
-  public function testEntityRollback() {
+  function testEntityRollback() {
     // Create a block.
     try {
-      EntityTest::create(['name' => 'fail_insert'])->save();
+      EntityTest::create(array('name' => 'fail_insert'))->save();
       $this->fail('Expected exception has not been thrown.');
     }
     catch (\Exception $e) {

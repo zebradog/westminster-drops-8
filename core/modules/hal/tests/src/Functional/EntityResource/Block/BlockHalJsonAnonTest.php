@@ -27,4 +27,9 @@ class BlockHalJsonAnonTest extends BlockResourceTestBase {
    */
   protected static $mimeType = 'application/hal+json';
 
+  /**
+   * {@inheritdoc}
+   */
+  protected static $expectedErrorMimeType = 'application/json';
+
 }

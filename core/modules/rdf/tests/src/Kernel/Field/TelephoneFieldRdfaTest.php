@@ -26,7 +26,7 @@ class TelephoneFieldRdfaTest extends FieldRdfaTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['telephone', 'text'];
+  public static $modules = array('telephone', 'text');
 
   protected function setUp() {
     parent::setUp();
@@ -35,13 +35,13 @@ class TelephoneFieldRdfaTest extends FieldRdfaTestBase {
 
     // Add the mapping.
     $mapping = rdf_get_mapping('entity_test', 'entity_test');
-    $mapping->setFieldMapping($this->fieldName, [
-      'properties' => ['schema:telephone'],
-    ])->save();
+    $mapping->setFieldMapping($this->fieldName, array(
+      'properties' => array('schema:telephone'),
+    ))->save();
 
     // Set up test values.
     $this->testValue = '555-555-5555';
-    $this->entity = EntityTest::create([]);
+    $this->entity = EntityTest::create(array());
     $this->entity->{$this->fieldName}->value = $this->testValue;
   }
 
@@ -50,18 +50,18 @@ class TelephoneFieldRdfaTest extends FieldRdfaTestBase {
    */
   public function testAllFormatters() {
     // Tests the plain formatter.
-    $this->assertFormatterRdfa(['type' => 'string'], 'http://schema.org/telephone', ['value' => $this->testValue]);
+    $this->assertFormatterRdfa(array('type' => 'string'), 'http://schema.org/telephone', array('value' => $this->testValue));
     // Tests the telephone link formatter.
-    $this->assertFormatterRdfa(['type' => 'telephone_link'], 'http://schema.org/telephone', ['value' => 'tel:' . $this->testValue, 'type' => 'uri']);
+    $this->assertFormatterRdfa(array('type' => 'telephone_link'), 'http://schema.org/telephone', array('value' => 'tel:' . $this->testValue, 'type' => 'uri'));
 
-    $formatter = [
+    $formatter = array(
       'type' => 'telephone_link',
-      'settings' => ['title' => 'Contact us'],
-    ];
-    $expected_rdf_value = [
+      'settings' => array('title' => 'Contact us'),
+    );
+    $expected_rdf_value = array(
       'value' => 'tel:' . $this->testValue,
       'type' => 'uri',
-    ];
+    );
     // Tests the telephone link formatter with custom title.
     $this->assertFormatterRdfa($formatter, 'http://schema.org/telephone', $expected_rdf_value);
   }

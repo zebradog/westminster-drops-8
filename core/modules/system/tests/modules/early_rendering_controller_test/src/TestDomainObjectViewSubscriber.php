@@ -37,7 +37,7 @@ class TestDomainObjectViewSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  static function getSubscribedEvents() {
     $events[KernelEvents::VIEW][] = ['onViewTestDomainObject'];
 
     return $events;

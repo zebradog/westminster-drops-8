@@ -27,19 +27,19 @@ class DrupalLink extends CKEditorPluginBase {
    * {@inheritdoc}
    */
   public function getLibraries(Editor $editor) {
-    return [
+    return array(
       'core/drupal.ajax',
-    ];
+    );
   }
 
   /**
    * {@inheritdoc}
    */
   public function getConfig(Editor $editor) {
-    return [
-      'drupalLink_dialogTitleAdd' => $this->t('Add Link'),
-      'drupalLink_dialogTitleEdit' => $this->t('Edit Link'),
-    ];
+    return array(
+      'drupalLink_dialogTitleAdd' => t('Add Link'),
+      'drupalLink_dialogTitleEdit' => t('Edit Link'),
+    );
   }
 
   /**
@@ -47,16 +47,16 @@ class DrupalLink extends CKEditorPluginBase {
    */
   public function getButtons() {
     $path = drupal_get_path('module', 'ckeditor') . '/js/plugins/drupallink';
-    return [
-      'DrupalLink' => [
-        'label' => $this->t('Link'),
+    return array(
+      'DrupalLink' => array(
+        'label' => t('Link'),
         'image' => $path . '/icons/drupallink.png',
-      ],
-      'DrupalUnlink' => [
-        'label' => $this->t('Unlink'),
+      ),
+      'DrupalUnlink' => array(
+        'label' => t('Unlink'),
         'image' => $path . '/icons/drupalunlink.png',
-      ],
-    ];
+      ),
+    );
   }
 
 }

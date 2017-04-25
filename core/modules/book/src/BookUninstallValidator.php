@@ -2,7 +2,7 @@
 
 namespace Drupal\book;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Extension\ModuleUninstallValidatorInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
@@ -23,25 +23,25 @@ class BookUninstallValidator implements ModuleUninstallValidatorInterface {
   protected $bookOutlineStorage;
 
   /**
-   * The entity type manager.
+   * The entity query for node.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   * @var \Drupal\Core\Entity\Query\QueryInterface
    */
-  protected $entityTypeManager;
+  protected $entityQuery;
 
   /**
    * Constructs a new BookUninstallValidator.
    *
    * @param \Drupal\book\BookOutlineStorageInterface $book_outline_storage
    *   The book outline storage.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
+   * @param \Drupal\Core\Entity\Query\QueryFactory $query_factory
+   *   The entity query factory.
    * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
    *   The string translation service.
    */
-  public function __construct(BookOutlineStorageInterface $book_outline_storage, EntityTypeManagerInterface $entity_type_manager, TranslationInterface $string_translation) {
+  public function __construct(BookOutlineStorageInterface $book_outline_storage, QueryFactory $query_factory, TranslationInterface $string_translation) {
     $this->bookOutlineStorage = $book_outline_storage;
-    $this->entityTypeManager = $entity_type_manager;
+    $this->entityQuery = $query_factory->get('node');
     $this->stringTranslation = $string_translation;
   }
 
@@ -82,7 +82,7 @@ class BookUninstallValidator implements ModuleUninstallValidatorInterface {
    *   TRUE if there are book nodes, FALSE otherwise.
    */
   protected function hasBookNodes() {
-    $nodes = $this->entityTypeManager->getStorage('node')->getQuery()
+    $nodes = $this->entityQuery
       ->condition('type', 'book')
       ->accessCheck(FALSE)
       ->range(0, 1)

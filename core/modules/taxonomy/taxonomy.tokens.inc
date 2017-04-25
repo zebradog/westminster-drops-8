@@ -12,80 +12,80 @@ use Drupal\taxonomy\Entity\Vocabulary;
  * Implements hook_token_info().
  */
 function taxonomy_token_info() {
-  $types['term'] = [
+  $types['term'] = array(
     'name' => t("Taxonomy terms"),
     'description' => t("Tokens related to taxonomy terms."),
     'needs-data' => 'term',
-  ];
-  $types['vocabulary'] = [
+  );
+  $types['vocabulary'] = array(
     'name' => t("Vocabularies"),
     'description' => t("Tokens related to taxonomy vocabularies."),
     'needs-data' => 'vocabulary',
-  ];
+  );
 
   // Taxonomy term related variables.
-  $term['tid'] = [
+  $term['tid'] = array(
     'name' => t("Term ID"),
     'description' => t("The unique ID of the taxonomy term."),
-  ];
-  $term['name'] = [
+  );
+  $term['name'] = array(
     'name' => t("Name"),
     'description' => t("The name of the taxonomy term."),
-  ];
-  $term['description'] = [
+  );
+  $term['description'] = array(
     'name' => t("Description"),
     'description' => t("The optional description of the taxonomy term."),
-  ];
-  $term['node-count'] = [
+  );
+  $term['node-count'] = array(
     'name' => t("Node count"),
     'description' => t("The number of nodes tagged with the taxonomy term."),
-  ];
-  $term['url'] = [
+  );
+  $term['url'] = array(
     'name' => t("URL"),
     'description' => t("The URL of the taxonomy term."),
-  ];
+  );
 
   // Taxonomy vocabulary related variables.
-  $vocabulary['vid'] = [
+  $vocabulary['vid'] = array(
     'name' => t("Vocabulary ID"),
     'description' => t("The unique ID of the taxonomy vocabulary."),
-  ];
-  $vocabulary['name'] = [
+  );
+  $vocabulary['name'] = array(
     'name' => t("Name"),
     'description' => t("The name of the taxonomy vocabulary."),
-  ];
-  $vocabulary['description'] = [
+  );
+  $vocabulary['description'] = array(
     'name' => t("Description"),
     'description' => t("The optional description of the taxonomy vocabulary."),
-  ];
-  $vocabulary['node-count'] = [
+  );
+  $vocabulary['node-count'] = array(
     'name' => t("Node count"),
     'description' => t("The number of nodes tagged with terms belonging to the taxonomy vocabulary."),
-  ];
-  $vocabulary['term-count'] = [
+  );
+  $vocabulary['term-count'] = array(
     'name' => t("Term count"),
     'description' => t("The number of terms belonging to the taxonomy vocabulary."),
-  ];
+  );
 
   // Chained tokens for taxonomies
-  $term['vocabulary'] = [
+  $term['vocabulary'] = array(
     'name' => t("Vocabulary"),
     'description' => t("The vocabulary the taxonomy term belongs to."),
     'type' => 'vocabulary',
-  ];
-  $term['parent'] = [
+  );
+  $term['parent'] = array(
     'name' => t("Parent term"),
     'description' => t("The parent term of the taxonomy term, if one exists."),
     'type' => 'term',
-  ];
+  );
 
-  return [
+  return array(
     'types' => $types,
-    'tokens' => [
+    'tokens' => array(
       'term' => $term,
       'vocabulary' => $vocabulary,
-    ],
-  ];
+    ),
+  );
 }
 
 /**
@@ -94,7 +94,7 @@ function taxonomy_token_info() {
 function taxonomy_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
   $token_service = \Drupal::token();
 
-  $replacements = [];
+  $replacements = array();
   $taxonomy_storage = \Drupal::entityManager()->getStorage('taxonomy_term');
   if ($type == 'term' && !empty($data['term'])) {
     $term = $data['term'];
@@ -116,7 +116,7 @@ function taxonomy_tokens($type, $tokens, array $data, array $options, Bubbleable
           break;
 
         case 'url':
-          $replacements[$original] = $term->url('canonical', ['absolute' => TRUE]);
+          $replacements[$original] = $term->url('canonical', array('absolute' => TRUE));
           break;
 
         case 'node-count':
@@ -145,12 +145,12 @@ function taxonomy_tokens($type, $tokens, array $data, array $options, Bubbleable
 
     if ($vocabulary_tokens = $token_service->findWithPrefix($tokens, 'vocabulary')) {
       $vocabulary = Vocabulary::load($term->bundle());
-      $replacements += $token_service->generate('vocabulary', $vocabulary_tokens, ['vocabulary' => $vocabulary], $options, $bubbleable_metadata);
+      $replacements += $token_service->generate('vocabulary', $vocabulary_tokens, array('vocabulary' => $vocabulary), $options, $bubbleable_metadata);
     }
 
     if (($vocabulary_tokens = $token_service->findWithPrefix($tokens, 'parent')) && $parents = $taxonomy_storage->loadParents($term->id())) {
       $parent = array_pop($parents);
-      $replacements += $token_service->generate('term', $vocabulary_tokens, ['term' => $parent], $options, $bubbleable_metadata);
+      $replacements += $token_service->generate('term', $vocabulary_tokens, array('term' => $parent), $options, $bubbleable_metadata);
     }
   }
 

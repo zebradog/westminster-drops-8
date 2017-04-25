@@ -30,7 +30,7 @@ class FileFieldItemList extends EntityReferenceFieldItemList {
     else {
       // Get current target file entities and file IDs.
       $files = $this->referencedEntities();
-      $ids = [];
+      $ids = array();
 
       /** @var \Drupal\file\FileInterface $file */
       foreach ($files as $file) {
@@ -48,7 +48,7 @@ class FileFieldItemList extends EntityReferenceFieldItemList {
 
       // Get the file IDs attached to the field before this update.
       $field_name = $this->getFieldDefinition()->getName();
-      $original_ids = [];
+      $original_ids = array();
       $langcode = $this->getLangcode();
       $original = $entity->original;
       if ($original->hasTranslation($langcode)) {

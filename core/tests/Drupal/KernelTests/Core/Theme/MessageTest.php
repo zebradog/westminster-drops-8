@@ -14,21 +14,21 @@ class MessageTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['system'];
+  public static $modules = array('system');
 
   /**
    * Tests setting messages output.
    */
-  public function testMessages() {
+  function testMessages() {
     // Enable the Classy theme.
     \Drupal::service('theme_handler')->install(['classy']);
-    $this->config('system.theme')->set('default', 'classy')->save();
+    \Drupal::service('theme_handler')->setDefault('classy');
 
     drupal_set_message('An error occurred', 'error');
     drupal_set_message('But then something nice happened');
-    $messages = [
+    $messages = array(
       '#type' => 'status_messages',
-    ];
+    );
     $this->render($messages);
     $this->assertRaw('messages messages--error');
     $this->assertRaw('messages messages--status');

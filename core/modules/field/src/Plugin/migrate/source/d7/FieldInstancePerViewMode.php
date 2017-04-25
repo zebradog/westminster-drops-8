@@ -18,7 +18,7 @@ class FieldInstancePerViewMode extends DrupalSqlBase {
    * {@inheritdoc}
    */
   protected function initializeIterator() {
-    $rows = [];
+    $rows = array();
     $result = $this->prepareQuery()->execute();
     foreach ($result as $field_instance) {
       $data = unserialize($field_instance['data']);
@@ -53,7 +53,7 @@ class FieldInstancePerViewMode extends DrupalSqlBase {
    * {@inheritdoc}
    */
   public function fields() {
-    return [
+    return array(
       'entity_type' => $this->t('The entity type ID.'),
       'bundle' => $this->t('The bundle ID.'),
       'field_name' => $this->t('Machine name of the field.'),
@@ -64,27 +64,27 @@ class FieldInstancePerViewMode extends DrupalSqlBase {
       'settings' => $this->t('Array of formatter-specific settings.'),
       'module' => $this->t('The module providing the formatter.'),
       'weight' => $this->t('Display weight of the field.'),
-    ];
+    );
   }
 
   /**
    * {@inheritdoc}
    */
   public function getIds() {
-    return [
-      'entity_type' => [
+    return array(
+      'entity_type' => array(
         'type' => 'string',
-      ],
-      'bundle' => [
+      ),
+      'bundle' => array(
         'type' => 'string',
-      ],
-      'view_mode' => [
+      ),
+      'view_mode' => array(
         'type' => 'string',
-      ],
-      'field_name' => [
+      ),
+      'field_name' => array(
         'type' => 'string',
-      ],
-    ];
+      ),
+    );
   }
 
   /**

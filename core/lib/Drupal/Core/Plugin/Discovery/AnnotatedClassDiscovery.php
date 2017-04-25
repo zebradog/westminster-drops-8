@@ -50,7 +50,7 @@ class AnnotatedClassDiscovery extends ComponentAnnotatedClassDiscovery {
    * @param string[] $annotation_namespaces
    *   (optional) Additional namespaces to scan for annotation definitions.
    */
-  public function __construct($subdir, \Traversable $root_namespaces, $plugin_definition_annotation_name = 'Drupal\Component\Annotation\Plugin', array $annotation_namespaces = []) {
+  function __construct($subdir, \Traversable $root_namespaces, $plugin_definition_annotation_name = 'Drupal\Component\Annotation\Plugin', array $annotation_namespaces = []) {
     if ($subdir) {
       // Prepend a directory separator to $subdir,
       // if it does not already have one.
@@ -61,7 +61,7 @@ class AnnotatedClassDiscovery extends ComponentAnnotatedClassDiscovery {
       $this->namespaceSuffix = str_replace('/', '\\', $subdir);
     }
     $this->rootNamespacesIterator = $root_namespaces;
-    $plugin_namespaces = [];
+    $plugin_namespaces = array();
     parent::__construct($plugin_namespaces, $plugin_definition_annotation_name, $annotation_namespaces);
   }
 
@@ -113,7 +113,7 @@ class AnnotatedClassDiscovery extends ComponentAnnotatedClassDiscovery {
    * {@inheritdoc}
    */
   protected function getPluginNamespaces() {
-    $plugin_namespaces = [];
+    $plugin_namespaces = array();
     if ($this->namespaceSuffix) {
       foreach ($this->rootNamespacesIterator as $namespace => $dirs) {
         // Append the namespace suffix to the base namespace, to obtain the

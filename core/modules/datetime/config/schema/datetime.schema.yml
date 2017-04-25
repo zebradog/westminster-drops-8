@@ -47,8 +47,10 @@ field.formatter.settings.datetime_custom:
   label: 'Datetime custom display format settings'
   mapping:
     date_format:
-      type: date_format
+      type: string
       label: 'Date/time format'
+      translatable: true
+      translation context: 'PHP date format'
 
 field.formatter.settings.datetime_time_ago:
   type: mapping

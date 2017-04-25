@@ -18,6 +18,11 @@ function block_install() {
 }
 
 /**
+ * @addtogroup updates-8.0.0-beta
+ * @{
+ */
+
+/**
  * Update block visibility context mapping.
  */
 function block_update_8001() {
@@ -117,3 +122,7 @@ function block_update_8003() {
 
   return t('Block settings updated.');
 }
+
+/**
+ * @} End of "addtogroup updates-8.0.0-beta".
+ */

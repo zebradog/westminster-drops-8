@@ -41,14 +41,14 @@ class ParamConversionEnhancerTest extends UnitTestCase {
   public function testEnhance() {
     $route = new Route('/test/{id}/{literal}/{null}');
 
-    $raw_variables = [
+    $raw_variables = array(
       'id' => 1,
       'literal' => 'this is a literal',
       'null' => NULL,
-    ];
-    $defaults = [
+    );
+    $defaults = array(
       RouteObjectInterface::ROUTE_OBJECT => $route,
-    ] + $raw_variables;
+    ) + $raw_variables;
 
     $expected = $defaults;
     $expected['id'] = 'something_better!';
@@ -75,10 +75,10 @@ class ParamConversionEnhancerTest extends UnitTestCase {
    */
   public function testCopyRawVariables() {
     $route = new Route('/test/{id}');
-    $defaults = [
+    $defaults = array(
       RouteObjectInterface::ROUTE_OBJECT => $route,
       'id' => '1',
-    ];
+    );
     // Set one default to mirror another by reference.
     $defaults['bar'] = &$defaults['id'];
     $this->paramConverterManager->expects($this->any())
@@ -89,7 +89,7 @@ class ParamConversionEnhancerTest extends UnitTestCase {
         $defaults['bar'] = '2';
         return $defaults;
       }));
-    $expected = new ParameterBag(['id' => 1]);
+    $expected = new ParameterBag(array('id' => 1));
     $result = $this->paramConversionEnhancer->enhance($defaults, new Request());
     $this->assertEquals($result['_raw_variables'], $expected);
   }

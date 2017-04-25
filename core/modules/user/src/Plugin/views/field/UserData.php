@@ -58,8 +58,8 @@ class UserData extends FieldPluginBase {
   protected function defineOptions() {
     $options = parent::defineOptions();
 
-    $options['data_module'] = ['default' => ''];
-    $options['data_name'] = ['default' => ''];
+    $options['data_module'] = array('default' => '');
+    $options['data_name'] = array('default' => '');
 
     return $options;
   }
@@ -71,25 +71,25 @@ class UserData extends FieldPluginBase {
     parent::buildOptionsForm($form, $form_state);
 
     $modules = $this->moduleHandler->getModuleList();
-    $names = [];
+    $names = array();
     foreach (array_keys($modules) as $name) {
       $names[$name] = $this->moduleHandler->getName($name);
     }
 
-    $form['data_module'] = [
+    $form['data_module'] = array(
       '#title' => $this->t('Module name'),
       '#type' => 'select',
       '#description' => $this->t('The module which sets this user data.'),
       '#default_value' => $this->options['data_module'],
       '#options' => $names,
-    ];
+    );
 
-    $form['data_name'] = [
+    $form['data_name'] = array(
       '#title' => $this->t('Name'),
       '#type' => 'textfield',
       '#description' => $this->t('The name of the data key.'),
       '#default_value' => $this->options['data_name'],
-    ];
+    );
   }
 
   /**

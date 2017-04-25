@@ -28,8 +28,8 @@ class PhpStorageFactory {
    * @return \Drupal\Component\PhpStorage\PhpStorageInterface
    *   An instantiated storage for the specified name.
    */
-  public static function get($name) {
-    $configuration = [];
+  static function get($name) {
+    $configuration = array();
     $overrides = Settings::get('php_storage');
     if (isset($overrides[$name])) {
       $configuration = $overrides[$name];

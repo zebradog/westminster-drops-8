@@ -13,7 +13,6 @@ use Drupal\Core\Validation\Plugin\Validation\Constraint\PrimitiveTypeConstraint;
 use Drupal\Core\Validation\Plugin\Validation\Constraint\PrimitiveTypeConstraintValidator;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Tests\UnitTestCase;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @coversDefaultClass \Drupal\Core\Validation\Plugin\Validation\Constraint\PrimitiveTypeConstraintValidator
@@ -27,7 +26,7 @@ class PrimitiveTypeConstraintValidatorTest extends UnitTestCase {
    * @dataProvider provideTestValidate
    */
   public function testValidate(PrimitiveInterface $typed_data, $value, $valid) {
-    $context = $this->getMock(ExecutionContextInterface::class);
+    $context = $this->getMock('\Symfony\Component\Validator\Context\ExecutionContextInterface');
     $context->expects($this->any())
       ->method('getObject')
       ->willReturn($typed_data);

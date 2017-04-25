@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\hal\Functional\EntityResource\ConfigTest;
 
+use Drupal\Tests\hal\Functional\HalJsonBasicAuthWorkaroundFor2805281Trait;
 use Drupal\Tests\rest\Functional\BasicAuthResourceTestTrait;
 use Drupal\Tests\rest\Functional\EntityResource\ConfigTest\ConfigTestResourceTestBase;
 
@@ -30,6 +31,16 @@ class ConfigTestHalJsonBasicAuthTest extends ConfigTestResourceTestBase {
   /**
    * {@inheritdoc}
    */
+  protected static $expectedErrorMimeType = 'application/json';
+
+  /**
+   * {@inheritdoc}
+   */
   protected static $auth = 'basic_auth';
+
+  // @todo Fix in https://www.drupal.org/node/2805281: remove this trait usage.
+  use HalJsonBasicAuthWorkaroundFor2805281Trait {
+    HalJsonBasicAuthWorkaroundFor2805281Trait::assertResponseWhenMissingAuthentication insteadof BasicAuthResourceTestTrait;
+  }
 
 }

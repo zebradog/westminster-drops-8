@@ -18,7 +18,13 @@ class ModerationStateNodeTest extends ModerationStateTestBase {
   protected function setUp() {
     parent::setUp();
     $this->drupalLogin($this->adminUser);
-    $this->createContentTypeFromUi('Moderated content', 'moderated_content', TRUE);
+    $this->createContentTypeFromUi(
+      'Moderated content',
+      'moderated_content',
+      TRUE,
+      ['draft', 'needs_review', 'published'],
+      'draft'
+    );
     $this->grantUserPermissionToCreateContentOfType($this->adminUser, 'moderated_content');
   }
 
@@ -29,11 +35,19 @@ class ModerationStateNodeTest extends ModerationStateTestBase {
     $this->drupalPostForm('node/add/moderated_content', [
       'title[0][value]' => 'moderated content',
     ], t('Save and Create New Draft'));
-    $node = $this->getNodeByTitle('moderated content');
-    if (!$node) {
+    $nodes = \Drupal::entityTypeManager()
+      ->getStorage('node')
+      ->loadByProperties([
+        'title' => 'moderated content',
+      ]);
+
+    if (!$nodes) {
       $this->fail('Test node was not saved correctly.');
+      return;
     }
-    $this->assertEqual('draft', $node->moderation_state->value);
+
+    $node = reset($nodes);
+    $this->assertEqual('draft', $node->moderation_state->target_id);
 
     $path = 'node/' . $node->id() . '/edit';
     // Set up published revision.
@@ -42,34 +56,39 @@ class ModerationStateNodeTest extends ModerationStateTestBase {
     /* @var \Drupal\node\NodeInterface $node */
     $node = \Drupal::entityTypeManager()->getStorage('node')->load($node->id());
     $this->assertTrue($node->isPublished());
-    $this->assertEqual('published', $node->moderation_state->value);
+    $this->assertEqual('published', $node->moderation_state->target_id);
 
     // Verify that the state field is not shown.
     $this->assertNoText('Published');
 
     // Delete the node.
-    $this->drupalPostForm('node/' . $node->id() . '/delete', [], t('Delete'));
+    $this->drupalPostForm('node/' . $node->id() . '/delete', array(), t('Delete'));
     $this->assertText(t('The Moderated content moderated content has been deleted.'));
 
-    // Disable content moderation.
-    $this->drupalPostForm('admin/structure/types/manage/moderated_content/moderation', ['workflow' => ''], t('Save'));
     $this->drupalGet('admin/structure/types/manage/moderated_content/moderation');
-    $this->assertOptionSelected('edit-workflow', '');
-    // Ensure the parent environment is up-to-date.
-    // @see content_moderation_workflow_insert()
-    \Drupal::service('entity_type.bundle.info')->clearCachedBundles();
-    \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
-
-    // Create a new node.
+    $this->assertFieldByName('enable_moderation_state');
+    $this->assertFieldChecked('edit-enable-moderation-state');
+    $this->drupalPostForm(NULL, ['enable_moderation_state' => FALSE], t('Save'));
+    $this->drupalGet('admin/structure/types/manage/moderated_content/moderation');
+    $this->assertFieldByName('enable_moderation_state');
+    $this->assertNoFieldChecked('edit-enable-moderation-state');
     $this->drupalPostForm('node/add/moderated_content', [
       'title[0][value]' => 'non-moderated content',
     ], t('Save and publish'));
 
-    $node = $this->getNodeByTitle('non-moderated content');
-    if (!$node) {
+    $nodes = \Drupal::entityTypeManager()
+      ->getStorage('node')
+      ->loadByProperties([
+        'title' => 'non-moderated content',
+      ]);
+
+    if (!$nodes) {
       $this->fail('Non-moderated test node was not saved correctly.');
+      return;
     }
-    $this->assertEqual(NULL, $node->moderation_state->value);
+
+    $node = reset($nodes);
+    $this->assertEqual(NULL, $node->moderation_state->target_id);
   }
 
   /**

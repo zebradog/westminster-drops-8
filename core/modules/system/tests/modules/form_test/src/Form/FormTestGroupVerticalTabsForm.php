@@ -21,27 +21,27 @@ class FormTestGroupVerticalTabsForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['vertical_tabs'] = [
+    $form['vertical_tabs'] = array(
       '#type' => 'vertical_tabs',
-    ];
-    $form['meta'] = [
+    );
+    $form['meta'] = array(
       '#type' => 'details',
       '#title' => 'First group element',
       '#group' => 'vertical_tabs',
-    ];
-    $form['meta']['element'] = [
+    );
+    $form['meta']['element'] = array(
       '#type' => 'textfield',
       '#title' => 'First nested element in details element',
-    ];
-    $form['meta_2'] = [
+    );
+    $form['meta_2'] = array(
       '#type' => 'details',
       '#title' => 'Second group element',
       '#group' => 'vertical_tabs',
-    ];
-    $form['meta_2']['element_2'] = [
+    );
+    $form['meta_2']['element_2'] = array(
       '#type' => 'textfield',
       '#title' => 'Second nested element in details element',
-    ];
+    );
     return $form;
   }
 

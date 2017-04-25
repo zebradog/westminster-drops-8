@@ -21,34 +21,34 @@ class FormTestPatternForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['textfield'] = [
+    $form['textfield'] = array(
       '#type' => 'textfield',
       '#title' => 'One digit followed by lowercase letters',
       '#pattern' => '[0-9][a-z]+',
-    ];
-    $form['tel'] = [
+    );
+    $form['tel'] = array(
       '#type' => 'tel',
       '#title' => 'Everything except numbers',
       '#pattern' => '[^\d]*',
-    ];
-    $form['password'] = [
+    );
+    $form['password'] = array(
       '#type' => 'password',
       '#title' => 'Password',
       '#pattern' => '[01]+',
-    ];
-    $form['url'] = [
+    );
+    $form['url'] = array(
       '#type' => 'url',
       '#title' => 'Client side validation',
       '#decription' => 'Just client side validation, using the #pattern attribute.',
-      '#attributes' => [
+      '#attributes' => array(
         'pattern' => '.*foo.*',
-      ],
+      ),
       '#pattern' => 'ignored',
-    ];
-    $form['submit'] = [
+    );
+    $form['submit'] = array(
       '#type' => 'submit',
       '#value' => 'Submit',
-    ];
+    );
     return $form;
   }
 

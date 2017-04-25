@@ -51,48 +51,48 @@ class StorageComparerTest extends UnitTestCase {
   protected function getConfigData() {
     $uuid = new Php();
     // Mock data using minimal data to use ConfigDependencyManger.
-    $this->configData = [
+    $this->configData = array(
       // Simple config that controls configuration sync.
-      'system.site' => [
+      'system.site' => array(
         'title' => 'Drupal',
         'uuid' => $uuid->generate(),
-      ],
+      ),
       // Config entity which requires another config entity.
-      'field.field.node.article.body' => [
+      'field.field.node.article.body' => array(
         'id' => 'node.article.body',
         'uuid' => $uuid->generate(),
-        'dependencies' => [
-          'config' => [
+        'dependencies' => array(
+          'config' => array(
             'field.storage.node.body'
-          ],
-        ],
-      ],
+          ),
+        ),
+      ),
       // Config entity which is required by another config entity.
-      'field.storage.node.body' => [
+      'field.storage.node.body' => array(
         'id' => 'node.body',
         'uuid' => $uuid->generate(),
-        'dependencies' => [
-          'module' => [
+        'dependencies' => array(
+          'module' => array(
             'text',
-          ],
-        ],
-      ],
+          ),
+        ),
+      ),
       // Config entity not which has no dependencies on configuration.
-      'views.view.test_view' => [
+      'views.view.test_view' => array(
         'id' => 'test_view',
         'uuid' => $uuid->generate(),
-        'dependencies' => [
-          'module' => [
+        'dependencies' => array(
+          'module' => array(
             'node',
-          ],
-        ],
-      ],
+          ),
+        ),
+      ),
       // Simple config.
-      'system.performance' => [
+      'system.performance' => array(
         'stale_file_threshold' => 2592000
-      ],
+      ),
 
-    ];
+    );
     return $this->configData;
   }
 
@@ -116,10 +116,10 @@ class StorageComparerTest extends UnitTestCase {
       ->will($this->returnValue($config_data));
     $this->sourceStorage->expects($this->once())
       ->method('getAllCollectionNames')
-      ->will($this->returnValue([]));
+      ->will($this->returnValue(array()));
     $this->targetStorage->expects($this->once())
       ->method('getAllCollectionNames')
-      ->will($this->returnValue([]));
+      ->will($this->returnValue(array()));
 
     $this->storageComparer->createChangelist();
     $this->assertEmpty($this->storageComparer->getChangelist('create'));
@@ -150,17 +150,17 @@ class StorageComparerTest extends UnitTestCase {
       ->will($this->returnValue($target_data));
     $this->sourceStorage->expects($this->once())
       ->method('getAllCollectionNames')
-      ->will($this->returnValue([]));
+      ->will($this->returnValue(array()));
     $this->targetStorage->expects($this->once())
       ->method('getAllCollectionNames')
-      ->will($this->returnValue([]));
+      ->will($this->returnValue(array()));
 
     $this->storageComparer->createChangelist();
-    $expected = [
+    $expected = array(
       'field.storage.node.body',
       'field.field.node.article.body',
       'views.view.test_view',
-    ];
+    );
     $this->assertEquals($expected, $this->storageComparer->getChangelist('create'));
     $this->assertEmpty($this->storageComparer->getChangelist('delete'));
     $this->assertEmpty($this->storageComparer->getChangelist('update'));
@@ -189,17 +189,17 @@ class StorageComparerTest extends UnitTestCase {
       ->will($this->returnValue($target_data));
     $this->sourceStorage->expects($this->once())
       ->method('getAllCollectionNames')
-      ->will($this->returnValue([]));
+      ->will($this->returnValue(array()));
     $this->targetStorage->expects($this->once())
       ->method('getAllCollectionNames')
-      ->will($this->returnValue([]));
+      ->will($this->returnValue(array()));
 
     $this->storageComparer->createChangelist();
-    $expected = [
+    $expected = array(
       'views.view.test_view',
       'field.field.node.article.body',
       'field.storage.node.body',
-    ];
+    );
     $this->assertEquals($expected, $this->storageComparer->getChangelist('delete'));
     $this->assertEmpty($this->storageComparer->getChangelist('create'));
     $this->assertEmpty($this->storageComparer->getChangelist('update'));
@@ -228,17 +228,17 @@ class StorageComparerTest extends UnitTestCase {
       ->will($this->returnValue($target_data));
     $this->sourceStorage->expects($this->once())
       ->method('getAllCollectionNames')
-      ->will($this->returnValue([]));
+      ->will($this->returnValue(array()));
     $this->targetStorage->expects($this->once())
       ->method('getAllCollectionNames')
-      ->will($this->returnValue([]));
+      ->will($this->returnValue(array()));
 
     $this->storageComparer->createChangelist();
-    $expected = [
+    $expected = array(
       'field.storage.node.body',
       'field.field.node.article.body',
       'system.site',
-    ];
+    );
     $this->assertEquals($expected, $this->storageComparer->getChangelist('update'));
     $this->assertEmpty($this->storageComparer->getChangelist('create'));
     $this->assertEmpty($this->storageComparer->getChangelist('delete'));

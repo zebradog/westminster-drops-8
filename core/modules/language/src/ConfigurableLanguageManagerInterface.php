@@ -77,7 +77,7 @@ interface ConfigurableLanguageManagerInterface extends LanguageManagerInterface 
    * @param string $langcode
    *   The language code for the override.
    *
-   * @return \Drupal\Core\Config\StorageInterface
+   * @return \Drupal\Core\Config\StorageInterface $storage
    *   A storage object to use for reading and writing the
    *   configuration override.
    */

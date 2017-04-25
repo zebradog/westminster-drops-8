@@ -36,7 +36,7 @@ class TranslationsStream extends LocalStream {
   /**
    * {@inheritdoc}
    */
-  public function getDirectoryPath() {
+  function getDirectoryPath() {
     return \Drupal::config('locale.settings')->get('translation.path');
   }
 
@@ -45,7 +45,7 @@ class TranslationsStream extends LocalStream {
    * @throws \LogicException
    *   PO files URL should not be public.
    */
-  public function getExternalUrl() {
+  function getExternalUrl() {
     throw new \LogicException('PO files URL should not be public.');
   }
 

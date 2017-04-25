@@ -42,7 +42,7 @@ class TwigWhiteListTest extends KernelTestBase {
    */
   protected function setUp() {
     parent::setUp();
-    $this->installSchema('system', ['sequences']);
+    $this->installSchema('system', array('sequences'));
     $this->installEntitySchema('node');
     $this->installEntitySchema('user');
     $this->installEntitySchema('taxonomy_term');
@@ -71,38 +71,38 @@ class TwigWhiteListTest extends KernelTestBase {
     $this->term->save();
 
     // Create a field.
-    $handler_settings = [
-      'target_bundles' => [
+    $handler_settings = array(
+      'target_bundles' => array(
         $vocabulary->id() => $vocabulary->id(),
-      ],
+      ),
       'auto_create' => TRUE,
-    ];
+    );
     // Add the term field.
-    FieldStorageConfig::create([
+    FieldStorageConfig::create(array(
       'field_name' => 'field_term',
       'type' => 'entity_reference',
       'entity_type' => 'node',
       'cardinality' => 1,
-      'settings' => [
+      'settings' => array(
         'target_type' => 'taxonomy_term',
-      ],
-    ])->save();
-    FieldConfig::create([
+      ),
+    ))->save();
+    FieldConfig::create(array(
       'field_name' => 'field_term',
       'entity_type' => 'node',
       'bundle' => 'page',
       'label' => 'Terms',
-      'settings' => [
+      'settings' => array(
         'handler' => 'default',
         'handler_settings' => $handler_settings,
-      ],
-    ])->save();
+      ),
+    ))->save();
 
     // Show on default display and teaser.
     entity_get_display('node', 'page', 'default')
-      ->setComponent('field_term', [
+      ->setComponent('field_term', array(
         'type' => 'entity_reference_label',
-      ])
+      ))
       ->save();
     // Boot twig environment.
     $this->twig = \Drupal::service('twig');

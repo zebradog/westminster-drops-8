@@ -19,7 +19,7 @@ class NumberFieldRdfaTest extends FieldRdfaTestBase {
     $testValue = 3;
     $this->createTestField();
     $this->createTestEntity($testValue);
-    $this->assertFormatterRdfa(['type' => 'number_integer'], 'http://schema.org/baseSalary', ['value' => $testValue]);
+    $this->assertFormatterRdfa(array('type' => 'number_integer'), 'http://schema.org/baseSalary', array('value' => $testValue));
 
     // Test that the content attribute is not created.
     $result = $this->xpathContent($this->getRawContent(), '//div[contains(@class, "field__items") and @content]');
@@ -31,26 +31,26 @@ class NumberFieldRdfaTest extends FieldRdfaTestBase {
    */
   public function testIntegerFormatterWithSettings() {
     \Drupal::service('theme_handler')->install(['classy']);
-    $this->config('system.theme')->set('default', 'classy')->save();
+    \Drupal::service('theme_handler')->setDefault('classy');
     $this->fieldType = 'integer';
-    $formatter = [
+    $formatter = array(
       'type' => 'number_integer',
-      'settings' => [
+      'settings' => array(
         'thousand_separator' => '.',
         'prefix_suffix' => TRUE,
-      ],
-    ];
+      ),
+    );
     $testValue = 3333333.33;
-    $field_settings = [
+    $field_settings = array(
       'prefix' => '#',
       'suffix' => ' llamas.',
-    ];
+    );
     $this->createTestField($field_settings);
     $this->createTestEntity($testValue);
-    $this->assertFormatterRdfa($formatter, 'http://schema.org/baseSalary', ['value' => $testValue]);
+    $this->assertFormatterRdfa($formatter, 'http://schema.org/baseSalary', array('value' => $testValue));
 
     // Test that the content attribute is created.
-    $result = $this->xpathContent($this->getRawContent(), '//div[contains(@class, "field__item") and @content=:testValue]', [':testValue' => $testValue]);
+    $result = $this->xpathContent($this->getRawContent(), '//div[contains(@class, "field__item") and @content=:testValue]', array(':testValue' => $testValue));
     $this->assertTrue($result);
   }
 
@@ -62,7 +62,7 @@ class NumberFieldRdfaTest extends FieldRdfaTestBase {
     $testValue = 3.33;
     $this->createTestField();
     $this->createTestEntity($testValue);
-    $this->assertFormatterRdfa(['type' => 'number_unformatted'], 'http://schema.org/baseSalary', ['value' => $testValue]);
+    $this->assertFormatterRdfa(array('type' => 'number_unformatted'), 'http://schema.org/baseSalary', array('value' => $testValue));
 
     // Test that the content attribute is not created.
     $result = $this->xpathContent($this->getRawContent(), '//div[contains(@class, "field__items") and @content]');
@@ -74,27 +74,27 @@ class NumberFieldRdfaTest extends FieldRdfaTestBase {
    */
   public function testFloatFormatterWithSettings() {
     \Drupal::service('theme_handler')->install(['classy']);
-    $this->config('system.theme')->set('default', 'classy')->save();
+    \Drupal::service('theme_handler')->setDefault('classy');
     $this->fieldType = 'float';
-    $formatter = [
+    $formatter = array(
       'type' => 'number_decimal',
-      'settings' => [
+      'settings' => array(
         'thousand_separator' => '.',
         'decimal_separator' => ',',
         'prefix_suffix' => TRUE,
-      ],
-    ];
+      ),
+    );
     $testValue = 3333333.33;
-    $field_settings = [
+    $field_settings = array(
       'prefix' => '$',
       'suffix' => ' more.',
-    ];
+    );
     $this->createTestField($field_settings);
     $this->createTestEntity($testValue);
-    $this->assertFormatterRdfa($formatter, 'http://schema.org/baseSalary', ['value' => $testValue]);
+    $this->assertFormatterRdfa($formatter, 'http://schema.org/baseSalary', array('value' => $testValue));
 
     // Test that the content attribute is created.
-    $result = $this->xpathContent($this->getRawContent(), '//div[contains(@class, "field__item") and @content=:testValue]', [':testValue' => $testValue]);
+    $result = $this->xpathContent($this->getRawContent(), '//div[contains(@class, "field__item") and @content=:testValue]', array(':testValue' => $testValue));
     $this->assertTrue($result);
   }
 
@@ -103,16 +103,16 @@ class NumberFieldRdfaTest extends FieldRdfaTestBase {
    */
   public function testFloatFormatterWithScale() {
     $this->fieldType = 'float';
-    $formatter = [
+    $formatter = array(
       'type' => 'number_decimal',
-      'settings' => [
+      'settings' => array(
         'scale' => 5,
-      ],
-    ];
+      ),
+    );
     $testValue = 3.33;
     $this->createTestField();
     $this->createTestEntity($testValue);
-    $this->assertFormatterRdfa($formatter, 'http://schema.org/baseSalary', ['value' => $testValue]);
+    $this->assertFormatterRdfa($formatter, 'http://schema.org/baseSalary', array('value' => $testValue));
 
     // Test that the content attribute is not created.
     $result = $this->xpathContent($this->getRawContent(), '//div[contains(@class, "field__items") and @content]');
@@ -124,21 +124,21 @@ class NumberFieldRdfaTest extends FieldRdfaTestBase {
    */
   public function testFloatFormatterWithScaleExercised() {
     \Drupal::service('theme_handler')->install(['classy']);
-    $this->config('system.theme')->set('default', 'classy')->save();
+    \Drupal::service('theme_handler')->setDefault('classy');
     $this->fieldType = 'float';
-    $formatter = [
+    $formatter = array(
       'type' => 'number_decimal',
-      'settings' => [
+      'settings' => array(
         'scale' => 5,
-      ],
-    ];
+      ),
+    );
     $testValue = 3.1234567;
     $this->createTestField();
     $this->createTestEntity($testValue);
-    $this->assertFormatterRdfa($formatter, 'http://schema.org/baseSalary', ['value' => $testValue]);
+    $this->assertFormatterRdfa($formatter, 'http://schema.org/baseSalary', array('value' => $testValue));
 
     // Test that the content attribute is created.
-    $result = $this->xpathContent($this->getRawContent(), '//div[contains(@class, "field__item") and @content=:testValue]', [':testValue' => $testValue]);
+    $result = $this->xpathContent($this->getRawContent(), '//div[contains(@class, "field__item") and @content=:testValue]', array(':testValue' => $testValue));
     $this->assertTrue($result);
   }
 
@@ -150,7 +150,7 @@ class NumberFieldRdfaTest extends FieldRdfaTestBase {
     $testValue = 3.33;
     $this->createTestField();
     $this->createTestEntity($testValue);
-    $this->assertFormatterRdfa(['type' => 'number_decimal'], 'http://schema.org/baseSalary', ['value' => $testValue]);
+    $this->assertFormatterRdfa(array('type' => 'number_decimal'), 'http://schema.org/baseSalary', array('value' => $testValue));
 
     // Test that the content attribute is not created.
     $result = $this->xpathContent($this->getRawContent(), '//div[contains(@class, "field__items") and @content]');
@@ -162,27 +162,27 @@ class NumberFieldRdfaTest extends FieldRdfaTestBase {
    */
   public function testDecimalFormatterWithSettings() {
     \Drupal::service('theme_handler')->install(['classy']);
-    $this->config('system.theme')->set('default', 'classy')->save();
+    \Drupal::service('theme_handler')->setDefault('classy');
     $this->fieldType = 'decimal';
-    $formatter = [
+    $formatter = array(
       'type' => 'number_decimal',
-      'settings' => [
+      'settings' => array(
         'thousand_separator' => 't',
         'decimal_separator' => '#',
         'prefix_suffix' => TRUE,
-      ],
-    ];
+      ),
+    );
     $testValue = 3333333.33;
-    $field_settings = [
+    $field_settings = array(
       'prefix' => '$',
       'suffix' => ' more.',
-    ];
+    );
     $this->createTestField($field_settings);
     $this->createTestEntity($testValue);
-    $this->assertFormatterRdfa($formatter, 'http://schema.org/baseSalary', ['value' => $testValue]);
+    $this->assertFormatterRdfa($formatter, 'http://schema.org/baseSalary', array('value' => $testValue));
 
     // Test that the content attribute is created.
-    $result = $this->xpathContent($this->getRawContent(), '//div[contains(@class, "field__item") and @content=:testValue]', [':testValue' => $testValue]);
+    $result = $this->xpathContent($this->getRawContent(), '//div[contains(@class, "field__item") and @content=:testValue]', array(':testValue' => $testValue));
     $this->assertTrue($result);
   }
 
@@ -192,12 +192,12 @@ class NumberFieldRdfaTest extends FieldRdfaTestBase {
   protected function createTestEntity($testValue) {
     // Add the mapping.
     $mapping = rdf_get_mapping('entity_test', 'entity_test');
-    $mapping->setFieldMapping($this->fieldName, [
-      'properties' => ['schema:baseSalary'],
-    ])->save();
+    $mapping->setFieldMapping($this->fieldName, array(
+      'properties' => array('schema:baseSalary'),
+    ))->save();
 
     // Set up test entity.
-    $this->entity = EntityTest::create([]);
+    $this->entity = EntityTest::create(array());
     $this->entity->{$this->fieldName}->value = $testValue;
   }
 

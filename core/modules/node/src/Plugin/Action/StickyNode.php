@@ -20,7 +20,8 @@ class StickyNode extends ActionBase {
    * {@inheritdoc}
    */
   public function execute($entity = NULL) {
-    $entity->setSticky(TRUE)->save();
+    $entity->sticky = NODE_STICKY;
+    $entity->save();
   }
 
   /**

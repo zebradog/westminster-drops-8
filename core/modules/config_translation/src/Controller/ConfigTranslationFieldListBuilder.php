@@ -26,14 +26,14 @@ class ConfigTranslationFieldListBuilder extends ConfigTranslationEntityListBuild
    *
    * @var array
    */
-  protected $baseEntityInfo = [];
+  protected $baseEntityInfo = array();
 
   /**
    * The bundle info for the base entity type.
    *
    * @var array
    */
-  protected $baseEntityBundles = [];
+  protected $baseEntityBundles = array();
 
   /**
    * The entity manager.
@@ -99,8 +99,8 @@ class ConfigTranslationFieldListBuilder extends ConfigTranslationEntityListBuild
     $bundle = $this->baseEntityInfo->getBundleLabel() ?: $this->t('Bundle');
     $bundle = Unicode::strtolower($bundle);
 
-    $info['placeholder'] = $this->t('Enter field or @bundle', ['@bundle' => $bundle]);
-    $info['description'] = $this->t('Enter a part of the field or @bundle to filter by.', ['@bundle' => $bundle]);
+    $info['placeholder'] = $this->t('Enter field or @bundle', array('@bundle' => $bundle));
+    $info['description'] = $this->t('Enter a part of the field or @bundle to filter by.', array('@bundle' => $bundle));
 
     return $info;
   }
@@ -109,17 +109,17 @@ class ConfigTranslationFieldListBuilder extends ConfigTranslationEntityListBuild
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-    $row['label'] = [
+    $row['label'] = array(
       'data' => $entity->label(),
       'class' => 'table-filter-text-source',
-    ];
+    );
 
     if ($this->displayBundle()) {
       $bundle = $entity->get('bundle');
-      $row['bundle'] = [
+      $row['bundle'] = array(
         'data' => $this->baseEntityBundles[$bundle]['label'],
         'class' => 'table-filter-text-source',
-      ];
+      );
     }
 
     return $row + parent::buildRow($entity);
@@ -165,7 +165,7 @@ class ConfigTranslationFieldListBuilder extends ConfigTranslationEntityListBuild
    * {@inheritdoc}
    */
   public function sortRows($a, $b) {
-    return $this->sortRowsMultiple($a, $b, ['bundle', 'label']);
+    return $this->sortRowsMultiple($a, $b, array('bundle', 'label'));
   }
 
 }

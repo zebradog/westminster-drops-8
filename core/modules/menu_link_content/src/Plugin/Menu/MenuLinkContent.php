@@ -21,12 +21,12 @@ class MenuLinkContent extends MenuLinkBase implements ContainerFactoryPluginInte
    *
    * @var array
    */
-  protected static $entityIdsToLoad = [];
+  protected static $entityIdsToLoad = array();
 
   /**
    * {@inheritdoc}
    */
-  protected $overrideAllowed = [
+  protected $overrideAllowed = array(
     'menu_name' => 1,
     'parent' => 1,
     'weight' => 1,
@@ -38,7 +38,7 @@ class MenuLinkContent extends MenuLinkBase implements ContainerFactoryPluginInte
     'route_parameters' => 1,
     'url' => 1,
     'options' => 1,
-  ];
+  );
 
   /**
    * The menu link content entity connected to this plugin instance.
@@ -123,12 +123,12 @@ class MenuLinkContent extends MenuLinkBase implements ContainerFactoryPluginInte
         static::$entityIdsToLoad[$entity_id] = $entity_id;
         $entities = $storage->loadMultiple(array_values(static::$entityIdsToLoad));
         $entity = isset($entities[$entity_id]) ? $entities[$entity_id] : NULL;
-        static::$entityIdsToLoad = [];
+        static::$entityIdsToLoad = array();
       }
       if (!$entity) {
         // Fallback to the loading by the UUID.
         $uuid = $this->getUuid();
-        $loaded_entities = $storage->loadByProperties(['uuid' => $uuid]);
+        $loaded_entities = $storage->loadByProperties(array('uuid' => $uuid));
         $entity = reset($loaded_entities);
       }
       if (!$entity) {

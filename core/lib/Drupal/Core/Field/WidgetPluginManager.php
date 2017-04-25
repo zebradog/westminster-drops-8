@@ -74,10 +74,10 @@ class WidgetPluginManager extends DefaultPluginManager {
    */
   public function getInstance(array $options) {
     // Fill in defaults for missing properties.
-    $options += [
-      'configuration' => [],
+    $options += array(
+      'configuration' => array(),
       'prepare' => TRUE,
-    ];
+    );
 
     $configuration = $options['configuration'];
     $field_definition = $options['field_definition'];
@@ -104,16 +104,16 @@ class WidgetPluginManager extends DefaultPluginManager {
       $plugin_id = $field_type_definition['default_widget'];
     }
 
-    $configuration += [
+    $configuration += array(
       'field_definition' => $field_definition,
-    ];
+    );
     return $this->createInstance($plugin_id, $configuration);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function createInstance($plugin_id, array $configuration = []) {
+  public function createInstance($plugin_id, array $configuration = array()) {
     $plugin_definition = $this->getDefinition($plugin_id);
     $plugin_class = DefaultFactory::getPluginClass($plugin_id, $plugin_definition);
 
@@ -139,10 +139,10 @@ class WidgetPluginManager extends DefaultPluginManager {
    */
   public function prepareConfiguration($field_type, array $configuration) {
     // Fill in defaults for missing properties.
-    $configuration += [
-      'settings' => [],
-      'third_party_settings' => [],
-    ];
+    $configuration += array(
+      'settings' => array(),
+      'third_party_settings' => array(),
+    );
     // If no widget is specified, use the default widget.
     if (!isset($configuration['type'])) {
       $field_type = $this->fieldTypeManager->getDefinition($field_type);
@@ -168,10 +168,10 @@ class WidgetPluginManager extends DefaultPluginManager {
    */
   public function getOptions($field_type = NULL) {
     if (!isset($this->widgetOptions)) {
-      $options = [];
+      $options = array();
       $field_types = $this->fieldTypeManager->getDefinitions();
       $widget_types = $this->getDefinitions();
-      uasort($widget_types, ['Drupal\Component\Utility\SortArray', 'sortByWeightElement']);
+      uasort($widget_types, array('Drupal\Component\Utility\SortArray', 'sortByWeightElement'));
       foreach ($widget_types as $name => $widget_type) {
         foreach ($widget_type['field_types'] as $widget_field_type) {
           // Check that the field type exists.
@@ -183,7 +183,7 @@ class WidgetPluginManager extends DefaultPluginManager {
       $this->widgetOptions = $options;
     }
     if (isset($field_type)) {
-      return !empty($this->widgetOptions[$field_type]) ? $this->widgetOptions[$field_type] : [];
+      return !empty($this->widgetOptions[$field_type]) ? $this->widgetOptions[$field_type] : array();
     }
 
     return $this->widgetOptions;
@@ -206,7 +206,7 @@ class WidgetPluginManager extends DefaultPluginManager {
       return $plugin_class::defaultSettings();
     }
 
-    return [];
+    return array();
   }
 
 }

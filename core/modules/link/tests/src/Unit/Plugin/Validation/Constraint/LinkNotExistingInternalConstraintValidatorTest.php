@@ -7,7 +7,6 @@ use Drupal\link\Plugin\Validation\Constraint\LinkNotExistingInternalConstraint;
 use Drupal\link\Plugin\Validation\Constraint\LinkNotExistingInternalConstraintValidator;
 use Drupal\Tests\UnitTestCase;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @coversDefaultClass \Drupal\link\Plugin\Validation\Constraint\LinkNotExistingInternalConstraintValidator
@@ -20,7 +19,7 @@ class LinkNotExistingInternalConstraintValidatorTest extends UnitTestCase {
    * @dataProvider providerValidate
    */
   public function testValidate($value, $valid) {
-    $context = $this->getMock(ExecutionContextInterface::class);
+    $context = $this->getMock('Symfony\Component\Validator\ExecutionContextInterface');
 
     if ($valid) {
       $context->expects($this->never())
@@ -95,7 +94,7 @@ class LinkNotExistingInternalConstraintValidatorTest extends UnitTestCase {
       ->method('getUrl')
       ->willThrowException(new \InvalidArgumentException());
 
-    $context = $this->getMock(ExecutionContextInterface::class);
+    $context = $this->getMock('Symfony\Component\Validator\ExecutionContextInterface');
     $context->expects($this->never())
       ->method('addViolation');
 

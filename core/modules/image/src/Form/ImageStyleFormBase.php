@@ -50,20 +50,20 @@ abstract class ImageStyleFormBase extends EntityForm {
    */
   public function form(array $form, FormStateInterface $form_state) {
 
-    $form['label'] = [
+    $form['label'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Image style name'),
       '#default_value' => $this->entity->label(),
       '#required' => TRUE,
-    ];
-    $form['name'] = [
+    );
+    $form['name'] = array(
       '#type' => 'machine_name',
-      '#machine_name' => [
-        'exists' => [$this->imageStyleStorage, 'load'],
-      ],
+      '#machine_name' => array(
+        'exists' => array($this->imageStyleStorage, 'load'),
+      ),
       '#default_value' => $this->entity->id(),
       '#required' => TRUE,
-    ];
+    );
 
     return parent::form($form, $form_state);
   }

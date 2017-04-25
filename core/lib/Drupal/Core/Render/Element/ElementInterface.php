@@ -47,6 +47,6 @@ interface ElementInterface extends PluginInspectionInterface {
    * @param array $class
    *   Array of new class names to be added.
    */
-  public static function setAttributes(&$element, $class = []);
+  public static function setAttributes(&$element, $class = array());
 
 }

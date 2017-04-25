@@ -6,8 +6,10 @@ drupal.node:
   js:
     node.js: {}
   dependencies:
-    - core/drupal.entity-form
+    - core/jquery
+    - core/drupal
     - core/drupalSettings
+    - core/drupal.form
 
 drupal.node.preview:
   version: VERSION

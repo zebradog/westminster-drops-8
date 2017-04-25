@@ -68,27 +68,27 @@ class NodeListBuilder extends EntityListBuilder {
    */
   public function buildHeader() {
     // Enable language column and filter if multiple languages are added.
-    $header = [
+    $header = array(
       'title' => $this->t('Title'),
-      'type' => [
+      'type' => array(
         'data' => $this->t('Content type'),
-        'class' => [RESPONSIVE_PRIORITY_MEDIUM],
-      ],
-      'author' => [
+        'class' => array(RESPONSIVE_PRIORITY_MEDIUM),
+      ),
+      'author' => array(
         'data' => $this->t('Author'),
-        'class' => [RESPONSIVE_PRIORITY_LOW],
-      ],
+        'class' => array(RESPONSIVE_PRIORITY_LOW),
+      ),
       'status' => $this->t('Status'),
-      'changed' => [
+      'changed' => array(
         'data' => $this->t('Updated'),
-        'class' => [RESPONSIVE_PRIORITY_LOW],
-      ],
-    ];
+        'class' => array(RESPONSIVE_PRIORITY_LOW),
+      ),
+    );
     if (\Drupal::languageManager()->isMultilingual()) {
-      $header['language_name'] = [
+      $header['language_name'] = array(
         'data' => $this->t('Language'),
-        'class' => [RESPONSIVE_PRIORITY_LOW],
-      ];
+        'class' => array(RESPONSIVE_PRIORITY_LOW),
+      );
     }
     return $header + parent::buildHeader();
   }
@@ -98,26 +98,26 @@ class NodeListBuilder extends EntityListBuilder {
    */
   public function buildRow(EntityInterface $entity) {
     /** @var \Drupal\node\NodeInterface $entity */
-    $mark = [
+    $mark = array(
       '#theme' => 'mark',
       '#mark_type' => node_mark($entity->id(), $entity->getChangedTime()),
-    ];
+    );
     $langcode = $entity->language()->getId();
     $uri = $entity->urlInfo();
     $options = $uri->getOptions();
-    $options += ($langcode != LanguageInterface::LANGCODE_NOT_SPECIFIED && isset($languages[$langcode]) ? ['language' => $languages[$langcode]] : []);
+    $options += ($langcode != LanguageInterface::LANGCODE_NOT_SPECIFIED && isset($languages[$langcode]) ? array('language' => $languages[$langcode]) : array());
     $uri->setOptions($options);
-    $row['title']['data'] = [
+    $row['title']['data'] = array(
       '#type' => 'link',
       '#title' => $entity->label(),
       '#suffix' => ' ' . drupal_render($mark),
       '#url' => $uri,
-    ];
+    );
     $row['type'] = node_get_type_label($entity);
-    $row['author']['data'] = [
+    $row['author']['data'] = array(
       '#theme' => 'username',
       '#account' => $entity->getOwner(),
-    ];
+    );
     $row['status'] = $entity->isPublished() ? $this->t('published') : $this->t('not published');
     $row['changed'] = $this->dateFormatter->format($entity->getChangedTime(), 'short');
     $language_manager = \Drupal::languageManager();

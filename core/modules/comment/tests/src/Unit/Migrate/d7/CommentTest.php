@@ -13,15 +13,15 @@ class CommentTest extends MigrateSqlSourceTestCase {
 
   const PLUGIN_CLASS = 'Drupal\comment\Plugin\migrate\source\d7\Comment';
 
-  protected $migrationConfiguration = [
+  protected $migrationConfiguration = array(
     'id' => 'test',
-    'source' => [
+    'source' => array(
       'plugin' => 'd7_comment',
-    ],
-  ];
+    ),
+  );
 
-  protected $expectedResults = [
-    [
+  protected $expectedResults = array(
+    array(
       'cid' => '1',
       'pid' => '0',
       'nid' => '1',
@@ -36,14 +36,14 @@ class CommentTest extends MigrateSqlSourceTestCase {
       'mail' => '',
       'homepage' => '',
       'language' => 'und',
-      'comment_body' => [
-        [
+      'comment_body' => array(
+        array(
           'value' => 'This is a comment',
           'format' => 'filtered_html',
-        ],
-      ],
-    ],
-  ];
+        ),
+      ),
+    ),
+  );
 
   /**
    * {@inheritdoc}
@@ -52,8 +52,8 @@ class CommentTest extends MigrateSqlSourceTestCase {
     $this->databaseContents['comment'] = $this->expectedResults;
     unset($this->databaseContents['comment'][0]['comment_body']);
 
-    $this->databaseContents['node'] = [
-      [
+    $this->databaseContents['node'] = array(
+      array(
         'nid' => '1',
         'vid' => '1',
         'type' => 'test_content_type',
@@ -68,10 +68,10 @@ class CommentTest extends MigrateSqlSourceTestCase {
         'sticky' => '0',
         'tnid' => '0',
         'translate' => '0',
-      ],
-    ];
-    $this->databaseContents['field_config_instance'] = [
-      [
+      ),
+    );
+    $this->databaseContents['field_config_instance'] = array(
+      array(
         'id' => '14',
         'field_id' => '1',
         'field_name' => 'comment_body',
@@ -79,10 +79,10 @@ class CommentTest extends MigrateSqlSourceTestCase {
         'bundle' => 'comment_node_test_content_type',
         'data' => 'a:0:{}',
         'deleted' => '0',
-      ],
-    ];
-    $this->databaseContents['field_data_comment_body'] = [
-      [
+      ),
+    );
+    $this->databaseContents['field_data_comment_body'] = array(
+      array(
         'entity_type' => 'comment',
         'bundle' => 'comment_node_test_content_type',
         'deleted' => '0',
@@ -92,8 +92,8 @@ class CommentTest extends MigrateSqlSourceTestCase {
         'delta' => '0',
         'comment_body_value' => 'This is a comment',
         'comment_body_format' => 'filtered_html',
-      ],
-    ];
+      ),
+    );
     parent::setUp();
   }
 

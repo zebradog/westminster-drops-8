@@ -25,11 +25,11 @@ class FormEditor extends InPlaceEditorBase {
    * {@inheritdoc}
    */
   public function getAttachments() {
-    return [
-      'library' => [
+    return array(
+      'library' => array(
         'quickedit/quickedit.inPlaceEditor.form',
-      ],
-    ];
+      ),
+    );
   }
 
 }

@@ -2,7 +2,6 @@
 
 namespace Drupal\filter;
 
-use Drupal\Component\Utility\Crypt;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Render\BubbleableMetadata;
@@ -135,7 +134,7 @@ class FilterProcessResult extends BubbleableMetadata {
     // Generate placeholder markup.
     // @see \Drupal\Core\Render\PlaceholderGenerator::createPlaceholder()
     $arguments = UrlHelper::buildQuery($args);
-    $token = Crypt::hashBase64(serialize([$callback, $args]));
+    $token = hash('crc32b', serialize([$callback, $args]));
     $placeholder_markup = '<drupal-filter-placeholder callback="' . Html::escape($callback) . '" arguments="' . Html::escape($arguments) . '" token="' . Html::escape($token) . '"></drupal-filter-placeholder>';
 
     // Add the placeholder attachment.

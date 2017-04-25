@@ -2,7 +2,6 @@
 
 namespace Drupal\big_pipe\Render\Placeholder;
 
-use Drupal\Component\Utility\Crypt;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Render\Placeholder\PlaceholderStrategyInterface;
@@ -56,7 +55,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * See \Drupal\big_pipe\Render\BigPipe for detailed documentation on how those
  * different placeholders are actually replaced.
  *
- * @see \Drupal\big_pipe\Render\BigPipe
+ * @see \Drupal\big_pipe\Render\BigPipeInterface
  */
 class BigPipeStrategy implements PlaceholderStrategyInterface {
 
@@ -150,7 +149,7 @@ class BigPipeStrategy implements PlaceholderStrategyInterface {
       // @see \Drupal\Core\Access\RouteProcessorCsrf::renderPlaceholderCsrfToken()
       // @see \Drupal\Core\Form\FormBuilder::renderFormTokenPlaceholder()
       // @see \Drupal\Core\Form\FormBuilder::renderPlaceholderFormAction()
-      if (static::placeholderIsAttributeSafe($placeholder)) {
+      if ($placeholder[0] !== '<' || $placeholder !== Html::normalize($placeholder)) {
         $overridden_placeholders[$placeholder] = static::createBigPipeNoJsPlaceholder($placeholder, $placeholder_elements, TRUE);
       }
       else {
@@ -170,21 +169,6 @@ class BigPipeStrategy implements PlaceholderStrategyInterface {
   }
 
   /**
-   * Determines whether the given placeholder is attribute-safe or not.
-   *
-   * @param string $placeholder
-   *   A placeholder.
-   *
-   * @return bool
-   *   Whether the placeholder is safe for use in a HTML attribute (in case it's
-   *   a placeholder for a HTML attribute value or a subset of it).
-   */
-  protected static function placeholderIsAttributeSafe($placeholder) {
-    assert('is_string($placeholder)');
-    return $placeholder[0] !== '<' || $placeholder !== Html::normalize($placeholder);
-  }
-
-  /**
    * Creates a BigPipe JS placeholder.
    *
    * @param string $original_placeholder
@@ -199,7 +183,7 @@ class BigPipeStrategy implements PlaceholderStrategyInterface {
     $big_pipe_placeholder_id = static::generateBigPipePlaceholderId($original_placeholder, $placeholder_render_array);
 
     return [
-      '#markup' => '<span data-big-pipe-placeholder-id="' . Html::escape($big_pipe_placeholder_id) . '"></span>',
+      '#markup' => '<div data-big-pipe-placeholder-id="' . Html::escape($big_pipe_placeholder_id) . '"></div>',
       '#cache' => [
         'max-age' => 0,
         'contexts' => [
@@ -237,7 +221,7 @@ class BigPipeStrategy implements PlaceholderStrategyInterface {
    */
   protected static function createBigPipeNoJsPlaceholder($original_placeholder, array $placeholder_render_array, $placeholder_must_be_attribute_safe = FALSE) {
     if (!$placeholder_must_be_attribute_safe) {
-      $big_pipe_placeholder = '<span data-big-pipe-nojs-placeholder-id="' . Html::escape(static::generateBigPipePlaceholderId($original_placeholder, $placeholder_render_array)) . '"></span>';
+      $big_pipe_placeholder = '<div data-big-pipe-nojs-placeholder-id="' . Html::escape(static::generateBigPipePlaceholderId($original_placeholder, $placeholder_render_array)) . '"></div>';
     }
     else {
       $big_pipe_placeholder = 'big_pipe_nojs_placeholder_attribute_safe:' . Html::escape($original_placeholder);
@@ -276,7 +260,7 @@ class BigPipeStrategy implements PlaceholderStrategyInterface {
     if (isset($placeholder_render_array['#lazy_builder'])) {
       $callback = $placeholder_render_array['#lazy_builder'][0];
       $arguments = $placeholder_render_array['#lazy_builder'][1];
-      $token = Crypt::hashBase64(serialize($placeholder_render_array));
+      $token = hash('crc32b', serialize($placeholder_render_array));
       return UrlHelper::buildQuery(['callback' => $callback, 'args' => $arguments, 'token' => $token]);
     }
     // When the placeholder's render array is not using a #lazy_builder,

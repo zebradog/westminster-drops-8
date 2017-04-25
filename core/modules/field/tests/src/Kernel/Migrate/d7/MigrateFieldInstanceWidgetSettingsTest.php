@@ -18,7 +18,7 @@ class MigrateFieldInstanceWidgetSettingsTest extends MigrateDrupal7TestBase {
    *
    * @var array
    */
-  public static $modules = [
+  public static $modules = array(
     'comment',
     'datetime',
     'field',
@@ -29,7 +29,7 @@ class MigrateFieldInstanceWidgetSettingsTest extends MigrateDrupal7TestBase {
     'taxonomy',
     'telephone',
     'text',
-  ];
+  );
 
   /**
    * {@inheritdoc}

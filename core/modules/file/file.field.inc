@@ -26,26 +26,26 @@ function template_preprocess_file_widget_multiple(&$variables) {
   $table_id = $element['#id'] . '-table';
 
   // Build up a table of applicable fields.
-  $headers = [];
+  $headers = array();
   $headers[] = t('File information');
   if ($element['#display_field']) {
-    $headers[] = [
+    $headers[] = array(
       'data' => t('Display'),
-      'class' => ['checkbox'],
-    ];
+      'class' => array('checkbox'),
+    );
   }
   $headers[] = t('Weight');
   $headers[] = t('Operations');
 
   // Get our list of widgets in order (needed when the form comes back after
   // preview or failed validation).
-  $widgets = [];
+  $widgets = array();
   foreach (Element::children($element) as $key) {
     $widgets[] = &$element[$key];
   }
   usort($widgets, '_field_multiple_value_form_sort_helper');
 
-  $rows = [];
+  $rows = array();
   foreach ($widgets as $key => &$widget) {
     // Save the uploading row for last.
     if (empty($widget['#files'])) {
@@ -56,7 +56,7 @@ function template_preprocess_file_widget_multiple(&$variables) {
 
     // Delay rendering of the buttons, so that they can be rendered later in the
     // "operations" column.
-    $operations_elements = [];
+    $operations_elements = array();
     foreach (Element::children($widget) as $sub_key) {
       if (isset($widget[$sub_key]['#type']) && $widget[$sub_key]['#type'] == 'submit') {
         hide($widget[$sub_key]);
@@ -72,21 +72,21 @@ function template_preprocess_file_widget_multiple(&$variables) {
     hide($widget['_weight']);
 
     // Render everything else together in a column, without the normal wrappers.
-    $widget['#theme_wrappers'] = [];
+    $widget['#theme_wrappers'] = array();
     $information = drupal_render($widget);
     $display = '';
     if ($element['#display_field']) {
       unset($widget['display']['#title']);
-      $display = [
+      $display = array(
         'data' => render($widget['display']),
-        'class' => ['checkbox'],
-      ];
+        'class' => array('checkbox'),
+      );
     }
-    $widget['_weight']['#attributes']['class'] = [$weight_class];
+    $widget['_weight']['#attributes']['class'] = array($weight_class);
     $weight = render($widget['_weight']);
 
     // Arrange the row with all of the rendered columns.
-    $row = [];
+    $row = array();
     $row[] = $information;
     if ($element['#display_field']) {
       $row[] = $display;
@@ -98,31 +98,31 @@ function template_preprocess_file_widget_multiple(&$variables) {
     foreach (Element::children($operations_elements) as $key) {
       show($operations_elements[$key]);
     }
-    $row[] = [
+    $row[] = array(
       'data' => $operations_elements,
-    ];
-    $rows[] = [
+    );
+    $rows[] = array(
       'data' => $row,
-      'class' => isset($widget['#attributes']['class']) ? array_merge($widget['#attributes']['class'], ['draggable']) : ['draggable'],
-    ];
+      'class' => isset($widget['#attributes']['class']) ? array_merge($widget['#attributes']['class'], array('draggable')) : array('draggable'),
+    );
   }
 
-  $variables['table'] = [
+  $variables['table'] = array(
     '#type' => 'table',
     '#header' => $headers,
     '#rows' => $rows,
-    '#attributes' => [
+    '#attributes' => array(
       'id' => $table_id,
-    ],
-    '#tabledrag' => [
-      [
+    ),
+    '#tabledrag' => array(
+      array(
         'action' => 'order',
         'relationship' => 'sibling',
         'group' => $weight_class,
-      ],
-    ],
+      ),
+    ),
     '#access' => !empty($rows),
-  ];
+  );
 
   $variables['element'] = $element;
 }
@@ -144,7 +144,7 @@ function template_preprocess_file_upload_help(&$variables) {
   $upload_validators = $variables['upload_validators'];
   $cardinality = $variables['cardinality'];
 
-  $descriptions = [];
+  $descriptions = array();
 
   if (!empty($description)) {
     $descriptions[] = FieldFilteredMarkup::create($description);
@@ -158,26 +158,26 @@ function template_preprocess_file_upload_help(&$variables) {
     }
   }
   if (isset($upload_validators['file_validate_size'])) {
-    $descriptions[] = t('@size limit.', ['@size' => format_size($upload_validators['file_validate_size'][0])]);
+    $descriptions[] = t('@size limit.', array('@size' => format_size($upload_validators['file_validate_size'][0])));
   }
   if (isset($upload_validators['file_validate_extensions'])) {
-    $descriptions[] = t('Allowed types: @extensions.', ['@extensions' => $upload_validators['file_validate_extensions'][0]]);
+    $descriptions[] = t('Allowed types: @extensions.', array('@extensions' => $upload_validators['file_validate_extensions'][0]));
   }
 
   if (isset($upload_validators['file_validate_image_resolution'])) {
     $max = $upload_validators['file_validate_image_resolution'][0];
     $min = $upload_validators['file_validate_image_resolution'][1];
     if ($min && $max && $min == $max) {
-      $descriptions[] = t('Images must be exactly <strong>@size</strong> pixels.', ['@size' => $max]);
+      $descriptions[] = t('Images must be exactly <strong>@size</strong> pixels.', array('@size' => $max));
     }
     elseif ($min && $max) {
-      $descriptions[] = t('Images must be larger than <strong>@min</strong> pixels. Images larger than <strong>@max</strong> pixels will be resized.', ['@min' => $min, '@max' => $max]);
+      $descriptions[] = t('Images must be larger than <strong>@min</strong> pixels. Images larger than <strong>@max</strong> pixels will be resized.', array('@min' => $min, '@max' => $max));
     }
     elseif ($min) {
-      $descriptions[] = t('Images must be larger than <strong>@min</strong> pixels.', ['@min' => $min]);
+      $descriptions[] = t('Images must be larger than <strong>@min</strong> pixels.', array('@min' => $min));
     }
     elseif ($max) {
-      $descriptions[] = t('Images larger than <strong>@max</strong> pixels will be resized.', ['@max' => $max]);
+      $descriptions[] = t('Images larger than <strong>@max</strong> pixels will be resized.', array('@max' => $max));
     }
   }
 

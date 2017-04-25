@@ -81,8 +81,8 @@ abstract class TranslateFormBase extends FormBase {
 
     // Language is sanitized to be one of the possible options in
     // translateFilterValues().
-    $conditions = ['language' => $filter_values['langcode']];
-    $options = ['pager limit' => 30, 'translated' => TRUE, 'untranslated' => TRUE];
+    $conditions = array('language' => $filter_values['langcode']);
+    $options = array('pager limit' => 30, 'translated' => TRUE, 'untranslated' => TRUE);
 
     // Add translation status conditions and options.
     switch ($filter_values['translation']) {
@@ -123,7 +123,7 @@ abstract class TranslateFormBase extends FormBase {
       return static::$filterValues;
     }
 
-    $filter_values = [];
+    $filter_values = array();
     $filters = $this->translateFilters();
     foreach ($filters as $key => $filter) {
       $filter_values[$key] = $filter['default'];
@@ -152,12 +152,12 @@ abstract class TranslateFormBase extends FormBase {
    * Lists locale translation filters that can be applied.
    */
   protected function translateFilters() {
-    $filters = [];
+    $filters = array();
 
     // Get all languages, except English.
     $this->languageManager->reset();
     $languages = $this->languageManager->getLanguages();
-    $language_options = [];
+    $language_options = array();
     foreach ($languages as $langcode => $language) {
       if (locale_is_translatable($langcode)) {
         $language_options[$langcode] = $language->getName();
@@ -171,42 +171,42 @@ abstract class TranslateFormBase extends FormBase {
       $default_langcode = array_shift($available_langcodes);
     }
 
-    $filters['string'] = [
+    $filters['string'] = array(
       'title' => $this->t('String contains'),
       'description' => $this->t('Leave blank to show all strings. The search is case sensitive.'),
       'default' => '',
-    ];
+    );
 
-    $filters['langcode'] = [
+    $filters['langcode'] = array(
       'title' => $this->t('Translation language'),
       'options' => $language_options,
       'default' => $default_langcode,
-    ];
+    );
 
-    $filters['translation'] = [
+    $filters['translation'] = array(
       'title' => $this->t('Search in'),
-      'options' => [
+      'options' => array(
         'all' => $this->t('Both translated and untranslated strings'),
         'translated' => $this->t('Only translated strings'),
         'untranslated' => $this->t('Only untranslated strings'),
-      ],
+      ),
       'default' => 'all',
-    ];
+    );
 
-    $filters['customized'] = [
+    $filters['customized'] = array(
       'title' => $this->t('Translation type'),
-      'options' => [
+      'options' => array(
         'all' => $this->t('All'),
         LOCALE_NOT_CUSTOMIZED => $this->t('Non-customized translation'),
         LOCALE_CUSTOMIZED => $this->t('Customized translation'),
-      ],
-      'states' => [
-        'visible' => [
-          ':input[name=translation]' => ['value' => 'translated'],
-        ],
-      ],
+      ),
+      'states' => array(
+        'visible' => array(
+          ':input[name=translation]' => array('value' => 'translated'),
+        ),
+      ),
       'default' => 'all',
-    ];
+    );
 
     return $filters;
   }

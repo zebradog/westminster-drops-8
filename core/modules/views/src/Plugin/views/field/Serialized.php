@@ -19,8 +19,8 @@ class Serialized extends FieldPluginBase {
    */
   protected function defineOptions() {
     $options = parent::defineOptions();
-    $options['format'] = ['default' => 'unserialized'];
-    $options['key'] = ['default' => ''];
+    $options['format'] = array('default' => 'unserialized');
+    $options['key'] = array('default' => '');
     return $options;
   }
 
@@ -30,27 +30,27 @@ class Serialized extends FieldPluginBase {
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
 
-    $form['format'] = [
+    $form['format'] = array(
       '#type' => 'select',
       '#title' => $this->t('Display format'),
       '#description' => $this->t('How should the serialized data be displayed. You can choose a custom array/object key or a print_r on the full output.'),
-      '#options' => [
+      '#options' => array(
         'unserialized' => $this->t('Full data (unserialized)'),
         'serialized' => $this->t('Full data (serialized)'),
         'key' => $this->t('A certain key'),
-      ],
+      ),
       '#default_value' => $this->options['format'],
-    ];
-    $form['key'] = [
+    );
+    $form['key'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Which key should be displayed'),
       '#default_value' => $this->options['key'],
-      '#states' => [
-        'visible' => [
-          ':input[name="options[format]"]' => ['value' => 'key'],
-        ],
-      ],
-    ];
+      '#states' => array(
+        'visible' => array(
+          ':input[name="options[format]"]' => array('value' => 'key'),
+        ),
+      ),
+    );
   }
 
   /**
@@ -58,7 +58,7 @@ class Serialized extends FieldPluginBase {
    */
   public function validateOptionsForm(&$form, FormStateInterface $form_state) {
     // Require a key if the format is key.
-    if ($form_state->getValue(['options', 'format']) == 'key' && $form_state->getValue(['options', 'key']) == '') {
+    if ($form_state->getValue(array('options', 'format')) == 'key' && $form_state->getValue(array('options', 'key')) == '') {
       $form_state->setError($form['key'], $this->t('You have to enter a key if you want to display a key of the data.'));
     }
   }

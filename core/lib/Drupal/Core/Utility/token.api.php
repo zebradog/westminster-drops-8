@@ -74,7 +74,7 @@ use Drupal\user\Entity\User;
 function hook_tokens($type, $tokens, array $data, array $options, \Drupal\Core\Render\BubbleableMetadata $bubbleable_metadata) {
   $token_service = \Drupal::token();
 
-  $url_options = ['absolute' => TRUE];
+  $url_options = array('absolute' => TRUE);
   if (isset($options['langcode'])) {
     $url_options['language'] = \Drupal::languageManager()->getLanguage($options['langcode']);
     $langcode = $options['langcode'];
@@ -82,7 +82,7 @@ function hook_tokens($type, $tokens, array $data, array $options, \Drupal\Core\R
   else {
     $langcode = NULL;
   }
-  $replacements = [];
+  $replacements = array();
 
   if ($type == 'node' && !empty($data['node'])) {
     /** @var \Drupal\node\NodeInterface $node */
@@ -117,11 +117,11 @@ function hook_tokens($type, $tokens, array $data, array $options, \Drupal\Core\R
     }
 
     if ($author_tokens = $token_service->findWithPrefix($tokens, 'author')) {
-      $replacements += $token_service->generate('user', $author_tokens, ['user' => $node->getOwner()], $options, $bubbleable_metadata);
+      $replacements = $token_service->generate('user', $author_tokens, array('user' => $node->getOwner()), $options, $bubbleable_metadata);
     }
 
     if ($created_tokens = $token_service->findWithPrefix($tokens, 'created')) {
-      $replacements += $token_service->generate('date', $created_tokens, ['date' => $node->getCreatedTime()], $options, $bubbleable_metadata);
+      $replacements = $token_service->generate('date', $created_tokens, array('date' => $node->getCreatedTime()), $options, $bubbleable_metadata);
     }
   }
 
@@ -219,39 +219,39 @@ function hook_tokens_alter(array &$replacements, array $context, \Drupal\Core\Re
  * @see hook_tokens()
  */
 function hook_token_info() {
-  $type = [
+  $type = array(
     'name' => t('Nodes'),
     'description' => t('Tokens related to individual nodes.'),
     'needs-data' => 'node',
-  ];
+  );
 
   // Core tokens for nodes.
-  $node['nid'] = [
+  $node['nid'] = array(
     'name' => t("Node ID"),
     'description' => t("The unique ID of the node."),
-  ];
-  $node['title'] = [
+  );
+  $node['title'] = array(
     'name' => t("Title"),
-  ];
-  $node['edit-url'] = [
+  );
+  $node['edit-url'] = array(
     'name' => t("Edit URL"),
     'description' => t("The URL of the node's edit page."),
-  ];
+  );
 
   // Chained tokens for nodes.
-  $node['created'] = [
+  $node['created'] = array(
     'name' => t("Date created"),
     'type' => 'date',
-  ];
-  $node['author'] = [
+  );
+  $node['author'] = array(
     'name' => t("Author"),
     'type' => 'user',
-  ];
+  );
 
-  return [
-    'types' => ['node' => $type],
-    'tokens' => ['node' => $node],
-  ];
+  return array(
+    'types' => array('node' => $type),
+    'tokens' => array('node' => $node),
+  );
 }
 
 /**
@@ -264,21 +264,21 @@ function hook_token_info() {
  */
 function hook_token_info_alter(&$data) {
   // Modify description of node tokens for our site.
-  $data['tokens']['node']['nid'] = [
+  $data['tokens']['node']['nid'] = array(
     'name' => t("Node ID"),
     'description' => t("The unique ID of the article."),
-  ];
-  $data['tokens']['node']['title'] = [
+  );
+  $data['tokens']['node']['title'] = array(
     'name' => t("Title"),
     'description' => t("The title of the article."),
-  ];
+  );
 
   // Chained tokens for nodes.
-  $data['tokens']['node']['created'] = [
+  $data['tokens']['node']['created'] = array(
     'name' => t("Date created"),
     'description' => t("The date the article was posted."),
     'type' => 'date',
-  ];
+  );
 }
 
 /**

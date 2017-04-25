@@ -24,14 +24,14 @@ class RowRenderCacheTest extends ViewsKernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['user', 'node'];
+  public static $modules = array('user', 'node');
 
   /**
    * Views used by this test.
    *
    * @var array
    */
-  public static $testViews = ['test_row_render_cache', 'test_row_render_cache_none'];
+  public static $testViews = array('test_row_render_cache', 'test_row_render_cache_none');
 
   /**
    * An editor user account.

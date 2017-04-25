@@ -23,7 +23,7 @@ class Fixed extends ArgumentDefaultPluginBase implements CacheableDependencyInte
    */
   protected function defineOptions() {
     $options = parent::defineOptions();
-    $options['argument'] = ['default' => ''];
+    $options['argument'] = array('default' => '');
 
     return $options;
   }
@@ -33,11 +33,11 @@ class Fixed extends ArgumentDefaultPluginBase implements CacheableDependencyInte
    */
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
-    $form['argument'] = [
+    $form['argument'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Fixed value'),
       '#default_value' => $this->options['argument'],
-    ];
+    );
   }
 
   /**

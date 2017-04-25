@@ -55,20 +55,14 @@ class ContentModerationState extends ContentEntityBase implements ContentModerat
       ->setTranslatable(TRUE)
       ->setRevisionable(TRUE);
 
-    $fields['workflow'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Workflow'))
-      ->setDescription(t('The workflow the moderation state is in.'))
-      ->setSetting('target_type', 'workflow')
-      ->setRequired(TRUE)
-      ->setTranslatable(TRUE)
-      ->setRevisionable(TRUE);
-
-    $fields['moderation_state'] = BaseFieldDefinition::create('string')
+    $fields['moderation_state'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Moderation state'))
       ->setDescription(t('The moderation state of the referenced content.'))
+      ->setSetting('target_type', 'moderation_state')
       ->setRequired(TRUE)
       ->setTranslatable(TRUE)
-      ->setRevisionable(TRUE);
+      ->setRevisionable(TRUE)
+      ->addConstraint('ModerationState', []);
 
     $fields['content_entity_type_id'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Content entity type ID'))
@@ -148,7 +142,7 @@ class ContentModerationState extends ContentEntityBase implements ContentModerat
    *   An array of default values.
    */
   public static function getCurrentUserId() {
-    return [\Drupal::currentUser()->id()];
+    return array(\Drupal::currentUser()->id());
   }
 
   /**
@@ -161,7 +155,7 @@ class ContentModerationState extends ContentEntityBase implements ContentModerat
     if ($related_entity instanceof TranslatableInterface) {
       $related_entity = $related_entity->getTranslation($this->activeLangcode);
     }
-    $related_entity->moderation_state = $this->moderation_state;
+    $related_entity->moderation_state->target_id = $this->moderation_state->target_id;
     return $related_entity->save();
   }
 

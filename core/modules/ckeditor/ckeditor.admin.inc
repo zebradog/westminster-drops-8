@@ -29,8 +29,8 @@ function template_preprocess_ckeditor_settings_toolbar(&$variables) {
   // Create lists of active and disabled buttons.
   $editor = $variables['editor'];
   $plugins = $variables['plugins'];
-  $buttons = [];
-  $multiple_buttons = [];
+  $buttons = array();
+  $multiple_buttons = array();
   foreach ($plugins as $plugin_buttons) {
     foreach ($plugin_buttons as $button_name => $button) {
       $button['name'] = $button_name;
@@ -40,11 +40,11 @@ function template_preprocess_ckeditor_settings_toolbar(&$variables) {
       $buttons[$button_name] = $button;
     }
   }
-  $button_groups = [];
-  $active_buttons = [];
+  $button_groups = array();
+  $active_buttons = array();
   $settings = $editor->getSettings();
   foreach ($settings['toolbar']['rows'] as $row_number => $row) {
-    $button_groups[$row_number] = [];
+    $button_groups[$row_number] = array();
     foreach ($row as $group) {
       foreach ($group['items'] as $button_name) {
         if (isset($buttons[$button_name])) {
@@ -75,31 +75,31 @@ function template_preprocess_ckeditor_settings_toolbar(&$variables) {
       $value = $button['image_alternative'];
     }
     elseif (isset($button['image']) || isset($button['image' . $rtl])) {
-      $value = [
+      $value = array(
         '#theme' => 'image',
         '#uri' => isset($button['image' . $rtl]) ? $button['image' . $rtl] : $button['image'],
         '#title' => $button['label'],
         '#prefix' => '<a href="#" role="button" title="' . $button['label'] . '" aria-label="' . $button['label'] . '"><span class="cke_button_icon">',
         '#suffix' => '</span></a>',
-      ];
+      );
     }
     else {
       $value = '?';
     }
 
     // Build the button attributes.
-    $attributes = [
+    $attributes = array(
       'data-drupal-ckeditor-button-name' => $button['name'],
-    ];
+    );
     if (!empty($button['attributes'])) {
       $attributes = array_merge($attributes, $button['attributes']);
     }
 
     // Build the button item.
-    $button_item = [
+    $button_item = array(
       'value' => $value,
       'attributes' => new Attribute($attributes),
-    ];
+    );
     // If this button has group information, add it to the attributes.
     if (!empty($button['group'])) {
       $button_item['group'] = $button['group'];
@@ -114,14 +114,14 @@ function template_preprocess_ckeditor_settings_toolbar(&$variables) {
   };
 
   // Assemble list of disabled buttons (which are always a single row).
-  $variables['active_buttons'] = [];
+  $variables['active_buttons'] = array();
   foreach ($active_buttons as $row_number => $button_row) {
     foreach ($button_groups[$row_number] as $group_name) {
       $group_name = (string) $group_name;
-      $variables['active_buttons'][$row_number][$group_name] = [
+      $variables['active_buttons'][$row_number][$group_name] = array(
         'group_name_class' => Html::getClass($group_name),
-        'buttons' => [],
-      ];
+        'buttons' => array(),
+      );
       $buttons = array_filter($button_row, function ($button) use ($group_name) {
         return (string) $button['group'] === $group_name;
       });
@@ -131,12 +131,12 @@ function template_preprocess_ckeditor_settings_toolbar(&$variables) {
     }
   }
   // Assemble list of disabled buttons (which are always a single row).
-  $variables['disabled_buttons'] = [];
+  $variables['disabled_buttons'] = array();
   foreach ($disabled_buttons as $button) {
     $variables['disabled_buttons'][] = $build_button_item($button, $rtl);
   }
   // Assemble list of multiple buttons that may be added multiple times.
-  $variables['multiple_buttons'] = [];
+  $variables['multiple_buttons'] = array();
   foreach ($multiple_buttons as $button) {
     $variables['multiple_buttons'][] = $build_button_item($button, $rtl);
   }

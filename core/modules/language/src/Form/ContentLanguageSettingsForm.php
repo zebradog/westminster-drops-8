@@ -52,11 +52,11 @@ class ContentLanguageSettingsForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $entity_types = $this->entityManager->getDefinitions();
-    $labels = [];
-    $default = [];
+    $labels = array();
+    $default = array();
 
     $bundles = $this->entityManager->getAllBundleInfo();
-    $language_configuration = [];
+    $language_configuration = array();
     foreach ($entity_types as $entity_type_id => $entity_type) {
       if (!$entity_type instanceof ContentEntityTypeInterface || !$entity_type->hasKey('langcode') || !isset($bundles[$entity_type_id])) {
         continue;
@@ -76,65 +76,65 @@ class ContentLanguageSettingsForm extends FormBase {
 
     asort($labels);
 
-    $form = [
+    $form = array(
       '#labels' => $labels,
-      '#attached' => [
-        'library' => [
+      '#attached' => array(
+        'library' => array(
           'language/drupal.language.admin',
-        ],
-      ],
-      '#attributes' => [
+        ),
+      ),
+      '#attributes' => array(
         'class' => 'language-content-settings-form',
-      ],
-    ];
+      ),
+    );
 
-    $form['entity_types'] = [
+    $form['entity_types'] = array(
       '#title' => $this->t('Custom language settings'),
       '#type' => 'checkboxes',
       '#options' => $labels,
       '#default_value' => $default,
-    ];
+    );
 
-    $form['settings'] = ['#tree' => TRUE];
+    $form['settings'] = array('#tree' => TRUE);
 
     foreach ($labels as $entity_type_id => $label) {
       $entity_type = $entity_types[$entity_type_id];
 
-      $form['settings'][$entity_type_id] = [
+      $form['settings'][$entity_type_id] = array(
         '#title' => $label,
         '#type' => 'container',
         '#entity_type' => $entity_type_id,
         '#theme' => 'language_content_settings_table',
         '#bundle_label' => $entity_type->getBundleLabel() ?: $label,
-        '#states' => [
-          'visible' => [
-            ':input[name="entity_types[' . $entity_type_id . ']"]' => ['checked' => TRUE],
-          ],
-        ],
-      ];
+        '#states' => array(
+          'visible' => array(
+            ':input[name="entity_types[' . $entity_type_id . ']"]' => array('checked' => TRUE),
+          ),
+        ),
+      );
 
       foreach ($bundles[$entity_type_id] as $bundle => $bundle_info) {
-        $form['settings'][$entity_type_id][$bundle]['settings'] = [
+        $form['settings'][$entity_type_id][$bundle]['settings'] = array(
           '#type' => 'item',
           '#label' => $bundle_info['label'],
-          'language' => [
+          'language' => array(
             '#type' => 'language_configuration',
-            '#entity_information' => [
+            '#entity_information' => array(
               'entity_type' => $entity_type_id,
               'bundle' => $bundle,
-            ],
+            ),
             '#default_value' => $language_configuration[$entity_type_id][$bundle],
-          ],
-        ];
+          ),
+        );
       }
     }
 
     $form['actions']['#type'] = 'actions';
-    $form['actions']['submit'] = [
+    $form['actions']['submit'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Save configuration'),
       '#button_type' => 'primary',
-    ];
+    );
 
     return $form;
   }
@@ -143,13 +143,9 @@ class ContentLanguageSettingsForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $entity_types = $form_state->getValue('entity_types');
     foreach ($form_state->getValue('settings') as $entity_type => $entity_settings) {
       foreach ($entity_settings as $bundle => $bundle_settings) {
         $config = ContentLanguageSettings::loadByEntityTypeBundle($entity_type, $bundle);
-        if (empty($entity_types[$entity_type])) {
-          $bundle_settings['settings']['language']['language_alterable'] = FALSE;
-        }
         $config->setDefaultLangcode($bundle_settings['settings']['language']['langcode'])
           ->setLanguageAlterable($bundle_settings['settings']['language']['language_alterable'])
           ->save();

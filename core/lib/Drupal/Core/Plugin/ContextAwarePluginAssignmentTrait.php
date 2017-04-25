@@ -12,7 +12,7 @@ trait ContextAwarePluginAssignmentTrait {
    *
    * @see \Drupal\Core\StringTranslation\StringTranslationTrait
    */
-  abstract protected function t($string, array $args = [], array $options = []);
+  abstract protected function t($string, array $args = array(), array $options = array());
 
   /**
    * Wraps the context handler.

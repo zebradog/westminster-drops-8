@@ -2,10 +2,19 @@
 
 namespace Drupal\rest\LinkManager;
 
-use Drupal\hal\LinkManager\ConfigurableLinkManagerInterface as MovedConfigurableLinkManagerInterface;
-
 /**
- * @deprecated in Drupal 8.3.x and will be removed before Drupal 9.0.0. This has
- *   been moved to the hal module. This exists solely for BC.
+ * Defines an interface for a link manager with a configurable domain.
  */
-interface ConfigurableLinkManagerInterface extends MovedConfigurableLinkManagerInterface {}
+interface ConfigurableLinkManagerInterface {
+
+  /**
+   * Sets the link domain used in constructing link URIs.
+   *
+   * @param string $domain
+   *   The link domain to use for constructing link URIs.
+   *
+   * @return $this
+   */
+  public function setLinkDomain($domain);
+
+}

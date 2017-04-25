@@ -99,12 +99,12 @@ class CommentAdminOverview extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state, $type = 'new') {
 
     // Build an 'Update options' form.
-    $form['options'] = [
+    $form['options'] = array(
       '#type' => 'details',
       '#title' => $this->t('Update options'),
       '#open' => TRUE,
-      '#attributes' => ['class' => ['container-inline']],
-    ];
+      '#attributes' => array('class' => array('container-inline')),
+    );
 
     if ($type == 'approval') {
       $options['publish'] = $this->t('Publish the selected comments');
@@ -114,42 +114,42 @@ class CommentAdminOverview extends FormBase {
     }
     $options['delete'] = $this->t('Delete the selected comments');
 
-    $form['options']['operation'] = [
+    $form['options']['operation'] = array(
       '#type' => 'select',
       '#title' => $this->t('Action'),
       '#title_display' => 'invisible',
       '#options' => $options,
       '#default_value' => 'publish',
-    ];
-    $form['options']['submit'] = [
+    );
+    $form['options']['submit'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Update'),
-    ];
+    );
 
     // Load the comments that need to be displayed.
     $status = ($type == 'approval') ? CommentInterface::NOT_PUBLISHED : CommentInterface::PUBLISHED;
-    $header = [
-      'subject' => [
+    $header = array(
+      'subject' => array(
         'data' => $this->t('Subject'),
         'specifier' => 'subject',
-      ],
-      'author' => [
+      ),
+      'author' => array(
         'data' => $this->t('Author'),
         'specifier' => 'name',
-        'class' => [RESPONSIVE_PRIORITY_MEDIUM],
-      ],
-      'posted_in' => [
+        'class' => array(RESPONSIVE_PRIORITY_MEDIUM),
+      ),
+      'posted_in' => array(
         'data' => $this->t('Posted in'),
-        'class' => [RESPONSIVE_PRIORITY_LOW],
-      ],
-      'changed' => [
+        'class' => array(RESPONSIVE_PRIORITY_LOW),
+      ),
+      'changed' => array(
         'data' => $this->t('Updated'),
         'specifier' => 'changed',
         'sort' => 'desc',
-        'class' => [RESPONSIVE_PRIORITY_LOW],
-      ],
+        'class' => array(RESPONSIVE_PRIORITY_LOW),
+      ),
       'operations' => $this->t('Operations'),
-    ];
+    );
     $cids = $this->commentStorage->getQuery()
       ->condition('status', $status)
       ->tableSort($header)
@@ -160,11 +160,11 @@ class CommentAdminOverview extends FormBase {
     $comments = $this->commentStorage->loadMultiple($cids);
 
     // Build a table listing the appropriate comments.
-    $options = [];
+    $options = array();
     $destination = $this->getDestinationArray();
 
-    $commented_entity_ids = [];
-    $commented_entities = [];
+    $commented_entity_ids = array();
+    $commented_entities = array();
 
     foreach ($comments as $comment) {
       $commented_entity_ids[$comment->getCommentedEntityTypeId()][] = $comment->getCommentedEntityId();
@@ -179,61 +179,61 @@ class CommentAdminOverview extends FormBase {
       $commented_entity = $commented_entities[$comment->getCommentedEntityTypeId()][$comment->getCommentedEntityId()];
       $comment_permalink = $comment->permalink();
       if ($comment->hasField('comment_body') && ($body = $comment->get('comment_body')->value)) {
-        $attributes = $comment_permalink->getOption('attributes') ?: [];
-        $attributes += ['title' => Unicode::truncate($body, 128)];
+        $attributes = $comment_permalink->getOption('attributes') ?: array();
+        $attributes += array('title' => Unicode::truncate($body, 128));
         $comment_permalink->setOption('attributes', $attributes);
       }
-      $options[$comment->id()] = [
-        'title' => ['data' => ['#title' => $comment->getSubject() ?: $comment->id()]],
-        'subject' => [
-          'data' => [
+      $options[$comment->id()] = array(
+        'title' => array('data' => array('#title' => $comment->getSubject() ?: $comment->id())),
+        'subject' => array(
+          'data' => array(
             '#type' => 'link',
             '#title' => $comment->getSubject(),
             '#url' => $comment_permalink,
-          ],
-        ],
-        'author' => [
-          'data' => [
+          ),
+        ),
+        'author' => array(
+          'data' => array(
             '#theme' => 'username',
             '#account' => $comment->getOwner(),
-          ],
-        ],
-        'posted_in' => [
-          'data' => [
+          ),
+        ),
+        'posted_in' => array(
+          'data' => array(
             '#type' => 'link',
             '#title' => $commented_entity->label(),
             '#access' => $commented_entity->access('view'),
             '#url' => $commented_entity->urlInfo(),
-          ],
-        ],
+          ),
+        ),
         'changed' => $this->dateFormatter->format($comment->getChangedTimeAcrossTranslations(), 'short'),
-      ];
+      );
       $comment_uri_options = $comment->urlInfo()->getOptions() + ['query' => $destination];
-      $links = [];
-      $links['edit'] = [
+      $links = array();
+      $links['edit'] = array(
         'title' => $this->t('Edit'),
         'url' => $comment->urlInfo('edit-form', $comment_uri_options),
-      ];
-      if ($this->moduleHandler->moduleExists('content_translation') && $this->moduleHandler->invoke('content_translation', 'translate_access', [$comment])->isAllowed()) {
-        $links['translate'] = [
+      );
+      if ($this->moduleHandler->moduleExists('content_translation') && $this->moduleHandler->invoke('content_translation', 'translate_access', array($comment))->isAllowed()) {
+        $links['translate'] = array(
           'title' => $this->t('Translate'),
           'url' => $comment->urlInfo('drupal:content-translation-overview', $comment_uri_options),
-        ];
+        );
       }
-      $options[$comment->id()]['operations']['data'] = [
+      $options[$comment->id()]['operations']['data'] = array(
         '#type' => 'operations',
         '#links' => $links,
-      ];
+      );
     }
 
-    $form['comments'] = [
+    $form['comments'] = array(
       '#type' => 'tableselect',
       '#header' => $header,
       '#options' => $options,
       '#empty' => $this->t('No comments available.'),
-    ];
+    );
 
-    $form['pager'] = ['#type' => 'pager'];
+    $form['pager'] = array('#type' => 'pager');
 
     return $form;
   }
@@ -242,7 +242,7 @@ class CommentAdminOverview extends FormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    $form_state->setValue('comments', array_diff($form_state->getValue('comments'), [0]));
+    $form_state->setValue('comments', array_diff($form_state->getValue('comments'), array(0)));
     // We can't execute any 'Update options' if no comments were selected.
     if (count($form_state->getValue('comments')) == 0) {
       $form_state->setErrorByName('', $this->t('Select one or more comments to perform the update on.'));

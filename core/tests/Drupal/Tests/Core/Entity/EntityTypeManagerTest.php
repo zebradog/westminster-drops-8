@@ -8,7 +8,6 @@
 namespace Drupal\Tests\Core\Entity;
 
 use Drupal\Component\Plugin\Discovery\DiscoveryInterface;
-use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
@@ -18,7 +17,6 @@ use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Entity\Exception\InvalidLinkTemplateException;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Tests\UnitTestCase;
@@ -100,7 +98,6 @@ class EntityTypeManagerTest extends UnitTestCase {
 
       // Give the entity type a legitimate class to return.
       $entity_type->getClass()->willReturn($class);
-      $entity_type->setClass($class)->willReturn($entity_type->reveal());
 
       $definitions[$key] = $entity_type->reveal();
     }
@@ -251,13 +248,14 @@ class EntityTypeManagerTest extends UnitTestCase {
    * Tests the getFormObject() method with an invalid operation.
    *
    * @covers ::getFormObject
+   *
+   * @expectedException \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    */
   public function testGetFormObjectInvalidOperation() {
     $entity = $this->prophesize(EntityTypeInterface::class);
     $entity->getFormClass('edit')->willReturn('');
     $this->setUpEntityTypeDefinitions(['test_entity_type' => $entity]);
 
-    $this->setExpectedException(InvalidPluginDefinitionException::class);
     $this->entityTypeManager->getFormObject('test_entity_type', 'edit');
   }
 
@@ -285,12 +283,13 @@ class EntityTypeManagerTest extends UnitTestCase {
    * Tests the getHandler() method when no controller is defined.
    *
    * @covers ::getHandler
+   *
+   * @expectedException \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    */
   public function testGetHandlerMissingHandler() {
     $entity = $this->prophesize(EntityTypeInterface::class);
     $entity->getHandlerClass('storage')->willReturn('');
     $this->setUpEntityTypeDefinitions(['test_entity_type' => $entity]);
-    $this->setExpectedException(InvalidPluginDefinitionException::class);
     $this->entityTypeManager->getHandler('test_entity_type', 'storage');
   }
 
@@ -315,6 +314,9 @@ class EntityTypeManagerTest extends UnitTestCase {
    * Tests the processDefinition() method.
    *
    * @covers ::processDefinition
+   *
+   * @expectedException \Drupal\Core\Entity\Exception\InvalidLinkTemplateException
+   * @expectedExceptionMessage Link template 'canonical' for entity type 'apple' must start with a leading slash, the current link template is 'path/to/apple'
    */
   public function testProcessDefinition() {
     $apple = $this->prophesize(EntityTypeInterface::class);
@@ -323,7 +325,6 @@ class EntityTypeManagerTest extends UnitTestCase {
     $apple->getLinkTemplates()->willReturn(['canonical' => 'path/to/apple']);
 
     $definition = $apple->reveal();
-    $this->setExpectedException(InvalidLinkTemplateException::class, "Link template 'canonical' for entity type 'apple' must start with a leading slash, the current link template is 'path/to/apple'");
     $this->entityTypeManager->processDefinition($definition, 'apple');
   }
 
@@ -369,11 +370,13 @@ class EntityTypeManagerTest extends UnitTestCase {
    * Tests the getDefinition() method with an invalid definition.
    *
    * @covers ::getDefinition
+   *
+   * @expectedException \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @expectedExceptionMessage The "pear" entity type does not exist.
    */
   public function testGetDefinitionInvalidException() {
     $this->setUpEntityTypeDefinitions();
 
-    $this->setExpectedException(PluginNotFoundException::class, 'The "pear" entity type does not exist.');
     $this->entityTypeManager->getDefinition('pear', TRUE);
   }
 

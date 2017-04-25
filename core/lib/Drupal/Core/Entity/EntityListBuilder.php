@@ -120,7 +120,7 @@ class EntityListBuilder extends EntityHandlerBase implements EntityListBuilderIn
    */
   public function getOperations(EntityInterface $entity) {
     $operations = $this->getDefaultOperations($entity);
-    $operations += $this->moduleHandler()->invokeAll('entity_operation', [$entity]);
+    $operations += $this->moduleHandler()->invokeAll('entity_operation', array($entity));
     $this->moduleHandler->alter('entity_operation', $operations, $entity);
     uasort($operations, '\Drupal\Component\Utility\SortArray::sortByWeightElement');
 
@@ -138,20 +138,20 @@ class EntityListBuilder extends EntityHandlerBase implements EntityListBuilderIn
    *   self::getOperations().
    */
   protected function getDefaultOperations(EntityInterface $entity) {
-    $operations = [];
+    $operations = array();
     if ($entity->access('update') && $entity->hasLinkTemplate('edit-form')) {
-      $operations['edit'] = [
+      $operations['edit'] = array(
         'title' => $this->t('Edit'),
         'weight' => 10,
         'url' => $entity->urlInfo('edit-form'),
-      ];
+      );
     }
     if ($entity->access('delete') && $entity->hasLinkTemplate('delete-form')) {
-      $operations['delete'] = [
+      $operations['delete'] = array(
         'title' => $this->t('Delete'),
         'weight' => 100,
         'url' => $entity->urlInfo('delete-form'),
-      ];
+      );
     }
 
     return $operations;
@@ -198,10 +198,10 @@ class EntityListBuilder extends EntityHandlerBase implements EntityListBuilderIn
    * @see \Drupal\Core\Entity\EntityListBuilder::buildRow()
    */
   public function buildOperations(EntityInterface $entity) {
-    $build = [
+    $build = array(
       '#type' => 'operations',
       '#links' => $this->getOperations($entity),
-    ];
+    );
 
     return $build;
   }
@@ -214,17 +214,17 @@ class EntityListBuilder extends EntityHandlerBase implements EntityListBuilderIn
    * @todo Add a link to add a new item to the #empty text.
    */
   public function render() {
-    $build['table'] = [
+    $build['table'] = array(
       '#type' => 'table',
       '#header' => $this->buildHeader(),
       '#title' => $this->getTitle(),
-      '#rows' => [],
-      '#empty' => $this->t('There is no @label yet.', ['@label' => $this->entityType->getLabel()]),
+      '#rows' => array(),
+      '#empty' => $this->t('There is no @label yet.', array('@label' => $this->entityType->getLabel())),
       '#cache' => [
         'contexts' => $this->entityType->getListCacheContexts(),
         'tags' => $this->entityType->getListCacheTags(),
       ],
-    ];
+    );
     foreach ($this->load() as $entity) {
       if ($row = $this->buildRow($entity)) {
         $build['table']['#rows'][$entity->id()] = $row;
@@ -233,9 +233,9 @@ class EntityListBuilder extends EntityHandlerBase implements EntityListBuilderIn
 
     // Only add the pager if a limit is specified.
     if ($this->limit) {
-      $build['pager'] = [
+      $build['pager'] = array(
         '#type' => 'pager',
-      ];
+      );
     }
     return $build;
   }

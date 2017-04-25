@@ -11,147 +11,147 @@
 function forum_views_data() {
 
   $data['forum_index']['table']['group'] = t('Forum');
-  $data['forum_index']['table']['base'] = [
+  $data['forum_index']['table']['base'] = array(
     'field' => 'nid',
     'title' => t('Forum content'),
     'access query tag' => 'node_access',
-  ];
+  );
 
-  $data['forum_index']['nid'] = [
+  $data['forum_index']['nid'] = array(
     'title' => t('Nid'),
     'help' => t('The content ID of the forum index entry.'),
-    'field' => [
+    'field' => array(
       'id' => 'numeric',
-    ],
-    'filter' => [
+    ),
+    'filter' => array(
       'id' => 'numeric',
-    ],
-    'argument' => [
+    ),
+    'argument' => array(
       'id' => 'numeric',
-    ],
-    'sort' => [
+    ),
+    'sort' => array(
       'id' => 'standard',
-    ],
-    'relationship' => [
+    ),
+    'relationship' => array(
       'base' => 'node',
       'base field' => 'nid',
       'label' => t('Node'),
-    ],
-  ];
+    ),
+  );
 
-  $data['forum_index']['title'] = [
+  $data['forum_index']['title'] = array(
     'title' => t('Title'),
     'help' => t('The content title.'),
-    'field' => [
+    'field' => array(
       'id' => 'standard',
       'link_to_node default' => TRUE,
-    ],
-    'sort' => [
+    ),
+    'sort' => array(
       'id' => 'standard',
-    ],
-    'filter' => [
+    ),
+    'filter' => array(
       'id' => 'string',
-    ],
-    'argument' => [
+    ),
+    'argument' => array(
       'id' => 'string',
-    ],
-  ];
+    ),
+  );
 
-  $data['forum_index']['tid'] = [
+  $data['forum_index']['tid'] = array(
     'title' => t('Has taxonomy term ID'),
     'help' => t('Display content if it has the selected taxonomy terms.'),
-    'argument' => [
+    'argument' => array(
       'id' => 'taxonomy_index_tid',
       'name table' => 'taxonomy_term_data',
       'name field' => 'name',
       'empty field name' => t('Uncategorized'),
       'numeric' => TRUE,
       'skip base' => 'taxonomy_term_data',
-    ],
-    'field' => [
+    ),
+    'field' => array(
       'id' => 'numeric',
-    ],
-    'filter' => [
+    ),
+    'filter' => array(
       'title' => t('Has taxonomy term'),
       'id' => 'taxonomy_index_tid',
       'hierarchy table' => 'taxonomy_term_hierarchy',
       'numeric' => TRUE,
       'skip base' => 'taxonomy_term_data',
       'allow empty' => TRUE,
-    ],
-    'relationship' => [
+    ),
+    'relationship' => array(
       'base' => 'taxonomy_term',
       'base field' => 'tid',
       'label' => t('Term'),
-    ],
-  ];
+    ),
+  );
 
 
-  $data['forum_index']['created'] = [
+  $data['forum_index']['created'] = array(
     'title' => t('Post date'),
     'help' => t('The date the content was posted.'),
-    'field' => [
+    'field' => array(
       'id' => 'date',
-    ],
-    'sort' => [
+    ),
+    'sort' => array(
       'id' => 'date'
-    ],
-    'filter' => [
+    ),
+    'filter' => array(
       'id' => 'date',
-    ],
-  ];
+    ),
+  );
 
-  $data['forum_index']['sticky'] = [
+  $data['forum_index']['sticky'] = array(
     'title' => t('Sticky'),
     'help' => t('Whether or not the content is sticky.'),
-    'field' => [
+    'field' => array(
       'id' => 'boolean',
       'click sortable' => TRUE,
-      'output formats' => [
-        'sticky' => [t('Sticky'), t('Not sticky')],
-      ],
-    ],
-    'filter' => [
+      'output formats' => array(
+        'sticky' => array(t('Sticky'), t('Not sticky')),
+      ),
+    ),
+    'filter' => array(
       'id' => 'boolean',
       'label' => t('Sticky'),
       'type' => 'yes-no',
-    ],
-    'sort' => [
+    ),
+    'sort' => array(
       'id' => 'standard',
       'help' => t('Whether or not the content is sticky. To list sticky content first, set this to descending.'),
-    ],
-  ];
+    ),
+  );
 
-  $data['forum_index']['last_comment_timestamp'] = [
+  $data['forum_index']['last_comment_timestamp'] = array(
     'title' => t('Last comment time'),
     'help' => t('Date and time of when the last comment was posted.'),
-    'field' => [
+    'field' => array(
       'id' => 'comment_last_timestamp',
-    ],
-    'sort' => [
+    ),
+    'sort' => array(
       'id' => 'date',
-    ],
-    'filter' => [
+    ),
+    'filter' => array(
       'id' => 'date',
-    ],
-  ];
+    ),
+  );
 
-  $data['forum_index']['comment_count'] = [
+  $data['forum_index']['comment_count'] = array(
     'title' => t('Comment count'),
     'help' => t('The number of comments a node has.'),
-    'field' => [
+    'field' => array(
       'id' => 'numeric',
-    ],
-    'filter' => [
+    ),
+    'filter' => array(
       'id' => 'numeric',
-    ],
-    'sort' => [
+    ),
+    'sort' => array(
       'id' => 'standard',
-    ],
-    'argument' => [
+    ),
+    'argument' => array(
       'id' => 'standard',
-    ],
-  ];
+    ),
+  );
 
   return $data;
 }

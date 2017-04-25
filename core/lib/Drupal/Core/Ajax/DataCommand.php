@@ -62,12 +62,12 @@ class DataCommand implements CommandInterface {
    */
   public function render() {
 
-    return [
+    return array(
       'command' => 'data',
       'selector' => $this->selector,
       'name' => $this->name,
       'value' => $this->value,
-    ];
+    );
   }
 
 }

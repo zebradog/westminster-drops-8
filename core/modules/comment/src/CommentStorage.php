@@ -147,7 +147,7 @@ class CommentStorage extends SqlContentEntityStorage implements CommentStorageIn
 
       // 1. Find all the threads with a new comment.
       $unread_threads_query = $this->database->select('comment_field_data', 'comment')
-        ->fields('comment', ['thread'])
+        ->fields('comment', array('thread'))
         ->condition('entity_id', $entity->id())
         ->condition('entity_type', $entity->getEntityTypeId())
         ->condition('field_name', $field_name)
@@ -161,7 +161,7 @@ class CommentStorage extends SqlContentEntityStorage implements CommentStorageIn
       $first_thread_query = $this->database->select($unread_threads_query, 'thread');
       $first_thread_query->addExpression('SUBSTRING(thread, 1, (LENGTH(thread) - 1))', 'torder');
       $first_thread = $first_thread_query
-        ->fields('thread', ['thread'])
+        ->fields('thread', array('thread'))
         ->orderBy('torder')
         ->range(0, 1)
         ->execute()
@@ -176,13 +176,13 @@ class CommentStorage extends SqlContentEntityStorage implements CommentStorageIn
                         AND field_name = :field_name
                         AND status = :status
                         AND SUBSTRING(thread, 1, (LENGTH(thread) - 1)) < :thread
-                        AND default_langcode = 1', [
+                        AND default_langcode = 1', array(
         ':status' => CommentInterface::PUBLISHED,
         ':entity_id' => $entity->id(),
         ':field_name' => $field_name,
         ':entity_type' => $entity->getEntityTypeId(),
         ':thread' => $first_thread,
-      ])->fetchField();
+      ))->fetchField();
     }
 
     return $comments_per_page > 0 ? (int) ($count / $comments_per_page) : 0;
@@ -193,7 +193,7 @@ class CommentStorage extends SqlContentEntityStorage implements CommentStorageIn
    */
   public function getChildCids(array $comments) {
     return $this->database->select('comment_field_data', 'c')
-      ->fields('c', ['cid'])
+      ->fields('c', array('cid'))
       ->condition('pid', array_keys($comments), 'IN')
       ->condition('default_langcode', 1)
       ->execute()
@@ -312,7 +312,7 @@ class CommentStorage extends SqlContentEntityStorage implements CommentStorageIn
 
     $cids = $query->execute()->fetchCol();
 
-    $comments = [];
+    $comments = array();
     if ($cids) {
       $comments = $this->loadMultiple($cids);
     }

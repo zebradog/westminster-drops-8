@@ -52,8 +52,8 @@ class EntityRouteAlterSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
-    $events[RoutingEvents::ALTER][] = ['onRoutingRouteAlterSetType', -150];
+  static function getSubscribedEvents() {
+    $events[RoutingEvents::ALTER][] = array('onRoutingRouteAlterSetType', -150);
     return $events;
   }
 

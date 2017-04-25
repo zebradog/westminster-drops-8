@@ -7,7 +7,6 @@ use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\EntityReferenceSelection\SelectionWithAutocreateInterface;
-use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
 use Drupal\Core\Form\FormStateInterface;
@@ -109,26 +108,26 @@ class DefaultSelection extends PluginBase implements SelectionInterface, Selecti
     $bundles = $this->entityManager->getBundleInfo($entity_type_id);
 
     // Merge-in default values.
-    $selection_handler_settings += [
+    $selection_handler_settings += array(
       // For the 'target_bundles' setting, a NULL value is equivalent to "allow
       // entities from any bundle to be referenced" and an empty array value is
       // equivalent to "no entities from any bundle can be referenced".
       'target_bundles' => NULL,
-      'sort' => [
+      'sort' => array(
         'field' => '_none',
-      ],
+      ),
       'auto_create' => FALSE,
       'auto_create_bundle' => NULL,
-    ];
+    );
 
     if ($entity_type->hasKey('bundle')) {
-      $bundle_options = [];
+      $bundle_options = array();
       foreach ($bundles as $bundle_name => $bundle_info) {
         $bundle_options[$bundle_name] = $bundle_info['label'];
       }
       natsort($bundle_options);
 
-      $form['target_bundles'] = [
+      $form['target_bundles'] = array(
         '#type' => 'checkboxes',
         '#title' => $this->t('Bundles'),
         '#options' => $bundle_options,
@@ -139,7 +138,7 @@ class DefaultSelection extends PluginBase implements SelectionInterface, Selecti
         '#element_validate' => [[get_class($this), 'elementValidateFilter']],
         '#ajax' => TRUE,
         '#limit_validation_errors' => [],
-      ];
+      );
 
       $form['target_bundles_update'] = [
         '#type' => 'submit',
@@ -152,14 +151,14 @@ class DefaultSelection extends PluginBase implements SelectionInterface, Selecti
       ];
     }
     else {
-      $form['target_bundles'] = [
+      $form['target_bundles'] = array(
         '#type' => 'value',
-        '#value' => [],
-      ];
+        '#value' => array(),
+      );
     }
 
-    if ($entity_type->entityClassImplements(FieldableEntityInterface::class)) {
-      $fields = [];
+    if ($entity_type->isSubclassOf('\Drupal\Core\Entity\FieldableEntityInterface')) {
+      $fields = array();
       foreach (array_keys($bundles) as $bundle) {
         $bundle_fields = array_filter($this->entityManager->getFieldDefinitions($entity_type_id, $bundle), function ($field_definition) {
           return !$field_definition->isComputed();
@@ -172,57 +171,57 @@ class DefaultSelection extends PluginBase implements SelectionInterface, Selecti
           // @todo: Use property labels instead of the column name.
           if (count($columns) > 1) {
             foreach ($columns as $column_name => $column_info) {
-              $fields[$field_name . '.' . $column_name] = $this->t('@label (@column)', ['@label' => $field_definition->getLabel(), '@column' => $column_name]);
+              $fields[$field_name . '.' . $column_name] = $this->t('@label (@column)', array('@label' => $field_definition->getLabel(), '@column' => $column_name));
             }
           }
           else {
-            $fields[$field_name] = $this->t('@label', ['@label' => $field_definition->getLabel()]);
+            $fields[$field_name] = $this->t('@label', array('@label' => $field_definition->getLabel()));
           }
         }
       }
 
-      $form['sort']['field'] = [
+      $form['sort']['field'] = array(
         '#type' => 'select',
         '#title' => $this->t('Sort by'),
-        '#options' => [
+        '#options' => array(
           '_none' => $this->t('- None -'),
-        ] + $fields,
+        ) + $fields,
         '#ajax' => TRUE,
-        '#limit_validation_errors' => [],
+        '#limit_validation_errors' => array(),
         '#default_value' => $selection_handler_settings['sort']['field'],
-      ];
+      );
 
-      $form['sort']['settings'] = [
+      $form['sort']['settings'] = array(
         '#type' => 'container',
-        '#attributes' => ['class' => ['entity_reference-settings']],
+        '#attributes' => array('class' => array('entity_reference-settings')),
         '#process' => [[EntityReferenceItem::class, 'formProcessMergeParent']],
-      ];
+      );
 
       if ($selection_handler_settings['sort']['field'] != '_none') {
         // Merge-in default values.
-        $selection_handler_settings['sort'] += [
+        $selection_handler_settings['sort'] += array(
           'direction' => 'ASC',
-        ];
+        );
 
-        $form['sort']['settings']['direction'] = [
+        $form['sort']['settings']['direction'] = array(
           '#type' => 'select',
           '#title' => $this->t('Sort direction'),
           '#required' => TRUE,
-          '#options' => [
+          '#options' => array(
             'ASC' => $this->t('Ascending'),
             'DESC' => $this->t('Descending'),
-          ],
+          ),
           '#default_value' => $selection_handler_settings['sort']['direction'],
-        ];
+        );
       }
     }
 
-    $form['auto_create'] = [
+    $form['auto_create'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t("Create referenced entities if they don't already exist"),
       '#default_value' => $selection_handler_settings['auto_create'],
       '#weight' => -2,
-    ];
+    );
 
     if ($entity_type->hasKey('bundle')) {
       $bundles = array_intersect_key($bundle_options, array_filter((array) $selection_handler_settings['target_bundles']));
@@ -288,10 +287,10 @@ class DefaultSelection extends PluginBase implements SelectionInterface, Selecti
     $result = $query->execute();
 
     if (empty($result)) {
-      return [];
+      return array();
     }
 
-    $options = [];
+    $options = array();
     $entities = $this->entityManager->getStorage($target_type)->loadMultiple($result);
     foreach ($entities as $entity_id => $entity) {
       $bundle = $entity->bundle();
@@ -315,7 +314,7 @@ class DefaultSelection extends PluginBase implements SelectionInterface, Selecti
    * {@inheritdoc}
    */
   public function validateReferenceableEntities(array $ids) {
-    $result = [];
+    $result = array();
     if ($ids) {
       $target_type = $this->configuration['target_type'];
       $entity_type = $this->entityManager->getDefinition($target_type);
@@ -336,10 +335,10 @@ class DefaultSelection extends PluginBase implements SelectionInterface, Selecti
     $bundle_key = $entity_type->getKey('bundle');
     $label_key = $entity_type->getKey('label');
 
-    $entity = $this->entityManager->getStorage($entity_type_id)->create([
+    $entity = $this->entityManager->getStorage($entity_type_id)->create(array(
       $bundle_key => $bundle,
       $label_key => $label,
-    ]);
+    ));
 
     if ($entity instanceof EntityOwnerInterface) {
       $entity->setOwnerId($uid);
@@ -433,9 +432,9 @@ class DefaultSelection extends PluginBase implements SelectionInterface, Selecti
     $old_tags = $query->alterTags;
     $old_metadata = $query->alterMetaData;
 
-    $query->alterTags = [$tag => TRUE];
+    $query->alterTags = array($tag => TRUE);
     $query->alterMetaData['base_table'] = $base_table;
-    $this->moduleHandler->alter(['query', 'query_' . $tag], $query);
+    $this->moduleHandler->alter(array('query', 'query_' . $tag), $query);
 
     // Restore the tags and metadata.
     $query->alterTags = $old_tags;

@@ -21,18 +21,18 @@ class FormTestInputForgeryForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     // For testing that a user can't submit a value not matching one of the
     // allowed options.
-    $form['checkboxes'] = [
+    $form['checkboxes'] = array(
       '#title' => t('Checkboxes'),
       '#type' => 'checkboxes',
-      '#options' => [
+      '#options' => array(
         'one' => 'One',
         'two' => 'Two',
-      ],
-    ];
-    $form['submit'] = [
+      ),
+    );
+    $form['submit'] = array(
       '#type' => 'submit',
       '#value' => t('Submit'),
-    ];
+    );
 
     return $form;
   }

@@ -21,14 +21,14 @@ class IntegrationTest extends ViewsKernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['aggregator', 'aggregator_test_views', 'system', 'field', 'options', 'user'];
+  public static $modules = array('aggregator', 'aggregator_test_views', 'system', 'field', 'options', 'user');
 
   /**
    * Views used by this test.
    *
    * @var array
    */
-  public static $testViews = ['test_aggregator_items'];
+  public static $testViews = array('test_aggregator_items');
 
   /**
    * The entity storage for aggregator items.
@@ -53,7 +53,7 @@ class IntegrationTest extends ViewsKernelTestBase {
     $this->installEntitySchema('aggregator_item');
     $this->installEntitySchema('aggregator_feed');
 
-    ViewTestData::createTestViews(get_class($this), ['aggregator_test_views']);
+    ViewTestData::createTestViews(get_class($this), array('aggregator_test_views'));
 
     $this->itemStorage = $this->container->get('entity.manager')->getStorage('aggregator_item');
     $this->feedStorage = $this->container->get('entity.manager')->getStorage('aggregator_feed');
@@ -66,19 +66,19 @@ class IntegrationTest extends ViewsKernelTestBase {
     /** @var \Drupal\Core\Render\RendererInterface $renderer */
     $renderer = \Drupal::service('renderer');
 
-    $feed = $this->feedStorage->create([
+    $feed = $this->feedStorage->create(array(
       'title' => $this->randomMachineName(),
       'url' => 'https://www.drupal.org/',
       'refresh' => 900,
       'checked' => 123543535,
       'description' => $this->randomMachineName(),
-    ]);
+    ));
     $feed->save();
 
-    $items = [];
-    $expected = [];
+    $items = array();
+    $expected = array();
     for ($i = 0; $i < 10; $i++) {
-      $values = [];
+      $values = array();
       $values['fid'] = $feed->id();
       $values['timestamp'] = mt_rand(REQUEST_TIME - 10, REQUEST_TIME + 10);
       $values['title'] = $this->randomMachineName();
@@ -99,13 +99,13 @@ class IntegrationTest extends ViewsKernelTestBase {
     $view = Views::getView('test_aggregator_items');
     $this->executeView($view);
 
-    $column_map = [
+    $column_map = array(
       'iid' => 'iid',
       'title' => 'title',
       'aggregator_item_timestamp' => 'timestamp',
       'description' => 'description',
       'aggregator_item_author' => 'author',
-    ];
+    );
     $this->assertIdenticalResultset($view, $expected, $column_map);
 
     // Ensure that the rendering of the linked title works as expected.

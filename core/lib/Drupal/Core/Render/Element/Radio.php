@@ -22,19 +22,19 @@ class Radio extends FormElement {
    */
   public function getInfo() {
     $class = get_class($this);
-    return [
+    return array(
       '#input' => TRUE,
       '#default_value' => NULL,
-      '#process' => [
-        [$class, 'processAjaxForm'],
-      ],
-      '#pre_render' => [
-        [$class, 'preRenderRadio'],
-      ],
+      '#process' => array(
+        array($class, 'processAjaxForm'),
+      ),
+      '#pre_render' => array(
+        array($class, 'preRenderRadio'),
+      ),
       '#theme' => 'input__radio',
-      '#theme_wrappers' => ['form_element'],
+      '#theme_wrappers' => array('form_element'),
       '#title_display' => 'after',
-    ];
+    );
   }
 
   /**
@@ -52,12 +52,12 @@ class Radio extends FormElement {
    */
   public static function preRenderRadio($element) {
     $element['#attributes']['type'] = 'radio';
-    Element::setAttributes($element, ['id', 'name', '#return_value' => 'value']);
+    Element::setAttributes($element, array('id', 'name', '#return_value' => 'value'));
 
     if (isset($element['#return_value']) && $element['#value'] !== FALSE && $element['#value'] == $element['#return_value']) {
       $element['#attributes']['checked'] = 'checked';
     }
-    static::setAttributes($element, ['form-radio']);
+    static::setAttributes($element, array('form-radio'));
 
     return $element;
   }

@@ -38,10 +38,10 @@ class RemoveCommand implements CommandInterface {
    * Implements Drupal\Core\Ajax\CommandInterface:render().
    */
   public function render() {
-    return [
+    return array(
       'command' => 'remove',
       'selector' => $this->selector,
-    ];
+    );
   }
 
 }

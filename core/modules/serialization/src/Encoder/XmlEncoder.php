@@ -19,7 +19,7 @@ class XmlEncoder implements EncoderInterface, DecoderInterface {
    *
    * @var array
    */
-  static protected $format = ['xml'];
+  static protected $format = array('xml');
 
   /**
    * An instance of the Symfony XmlEncoder to perform the actual encoding.
@@ -54,7 +54,7 @@ class XmlEncoder implements EncoderInterface, DecoderInterface {
   /**
    * {@inheritdoc}
    */
-  public function encode($data, $format, array $context = []){
+  public function encode($data, $format, array $context = array()){
     return $this->getBaseEncoder()->encode($data, $format, $context);
   }
 
@@ -68,7 +68,7 @@ class XmlEncoder implements EncoderInterface, DecoderInterface {
   /**
    * {@inheritdoc}
    */
-  public function decode($data, $format, array $context = []){
+  public function decode($data, $format, array $context = array()){
     return $this->getBaseEncoder()->decode($data, $format, $context);
   }
 

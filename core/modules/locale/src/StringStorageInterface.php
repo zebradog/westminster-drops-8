@@ -27,7 +27,7 @@ interface StringStorageInterface {
    * @return array
    *   Array of \Drupal\locale\StringInterface objects matching the conditions.
    */
-  public function getStrings(array $conditions = [], array $options = []);
+  public function getStrings(array $conditions = array(), array $options = array());
 
   /**
    * Loads multiple string translation objects.
@@ -44,7 +44,7 @@ interface StringStorageInterface {
    *
    * @see \Drupal\locale\StringStorageInterface::getStrings()
    */
-  public function getTranslations(array $conditions = [], array $options = []);
+  public function getTranslations(array $conditions = array(), array $options = array());
 
   /**
    * Loads string location information.
@@ -61,7 +61,7 @@ interface StringStorageInterface {
    *
    * @see \Drupal\locale\StringStorageInterface::getStrings()
    */
-  public function getLocations(array $conditions = []);
+  public function getLocations(array $conditions = array());
 
   /**
    * Loads a string source object, fast query.
@@ -164,7 +164,7 @@ interface StringStorageInterface {
    * @return \Drupal\locale\SourceString
    *   New source string object.
    */
-  public function createString($values = []);
+  public function createString($values = array());
 
   /**
    * Creates a string translation object bound to this storage but not saved.
@@ -175,6 +175,6 @@ interface StringStorageInterface {
    * @return \Drupal\locale\TranslationString
    *   New string translation object.
    */
-  public function createTranslation($values = []);
+  public function createTranslation($values = array());
 
 }

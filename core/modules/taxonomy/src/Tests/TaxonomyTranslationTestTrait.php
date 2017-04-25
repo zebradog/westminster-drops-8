@@ -79,26 +79,26 @@ trait TaxonomyTranslationTestTrait {
    *   to FALSE.
    */
   protected function setUpTermReferenceField() {
-    $handler_settings = [
-      'target_bundles' => [
+    $handler_settings = array(
+      'target_bundles' => array(
         $this->vocabulary->id() => $this->vocabulary->id(),
-      ],
+      ),
       'auto_create' => TRUE,
-    ];
+    );
     $this->createEntityReferenceField('node', 'article', $this->termFieldName, NULL, 'taxonomy_term', 'default', $handler_settings, FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED);
     $field_storage = FieldStorageConfig::loadByName('node', $this->termFieldName);
     $field_storage->setTranslatable(FALSE);
     $field_storage->save();
 
     entity_get_form_display('node', 'article', 'default')
-      ->setComponent($this->termFieldName, [
+      ->setComponent($this->termFieldName, array(
         'type' => 'entity_reference_autocomplete_tags',
-      ])
+      ))
       ->save();
     entity_get_display('node', 'article', 'default')
-      ->setComponent($this->termFieldName, [
+      ->setComponent($this->termFieldName, array(
         'type' => 'entity_reference_label',
-      ])
+      ))
       ->save();
   }
 

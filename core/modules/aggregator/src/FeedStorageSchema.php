@@ -24,6 +24,9 @@ class FeedStorageSchema extends SqlContentEntityStorageSchema {
           break;
 
         case 'queued':
+          $this->addSharedTableFieldIndex($storage_definition, $schema, TRUE);
+          break;
+
         case 'title':
           $this->addSharedTableFieldIndex($storage_definition, $schema, TRUE);
           break;

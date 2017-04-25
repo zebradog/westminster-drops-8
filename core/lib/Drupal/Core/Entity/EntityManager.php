@@ -265,7 +265,7 @@ class EntityManager implements EntityManagerInterface, ContainerAwareInterface {
    *
    * @deprecated in Drupal 8.0.0, will be removed before Drupal 9.0.0.
    */
-  public function getTranslationFromContext(EntityInterface $entity, $langcode = NULL, $context = []) {
+  public function getTranslationFromContext(EntityInterface $entity, $langcode = NULL, $context = array()) {
     return $this->container->get('entity.repository')->getTranslationFromContext($entity, $langcode, $context);
   }
 

@@ -16,7 +16,7 @@ class HtaccessTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = ['node', 'path'];
+  public static $modules = array('node', 'path');
 
   /**
    * Get an array of file paths for access testing.

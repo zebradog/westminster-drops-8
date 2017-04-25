@@ -33,7 +33,7 @@ class FieldInstance extends DrupalSqlBase {
    * {@inheritdoc}
    */
   public function fields() {
-    return [
+    return array(
       'field_name' => $this->t('The machine name of field.'),
       'type_name' => $this->t('Content type where this field is in use.'),
       'weight' => $this->t('Weight.'),
@@ -45,7 +45,7 @@ class FieldInstance extends DrupalSqlBase {
       'widget_module' => $this->t('Module that implements widget.'),
       'widget_active' => $this->t('Status of widget'),
       'module' => $this->t('The module that provides the field.'),
-    ];
+    );
   }
 
   /**
@@ -66,15 +66,15 @@ class FieldInstance extends DrupalSqlBase {
    * {@inheritdoc}
    */
   public function getIds() {
-    $ids = [
-      'field_name' => [
+    $ids = array(
+      'field_name' => array(
         'type' => 'string',
         'alias' => 'cnfi',
-      ],
-      'type_name' => [
+      ),
+      'type_name' => array(
         'type' => 'string',
-      ],
-    ];
+      ),
+    );
     return $ids;
   }
 

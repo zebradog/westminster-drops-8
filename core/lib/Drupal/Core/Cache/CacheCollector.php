@@ -56,21 +56,21 @@ abstract class CacheCollector implements CacheCollectorInterface, DestructableIn
    *
    * @var array
    */
-  protected $keysToPersist = [];
+  protected $keysToPersist = array();
 
   /**
    * An array of keys to remove from the cache on service termination.
    *
    * @var array
    */
-  protected $keysToRemove = [];
+  protected $keysToRemove = array();
 
   /**
    * Storage for the data itself.
    *
    * @var array
    */
-  protected $storage = [];
+  protected $storage = array();
 
   /**
    * Stores the cache creation time.
@@ -110,7 +110,7 @@ abstract class CacheCollector implements CacheCollectorInterface, DestructableIn
    * @param array $tags
    *   (optional) The tags to specify for the cache item.
    */
-  public function __construct($cid, CacheBackendInterface $cache, LockBackendInterface $lock, array $tags = []) {
+  public function __construct($cid, CacheBackendInterface $cache, LockBackendInterface $lock, array $tags = array()) {
     assert('\Drupal\Component\Assertion\Inspector::assertAllStrings($tags)', 'Cache tags must be strings.');
     $this->cid = $cid;
     $this->cache = $cache;
@@ -216,7 +216,7 @@ abstract class CacheCollector implements CacheCollectorInterface, DestructableIn
    *   TRUE.
    */
   protected function updateCache($lock = TRUE) {
-    $data = [];
+    $data = array();
     foreach ($this->keysToPersist as $offset => $persist) {
       if ($persist) {
         $data[$offset] = $this->storage[$offset];
@@ -256,8 +256,8 @@ abstract class CacheCollector implements CacheCollectorInterface, DestructableIn
       }
     }
 
-    $this->keysToPersist = [];
-    $this->keysToRemove = [];
+    $this->keysToPersist = array();
+    $this->keysToRemove = array();
   }
 
   /**
@@ -288,9 +288,9 @@ abstract class CacheCollector implements CacheCollectorInterface, DestructableIn
    * {@inheritdoc}
    */
   public function reset() {
-    $this->storage = [];
-    $this->keysToPersist = [];
-    $this->keysToRemove = [];
+    $this->storage = array();
+    $this->keysToPersist = array();
+    $this->keysToRemove = array();
     $this->cacheLoaded = FALSE;
   }
 

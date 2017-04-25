@@ -36,7 +36,7 @@ class AcceptNegotiation406 implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  static function getSubscribedEvents() {
     $events[KernelEvents::VIEW][] = ['onViewDetect406', -10];
 
     return $events;

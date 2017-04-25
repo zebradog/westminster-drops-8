@@ -11,7 +11,7 @@ class SerializeQueryTest extends DatabaseTestBase {
   /**
    * Confirms that a query can be serialized and unserialized.
    */
-  public function testSerializeQuery() {
+  function testSerializeQuery() {
     $query = db_select('test');
     $query->addField('test', 'age');
     $query->condition('name', 'Ringo');

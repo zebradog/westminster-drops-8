@@ -15,9 +15,10 @@ class RectangleTest extends UnitTestCase {
    * Tests wrong rectangle width.
    *
    * @covers ::rotate
+   *
+   * @expectedException \InvalidArgumentException
    */
   public function testWrongWidth() {
-    $this->setExpectedException(\InvalidArgumentException::class);
     $rect = new Rectangle(-40, 20);
   }
 
@@ -25,9 +26,10 @@ class RectangleTest extends UnitTestCase {
    * Tests wrong rectangle height.
    *
    * @covers ::rotate
+   *
+   * @expectedException \InvalidArgumentException
    */
   public function testWrongHeight() {
-    $this->setExpectedException(\InvalidArgumentException::class);
     $rect = new Rectangle(40, 0);
   }
 

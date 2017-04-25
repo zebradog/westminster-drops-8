@@ -14,7 +14,7 @@ class RemoteFileUnmanagedDeleteTest extends UnmanagedDeleteTest {
    *
    * @var array
    */
-  public static $modules = ['file_test'];
+  public static $modules = array('file_test');
 
   /**
    * A stream wrapper scheme to register for the test.

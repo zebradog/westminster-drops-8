@@ -23,12 +23,12 @@ class TermForm extends ContentEntityForm {
     $form_state->set(['taxonomy', 'parent'], $parent);
     $form_state->set(['taxonomy', 'vocabulary'], $vocabulary);
 
-    $form['relations'] = [
+    $form['relations'] = array(
       '#type' => 'details',
       '#title' => $this->t('Relations'),
       '#open' => $vocabulary->getHierarchy() == VocabularyInterface::HIERARCHY_MULTIPLE,
       '#weight' => 10,
-    ];
+    );
 
     // \Drupal\taxonomy\TermStorageInterface::loadTree() and
     // \Drupal\taxonomy\TermStorageInterface::loadParents() may contain large
@@ -46,9 +46,9 @@ class TermForm extends ContentEntityForm {
       $exclude[] = $term->id();
 
       $tree = $taxonomy_storage->loadTree($vocabulary->id());
-      $options = ['<' . $this->t('root') . '>'];
+      $options = array('<' . $this->t('root') . '>');
       if (empty($parent)) {
-        $parent = [0];
+        $parent = array(0);
       }
 
       foreach ($tree as $item) {
@@ -57,33 +57,33 @@ class TermForm extends ContentEntityForm {
         }
       }
 
-      $form['relations']['parent'] = [
+      $form['relations']['parent'] = array(
         '#type' => 'select',
         '#title' => $this->t('Parent terms'),
         '#options' => $options,
         '#default_value' => $parent,
         '#multiple' => TRUE,
-      ];
+      );
     }
 
-    $form['relations']['weight'] = [
+    $form['relations']['weight'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Weight'),
       '#size' => 6,
       '#default_value' => $term->getWeight(),
       '#description' => $this->t('Terms are displayed in ascending order by weight.'),
       '#required' => TRUE,
-    ];
+    );
 
-    $form['vid'] = [
+    $form['vid'] = array(
       '#type' => 'value',
       '#value' => $vocabulary->id(),
-    ];
+    );
 
-    $form['tid'] = [
+    $form['tid'] = array(
       '#type' => 'value',
       '#value' => $term->id(),
-    ];
+    );
 
     return parent::form($form, $form_state, $term);
   }
@@ -127,21 +127,21 @@ class TermForm extends ContentEntityForm {
     $view_link = $term->link($term->getName());
     switch ($result) {
       case SAVED_NEW:
-        drupal_set_message($this->t('Created new term %term.', ['%term' => $view_link]));
-        $this->logger('taxonomy')->notice('Created new term %term.', ['%term' => $term->getName(), 'link' => $edit_link]);
+        drupal_set_message($this->t('Created new term %term.', array('%term' => $view_link)));
+        $this->logger('taxonomy')->notice('Created new term %term.', array('%term' => $term->getName(), 'link' => $edit_link));
         break;
       case SAVED_UPDATED:
-        drupal_set_message($this->t('Updated term %term.', ['%term' => $view_link]));
-        $this->logger('taxonomy')->notice('Updated term %term.', ['%term' => $term->getName(), 'link' => $edit_link]);
+        drupal_set_message($this->t('Updated term %term.', array('%term' => $view_link)));
+        $this->logger('taxonomy')->notice('Updated term %term.', array('%term' => $term->getName(), 'link' => $edit_link));
         break;
     }
 
     $current_parent_count = count($form_state->getValue('parent'));
     $previous_parent_count = count($form_state->get(['taxonomy', 'parent']));
     // Root doesn't count if it's the only parent.
-    if ($current_parent_count == 1 && $form_state->hasValue(['parent', 0])) {
+    if ($current_parent_count == 1 && $form_state->hasValue(array('parent', 0))) {
       $current_parent_count = 0;
-      $form_state->setValue('parent', []);
+      $form_state->setValue('parent', array());
     }
 
     // If the number of parents has been reduced to one or none, do a check on the

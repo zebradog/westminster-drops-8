@@ -18,81 +18,81 @@ class FormTestVerticalTabsAccessForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['vertical_tabs1'] = [
+    $form['vertical_tabs1'] = array(
       '#type' => 'vertical_tabs',
-    ];
-    $form['tab1'] = [
+    );
+    $form['tab1'] = array(
       '#type' => 'fieldset',
       '#title' => t('Tab 1'),
       '#collapsible' => TRUE,
       '#group' => 'vertical_tabs1',
-    ];
-    $form['tab1']['field1'] = [
+    );
+    $form['tab1']['field1'] = array(
       '#title' => t('Field 1'),
       '#type' => 'checkbox',
       '#default_value' => TRUE,
-    ];
-    $form['tab2'] = [
+    );
+    $form['tab2'] = array(
       '#type' => 'fieldset',
       '#title' => t('Tab 2'),
       '#collapsible' => TRUE,
       '#group' => 'vertical_tabs1',
-    ];
-    $form['tab2']['field2'] = [
+    );
+    $form['tab2']['field2'] = array(
       '#title' => t('Field 2'),
       '#type' => 'textfield',
       '#default_value' => 'field2',
-    ];
+    );
 
-    $form['fieldset1'] = [
+    $form['fieldset1'] = array(
       '#type' => 'fieldset',
       '#title' => t('Fieldset'),
-    ];
-    $form['fieldset1']['field3'] = [
+    );
+    $form['fieldset1']['field3'] = array(
       '#type' => 'checkbox',
       '#title' => t('Field 3'),
       '#default_value' => TRUE,
-    ];
+    );
 
-    $form['container'] = [
+    $form['container'] = array(
       '#type' => 'container',
-    ];
-    $form['container']['field4'] = [
+    );
+    $form['container']['field4'] = array(
       '#type' => 'checkbox',
       '#title' => t('Field 4'),
       '#default_value' => TRUE,
-    ];
-    $form['container']['subcontainer'] = [
+    );
+    $form['container']['subcontainer'] = array(
       '#type' => 'container',
-    ];
-    $form['container']['subcontainer']['field5'] = [
+    );
+    $form['container']['subcontainer']['field5'] = array(
       '#type' => 'checkbox',
       '#title' => t('Field 5'),
       '#default_value' => TRUE,
-    ];
+    );
 
-    $form['vertical_tabs2'] = [
+    $form['vertical_tabs2'] = array(
       '#type' => 'vertical_tabs',
-    ];
-    $form['tab3'] = [
+    );
+    $form['tab3'] = array(
       '#type' => 'fieldset',
       '#title' => t('Tab 3'),
       '#collapsible' => TRUE,
       '#group' => 'vertical_tabs2',
-    ];
-    $form['tab3']['field6'] = [
+    );
+    $form['tab3']['field6'] = array(
       '#title' => t('Field 6'),
       '#type' => 'checkbox',
       '#default_value' => TRUE,
-    ];
+    );
 
-    $form['actions'] = [
+    $form['actions'] = array(
       '#type' => 'actions',
-    ];
-    $form['actions']['submit'] = [
+    );
+    $form['actions']['submit'] = array(
       '#type' => 'submit',
       '#value' => t('Submit'),
-    ];
+    );
     return $form;
   }
 

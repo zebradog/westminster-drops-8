@@ -27,7 +27,7 @@ class RouteMethodSubscriber implements EventSubscriberInterface {
     foreach ($event->getRouteCollection() as $route) {
       $methods = $route->getMethods();
       if (empty($methods)) {
-        $route->setMethods(['GET', 'POST']);
+        $route->setMethods(array('GET', 'POST'));
       }
     }
   }
@@ -35,10 +35,10 @@ class RouteMethodSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  static function getSubscribedEvents() {
     // Set a higher priority to ensure that routes get the default HTTP methods
     // as early as possible.
-    $events[RoutingEvents::ALTER][] = ['onRouteBuilding', 5000];
+    $events[RoutingEvents::ALTER][] = array('onRouteBuilding', 5000);
     return $events;
   }
 

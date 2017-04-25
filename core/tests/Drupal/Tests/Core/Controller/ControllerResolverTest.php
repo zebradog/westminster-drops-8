@@ -78,11 +78,11 @@ class ControllerResolverTest extends UnitTestCase {
       ->disableOriginalConstructor()
       ->getMock();
     $mock_account = $this->getMock('Drupal\Core\Session\AccountInterface');
-    $request = new Request([], [], [
+    $request = new Request(array(), array(), array(
       'entity' => $mock_entity,
       'user' => $mock_account,
-      '_raw_variables' => new ParameterBag(['entity' => 1, 'user' => 1]),
-    ], [], [], ['HTTP_HOST' => 'drupal.org']);
+      '_raw_variables' => new ParameterBag(array('entity' => 1, 'user' => 1)),
+    ), array(), array(), array('HTTP_HOST' => 'drupal.org'));
     $arguments = $this->controllerResolver->getArguments($request, $controller);
 
     $this->assertEquals($mock_entity, $arguments[0]);
@@ -106,31 +106,33 @@ class ControllerResolverTest extends UnitTestCase {
    * Provides test data for testCreateController().
    */
   public function providerTestCreateController() {
-    return [
+    return array(
       // Tests class::method.
-      ['Drupal\Tests\Core\Controller\MockController::getResult', 'Drupal\Tests\Core\Controller\MockController', 'This is a regular controller.'],
+      array('Drupal\Tests\Core\Controller\MockController::getResult', 'Drupal\Tests\Core\Controller\MockController', 'This is a regular controller.'),
       // Tests service:method.
-      ['some_service:getResult', 'Drupal\Tests\Core\Controller\MockController', 'This is a regular controller.'],
+      array('some_service:getResult', 'Drupal\Tests\Core\Controller\MockController', 'This is a regular controller.'),
       // Tests a class with injection.
-      ['Drupal\Tests\Core\Controller\MockContainerInjection::getResult', 'Drupal\Tests\Core\Controller\MockContainerInjection', 'This used injection.'],
+      array('Drupal\Tests\Core\Controller\MockContainerInjection::getResult', 'Drupal\Tests\Core\Controller\MockContainerInjection', 'This used injection.'),
       // Tests a ContainerAware class.
-      ['Drupal\Tests\Core\Controller\MockContainerAware::getResult', 'Drupal\Tests\Core\Controller\MockContainerAware', 'This is container aware.'],
-    ];
+      array('Drupal\Tests\Core\Controller\MockContainerAware::getResult', 'Drupal\Tests\Core\Controller\MockContainerAware', 'This is container aware.'),
+    );
   }
 
   /**
    * Tests createController() with a non-existent class.
+   *
+   * @expectedException \InvalidArgumentException
    */
   public function testCreateControllerNonExistentClass() {
-    $this->setExpectedException(\InvalidArgumentException::class);
     $this->controllerResolver->getControllerFromDefinition('Class::method');
   }
 
   /**
    * Tests createController() with an invalid name.
+   *
+   * @expectedException \LogicException
    */
   public function testCreateControllerInvalidName() {
-    $this->setExpectedException(\LogicException::class);
     $this->controllerResolver->getControllerFromDefinition('ClassWithoutMethod');
   }
 
@@ -140,7 +142,7 @@ class ControllerResolverTest extends UnitTestCase {
    * @dataProvider providerTestGetController
    */
   public function testGetController($attributes, $class, $output = NULL) {
-    $request = new Request([], [], $attributes);
+    $request = new Request(array(), array(), $attributes);
     $result = $this->controllerResolver->getController($request);
     if ($class) {
       $this->assertCallableController($result, $class, $output);
@@ -154,12 +156,12 @@ class ControllerResolverTest extends UnitTestCase {
    * Provides test data for testGetController().
    */
   public function providerTestGetController() {
-    return [
+    return array(
       // Tests passing a controller via the request.
-      [['_controller' => 'Drupal\Tests\Core\Controller\MockContainerAware::getResult'], 'Drupal\Tests\Core\Controller\MockContainerAware', 'This is container aware.'],
+      array(array('_controller' => 'Drupal\Tests\Core\Controller\MockContainerAware::getResult'), 'Drupal\Tests\Core\Controller\MockContainerAware', 'This is container aware.'),
       // Tests a request with no controller specified.
-      [[], FALSE]
-    ];
+      array(array(), FALSE)
+    );
   }
 
   /**
@@ -176,22 +178,23 @@ class ControllerResolverTest extends UnitTestCase {
    * Provides test data for testGetControllerFromDefinition().
    */
   public function providerTestGetControllerFromDefinition() {
-    return [
+    return array(
       // Tests a method on an object.
-      [[new MockController(), 'getResult'], 'This is a regular controller.'],
+      array(array(new MockController(), 'getResult'), 'This is a regular controller.'),
       // Tests a function.
-      ['phpversion', phpversion()],
+      array('phpversion', phpversion()),
       // Tests an object using __invoke().
-      [new MockInvokeController(), 'This used __invoke().'],
+      array(new MockInvokeController(), 'This used __invoke().'),
       // Tests a class using __invoke().
-      ['Drupal\Tests\Core\Controller\MockInvokeController', 'This used __invoke().'],
-    ];
+      array('Drupal\Tests\Core\Controller\MockInvokeController', 'This used __invoke().'),
+    );
   }
   /**
    * Tests getControllerFromDefinition() without a callable.
+   *
+   * @expectedException \InvalidArgumentException
    */
   public function testGetControllerFromDefinitionNotCallable() {
-    $this->setExpectedException(\InvalidArgumentException::class);
     $this->controllerResolver->getControllerFromDefinition('Drupal\Tests\Core\Controller\MockController::bananas');
   }
 

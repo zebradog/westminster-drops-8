@@ -21,18 +21,18 @@ class NumberItemTest extends FieldKernelTestBase {
    *
    * @var array
    */
-  public static $modules = [];
+  public static $modules = array();
 
   protected function setUp() {
     parent::setUp();
 
     // Create number field storages and fields for validation.
-    foreach (['integer', 'float', 'decimal'] as $type) {
-      FieldStorageConfig::create([
+    foreach (array('integer', 'float', 'decimal') as $type) {
+      FieldStorageConfig::create(array(
         'entity_type' => 'entity_test',
         'field_name' => 'field_' . $type,
         'type' => $type,
-      ])->save();
+      ))->save();
       FieldConfig::create([
         'entity_type' => 'entity_test',
         'field_name' => 'field_' . $type,

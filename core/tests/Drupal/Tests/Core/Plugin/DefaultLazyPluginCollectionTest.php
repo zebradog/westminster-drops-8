@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\Core\Plugin;
 
-use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Tests\Core\Plugin\Fixtures\TestConfigurablePlugin;
 
 /**
@@ -44,10 +43,11 @@ class DefaultLazyPluginCollectionTest extends LazyPluginCollectionTestBase {
 
   /**
    * @covers ::get
+   * @expectedException \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @expectedExceptionMessage Plugin ID 'pear' was not found.
    */
   public function testGetNotExistingPlugin() {
     $this->setupPluginCollection();
-    $this->setExpectedException(PluginNotFoundException::class, "Plugin ID 'pear' was not found.");
     $this->defaultPluginCollection->get('pear');
   }
 
@@ -58,12 +58,12 @@ class DefaultLazyPluginCollectionTest extends LazyPluginCollectionTestBase {
    *   The test data.
    */
   public function providerTestSortHelper() {
-    return [
-      ['apple', 'apple', 0],
-      ['apple', 'cherry', -1],
-      ['cherry', 'apple', 1],
-      ['cherry', 'banana', 1],
-    ];
+    return array(
+      array('apple', 'apple', 0),
+      array('apple', 'cherry', -1),
+      array('cherry', 'apple', 1),
+      array('cherry', 'banana', 1),
+    );
   }
 
   /**
@@ -91,7 +91,7 @@ class DefaultLazyPluginCollectionTest extends LazyPluginCollectionTestBase {
   public function testGetConfiguration() {
     $this->setupPluginCollection($this->exactly(3));
     // The expected order matches $this->config.
-    $expected = ['banana', 'cherry', 'apple'];
+    $expected = array('banana', 'cherry', 'apple');
 
     $config = $this->defaultPluginCollection->getConfiguration();
     $this->assertSame($expected, array_keys($config), 'The order of the configuration is unchanged.');
@@ -113,21 +113,21 @@ class DefaultLazyPluginCollectionTest extends LazyPluginCollectionTestBase {
    */
   public function testAddInstanceId() {
     $this->setupPluginCollection($this->exactly(4));
-    $expected = [
+    $expected = array(
       'banana' => 'banana',
       'cherry' => 'cherry',
       'apple' => 'apple',
-    ];
+    );
     $this->defaultPluginCollection->addInstanceId('apple');
     $result = $this->defaultPluginCollection->getInstanceIds();
     $this->assertSame($expected, $result);
     $this->assertSame($expected, array_intersect_key($result, $this->defaultPluginCollection->getConfiguration()));
 
-    $expected = [
+    $expected = array(
       'cherry' => 'cherry',
       'apple' => 'apple',
       'banana' => 'banana',
-    ];
+    );
     $this->defaultPluginCollection->removeInstanceId('banana');
     $this->defaultPluginCollection->addInstanceId('banana', $this->config['banana']);
 
@@ -151,11 +151,11 @@ class DefaultLazyPluginCollectionTest extends LazyPluginCollectionTestBase {
    */
   public function testSetInstanceConfiguration() {
     $this->setupPluginCollection($this->exactly(3));
-    $expected = [
+    $expected = array(
       'id' => 'cherry',
       'key' => 'value',
       'custom' => 'bananas',
-    ];
+    );
     $this->defaultPluginCollection->setInstanceConfiguration('cherry', $expected);
     $config = $this->defaultPluginCollection->getConfiguration();
     $this->assertSame($expected, $config['cherry']);
@@ -189,12 +189,12 @@ class DefaultLazyPluginCollectionTest extends LazyPluginCollectionTestBase {
     $this->defaultPluginCollection->set('cherry2', $instance);
     $this->defaultPluginCollection->setInstanceConfiguration('cherry2', $this->config['cherry']);
 
-    $expected = [
+    $expected = array(
       'banana',
       'cherry',
       'apple',
       'cherry2',
-    ];
+    );
     $config = $this->defaultPluginCollection->getConfiguration();
     $this->assertSame($expected, array_keys($config));
   }

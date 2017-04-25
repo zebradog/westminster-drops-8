@@ -16,7 +16,7 @@ class UserBlocksTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = ['block', 'views'];
+  public static $modules = array('block', 'views');
 
   /**
    * A user with the 'administer blocks' permission.
@@ -28,7 +28,7 @@ class UserBlocksTest extends WebTestBase {
   protected function setUp() {
     parent::setUp();
 
-    $this->adminUser = $this->drupalCreateUser(['administer blocks']);
+    $this->adminUser = $this->drupalCreateUser(array('administer blocks'));
     $this->drupalLogin($this->adminUser);
     $this->drupalPlaceBlock('user_login_block');
     $this->drupalLogout($this->adminUser);
@@ -37,7 +37,7 @@ class UserBlocksTest extends WebTestBase {
   /**
    * Tests that user login block is hidden from user/login.
    */
-  public function testUserLoginBlockVisibility() {
+  function testUserLoginBlockVisibility() {
     // Array keyed list where key being the URL address and value being expected
     // visibility as boolean type.
     $paths = [
@@ -61,12 +61,12 @@ class UserBlocksTest extends WebTestBase {
   /**
    * Test the user login block.
    */
-  public function testUserLoginBlock() {
+  function testUserLoginBlock() {
     // Create a user with some permission that anonymous users lack.
-    $user = $this->drupalCreateUser(['administer permissions']);
+    $user = $this->drupalCreateUser(array('administer permissions'));
 
     // Log in using the block.
-    $edit = [];
+    $edit = array();
     $edit['name'] = $user->getUsername();
     $edit['pass'] = $user->pass_raw;
     $this->drupalPostForm('admin/people/permissions', $edit, t('Log in'));
@@ -84,14 +84,14 @@ class UserBlocksTest extends WebTestBase {
     // Check that the user login block is not vulnerable to information
     // disclosure to third party sites.
     $this->drupalLogout();
-    $this->drupalPostForm('http://example.com/', $edit, t('Log in'), ['external' => FALSE]);
+    $this->drupalPostForm('http://example.com/', $edit, t('Log in'), array('external' => FALSE));
     // Check that we remain on the site after login.
     $this->assertUrl($user->url('canonical', ['absolute' => TRUE]), [], 'Redirected to user profile page after login from the frontpage');
 
     // Verify that form validation errors are displayed immediately for forms
     // in blocks and not on subsequent page requests.
     $this->drupalLogout();
-    $edit = [];
+    $edit = array();
     $edit['name'] = 'foo';
     $edit['pass'] = 'invalid password';
     $this->drupalPostForm('filter/tips', $edit, t('Log in'));
@@ -103,13 +103,13 @@ class UserBlocksTest extends WebTestBase {
   /**
    * Test the Who's Online block.
    */
-  public function testWhosOnlineBlock() {
+  function testWhosOnlineBlock() {
     $block = $this->drupalPlaceBlock('views_block:who_s_online-who_s_online_block');
 
     // Generate users.
-    $user1 = $this->drupalCreateUser(['access user profiles']);
-    $user2 = $this->drupalCreateUser([]);
-    $user3 = $this->drupalCreateUser([]);
+    $user1 = $this->drupalCreateUser(array('access user profiles'));
+    $user2 = $this->drupalCreateUser(array());
+    $user3 = $this->drupalCreateUser(array());
 
     // Update access of two users to be within the active timespan.
     $this->updateAccess($user1->id());
@@ -138,7 +138,7 @@ class UserBlocksTest extends WebTestBase {
   private function updateAccess($uid, $access = REQUEST_TIME) {
     db_update('users_field_data')
       ->condition('uid', $uid)
-      ->fields(['access' => $access])
+      ->fields(array('access' => $access))
       ->execute();
   }
 

@@ -6,7 +6,6 @@ use Drupal\Component\Uuid\UuidInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Config\Config;
-use Drupal\Core\Config\ConfigDuplicateUUIDException;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ConfigManagerInterface;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
@@ -16,9 +15,7 @@ use Drupal\Core\Config\Entity\ConfigEntityType;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityMalformedException;
 use Drupal\Core\Entity\EntityManagerInterface;
-use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Entity\Query\QueryFactoryInterface;
 use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -180,7 +177,7 @@ class ConfigEntityStorageTest extends UnitTestCase {
 
     $this->uuidService->generate()->shouldNotBeCalled();
 
-    $entity = $this->entityStorage->create(['id' => 'foo', 'uuid' => 'baz']);
+    $entity = $this->entityStorage->create(array('id' => 'foo', 'uuid' => 'baz'));
     $this->assertInstanceOf(EntityInterface::class, $entity);
     $this->assertSame('foo', $entity->id());
     $this->assertSame('baz', $entity->uuid());
@@ -209,7 +206,7 @@ class ConfigEntityStorageTest extends UnitTestCase {
 
     $this->uuidService->generate()->willReturn('bar');
 
-    $entity = $this->entityStorage->create(['id' => 'foo']);
+    $entity = $this->entityStorage->create(array('id' => 'foo'));
     $this->assertInstanceOf(EntityInterface::class, $entity);
     $this->assertSame('foo', $entity->id());
     $this->assertSame('bar', $entity->uuid());
@@ -223,7 +220,7 @@ class ConfigEntityStorageTest extends UnitTestCase {
   public function testCreateWithCurrentLanguage() {
     $this->languageManager->getLanguage('hu')->willReturn(new Language(['id' => 'hu']));
 
-    $entity = $this->entityStorage->create(['id' => 'foo']);
+    $entity = $this->entityStorage->create(array('id' => 'foo'));
     $this->assertSame('hu', $entity->language()->getId());
   }
 
@@ -234,7 +231,7 @@ class ConfigEntityStorageTest extends UnitTestCase {
   public function testCreateWithExplicitLanguage() {
     $this->languageManager->getLanguage('en')->willReturn(new Language(['id' => 'en']));
 
-    $entity = $this->entityStorage->create(['id' => 'foo', 'langcode' => 'en']);
+    $entity = $this->entityStorage->create(array('id' => 'foo', 'langcode' => 'en'));
     $this->assertSame('en', $entity->language()->getId());
   }
 
@@ -379,19 +376,23 @@ class ConfigEntityStorageTest extends UnitTestCase {
 
   /**
    * @covers ::save
+   *
+   * @expectedException \Drupal\Core\Entity\EntityMalformedException
+   * @expectedExceptionMessage The entity does not have an ID.
    */
   public function testSaveInvalid() {
     $this->cacheTagsInvalidator->invalidateTags(Argument::cetera())
       ->shouldNotBeCalled();
 
     $entity = $this->getMockEntity();
-    $this->setExpectedException(EntityMalformedException::class, 'The entity does not have an ID.');
     $this->entityStorage->save($entity);
   }
 
   /**
    * @covers ::save
    * @covers ::doSave
+   *
+   * @expectedException \Drupal\Core\Entity\EntityStorageException
    */
   public function testSaveDuplicate() {
     $config_object = $this->prophesize(ImmutableConfig::class);
@@ -403,16 +404,18 @@ class ConfigEntityStorageTest extends UnitTestCase {
     $this->configFactory->get('the_provider.the_config_prefix.foo')
       ->willReturn($config_object->reveal());
 
-    $entity = $this->getMockEntity(['id' => 'foo']);
+    $entity = $this->getMockEntity(array('id' => 'foo'));
     $entity->enforceIsNew();
 
-    $this->setExpectedException(EntityStorageException::class);
     $this->entityStorage->save($entity);
   }
 
   /**
    * @covers ::save
    * @covers ::doSave
+   *
+   * @expectedException \Drupal\Core\Config\ConfigDuplicateUUIDException
+   * @expectedExceptionMessage when this UUID is already used for
    */
   public function testSaveMismatch() {
     $config_object = $this->prophesize(ImmutableConfig::class);
@@ -427,8 +430,7 @@ class ConfigEntityStorageTest extends UnitTestCase {
     $this->entityQuery->condition('uuid', NULL)->willReturn($this->entityQuery);
     $this->entityQuery->execute()->willReturn(['baz']);
 
-    $entity = $this->getMockEntity(['id' => 'foo']);
-    $this->setExpectedException(ConfigDuplicateUUIDException::class, 'when this UUID is already used for');
+    $entity = $this->getMockEntity(array('id' => 'foo'));
     $this->entityStorage->save($entity);
   }
 
@@ -461,7 +463,7 @@ class ConfigEntityStorageTest extends UnitTestCase {
     $this->entityQuery->condition('uuid', NULL)->willReturn($this->entityQuery);
     $this->entityQuery->execute()->willReturn(['baz']);
 
-    $entity = $this->getMockEntity(['id' => 'foo']);
+    $entity = $this->getMockEntity(array('id' => 'foo'));
     $entity->setOriginalId('baz');
     $entity->enforceIsNew();
     $this->entityStorage->save($entity);
@@ -470,6 +472,9 @@ class ConfigEntityStorageTest extends UnitTestCase {
   /**
    * @covers ::save
    * @covers ::doSave
+   *
+   * @expectedException \Drupal\Core\Config\ConfigDuplicateUUIDException
+   * @expectedExceptionMessage when this entity already exists with UUID
    */
   public function testSaveChangedUuid() {
     $config_object = $this->prophesize(ImmutableConfig::class);
@@ -496,10 +501,9 @@ class ConfigEntityStorageTest extends UnitTestCase {
     $this->entityQuery->condition('uuid', 'baz')->willReturn($this->entityQuery);
     $this->entityQuery->execute()->willReturn(['foo']);
 
-    $entity = $this->getMockEntity(['id' => 'foo']);
+    $entity = $this->getMockEntity(array('id' => 'foo'));
 
     $entity->set('uuid', 'baz');
-    $this->setExpectedException(ConfigDuplicateUUIDException::class, 'when this entity already exists with UUID');
     $this->entityStorage->save($entity);
   }
 
@@ -591,7 +595,7 @@ class ConfigEntityStorageTest extends UnitTestCase {
     $this->moduleHandler->getImplementations('entity_load')->willReturn([]);
     $this->moduleHandler->getImplementations('test_entity_type_load')->willReturn([]);
 
-    $entities = $this->entityStorage->loadMultiple(['foo']);
+    $entities = $this->entityStorage->loadMultiple(array('foo'));
     $this->assertContainsOnlyInstancesOf(EntityInterface::class, $entities);
     foreach ($entities as $id => $entity) {
       $this->assertSame($id, $entity->id());
@@ -629,9 +633,9 @@ class ConfigEntityStorageTest extends UnitTestCase {
       ->getConfigEntitiesToChangeOnDependencyRemoval('config', ['the_provider.the_config_prefix.bar'], FALSE)
       ->willReturn(['update' => [], 'delete' => [], 'unchanged' => []]);
 
-    $entities = [];
-    foreach (['foo', 'bar'] as $id) {
-      $entity = $this->getMockEntity(['id' => $id]);
+    $entities = array();
+    foreach (array('foo', 'bar') as $id) {
+      $entity = $this->getMockEntity(array('id' => $id));
       $entities[] = $entity;
 
       $config_object = $this->prophesize(Config::class);
@@ -670,7 +674,7 @@ class ConfigEntityStorageTest extends UnitTestCase {
 
     $this->cacheTagsInvalidator->invalidateTags(Argument::cetera())->shouldNotBeCalled();
 
-    $this->entityStorage->delete([]);
+    $this->entityStorage->delete(array());
   }
 
   /**
@@ -683,7 +687,7 @@ class ConfigEntityStorageTest extends UnitTestCase {
    *
    * @return \Drupal\Core\Entity\EntityInterface|\PHPUnit_Framework_MockObject_MockObject
    */
-  public function getMockEntity(array $values = [], $methods = []) {
+  public function getMockEntity(array $values = array(), $methods = array()) {
     return $this->getMockForAbstractClass(ConfigEntityBase::class, [$values, 'test_entity_type'], '', TRUE, TRUE, TRUE, $methods);
   }
 

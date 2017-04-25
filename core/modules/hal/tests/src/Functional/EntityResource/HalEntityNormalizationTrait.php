@@ -92,7 +92,7 @@ trait HalEntityNormalizationTrait {
    * {@inheritdoc}
    */
   protected function assertNormalizationEdgeCases($method, Url $url, array $request_options) {
-    // \Drupal\hal\Normalizer\EntityNormalizer::denormalize(): entity
+    // \Drupal\serialization\Normalizer\EntityNormalizer::denormalize(): entity
     // types with bundles MUST send their bundle field to be denormalizable.
     if ($this->entity->getEntityType()->hasKey('bundle')) {
       $normalization = $this->getNormalizedPostEntity();
@@ -103,7 +103,11 @@ trait HalEntityNormalizationTrait {
 
       // DX: 400 when incorrect entity type bundle is specified.
       $response = $this->request($method, $url, $request_options);
-      $this->assertResourceErrorResponse(400, 'No entity type(s) specified', $response);
+      // @todo Uncomment, remove next 3 in https://www.drupal.org/node/2813853.
+      // $this->assertResourceErrorResponse(400, 'No entity type(s) specified', $response);
+      $this->assertSame(400, $response->getStatusCode());
+      $this->assertSame([static::$mimeType], $response->getHeader('Content-Type'));
+      $this->assertSame($this->serializer->encode(['error' => 'No entity type(s) specified'], static::$format), (string) $response->getBody());
 
 
       unset($normalization['_links']['type']);
@@ -112,7 +116,11 @@ trait HalEntityNormalizationTrait {
 
       // DX: 400 when no entity type bundle is specified.
       $response = $this->request($method, $url, $request_options);
-      $this->assertResourceErrorResponse(400, 'The type link relation must be specified.', $response);
+      // @todo Uncomment, remove next 3 in https://www.drupal.org/node/2813853.
+      // $this->assertResourceErrorResponse(400, 'The type link relation must be specified.', $response);
+      $this->assertSame(400, $response->getStatusCode());
+      $this->assertSame([static::$mimeType], $response->getHeader('Content-Type'));
+      $this->assertSame($this->serializer->encode(['error' => 'The type link relation must be specified.'], static::$format), (string) $response->getBody());
     }
   }
 

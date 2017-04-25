@@ -57,23 +57,23 @@ class Tableselect extends Table {
    */
   public function getInfo() {
     $class = get_class($this);
-    return [
+    return array(
       '#input' => TRUE,
       '#js_select' => TRUE,
       '#multiple' => TRUE,
       '#responsive' => TRUE,
       '#sticky' => FALSE,
-      '#pre_render' => [
-        [$class, 'preRenderTable'],
-        [$class, 'preRenderTableselect'],
-      ],
-      '#process' => [
-        [$class, 'processTableselect'],
-      ],
-      '#options' => [],
+      '#pre_render' => array(
+        array($class, 'preRenderTable'),
+        array($class, 'preRenderTableselect'),
+      ),
+      '#process' => array(
+        array($class, 'processTableselect'),
+      ),
+      '#options' => array(),
       '#empty' => '',
       '#theme' => 'table__tableselect',
-    ];
+    );
   }
 
   /**
@@ -87,8 +87,8 @@ class Tableselect extends Table {
       // keys of the #default_value property. This differs from the checkboxes
       // element which uses the array values.
       if ($input === FALSE) {
-        $value = [];
-        $element += ['#default_value' => []];
+        $value = array();
+        $element += array('#default_value' => array());
         foreach ($element['#default_value'] as $key => $flag) {
           if ($flag) {
             $value[$key] = $key;
@@ -97,7 +97,7 @@ class Tableselect extends Table {
         return $value;
       }
       else {
-        return is_array($input) ? array_combine($input, $input) : [];
+        return is_array($input) ? array_combine($input, $input) : array();
       }
     }
   }
@@ -147,14 +147,14 @@ class Tableselect extends Table {
    *   The processed element.
    */
   public static function preRenderTableselect($element) {
-    $rows = [];
+    $rows = array();
     $header = $element['#header'];
     if (!empty($element['#options'])) {
       // Generate a table row for each selectable item in #options.
       foreach (Element::children($element) as $key) {
-        $row = [];
+        $row = array();
 
-        $row['data'] = [];
+        $row['data'] = array();
         if (isset($element['#options'][$key]['#attributes'])) {
           $row += $element['#options'][$key]['#attributes'];
         }
@@ -187,7 +187,7 @@ class Tableselect extends Table {
       if ($element['#js_select']) {
         // Add a "Select all" checkbox.
         $element['#attached']['library'][] = 'core/drupal.tableselect';
-        array_unshift($header, ['class' => ['select-all']]);
+        array_unshift($header, array('class' => array('select-all')));
       }
       else {
         // Add an empty header when radio buttons are displayed or a "Select all"
@@ -218,7 +218,7 @@ class Tableselect extends Table {
    */
   public static function processTableselect(&$element, FormStateInterface $form_state, &$complete_form) {
     if ($element['#multiple']) {
-      $value = is_array($element['#value']) ? $element['#value'] : [];
+      $value = is_array($element['#value']) ? $element['#value'] : array();
     }
     else {
       // Advanced selection behavior makes no sense for radios.
@@ -229,7 +229,7 @@ class Tableselect extends Table {
 
     if (count($element['#options']) > 0) {
       if (!isset($element['#default_value']) || $element['#default_value'] === 0) {
-        $element['#default_value'] = [];
+        $element['#default_value'] = array();
       }
 
       // Create a checkbox or radio for each item in #options in such a way that
@@ -242,12 +242,12 @@ class Tableselect extends Table {
             $title = '';
             if (isset($element['#options'][$key]['title']) && is_array($element['#options'][$key]['title'])) {
               if (!empty($element['#options'][$key]['title']['data']['#title'])) {
-                $title = new TranslatableMarkup('Update @title', [
+                $title = new TranslatableMarkup('Update @title', array(
                   '@title' => $element['#options'][$key]['title']['data']['#title'],
-                ]);
+                ));
               }
             }
-            $element[$key] = [
+            $element[$key] = array(
               '#type' => 'checkbox',
               '#title' => $title,
               '#title_display' => 'invisible',
@@ -255,13 +255,13 @@ class Tableselect extends Table {
               '#default_value' => isset($value[$key]) ? $key : NULL,
               '#attributes' => $element['#attributes'],
               '#ajax' => isset($element['#ajax']) ? $element['#ajax'] : NULL,
-            ];
+            );
           }
           else {
             // Generate the parents as the autogenerator does, so we will have a
             // unique id for each radio button.
-            $parents_for_id = array_merge($element['#parents'], [$key]);
-            $element[$key] = [
+            $parents_for_id = array_merge($element['#parents'], array($key));
+            $element[$key] = array(
               '#type' => 'radio',
               '#title' => '',
               '#return_value' => $key,
@@ -270,7 +270,7 @@ class Tableselect extends Table {
               '#parents' => $element['#parents'],
               '#id' => HtmlUtility::getUniqueId('edit-' . implode('-', $parents_for_id)),
               '#ajax' => isset($element['#ajax']) ? $element['#ajax'] : NULL,
-            ];
+            );
           }
           if (isset($element['#options'][$key]['#weight'])) {
             $element[$key]['#weight'] = $element['#options'][$key]['#weight'];
@@ -279,7 +279,7 @@ class Tableselect extends Table {
       }
     }
     else {
-      $element['#value'] = [];
+      $element['#value'] = array();
     }
     return $element;
   }

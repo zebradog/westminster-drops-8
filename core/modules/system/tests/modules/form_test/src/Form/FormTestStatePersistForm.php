@@ -21,18 +21,18 @@ class FormTestStatePersistForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['title'] = [
+    $form['title'] = array(
       '#type' => 'textfield',
       '#title' => 'title',
       '#default_value' => 'DEFAULT',
       '#required' => TRUE,
-    ];
+    );
     $form_state->set('value', 'State persisted.');
 
-    $form['submit'] = [
+    $form['submit'] = array(
       '#type' => 'submit',
       '#value' => t('Submit'),
-    ];
+    );
     return $form;
   }
 

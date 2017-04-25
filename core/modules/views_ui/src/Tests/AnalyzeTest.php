@@ -16,14 +16,14 @@ class AnalyzeTest extends ViewTestBase {
    *
    * @var array
    */
-  public static $modules = ['views_ui'];
+  public static $modules = array('views_ui');
 
   /**
    * Views used by this test.
    *
    * @var array
    */
-  public static $testViews = ['test_view'];
+  public static $testViews = array('test_view');
 
   protected function setUp() {
     parent::setUp();
@@ -31,13 +31,13 @@ class AnalyzeTest extends ViewTestBase {
     $this->enableViewsTestModule();
 
     // Add an admin user will full rights;
-    $this->admin = $this->drupalCreateUser(['administer views']);
+    $this->admin = $this->drupalCreateUser(array('administer views'));
   }
 
   /**
    * Tests that analyze works in general.
    */
-  public function testAnalyzeBasic() {
+  function testAnalyzeBasic() {
     $this->drupalLogin($this->admin);
 
     $this->drupalGet('admin/structure/views/view/test_view/edit');
@@ -47,13 +47,13 @@ class AnalyzeTest extends ViewTestBase {
     $this->clickLink(t('Analyze view'));
     $this->assertText(t('View analysis'));
 
-    foreach (['ok', 'warning', 'error'] as $type) {
-      $xpath = $this->xpath('//div[contains(@class, :class)]', [':class' => $type]);
-      $this->assertTrue(count($xpath), format_string('Analyse messages with @type found', ['@type' => $type]));
+    foreach (array('ok', 'warning', 'error') as $type) {
+      $xpath = $this->xpath('//div[contains(@class, :class)]', array(':class' => $type));
+      $this->assertTrue(count($xpath), format_string('Analyse messages with @type found', array('@type' => $type)));
     }
 
     // This redirects the user back to the main views edit page.
-    $this->drupalPostForm(NULL, [], t('Ok'));
+    $this->drupalPostForm(NULL, array(), t('Ok'));
   }
 
 }

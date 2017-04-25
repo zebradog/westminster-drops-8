@@ -85,7 +85,7 @@ class PoHeader {
    *   Plural form component from the header, for example:
    *   'nplurals=2; plural=(n > 1);'.
    */
-  public function getPluralForms() {
+  function getPluralForms() {
     return $this->_pluralForms;
   }
 
@@ -95,7 +95,7 @@ class PoHeader {
    * @param string $languageName
    *   Human readable language name.
    */
-  public function setLanguageName($languageName) {
+  function setLanguageName($languageName) {
     $this->_languageName = $languageName;
   }
 
@@ -105,7 +105,7 @@ class PoHeader {
    * @return string
    *   The human readable language name.
    */
-  public function getLanguageName() {
+  function getLanguageName() {
     return $this->_languageName;
   }
 
@@ -115,7 +115,7 @@ class PoHeader {
    * @param string $projectName
    *   Human readable project name.
    */
-  public function setProjectName($projectName) {
+  function setProjectName($projectName) {
     $this->_projectName = $projectName;
   }
 
@@ -125,7 +125,7 @@ class PoHeader {
    * @return string
    *   The human readable project name.
    */
-  public function getProjectName() {
+  function getProjectName() {
     return $this->_projectName;
   }
 
@@ -190,10 +190,10 @@ class PoHeader {
    *
    * @throws Exception
    */
-  public function parsePluralForms($pluralforms) {
-    $plurals = [];
+  function parsePluralForms($pluralforms) {
+    $plurals = array();
     // First, delete all whitespace.
-    $pluralforms = strtr($pluralforms, [" " => "", "\t" => ""]);
+    $pluralforms = strtr($pluralforms, array(" " => "", "\t" => ""));
 
     // Select the parts that define nplurals and plural.
     $nplurals = strstr($pluralforms, "nplurals=");
@@ -215,7 +215,7 @@ class PoHeader {
 
     // If the number of plurals is zero, we return a default result.
     if ($nplurals == 0) {
-      return [$nplurals, ['default' => 0]];
+      return array($nplurals, array('default' => 0));
     }
 
     // Calculate possible plural positions of different plural values. All known
@@ -233,7 +233,7 @@ class PoHeader {
       });
       $plurals['default'] = $default;
 
-      return [$nplurals, $plurals];
+      return array($nplurals, $plurals);
     }
     else {
       throw new \Exception('The plural formula could not be parsed.');
@@ -250,7 +250,7 @@ class PoHeader {
    *   An associative array of key-value pairs.
    */
   private function parseHeader($header) {
-    $header_parsed = [];
+    $header_parsed = array();
     $lines = array_map('trim', explode("\n", $header));
     foreach ($lines as $line) {
       if ($line) {
@@ -275,17 +275,17 @@ class PoHeader {
    */
   private function parseArithmetic($string) {
     // Operator precedence table.
-    $precedence = ["(" => -1, ")" => -1, "?" => 1, ":" => 1, "||" => 3, "&&" => 4, "==" => 5, "!=" => 5, "<" => 6, ">" => 6, "<=" => 6, ">=" => 6, "+" => 7, "-" => 7, "*" => 8, "/" => 8, "%" => 8];
+    $precedence = array("(" => -1, ")" => -1, "?" => 1, ":" => 1, "||" => 3, "&&" => 4, "==" => 5, "!=" => 5, "<" => 6, ">" => 6, "<=" => 6, ">=" => 6, "+" => 7, "-" => 7, "*" => 8, "/" => 8, "%" => 8);
     // Right associativity.
-    $right_associativity = ["?" => 1, ":" => 1];
+    $right_associativity = array("?" => 1, ":" => 1);
 
     $tokens = $this->tokenizeFormula($string);
 
     // Parse by converting into infix notation then back into postfix
     // Operator stack - holds math operators and symbols.
-    $operator_stack = [];
+    $operator_stack = array();
     // Element Stack - holds data to be operated on.
-    $element_stack = [];
+    $element_stack = array();
 
     foreach ($tokens as $token) {
       $current_token = $token;
@@ -373,7 +373,7 @@ class PoHeader {
    */
   private function tokenizeFormula($formula) {
     $formula = str_replace(" ", "", $formula);
-    $tokens = [];
+    $tokens = array();
     for ($i = 0; $i < strlen($formula); $i++) {
       if (is_numeric($formula[$i])) {
         $num = $formula[$i];

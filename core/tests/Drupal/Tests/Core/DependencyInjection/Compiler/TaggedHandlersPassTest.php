@@ -10,7 +10,6 @@ namespace Drupal\Tests\Core\DependencyInjection\Compiler;
 use Drupal\Core\DependencyInjection\Compiler\TaggedHandlersPass;
 use Drupal\Tests\UnitTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
@@ -45,37 +44,36 @@ class TaggedHandlersPassTest extends UnitTestCase {
   /**
    * Tests a required consumer with no handlers.
    *
+   * @expectedException \Symfony\Component\DependencyInjection\Exception\LogicException
+   * @expectedExceptionMessage At least one service tagged with 'consumer_id' is required.
    * @covers ::process
    */
   public function testProcessRequiredHandlers() {
     $container = $this->buildContainer();
     $container
       ->register('consumer_id', __NAMESPACE__ . '\ValidConsumer')
-      ->addTag('service_collector', [
+      ->addTag('service_collector', array(
         'required' => TRUE,
-      ]);
+      ));
 
     $handler_pass = new TaggedHandlersPass();
-    $this->setExpectedException(LogicException::class, "At least one service tagged with 'consumer_id' is required.");
     $handler_pass->process($container);
   }
 
   /**
    * Tests consumer with missing interface in non-production environment.
    *
+   * @expectedException \Symfony\Component\DependencyInjection\Exception\LogicException
+   * @expectedExceptionMessage Service consumer 'consumer_id' class method Drupal\Tests\Core\DependencyInjection\Compiler\InvalidConsumer::addHandler() has to type-hint an interface.
    * @covers ::process
    */
   public function testProcessMissingInterface() {
     $container = $this->buildContainer();
     $container
-      ->register('consumer_id0', __NAMESPACE__ . '\ValidConsumer')
-      ->addTag('service_collector');
-    $container
-      ->register('consumer_id1', __NAMESPACE__ . '\InvalidConsumer')
+      ->register('consumer_id', __NAMESPACE__ . '\InvalidConsumer')
       ->addTag('service_collector');
 
     $handler_pass = new TaggedHandlersPass();
-    $this->setExpectedException(LogicException::class, "Service consumer 'consumer_id1' class method Drupal\Tests\Core\DependencyInjection\Compiler\InvalidConsumer::addHandler() has to type-hint an interface.");
     $handler_pass->process($container);
   }
 
@@ -120,9 +118,9 @@ class TaggedHandlersPassTest extends UnitTestCase {
       ->addTag('consumer_id');
     $container
       ->register('handler2', __NAMESPACE__ . '\ValidHandler')
-      ->addTag('consumer_id', [
+      ->addTag('consumer_id', array(
         'priority' => 10,
-      ]);
+      ));
 
     $handler_pass = new TaggedHandlersPass();
     $handler_pass->process($container);
@@ -144,18 +142,18 @@ class TaggedHandlersPassTest extends UnitTestCase {
     $container = $this->buildContainer();
     $container
       ->register('consumer_id', __NAMESPACE__ . '\ValidConsumer')
-      ->addTag('service_collector', [
+      ->addTag('service_collector', array(
         'call' => 'addNoPriority',
-      ]);
+      ));
 
     $container
       ->register('handler1', __NAMESPACE__ . '\ValidHandler')
       ->addTag('consumer_id');
     $container
       ->register('handler2', __NAMESPACE__ . '\ValidHandler')
-      ->addTag('consumer_id', [
+      ->addTag('consumer_id', array(
         'priority' => 10,
-      ]);
+      ));
 
     $handler_pass = new TaggedHandlersPass();
     $handler_pass->process($container);
@@ -177,18 +175,18 @@ class TaggedHandlersPassTest extends UnitTestCase {
     $container = $this->buildContainer();
     $container
       ->register('consumer_id', __NAMESPACE__ . '\ValidConsumer')
-      ->addTag('service_collector', [
+      ->addTag('service_collector', array(
         'call' => 'addWithId',
-      ]);
+      ));
 
     $container
       ->register('handler1', __NAMESPACE__ . '\ValidHandler')
       ->addTag('consumer_id');
     $container
       ->register('handler2', __NAMESPACE__ . '\ValidHandler')
-      ->addTag('consumer_id', [
+      ->addTag('consumer_id', array(
         'priority' => 10,
-      ]);
+      ));
 
     $handler_pass = new TaggedHandlersPass();
     $handler_pass->process($container);
@@ -206,6 +204,7 @@ class TaggedHandlersPassTest extends UnitTestCase {
   /**
    * Tests interface validation in non-production environment.
    *
+   * @expectedException \Symfony\Component\DependencyInjection\Exception\LogicException
    * @covers ::process
    */
   public function testProcessInterfaceMismatch() {
@@ -219,12 +218,11 @@ class TaggedHandlersPassTest extends UnitTestCase {
       ->addTag('consumer_id');
     $container
       ->register('handler2', __NAMESPACE__ . '\ValidHandler')
-      ->addTag('consumer_id', [
+      ->addTag('consumer_id', array(
         'priority' => 10,
-      ]);
+      ));
 
     $handler_pass = new TaggedHandlersPass();
-    $this->setExpectedException(LogicException::class);
     $handler_pass->process($container);
   }
 
@@ -242,10 +240,10 @@ class TaggedHandlersPassTest extends UnitTestCase {
 
     $container
       ->register('handler1', __NAMESPACE__ . '\ValidHandler')
-      ->addTag('consumer_id', [
+      ->addTag('consumer_id', array(
           'extra1' => 'extra1',
           'extra2' => 'extra2',
-        ]);
+        ));
 
     $handler_pass = new TaggedHandlersPass();
     $handler_pass->process($container);
@@ -268,15 +266,15 @@ class TaggedHandlersPassTest extends UnitTestCase {
 
     $container
       ->register('consumer_id', __NAMESPACE__ . '\ValidConsumerWithExtraArguments')
-      ->addTag('service_collector', [
+      ->addTag('service_collector', array(
         'call' => 'addNoPriority'
-      ]);
+      ));
 
     $container
       ->register('handler1', __NAMESPACE__ . '\ValidHandler')
-      ->addTag('consumer_id', [
+      ->addTag('consumer_id', array(
         'extra' => 'extra',
-      ]);
+      ));
 
     $handler_pass = new TaggedHandlersPass();
     $handler_pass->process($container);
@@ -297,15 +295,15 @@ class TaggedHandlersPassTest extends UnitTestCase {
 
     $container
       ->register('consumer_id', __NAMESPACE__ . '\ValidConsumerWithExtraArguments')
-      ->addTag('service_collector', [
+      ->addTag('service_collector', array(
         'call' => 'addWithId'
-      ]);
+      ));
 
     $container
       ->register('handler1', __NAMESPACE__ . '\ValidHandler')
-      ->addTag('consumer_id', [
+      ->addTag('consumer_id', array(
         'extra1' => 'extra1',
-      ]);
+      ));
 
     $handler_pass = new TaggedHandlersPass();
     $handler_pass->process($container);
@@ -329,17 +327,17 @@ class TaggedHandlersPassTest extends UnitTestCase {
 
     $container
       ->register('consumer_id', __NAMESPACE__ . '\ValidConsumerWithExtraArguments')
-      ->addTag('service_collector', [
+      ->addTag('service_collector', array(
         'call' => 'addWithDifferentOrder'
-      ]);
+      ));
 
     $container
       ->register('handler1', __NAMESPACE__ . '\ValidHandler')
-      ->addTag('consumer_id', [
+      ->addTag('consumer_id', array(
         'priority' => 0,
         'extra1' => 'extra1',
         'extra3' => 'extra3'
-      ]);
+      ));
 
     $handler_pass = new TaggedHandlersPass();
     $handler_pass->process($container);

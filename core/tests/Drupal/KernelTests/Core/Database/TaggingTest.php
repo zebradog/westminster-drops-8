@@ -15,7 +15,7 @@ class TaggingTest extends DatabaseTestBase {
   /**
    * Confirms that a query has a tag added to it.
    */
-  public function testHasTag() {
+  function testHasTag() {
     $query = db_select('test');
     $query->addField('test', 'name');
     $query->addField('test', 'age', 'age');
@@ -29,7 +29,7 @@ class TaggingTest extends DatabaseTestBase {
   /**
    * Tests query tagging "has all of these tags" functionality.
    */
-  public function testHasAllTags() {
+  function testHasAllTags() {
     $query = db_select('test');
     $query->addField('test', 'name');
     $query->addField('test', 'age', 'age');
@@ -44,7 +44,7 @@ class TaggingTest extends DatabaseTestBase {
   /**
    * Tests query tagging "has at least one of these tags" functionality.
    */
-  public function testHasAnyTag() {
+  function testHasAnyTag() {
     $query = db_select('test');
     $query->addField('test', 'name');
     $query->addField('test', 'age', 'age');
@@ -58,7 +58,7 @@ class TaggingTest extends DatabaseTestBase {
   /**
    * Confirms that an extended query has a tag added to it.
    */
-  public function testExtenderHasTag() {
+  function testExtenderHasTag() {
     $query = db_select('test')
       ->extend('Drupal\Core\Database\Query\SelectExtender');
     $query->addField('test', 'name');
@@ -73,7 +73,7 @@ class TaggingTest extends DatabaseTestBase {
   /**
    * Tests extended query tagging "has all of these tags" functionality.
    */
-  public function testExtenderHasAllTags() {
+  function testExtenderHasAllTags() {
     $query = db_select('test')
       ->extend('Drupal\Core\Database\Query\SelectExtender');
     $query->addField('test', 'name');
@@ -89,7 +89,7 @@ class TaggingTest extends DatabaseTestBase {
   /**
    * Tests extended query tagging "has at least one of these tags" functionality.
    */
-  public function testExtenderHasAnyTag() {
+  function testExtenderHasAnyTag() {
     $query = db_select('test')
       ->extend('Drupal\Core\Database\Query\SelectExtender');
     $query->addField('test', 'name');
@@ -106,15 +106,15 @@ class TaggingTest extends DatabaseTestBase {
    *
    * This is how we pass additional context to alter hooks.
    */
-  public function testMetaData() {
+  function testMetaData() {
     $query = db_select('test');
     $query->addField('test', 'name');
     $query->addField('test', 'age', 'age');
 
-    $data = [
+    $data = array(
       'a' => 'A',
       'b' => 'B',
-    ];
+    );
 
     $query->addMetaData('test', $data);
 

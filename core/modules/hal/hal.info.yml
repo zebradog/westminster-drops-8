@@ -5,4 +5,5 @@ package: Web services
 version: VERSION
 core: 8.x
 dependencies:
+  - rest
   - serialization

@@ -65,6 +65,6 @@ abstract class AttributeValueBase {
   /**
    * Implements the magic __toString() method.
    */
-  abstract public function __toString();
+  abstract function __toString();
 
 }

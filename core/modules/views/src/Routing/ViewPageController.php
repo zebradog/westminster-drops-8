@@ -22,9 +22,9 @@ class ViewPageController {
    * @return null|void
    */
   public function handle($view_id, $display_id, RouteMatchInterface $route_match) {
-    $args = [];
+    $args = array();
     $route = $route_match->getRouteObject();
-    $map = $route->hasOption('_view_argument_map') ? $route->getOption('_view_argument_map') : [];
+    $map = $route->hasOption('_view_argument_map') ? $route->getOption('_view_argument_map') : array();
 
     foreach ($map as $attribute => $parameter_name) {
       // Allow parameters be pulled from the request.

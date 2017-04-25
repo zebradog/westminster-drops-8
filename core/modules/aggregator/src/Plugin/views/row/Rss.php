@@ -48,31 +48,31 @@ class Rss extends RssPluginBase {
       $item->{$name} = $field->value;
     }
 
-    $item->elements = [
-      [
+    $item->elements = array(
+      array(
         'key' => 'pubDate',
         // views_view_row_rss takes care about the escaping.
         'value' => gmdate('r', $entity->timestamp->value),
-      ],
-      [
+      ),
+      array(
         'key' => 'dc:creator',
         // views_view_row_rss takes care about the escaping.
         'value' => $entity->author->value,
-      ],
-      [
+      ),
+      array(
         'key' => 'guid',
         // views_view_row_rss takes care about the escaping.
         'value' => $entity->guid->value,
-        'attributes' => ['isPermaLink' => 'false'],
-      ],
-    ];
+        'attributes' => array('isPermaLink' => 'false'),
+      ),
+    );
 
-    $build = [
+    $build = array(
       '#theme' => $this->themeFunctions(),
       '#view' => $this->view,
       '#options' => $this->options,
       '#row' => $item,
-    ];
+    );
     return $build;
   }
 

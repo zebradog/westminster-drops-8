@@ -73,9 +73,9 @@ class BookController extends ControllerBase {
    *   A render array representing the administrative page content.
    */
   public function adminOverview() {
-    $rows = [];
+    $rows = array();
 
-    $headers = [t('Book'), t('Operations')];
+    $headers = array(t('Book'), t('Operations'));
     // Add any recognized books to the table list.
     foreach ($this->bookManager->getAllBooks() as $book) {
       /** @var \Drupal\Core\Url $url */
@@ -83,28 +83,28 @@ class BookController extends ControllerBase {
       if (isset($book['options'])) {
         $url->setOptions($book['options']);
       }
-      $row = [
+      $row = array(
         $this->l($book['title'], $url),
-      ];
-      $links = [];
-      $links['edit'] = [
+      );
+      $links = array();
+      $links['edit'] = array(
         'title' => t('Edit order and titles'),
         'url' => Url::fromRoute('book.admin_edit', ['node' => $book['nid']]),
-      ];
-      $row[] = [
-        'data' => [
+      );
+      $row[] = array(
+        'data' => array(
           '#type' => 'operations',
           '#links' => $links,
-        ],
-      ];
+        ),
+      );
       $rows[] = $row;
     }
-    return [
+    return array(
       '#type' => 'table',
       '#header' => $headers,
       '#rows' => $rows,
       '#empty' => t('No books available.'),
-    ];
+    );
   }
 
   /**
@@ -114,17 +114,17 @@ class BookController extends ControllerBase {
    *   A render array representing the listing of all books content.
    */
   public function bookRender() {
-    $book_list = [];
+    $book_list = array();
     foreach ($this->bookManager->getAllBooks() as $book) {
       $book_list[] = $this->l($book['title'], $book['url']);
     }
-    return [
+    return array(
       '#theme' => 'item_list',
       '#items' => $book_list,
       '#cache' => [
         'tags' => \Drupal::entityManager()->getDefinition('node')->getListCacheTags(),
       ],
-    ];
+    );
   }
 
   /**

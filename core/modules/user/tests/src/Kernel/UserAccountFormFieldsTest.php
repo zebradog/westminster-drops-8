@@ -18,12 +18,12 @@ class UserAccountFormFieldsTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'user', 'field'];
+  public static $modules = array('system', 'user', 'field');
 
   /**
    * Tests the root user account form section in the "Configure site" form.
    */
-  public function testInstallConfigureForm() {
+  function testInstallConfigureForm() {
     require_once \Drupal::root() . '/core/includes/install.core.inc';
     require_once \Drupal::root() . '/core/includes/install.inc';
     $install_state = install_state_defaults();
@@ -37,7 +37,7 @@ class UserAccountFormFieldsTest extends KernelTestBase {
 
     // Verify that web browsers may autocomplete the email value and
     // autofill/prefill the name and pass values.
-    foreach (['mail', 'name', 'pass'] as $key) {
+    foreach (array('mail', 'name', 'pass') as $key) {
       $this->assertFalse(isset($form['account'][$key]['#attributes']['autocomplete']), "'$key' field: 'autocomplete' attribute not found.");
     }
   }
@@ -45,9 +45,9 @@ class UserAccountFormFieldsTest extends KernelTestBase {
   /**
    * Tests the user registration form.
    */
-  public function testUserRegistrationForm() {
+  function testUserRegistrationForm() {
     // Install default configuration; required for AccountFormController.
-    $this->installConfig(['user']);
+    $this->installConfig(array('user'));
 
     // Disable email confirmation to unlock the password field.
     $this->config('user.settings')
@@ -61,7 +61,7 @@ class UserAccountFormFieldsTest extends KernelTestBase {
 
     // Verify that web browsers may autocomplete the email value and
     // autofill/prefill the name and pass values.
-    foreach (['mail', 'name', 'pass'] as $key) {
+    foreach (array('mail', 'name', 'pass') as $key) {
       $this->assertFalse(isset($form['account'][$key]['#attributes']['autocomplete']), "'$key' field: 'autocomplete' attribute not found.");
     }
   }
@@ -69,9 +69,9 @@ class UserAccountFormFieldsTest extends KernelTestBase {
   /**
    * Tests the user edit form.
    */
-  public function testUserEditForm() {
+  function testUserEditForm() {
     // Install default configuration; required for AccountFormController.
-    $this->installConfig(['user']);
+    $this->installConfig(array('user'));
 
     // Install the router table and then rebuild.
     \Drupal::service('router.builder')->rebuild();
@@ -82,7 +82,7 @@ class UserAccountFormFieldsTest extends KernelTestBase {
     $this->assertFieldOrder($form['account']);
 
     // Verify that autocomplete is off on all account fields.
-    foreach (['mail', 'name', 'pass'] as $key) {
+    foreach (array('mail', 'name', 'pass') as $key) {
       $this->assertIdentical($form['account'][$key]['#attributes']['autocomplete'], 'off', "'$key' field: 'autocomplete' attribute is 'off'.");
     }
   }
@@ -128,7 +128,7 @@ class UserAccountFormFieldsTest extends KernelTestBase {
   protected function buildAccountForm($operation) {
     // @see HtmlEntityFormController::getFormObject()
     $entity_type = 'user';
-    $fields = [];
+    $fields = array();
     if ($operation != 'register') {
       $fields['uid'] = 2;
     }

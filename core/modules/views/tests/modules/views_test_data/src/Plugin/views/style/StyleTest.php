@@ -40,7 +40,7 @@ class StyleTest extends StylePluginBase {
    */
   protected function defineOptions() {
     $options = parent::defineOptions();
-    $options['test_option'] = ['default' => ''];
+    $options['test_option'] = array('default' => '');
 
     return $options;
   }
@@ -51,12 +51,12 @@ class StyleTest extends StylePluginBase {
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
 
-    $form['test_option'] = [
+    $form['test_option'] = array(
       '#title' => $this->t('Test option'),
       '#type' => 'textfield',
       '#description' => $this->t('This is a textfield for test_option.'),
       '#default_value' => $this->options['test_option'],
-    ];
+    );
   }
 
   /**

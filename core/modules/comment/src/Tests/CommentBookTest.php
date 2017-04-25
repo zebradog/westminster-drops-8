@@ -21,7 +21,7 @@ class CommentBookTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = ['book', 'comment'];
+  public static $modules = array('book', 'comment');
 
   protected function setUp() {
     parent::setUp();
@@ -44,17 +44,17 @@ class CommentBookTest extends WebTestBase {
 
     $comment_subject = $this->randomMachineName(8);
     $comment_body = $this->randomMachineName(8);
-    $comment = Comment::create([
+    $comment = Comment::create(array(
       'subject' => $comment_subject,
       'comment_body' => $comment_body,
       'entity_id' => $book_node->id(),
       'entity_type' => 'node',
       'field_name' => 'comment',
       'status' => CommentInterface::PUBLISHED,
-    ]);
+    ));
     $comment->save();
 
-    $commenting_user = $this->drupalCreateUser(['access printer-friendly version', 'access comments', 'post comments']);
+    $commenting_user = $this->drupalCreateUser(array('access printer-friendly version', 'access comments', 'post comments'));
     $this->drupalLogin($commenting_user);
 
     $this->drupalGet('node/' . $book_node->id());

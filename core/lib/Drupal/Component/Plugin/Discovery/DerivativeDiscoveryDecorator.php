@@ -2,7 +2,6 @@
 
 namespace Drupal\Component\Plugin\Discovery;
 
-use Drupal\Component\Plugin\Definition\DerivablePluginDefinitionInterface;
 use Drupal\Component\Plugin\Exception\InvalidDeriverException;
 
 /**
@@ -21,7 +20,7 @@ class DerivativeDiscoveryDecorator implements DiscoveryInterface {
    * @var \Drupal\Component\Plugin\Derivative\DeriverInterface[]
    *   Keys are base plugin IDs.
    */
-  protected $derivers = [];
+  protected $derivers = array();
 
   /**
    * The decorated plugin discovery.
@@ -94,7 +93,7 @@ class DerivativeDiscoveryDecorator implements DiscoveryInterface {
    * DiscoveryInterface::getDefinitions().
    */
   protected function getDerivatives(array $base_plugin_definitions) {
-    $plugin_definitions = [];
+    $plugin_definitions = array();
     foreach ($base_plugin_definitions as $base_plugin_id => $plugin_definition) {
       $deriver = $this->getDeriver($base_plugin_id, $plugin_definition);
       if ($deriver) {
@@ -137,7 +136,7 @@ class DerivativeDiscoveryDecorator implements DiscoveryInterface {
       return explode(':', $plugin_id, 2);
     }
 
-    return [$plugin_id, NULL];
+    return array($plugin_id, NULL);
   }
 
   /**
@@ -204,21 +203,12 @@ class DerivativeDiscoveryDecorator implements DiscoveryInterface {
    */
   protected function getDeriverClass($base_definition) {
     $class = NULL;
-    $id = NULL;
-    if ($base_definition instanceof DerivablePluginDefinitionInterface) {
-      $class = $base_definition->getDeriver();
-      $id = $base_definition->id();
-    }
-    if ((is_array($base_definition) || ($base_definition = (array) $base_definition)) && (isset($base_definition['deriver']))) {
-      $class = $base_definition['deriver'];
-      $id = $base_definition['id'];
-    }
-    if ($class) {
+    if ((is_array($base_definition) || ($base_definition = (array) $base_definition)) && (isset($base_definition['deriver']) && $class = $base_definition['deriver'])) {
       if (!class_exists($class)) {
-        throw new InvalidDeriverException(sprintf('Plugin (%s) deriver "%s" does not exist.', $id, $class));
+        throw new InvalidDeriverException(sprintf('Plugin (%s) deriver "%s" does not exist.', $base_definition['id'], $class));
       }
       if (!is_subclass_of($class, '\Drupal\Component\Plugin\Derivative\DeriverInterface')) {
-        throw new InvalidDeriverException(sprintf('Plugin (%s) deriver "%s" must implement \Drupal\Component\Plugin\Derivative\DeriverInterface.', $id, $class));
+        throw new InvalidDeriverException(sprintf('Plugin (%s) deriver "%s" must implement \Drupal\Component\Plugin\Derivative\DeriverInterface.', $base_definition['id'], $class));
       }
     }
     return $class;
@@ -239,7 +229,7 @@ class DerivativeDiscoveryDecorator implements DiscoveryInterface {
     // Use this definition as defaults if a plugin already defined itself as
     // this derivative, but filter out empty values first.
     $filtered_base = array_filter($base_plugin_definition);
-    $derivative_definition = $filtered_base + ($derivative_definition ?: []);
+    $derivative_definition = $filtered_base + ($derivative_definition ?: array());
     // Add back any empty keys that the derivative didn't have.
     return $derivative_definition + $base_plugin_definition;
   }
@@ -248,7 +238,7 @@ class DerivativeDiscoveryDecorator implements DiscoveryInterface {
    * Passes through all unknown calls onto the decorated object.
    */
   public function __call($method, $args) {
-    return call_user_func_array([$this->decorated, $method], $args);
+    return call_user_func_array(array($this->decorated, $method), $args);
   }
 
 }

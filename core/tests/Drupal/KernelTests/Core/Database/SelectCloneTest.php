@@ -12,7 +12,7 @@ class SelectCloneTest extends DatabaseTestBase {
   /**
    * Test that subqueries as value within conditions are cloned properly.
    */
-  public function testSelectConditionSubQueryCloning() {
+  function testSelectConditionSubQueryCloning() {
     $subquery = db_select('test', 't');
     $subquery->addField('t', 'id', 'id');
     $subquery->condition('age', 28, '<');

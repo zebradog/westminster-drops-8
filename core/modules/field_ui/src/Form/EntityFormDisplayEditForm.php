@@ -38,7 +38,7 @@ class EntityFormDisplayEditForm extends EntityDisplayFormBase {
     $field_name = $field_definition->getName();
 
     // Update the (invisible) title of the 'plugin' column.
-    $field_row['plugin']['#title'] = $this->t('Formatter for @title', ['@title' => $field_definition->getLabel()]);
+    $field_row['plugin']['#title'] = $this->t('Formatter for @title', array('@title' => $field_definition->getLabel()));
     if (!empty($field_row['plugin']['settings_edit_form']) && ($plugin = $this->entity->getRenderer($field_name))) {
       $plugin_type_info = $plugin->getPluginDefinition();
       $field_row['plugin']['settings_edit_form']['label']['#markup'] = $this->t('Widget settings:') . ' <span class="plugin-name">' . $plugin_type_info['label'] . '</span>';
@@ -90,13 +90,12 @@ class EntityFormDisplayEditForm extends EntityDisplayFormBase {
    * {@inheritdoc}
    */
   protected function getTableHeader() {
-    return [
+    return array(
       $this->t('Field'),
       $this->t('Weight'),
       $this->t('Parent'),
-      $this->t('Region'),
-      ['data' => $this->t('Widget'), 'colspan' => 3],
-    ];
+      array('data' => $this->t('Widget'), 'colspan' => 3),
+    );
   }
 
   /**
@@ -113,17 +112,17 @@ class EntityFormDisplayEditForm extends EntityDisplayFormBase {
    * {@inheritdoc}
    */
   protected function thirdPartySettingsForm(PluginSettingsInterface $plugin, FieldDefinitionInterface $field_definition, array $form, FormStateInterface $form_state) {
-    $settings_form = [];
+    $settings_form = array();
     // Invoke hook_field_widget_third_party_settings_form(), keying resulting
     // subforms by module name.
     foreach ($this->moduleHandler->getImplementations('field_widget_third_party_settings_form') as $module) {
-      $settings_form[$module] = $this->moduleHandler->invoke($module, 'field_widget_third_party_settings_form', [
+      $settings_form[$module] = $this->moduleHandler->invoke($module, 'field_widget_third_party_settings_form', array(
         $plugin,
         $field_definition,
         $this->entity->getMode(),
         $form,
         $form_state,
-      ]);
+      ));
     }
     return $settings_form;
   }
@@ -132,11 +131,11 @@ class EntityFormDisplayEditForm extends EntityDisplayFormBase {
    * {@inheritdoc}
    */
   protected function alterSettingsSummary(array &$summary, PluginSettingsInterface $plugin, FieldDefinitionInterface $field_definition) {
-    $context = [
+    $context = array(
       'widget' => $plugin,
       'field_definition' => $field_definition,
       'form_mode' => $this->entity->getMode(),
-    ];
+    );
     $this->moduleHandler->alter('field_widget_settings_summary', $summary, $context);
   }
 

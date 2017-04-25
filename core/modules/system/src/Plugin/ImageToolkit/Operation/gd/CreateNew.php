@@ -21,29 +21,29 @@ class CreateNew extends GDImageToolkitOperationBase {
    * {@inheritdoc}
    */
   protected function arguments() {
-    return [
-      'width' => [
+    return array(
+      'width' => array(
         'description' => 'The width of the image, in pixels',
-      ],
-      'height' => [
+      ),
+      'height' => array(
         'description' => 'The height of the image, in pixels',
-      ],
-      'extension' => [
+      ),
+      'extension' => array(
         'description' => 'The extension of the image file (e.g. png, gif, etc.)',
         'required' => FALSE,
         'default' => 'png',
-      ],
-      'transparent_color' => [
+      ),
+      'transparent_color' => array(
         'description' => 'The RGB hex color for GIF transparency',
         'required' => FALSE,
         'default' => '#ffffff',
-      ],
-      'is_temp' => [
+      ),
+      'is_temp' => array(
         'description' => 'If TRUE, this operation is being used to create a temporary image by another GD operation. After performing its function, the caller is responsible for destroying the original GD resource.',
         'required' => FALSE,
         'default' => FALSE,
-      ],
-    ];
+      ),
+    );
   }
 
   /**

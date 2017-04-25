@@ -259,7 +259,7 @@ class RouteTest extends KernelTestBase {
    * @param array|string $value
    *   Source link path information.
    *
-   * @return array
+   * @return array $actual
    *   The route information based on the source link_path.
    */
   protected function doTransform($value) {

@@ -19,14 +19,14 @@ class Select extends Query implements SelectInterface {
    *
    * @var array
    */
-  protected $fields = [];
+  protected $fields = array();
 
   /**
    * The expressions to SELECT as virtual fields.
    *
    * @var array
    */
-  protected $expressions = [];
+  protected $expressions = array();
 
   /**
    * The tables against which to JOIN.
@@ -52,7 +52,7 @@ class Select extends Query implements SelectInterface {
    *
    * @var array
    */
-  protected $tables = [];
+  protected $tables = array();
 
   /**
    * The fields by which to order this query.
@@ -62,14 +62,14 @@ class Select extends Query implements SelectInterface {
    *
    * @var array
    */
-  protected $order = [];
+  protected $order = array();
 
   /**
    * The fields by which to group.
    *
    * @var array
    */
-  protected $group = [];
+  protected $group = array();
 
   /**
    * The conditional object for the HAVING clause.
@@ -103,7 +103,7 @@ class Select extends Query implements SelectInterface {
    *
    * @var array
    */
-  protected $union = [];
+  protected $union = array();
 
   /**
    * Indicates if preExecute() has already been called.
@@ -128,7 +128,7 @@ class Select extends Query implements SelectInterface {
    * @param array $options
    *   Array of query options.
    */
-  public function __construct($table, $alias = NULL, Connection $connection, $options = []) {
+  public function __construct($table, $alias = NULL, Connection $connection, $options = array()) {
     $options['return'] = Database::RETURN_STATEMENT;
     parent::__construct($connection, $options);
     $conjunction = isset($options['conjunction']) ? $options['conjunction'] : 'AND';
@@ -300,7 +300,7 @@ class Select extends Query implements SelectInterface {
   /**
    * {@inheritdoc}
    */
-  public function having($snippet, $args = []) {
+  public function having($snippet, $args = array()) {
     $this->having->where($snippet, $args);
     return $this;
   }
@@ -467,11 +467,11 @@ class Select extends Query implements SelectInterface {
       //   issue.
       // - Emit E_USER_DEPRECATED if term_access is used.
       //   https://www.drupal.org/node/2575081
-      $term_access_tags = ['term_access' => 1, 'taxonomy_term_access' => 1];
+      $term_access_tags = array('term_access' => 1, 'taxonomy_term_access' => 1);
       if (array_intersect_key($this->alterTags, $term_access_tags)) {
         $this->alterTags += $term_access_tags;
       }
-      $hooks = ['query'];
+      $hooks = array('query');
       foreach ($this->alterTags as $tag => $value) {
         $hooks[] = 'query_' . $tag;
       }
@@ -538,11 +538,11 @@ class Select extends Query implements SelectInterface {
     }
     $alias = $alias_candidate;
 
-    $this->fields[$alias] = [
+    $this->fields[$alias] = array(
       'field' => $field,
       'table' => $table_alias,
       'alias' => $alias,
-    ];
+    );
 
     return $alias;
   }
@@ -550,7 +550,7 @@ class Select extends Query implements SelectInterface {
   /**
    * {@inheritdoc}
    */
-  public function fields($table_alias, array $fields = []) {
+  public function fields($table_alias, array $fields = array()) {
     if ($fields) {
       foreach ($fields as $field) {
         // We don't care what alias was assigned.
@@ -568,7 +568,7 @@ class Select extends Query implements SelectInterface {
   /**
    * {@inheritdoc}
    */
-  public function addExpression($expression, $alias = NULL, $arguments = []) {
+  public function addExpression($expression, $alias = NULL, $arguments = array()) {
     if (empty($alias)) {
       $alias = 'expression';
     }
@@ -580,11 +580,11 @@ class Select extends Query implements SelectInterface {
     }
     $alias = $alias_candidate;
 
-    $this->expressions[$alias] = [
+    $this->expressions[$alias] = array(
       'expression' => $expression,
       'alias' => $alias,
       'arguments' => $arguments,
-    ];
+    );
 
     return $alias;
   }
@@ -592,35 +592,35 @@ class Select extends Query implements SelectInterface {
   /**
    * {@inheritdoc}
    */
-  public function join($table, $alias = NULL, $condition = NULL, $arguments = []) {
+  public function join($table, $alias = NULL, $condition = NULL, $arguments = array()) {
     return $this->addJoin('INNER', $table, $alias, $condition, $arguments);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function innerJoin($table, $alias = NULL, $condition = NULL, $arguments = []) {
+  public function innerJoin($table, $alias = NULL, $condition = NULL, $arguments = array()) {
     return $this->addJoin('INNER', $table, $alias, $condition, $arguments);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function leftJoin($table, $alias = NULL, $condition = NULL, $arguments = []) {
+  public function leftJoin($table, $alias = NULL, $condition = NULL, $arguments = array()) {
     return $this->addJoin('LEFT OUTER', $table, $alias, $condition, $arguments);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function rightJoin($table, $alias = NULL, $condition = NULL, $arguments = []) {
+  public function rightJoin($table, $alias = NULL, $condition = NULL, $arguments = array()) {
     return $this->addJoin('RIGHT OUTER', $table, $alias, $condition, $arguments);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function addJoin($type, $table, $alias = NULL, $condition = NULL, $arguments = []) {
+  public function addJoin($type, $table, $alias = NULL, $condition = NULL, $arguments = array()) {
     if (empty($alias)) {
       if ($table instanceof SelectInterface) {
         $alias = 'subquery';
@@ -641,13 +641,13 @@ class Select extends Query implements SelectInterface {
       $condition = str_replace('%alias', $alias, $condition);
     }
 
-    $this->tables[$alias] = [
+    $this->tables[$alias] = array(
       'join type' => $type,
       'table' => $table,
       'alias' => $alias,
       'condition' => $condition,
       'arguments' => $arguments,
-    ];
+    );
 
     return $alias;
   }
@@ -675,7 +675,7 @@ class Select extends Query implements SelectInterface {
    * {@inheritdoc}
    */
   public function range($start = NULL, $length = NULL) {
-    $this->range = $start !== NULL ? ['start' => $start, 'length' => $length] : [];
+    $this->range = $start !== NULL ? array('start' => $start, 'length' => $length) : array();
     return $this;
   }
 
@@ -696,10 +696,10 @@ class Select extends Query implements SelectInterface {
       default:
     }
 
-    $this->union[] = [
+    $this->union[] = array(
       'type' => $type,
       'query' => $query,
-    ];
+    );
 
     return $this;
   }
@@ -770,7 +770,7 @@ class Select extends Query implements SelectInterface {
     // Ordering a count query is a waste of cycles, and breaks on some
     // databases anyway.
     $orders = &$count->getOrderBy();
-    $orders = [];
+    $orders = array();
 
     if ($count->distinct && !empty($group_by)) {
       // If the query is distinct and contains a GROUP BY, we need to remove the
@@ -809,7 +809,7 @@ class Select extends Query implements SelectInterface {
     }
 
     // FIELDS and EXPRESSIONS
-    $fields = [];
+    $fields = array();
     foreach ($this->tables as $alias => $table) {
       if (!empty($table['all_fields'])) {
         $fields[] = $this->connection->escapeTable($alias) . '.*';
@@ -886,7 +886,7 @@ class Select extends Query implements SelectInterface {
     // ORDER BY
     if ($this->order) {
       $query .= "\nORDER BY ";
-      $fields = [];
+      $fields = array();
       foreach ($this->order as $field => $direction) {
         $fields[] = $this->connection->escapeField($field) . ' ' . $direction;
       }

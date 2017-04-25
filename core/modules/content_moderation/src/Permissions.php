@@ -3,7 +3,8 @@
 namespace Drupal\content_moderation;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\workflows\Entity\Workflow;
+use Drupal\content_moderation\Entity\ModerationState;
+use Drupal\content_moderation\Entity\ModerationStateTransition;
 
 /**
  * Defines a class for dynamic permissions based on transitions.
@@ -19,20 +20,24 @@ class Permissions {
    *   The transition permissions.
    */
   public function transitionPermissions() {
-    $permissions = [];
-    /** @var \Drupal\workflows\WorkflowInterface $workflow */
-    foreach (Workflow::loadMultipleByType('content_moderation') as $id => $workflow) {
-      foreach ($workflow->getTransitions() as $transition) {
-        $permissions['use ' . $workflow->id() . ' transition ' . $transition->id()] = [
-          'title' => $this->t('Use %transition transition from %workflow workflow.', [
-            '%transition' => $transition->label(),
-            '%workflow' => $workflow->label(),
-          ]),
-        ];
-      }
+    // @todo https://www.drupal.org/node/2779933 write a test for this.
+    $perms = [];
+    /* @var \Drupal\content_moderation\ModerationStateInterface[] $states */
+    $states = ModerationState::loadMultiple();
+    /* @var \Drupal\content_moderation\ModerationStateTransitionInterface $transition */
+    foreach (ModerationStateTransition::loadMultiple() as $id => $transition) {
+      $perms['use ' . $id . ' transition'] = [
+        'title' => $this->t('Use the %transition_name transition', [
+          '%transition_name' => $transition->label(),
+        ]),
+        'description' => $this->t('Move content from %from state to %to state.', [
+          '%from' => $states[$transition->getFromState()]->label(),
+          '%to' => $states[$transition->getToState()]->label(),
+        ]),
+      ];
     }
 
-    return $permissions;
+    return $perms;
   }
 
 }

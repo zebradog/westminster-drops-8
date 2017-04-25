@@ -73,8 +73,8 @@ class BookExport {
     }
 
     $tree = $this->bookManager->bookSubtreeData($node->book);
-    $contents = $this->exportTraverse($tree, [$this, 'bookNodeExport']);
-    return [
+    $contents = $this->exportTraverse($tree, array($this, 'bookNodeExport'));
+    return array(
       '#theme' => 'book_export_html',
       '#title' => $node->label(),
       '#contents' => $contents,
@@ -82,7 +82,7 @@ class BookExport {
       '#cache' => [
         'tags' => $node->getEntityType()->getListCacheTags(),
       ],
-    ];
+    );
   }
 
   /**
@@ -101,9 +101,9 @@ class BookExport {
    */
   protected function exportTraverse(array $tree, $callable) {
     // If there is no valid callable, use the default callback.
-    $callable = !empty($callable) ? $callable : [$this, 'bookNodeExport'];
+    $callable = !empty($callable) ? $callable : array($this, 'bookNodeExport');
 
-    $build = [];
+    $build = array();
     foreach ($tree as $data) {
       // Note- access checking is already performed when building the tree.
       if ($node = $this->nodeStorage->load($data['link']['nid'])) {
@@ -133,12 +133,12 @@ class BookExport {
     $build = $this->viewBuilder->view($node, 'print', NULL);
     unset($build['#theme']);
 
-    return [
+    return array(
       '#theme' => 'book_node_export_html',
       '#content' => $build,
       '#node' => $node,
       '#children' => $children,
-    ];
+    );
   }
 
 }

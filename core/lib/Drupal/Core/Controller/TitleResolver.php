@@ -47,11 +47,11 @@ class TitleResolver implements TitleResolverInterface {
       $route_title = call_user_func_array($callable, $arguments);
     }
     elseif ($title = $route->getDefault('_title')) {
-      $options = [];
+      $options = array();
       if ($context = $route->getDefault('_title_context')) {
         $options['context'] = $context;
       }
-      $args = [];
+      $args = array();
       if (($raw_parameters = $request->attributes->get('_raw_variables'))) {
         foreach ($raw_parameters->all() as $key => $value) {
           $args['@' . $key] = $value;

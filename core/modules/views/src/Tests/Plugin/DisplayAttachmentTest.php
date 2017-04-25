@@ -17,21 +17,21 @@ class DisplayAttachmentTest extends PluginTestBase {
    *
    * @var array
    */
-  public static $testViews = ['test_display_attachment', 'test_attached_disabled'];
+  public static $testViews = array('test_display_attachment', 'test_attached_disabled');
 
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['node', 'views'];
+  public static $modules = array('node', 'views');
 
   protected function setUp() {
     parent::setUp();
 
     $this->enableViewsTestModule();
 
-    $admin_user = $this->drupalCreateUser(['administer site configuration']);
+    $admin_user = $this->drupalCreateUser(array('administer site configuration'));
     $this->drupalLogin($admin_user);
   }
 

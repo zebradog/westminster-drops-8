@@ -7,9 +7,6 @@ use Drupal\simpletest\WebTestBase;
 
 /**
  * Provides common helper methods for Taxonomy module tests.
- *
- * @deprecated Scheduled for removal in Drupal 9.0.0.
- *   Use \Drupal\Tests\taxonomy\Functional\TaxonomyTestBase instead.
  */
 abstract class TaxonomyTestBase extends WebTestBase {
 
@@ -21,7 +18,7 @@ abstract class TaxonomyTestBase extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = ['taxonomy', 'block'];
+  public static $modules = array('taxonomy', 'block');
 
   /**
    * {@inheritdoc}
@@ -32,7 +29,7 @@ abstract class TaxonomyTestBase extends WebTestBase {
 
     // Create Basic page and Article node types.
     if ($this->profile != 'standard') {
-      $this->drupalCreateContentType(['type' => 'article', 'name' => 'Article']);
+      $this->drupalCreateContentType(array('type' => 'article', 'name' => 'Article'));
     }
   }
 

@@ -89,7 +89,7 @@ class MigrateMessageTest extends KernelTestBase implements MigrateMessageInterfa
   public function testMessagesTeed() {
     // Ask to receive any messages sent to the idmap.
     \Drupal::service('event_dispatcher')->addListener(MigrateEvents::IDMAP_MESSAGE,
-      [$this, 'mapMessageRecorder']);
+      array($this, 'mapMessageRecorder'));
     $executable = new MigrateExecutable($this->migration, $this);
     $executable->import();
     $this->assertIdentical(count($this->messages), 1);

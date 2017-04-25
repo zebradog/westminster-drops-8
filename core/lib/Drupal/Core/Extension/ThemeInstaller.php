@@ -17,11 +17,6 @@ use Psr\Log\LoggerInterface;
 class ThemeInstaller implements ThemeInstallerInterface {
 
   /**
-   * @var \Drupal\Core\Extension\ThemeHandlerInterface
-   */
-  protected $themeHandler;
-
-  /**
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $configFactory;
@@ -60,6 +55,7 @@ class ThemeInstaller implements ThemeInstallerInterface {
    * @var \Psr\Log\LoggerInterface
    */
   protected $logger;
+
 
   /**
    * Constructs a new ThemeInstaller.
@@ -115,7 +111,7 @@ class ThemeInstaller implements ThemeInstallerInterface {
       }
 
       // Only process themes that are not installed currently.
-      $installed_themes = $extension_config->get('theme') ?: [];
+      $installed_themes = $extension_config->get('theme') ?: array();
       if (!$theme_list = array_diff_key($theme_list, $installed_themes)) {
         // Nothing to do. All themes already installed.
         return TRUE;
@@ -147,10 +143,10 @@ class ThemeInstaller implements ThemeInstallerInterface {
       $theme_list = array_keys($theme_list);
     }
     else {
-      $installed_themes = $extension_config->get('theme') ?: [];
+      $installed_themes = $extension_config->get('theme') ?: array();
     }
 
-    $themes_installed = [];
+    $themes_installed = array();
     foreach ($theme_list as $key) {
       // Only process themes that are not already installed.
       $installed = $extension_config->get("theme.$key") !== NULL;
@@ -179,7 +175,7 @@ class ThemeInstaller implements ThemeInstallerInterface {
       $this->themeHandler->addTheme($theme_data[$key]);
 
       // Update the current theme data accordingly.
-      $current_theme_data = $this->state->get('system.theme.data', []);
+      $current_theme_data = $this->state->get('system.theme.data', array());
       $current_theme_data[$key] = $theme_data[$key];
       $this->state->set('system.theme.data', $current_theme_data);
 
@@ -200,14 +196,14 @@ class ThemeInstaller implements ThemeInstallerInterface {
       $themes_installed[] = $key;
 
       // Record the fact that it was installed.
-      $this->logger->info('%theme theme installed.', ['%theme' => $key]);
+      $this->logger->info('%theme theme installed.', array('%theme' => $key));
     }
 
     $this->cssCollectionOptimizer->deleteAll();
     $this->resetSystem();
 
     // Invoke hook_themes_installed() after the themes have been installed.
-    $this->moduleHandler->invokeAll('themes_installed', [$themes_installed]);
+    $this->moduleHandler->invokeAll('themes_installed', array($themes_installed));
 
     return !empty($themes_installed);
   }
@@ -244,7 +240,7 @@ class ThemeInstaller implements ThemeInstallerInterface {
     }
 
     $this->cssCollectionOptimizer->deleteAll();
-    $current_theme_data = $this->state->get('system.theme.data', []);
+    $current_theme_data = $this->state->get('system.theme.data', array());
     foreach ($theme_list as $key) {
       // The value is not used; the weight is ignored for themes currently.
       $extension_config->clear("theme.$key");
@@ -284,7 +280,7 @@ class ThemeInstaller implements ThemeInstallerInterface {
 
     // @todo It feels wrong to have the requirement to clear the local tasks
     //   cache here.
-    Cache::invalidateTags(['local_task']);
+    Cache::invalidateTags(array('local_task'));
     $this->themeRegistryRebuild();
   }
 

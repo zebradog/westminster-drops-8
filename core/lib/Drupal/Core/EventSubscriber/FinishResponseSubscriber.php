@@ -89,21 +89,6 @@ class FinishResponseSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Sets extra headers on any responses, also subrequest ones.
-   *
-   * @param \Symfony\Component\HttpKernel\Event\FilterResponseEvent $event
-   *   The event to process.
-   */
-  public function onAllResponds(FilterResponseEvent $event) {
-    $response = $event->getResponse();
-    // Always add the 'http_response' cache tag to be able to invalidate every
-    // response, for example after rebuilding routes.
-    if ($response instanceof CacheableResponseInterface) {
-      $response->getCacheableMetadata()->addCacheTags(['http_response']);
-    }
-  }
-
-  /**
    * Sets extra headers on successful responses.
    *
    * @param \Symfony\Component\HttpKernel\Event\FilterResponseEvent $event
@@ -298,10 +283,7 @@ class FinishResponseSubscriber implements EventSubscriberInterface {
    *   An array of event listener definitions.
    */
   public static function getSubscribedEvents() {
-    $events[KernelEvents::RESPONSE][] = ['onRespond'];
-    // There is no specific reason for choosing 16 beside it should be executed
-    // before ::onRespond().
-    $events[KernelEvents::RESPONSE][] = ['onAllResponds', 16];
+    $events[KernelEvents::RESPONSE][] = array('onRespond');
     return $events;
   }
 

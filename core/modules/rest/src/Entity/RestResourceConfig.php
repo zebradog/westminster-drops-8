@@ -3,7 +3,6 @@
 namespace Drupal\rest\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
-use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Plugin\DefaultSingleLazyPluginCollection;
 use Drupal\rest\RestResourceConfigInterface;
 
@@ -254,24 +253,6 @@ class RestResourceConfig extends ConfigEntityBase implements RestResourceConfigI
    */
   protected function normalizeRestMethod($method) {
     return strtoupper($method);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function postSave(EntityStorageInterface $storage, $update = TRUE) {
-    parent::postSave($storage, $update);
-
-    \Drupal::service('router.builder')->setRebuildNeeded();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function postDelete(EntityStorageInterface $storage, array $entities) {
-    parent::postDelete($storage, $entities);
-
-    \Drupal::service('router.builder')->setRebuildNeeded();
   }
 
 }

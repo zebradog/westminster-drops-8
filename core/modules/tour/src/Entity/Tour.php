@@ -59,7 +59,7 @@ class Tour extends ConfigEntityBase implements TourInterface {
    *
    * @var array
    */
-  protected $routes = [];
+  protected $routes = array();
 
   /**
    * The routes on which this tour should be displayed, keyed by route id.
@@ -80,7 +80,7 @@ class Tour extends ConfigEntityBase implements TourInterface {
    *
    * @var array
    */
-  protected $tips = [];
+  protected $tips = array();
 
   /**
    * {@inheritdoc}
@@ -109,7 +109,7 @@ class Tour extends ConfigEntityBase implements TourInterface {
    * {@inheritdoc}
    */
   public function getTips() {
-    $tips = [];
+    $tips = array();
     foreach ($this->tips as $id => $tip) {
       $tips[] = $this->getTip($id);
     }
@@ -136,9 +136,9 @@ class Tour extends ConfigEntityBase implements TourInterface {
    */
   public function hasMatchingRoute($route_name, $route_params) {
     if (!isset($this->keyedRoutes)) {
-      $this->keyedRoutes = [];
+      $this->keyedRoutes = array();
       foreach ($this->getRoutes() as $route) {
-        $this->keyedRoutes[$route['route_name']] = isset($route['route_params']) ? $route['route_params'] : [];
+        $this->keyedRoutes[$route['route_name']] = isset($route['route_params']) ? $route['route_params'] : array();
       }
     }
     if (!isset($this->keyedRoutes[$route_name])) {

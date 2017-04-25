@@ -15,7 +15,7 @@ class StaticDiscovery implements DiscoveryInterface {
    */
   public function getDefinitions() {
     if (!$this->definitions) {
-      $this->definitions = [];
+      $this->definitions = array();
     }
     return $this->definitions;
   }

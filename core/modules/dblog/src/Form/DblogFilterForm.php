@@ -23,39 +23,39 @@ class DblogFilterForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $filters = dblog_filters();
 
-    $form['filters'] = [
+    $form['filters'] = array(
       '#type' => 'details',
       '#title' => $this->t('Filter log messages'),
       '#open' => TRUE,
-    ];
+    );
     foreach ($filters as $key => $filter) {
-      $form['filters']['status'][$key] = [
+      $form['filters']['status'][$key] = array(
         '#title' => $filter['title'],
         '#type' => 'select',
         '#multiple' => TRUE,
         '#size' => 8,
         '#options' => $filter['options'],
-      ];
+      );
       if (!empty($_SESSION['dblog_overview_filter'][$key])) {
         $form['filters']['status'][$key]['#default_value'] = $_SESSION['dblog_overview_filter'][$key];
       }
     }
 
-    $form['filters']['actions'] = [
+    $form['filters']['actions'] = array(
       '#type' => 'actions',
-      '#attributes' => ['class' => ['container-inline']],
-    ];
-    $form['filters']['actions']['submit'] = [
+      '#attributes' => array('class' => array('container-inline')),
+    );
+    $form['filters']['actions']['submit'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Filter'),
-    ];
+    );
     if (!empty($_SESSION['dblog_overview_filter'])) {
-      $form['filters']['actions']['reset'] = [
+      $form['filters']['actions']['reset'] = array(
         '#type' => 'submit',
         '#value' => $this->t('Reset'),
-        '#limit_validation_errors' => [],
-        '#submit' => ['::resetForm'],
-      ];
+        '#limit_validation_errors' => array(),
+        '#submit' => array('::resetForm'),
+      );
     }
     return $form;
   }
@@ -90,7 +90,7 @@ class DblogFilterForm extends FormBase {
    *   The current state of the form.
    */
   public function resetForm(array &$form, FormStateInterface $form_state) {
-    $_SESSION['dblog_overview_filter'] = [];
+    $_SESSION['dblog_overview_filter'] = array();
   }
 
 }

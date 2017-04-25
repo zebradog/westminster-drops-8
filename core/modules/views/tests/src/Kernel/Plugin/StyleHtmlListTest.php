@@ -18,12 +18,12 @@ class StyleHtmlListTest extends ViewsKernelTestBase {
    *
    * @var array
    */
-  public static $testViews = ['test_style_html_list'];
+  public static $testViews = array('test_style_html_list');
 
   /**
    * Make sure that the HTML list style markup is correct.
    */
-  public function testDefaultRowClasses() {
+  function testDefaultRowClasses() {
     $view = Views::getView('test_style_html_list');
     $output = $view->preview();
     $output = \Drupal::service('renderer')->renderRoot($output);

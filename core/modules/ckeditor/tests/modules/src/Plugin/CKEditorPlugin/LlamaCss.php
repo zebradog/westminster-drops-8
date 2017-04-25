@@ -19,27 +19,27 @@ class LlamaCss extends Llama implements CKEditorPluginButtonsInterface, CKEditor
   /**
    * {@inheritdoc}
    */
-  public function getButtons() {
-    return [
-      'LlamaCSS' => [
+  function getButtons() {
+    return array(
+      'LlamaCSS' => array(
         'label' => t('Insert Llama CSS'),
-      ],
-    ];
+      ),
+    );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getCssFiles(Editor $editor) {
-    return [
+  function getCssFiles(Editor $editor) {
+    return array(
       drupal_get_path('module', 'ckeditor_test') . '/css/llama.css'
-    ];
+    );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getFile() {
+  function getFile() {
     return drupal_get_path('module', 'ckeditor_test') . '/js/llama_css.js';
   }
 

@@ -68,7 +68,7 @@ abstract class PluginManagerBase implements PluginManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function createInstance($plugin_id, array $configuration = []) {
+  public function createInstance($plugin_id, array $configuration = array()) {
     // If this PluginManager has fallback capabilities catch
     // PluginNotFoundExceptions.
     if ($this instanceof FallbackPluginManagerInterface) {

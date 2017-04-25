@@ -37,7 +37,7 @@ class SearchPageCacheTagsTest extends SearchTestBase {
     parent::setUp();
 
     // Create user.
-    $this->searchingUser = $this->drupalCreateUser(['search content', 'access user profiles']);
+    $this->searchingUser = $this->drupalCreateUser(array('search content', 'access user profiles'));
 
     // Create a node and update the search index.
     $this->node = $this->drupalCreateNode(['title' => 'bike shed shop']);
@@ -50,7 +50,7 @@ class SearchPageCacheTagsTest extends SearchTestBase {
   /**
    * Tests the presence of the expected cache tag in various situations.
    */
-  public function testSearchText() {
+  function testSearchText() {
     $this->drupalLogin($this->searchingUser);
 
     // Initial page for searching nodes.
@@ -60,7 +60,7 @@ class SearchPageCacheTagsTest extends SearchTestBase {
     $this->assertCacheTag('node_list');
 
     // Node search results.
-    $edit = [];
+    $edit = array();
     $edit['keys'] = 'bike shed';
     $this->drupalPostForm('search/node', $edit, t('Search'));
     $this->assertText('bike shed shop');
@@ -70,7 +70,6 @@ class SearchPageCacheTagsTest extends SearchTestBase {
     $this->assertCacheTag('node:1');
     $this->assertCacheTag('user:2');
     $this->assertCacheTag('rendered');
-    $this->assertCacheTag('http_response');
     $this->assertCacheTag('node_list');
 
     // Updating a node should invalidate the search plugin's index cache tag.
@@ -84,7 +83,6 @@ class SearchPageCacheTagsTest extends SearchTestBase {
     $this->assertCacheTag('node:1');
     $this->assertCacheTag('user:2');
     $this->assertCacheTag('rendered');
-    $this->assertCacheTag('http_response');
     $this->assertCacheTag('node_list');
 
     // Deleting a node should invalidate the search plugin's index cache tag.
@@ -174,7 +172,6 @@ class SearchPageCacheTagsTest extends SearchTestBase {
       'config:search.page.node_search',
       'search_index',
       'search_index:node_search',
-      'http_response',
       'rendered',
       'node_list',
     ];
@@ -182,7 +179,7 @@ class SearchPageCacheTagsTest extends SearchTestBase {
     // Node search results for shop, should return node:1 (bike shed shop) and
     // node:2 (Llama shop). The related authors cache tags should be visible as
     // well.
-    $edit = [];
+    $edit = array();
     $edit['keys'] = 'shop';
     $this->drupalPostForm('search/node', $edit, t('Search'));
     $this->assertText('bike shed shop');
@@ -195,12 +192,13 @@ class SearchPageCacheTagsTest extends SearchTestBase {
       'node_view',
       'config:filter.format.plain_text',
     ]);
-    $this->assertCacheTags($expected_cache_tags);
+    $cache_tags = $this->drupalGetHeader('X-Drupal-Cache-Tags');
+    $this->assertEqual(explode(' ', $cache_tags), $expected_cache_tags);
 
     // Only get the new node in the search results, should result in node:1,
     // node:2 and user:3 as cache tags even though only node:1 is shown. This is
     // because node:2 is reference in node:1 as an entity reference.
-    $edit = [];
+    $edit = array();
     $edit['keys'] = 'Llama';
     $this->drupalPostForm('search/node', $edit, t('Search'));
     $this->assertText('Llama shop');
@@ -210,7 +208,8 @@ class SearchPageCacheTagsTest extends SearchTestBase {
       'user:3',
       'node_view',
     ]);
-    $this->assertCacheTags($expected_cache_tags);
+    $cache_tags = $this->drupalGetHeader('X-Drupal-Cache-Tags');
+    $this->assertEqual(explode(' ', $cache_tags), $expected_cache_tags);
   }
 
 }

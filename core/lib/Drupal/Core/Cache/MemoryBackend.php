@@ -10,11 +10,6 @@ namespace Drupal\Core\Cache;
  * Should be used for unit tests and specialist use-cases only, does not
  * store cached items between requests.
  *
- * The functions ::prepareItem()/::set() use unserialize()/serialize(). It
- * behaves as an external cache backend to avoid changing the cached data by
- * reference. In ::prepareItem(), the object is not modified by the call to
- * unserialize() because we make a clone of it.
- *
  * @ingroup cache
  */
 class MemoryBackend implements CacheBackendInterface, CacheTagsInvalidatorInterface {
@@ -22,7 +17,16 @@ class MemoryBackend implements CacheBackendInterface, CacheTagsInvalidatorInterf
   /**
    * Array to store cache objects.
    */
-  protected $cache = [];
+  protected $cache = array();
+
+  /**
+   * Constructs a MemoryBackend object.
+   *
+   * @param string $bin
+   *   The cache bin for which the object is created.
+   */
+  public function __construct($bin) {
+  }
 
   /**
    * {@inheritdoc}
@@ -40,7 +44,7 @@ class MemoryBackend implements CacheBackendInterface, CacheTagsInvalidatorInterf
    * {@inheritdoc}
    */
   public function getMultiple(&$cids, $allow_invalid = FALSE) {
-    $ret = [];
+    $ret = array();
 
     $items = array_intersect_key($this->cache, array_flip($cids));
 
@@ -97,26 +101,26 @@ class MemoryBackend implements CacheBackendInterface, CacheTagsInvalidatorInterf
   /**
    * {@inheritdoc}
    */
-  public function set($cid, $data, $expire = Cache::PERMANENT, array $tags = []) {
+  public function set($cid, $data, $expire = Cache::PERMANENT, array $tags = array()) {
     assert('\Drupal\Component\Assertion\Inspector::assertAllStrings($tags)', 'Cache Tags must be strings.');
     $tags = array_unique($tags);
     // Sort the cache tags so that they are stored consistently in the database.
     sort($tags);
-    $this->cache[$cid] = (object) [
+    $this->cache[$cid] = (object) array(
       'cid' => $cid,
       'data' => serialize($data),
       'created' => $this->getRequestTime(),
       'expire' => $expire,
       'tags' => $tags,
-    ];
+    );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function setMultiple(array $items = []) {
+  public function setMultiple(array $items = array()) {
     foreach ($items as $cid => $item) {
-      $this->set($cid, $item['data'], isset($item['expire']) ? $item['expire'] : CacheBackendInterface::CACHE_PERMANENT, isset($item['tags']) ? $item['tags'] : []);
+      $this->set($cid, $item['data'], isset($item['expire']) ? $item['expire'] : CacheBackendInterface::CACHE_PERMANENT, isset($item['tags']) ? $item['tags'] : array());
     }
   }
 
@@ -138,7 +142,7 @@ class MemoryBackend implements CacheBackendInterface, CacheTagsInvalidatorInterf
    * {@inheritdoc}
    */
   public function deleteAll() {
-    $this->cache = [];
+    $this->cache = array();
   }
 
   /**
@@ -155,9 +159,7 @@ class MemoryBackend implements CacheBackendInterface, CacheTagsInvalidatorInterf
    */
   public function invalidateMultiple(array $cids) {
     foreach ($cids as $cid) {
-      if (isset($this->cache[$cid])) {
-        $this->cache[$cid]->expire = $this->getRequestTime() - 1;
-      }
+      $this->cache[$cid]->expire = $this->getRequestTime() - 1;
     }
   }
 

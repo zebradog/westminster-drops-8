@@ -36,10 +36,10 @@ class TranslationTest extends UnitTestCase {
     $container->set('string_translation', $this->translationManager);
     \Drupal::setContainer($container);
 
-    $arguments = isset($values['arguments']) ? $values['arguments'] : [];
-    $options = isset($values['context']) ? [
+    $arguments = isset($values['arguments']) ? $values['arguments'] : array();
+    $options = isset($values['context']) ? array(
       'context' => $values['context'],
-    ] : [];
+    ) : array();
 
     $annotation = new Translation($values);
 
@@ -50,27 +50,27 @@ class TranslationTest extends UnitTestCase {
    * Provides data to self::testGet().
    */
   public function providerTestGet() {
-    $data = [];
-    $data[] = [
-      [
+    $data = array();
+    $data[] = array(
+      array(
         'value' => 'Foo',
-      ],
+      ),
       'Foo'
-    ];
+    );
     $random = $this->randomMachineName();
     $random_html_entity = '&' . $random;
-    $data[] = [
-      [
+    $data[] = array(
+      array(
         'value' => 'Foo @bar @baz %qux',
-        'arguments' => [
+        'arguments' => array(
           '@bar' => $random,
           '@baz' => $random_html_entity,
           '%qux' => $random_html_entity,
-        ],
+        ),
         'context' => $this->randomMachineName(),
-      ],
+      ),
       'Foo ' . $random . ' &amp;' . $random . ' <em class="placeholder">&amp;' . $random . '</em>',
-    ];
+    );
 
     return $data;
   }

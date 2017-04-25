@@ -15,7 +15,7 @@ trait TaxonomyTestTrait {
   /**
    * Returns a new vocabulary with random properties.
    */
-  public function createVocabulary() {
+  function createVocabulary() {
     // Create a vocabulary.
     $vocabulary = Vocabulary::create([
       'name' => $this->randomMachineName(),
@@ -40,7 +40,7 @@ trait TaxonomyTestTrait {
    * @return \Drupal\taxonomy\Entity\Term
    *   The new taxonomy term object.
    */
-  public function createTerm(Vocabulary $vocabulary, $values = []) {
+  function createTerm(Vocabulary $vocabulary, $values = array()) {
     $filter_formats = filter_formats();
     $format = array_pop($filter_formats);
     $term = Term::create($values + [

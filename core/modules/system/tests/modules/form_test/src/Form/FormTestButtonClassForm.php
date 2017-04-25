@@ -21,16 +21,16 @@ class FormTestButtonClassForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['button'] = [
+    $form['button'] = array(
       '#type' => 'button',
       '#value' => 'test',
       '#button_type' => 'foo',
-    ];
-    $form['delete'] = [
+    );
+    $form['delete'] = array(
       '#type' => 'button',
       '#value' => 'Delete',
       '#button_type' => 'danger',
-    ];
+    );
     return $form;
   }
 

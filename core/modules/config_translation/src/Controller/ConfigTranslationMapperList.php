@@ -46,13 +46,13 @@ class ConfigTranslationMapperList extends ControllerBase {
    *   Renderable array with config translation mappers.
    */
   public function render() {
-    $build = [
+    $build = array(
       '#type' => 'table',
       '#header' => $this->buildHeader(),
-      '#rows' => [],
-    ];
+      '#rows' => array(),
+    );
 
-    $mappers = [];
+    $mappers = array();
 
     foreach ($this->mappers as $mapper) {
       if ($row = $this->buildRow($mapper)) {
@@ -120,10 +120,10 @@ class ConfigTranslationMapperList extends ControllerBase {
     // Retrieve and sort operations.
     $operations = $mapper->getOperations();
     uasort($operations, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
-    $build = [
+    $build = array(
       '#type' => 'operations',
       '#links' => $operations,
-    ];
+    );
     return $build;
   }
 

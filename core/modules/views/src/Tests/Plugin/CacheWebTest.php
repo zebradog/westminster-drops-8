@@ -21,14 +21,14 @@ class CacheWebTest extends PluginTestBase {
    *
    * @var array
    */
-  public static $testViews = ['test_display'];
+  public static $testViews = array('test_display');
 
   /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['taxonomy'];
+  public static $modules = array('taxonomy');
 
   /**
    * {@inheritdoc}
@@ -46,13 +46,13 @@ class CacheWebTest extends PluginTestBase {
     $view = Views::getView('test_display');
     $view->storage->setStatus(TRUE);
     $view->setDisplay('page_1');
-    $view->display_handler->overrideOption('cache', [
+    $view->display_handler->overrideOption('cache', array(
       'type' => 'time',
-      'options' => [
+      'options' => array(
         'results_lifespan' => '3600',
         'output_lifespan' => '3600'
-      ]
-    ]);
+      )
+    ));
     $view->save();
     $this->container->get('router.builder')->rebuildIfNeeded();
 

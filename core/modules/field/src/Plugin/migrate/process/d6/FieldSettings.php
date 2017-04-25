@@ -59,26 +59,26 @@ class FieldSettings extends ProcessPluginBase {
       }
     }
 
-    $settings = [
-      'text' => [
+    $settings = array(
+      'text' => array(
         'max_length' => $max_length,
-      ],
-      'datetime' => ['datetime_type' => 'datetime'],
-      'list_string' => [
+      ),
+      'datetime' => array('datetime_type' => 'datetime'),
+      'list_string' => array(
         'allowed_values' => $allowed_values,
-      ],
-      'list_integer' => [
+      ),
+      'list_integer' => array(
         'allowed_values' => $allowed_values,
-      ],
-      'list_float' => [
+      ),
+      'list_float' => array(
         'allowed_values' => $allowed_values,
-      ],
-      'boolean' => [
+      ),
+      'boolean' => array(
         'allowed_values' => $allowed_values,
-      ],
-    ];
+      ),
+    );
 
-    return isset($settings[$field_type]) ? $settings[$field_type] : [];
+    return isset($settings[$field_type]) ? $settings[$field_type] : array();
   }
 
 }

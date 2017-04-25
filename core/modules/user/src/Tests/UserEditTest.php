@@ -14,26 +14,19 @@ class UserEditTest extends WebTestBase {
   /**
    * Test user edit page.
    */
-  public function testUserEdit() {
+  function testUserEdit() {
     // Test user edit functionality.
-    $user1 = $this->drupalCreateUser(['change own username']);
-    $user2 = $this->drupalCreateUser([]);
+    $user1 = $this->drupalCreateUser(array('change own username'));
+    $user2 = $this->drupalCreateUser(array());
     $this->drupalLogin($user1);
 
     // Test that error message appears when attempting to use a non-unique user name.
     $edit['name'] = $user2->getUsername();
     $this->drupalPostForm("user/" . $user1->id() . "/edit", $edit, t('Save'));
-    $this->assertRaw(t('The username %name is already taken.', ['%name' => $edit['name']]));
-
-    // Check that the default value in user name field
-    // is the raw value and not a formatted one.
-    \Drupal::state()->set('user_hooks_test_user_format_name_alter', TRUE);
-    \Drupal::service('module_installer')->install(['user_hooks_test']);
-    $this->drupalGet('user/' . $user1->id() . '/edit');
-    $this->assertFieldByName('name', $user1->getAccountName());
+    $this->assertRaw(t('The username %name is already taken.', array('%name' => $edit['name'])));
 
     // Check that filling out a single password field does not validate.
-    $edit = [];
+    $edit = array();
     $edit['pass[pass1]'] = '';
     $edit['pass[pass2]'] = $this->randomMachineName();
     $this->drupalPostForm("user/" . $user1->id() . "/edit", $edit, t('Save'));
@@ -46,21 +39,21 @@ class UserEditTest extends WebTestBase {
 
     // Test that the error message appears when attempting to change the mail or
     // pass without the current password.
-    $edit = [];
+    $edit = array();
     $edit['mail'] = $this->randomMachineName() . '@new.example.com';
     $this->drupalPostForm("user/" . $user1->id() . "/edit", $edit, t('Save'));
-    $this->assertRaw(t("Your current password is missing or incorrect; it's required to change the %name.", ['%name' => t('Email')]));
+    $this->assertRaw(t("Your current password is missing or incorrect; it's required to change the %name.", array('%name' => t('Email'))));
 
     $edit['current_pass'] = $user1->pass_raw;
     $this->drupalPostForm("user/" . $user1->id() . "/edit", $edit, t('Save'));
     $this->assertRaw(t("The changes have been saved."));
 
     // Test that the user must enter current password before changing passwords.
-    $edit = [];
+    $edit = array();
     $edit['pass[pass1]'] = $new_pass = $this->randomMachineName();
     $edit['pass[pass2]'] = $new_pass;
     $this->drupalPostForm("user/" . $user1->id() . "/edit", $edit, t('Save'));
-    $this->assertRaw(t("Your current password is missing or incorrect; it's required to change the %name.", ['%name' => t('Password')]));
+    $this->assertRaw(t("Your current password is missing or incorrect; it's required to change the %name.", array('%name' => t('Password'))));
 
     // Try again with the current password.
     $edit['current_pass'] = $user1->pass_raw;
@@ -90,20 +83,20 @@ class UserEditTest extends WebTestBase {
 
     // Check that the user status field has the correct value and that it is
     // properly displayed.
-    $admin_user = $this->drupalCreateUser(['administer users']);
+    $admin_user = $this->drupalCreateUser(array('administer users'));
     $this->drupalLogin($admin_user);
 
     $this->drupalGet('user/' . $user1->id() . '/edit');
     $this->assertNoFieldChecked('edit-status-0');
     $this->assertFieldChecked('edit-status-1');
 
-    $edit = ['status' => 0];
+    $edit = array('status' => 0);
     $this->drupalPostForm('user/' . $user1->id() . '/edit', $edit, t('Save'));
     $this->assertText(t('The changes have been saved.'));
     $this->assertFieldChecked('edit-status-0');
     $this->assertNoFieldChecked('edit-status-1');
 
-    $edit = ['status' => 1];
+    $edit = array('status' => 1);
     $this->drupalPostForm('user/' . $user1->id() . '/edit', $edit, t('Save'));
     $this->assertText(t('The changes have been saved.'));
     $this->assertNoFieldChecked('edit-status-0');
@@ -131,16 +124,16 @@ class UserEditTest extends WebTestBase {
   /**
    * Tests editing of a user account without an email address.
    */
-  public function testUserWithoutEmailEdit() {
+  function testUserWithoutEmailEdit() {
     // Test that an admin can edit users without an email address.
-    $admin = $this->drupalCreateUser(['administer users']);
+    $admin = $this->drupalCreateUser(array('administer users'));
     $this->drupalLogin($admin);
     // Create a regular user.
-    $user1 = $this->drupalCreateUser([]);
+    $user1 = $this->drupalCreateUser(array());
     // This user has no email address.
     $user1->mail = '';
     $user1->save();
-    $this->drupalPostForm("user/" . $user1->id() . "/edit", ['mail' => ''], t('Save'));
+    $this->drupalPostForm("user/" . $user1->id() . "/edit", array('mail' => ''), t('Save'));
     $this->assertRaw(t("The changes have been saved."));
   }
 

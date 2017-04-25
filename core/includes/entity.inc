@@ -80,7 +80,7 @@ function entity_get_bundles($entity_type = NULL) {
 function entity_load($entity_type, $id, $reset = FALSE) {
   $controller = \Drupal::entityManager()->getStorage($entity_type);
   if ($reset) {
-    $controller->resetCache([$id]);
+    $controller->resetCache(array($id));
   }
   return $controller->load($id);
 }
@@ -305,7 +305,7 @@ function entity_delete_multiple($entity_type, array $ids) {
  * @see \Drupal\Core\Entity\EntityTypeManagerInterface::getStorage()
  * @see \Drupal\Core\Entity\EntityStorageInterface::create()
  */
-function entity_create($entity_type, array $values = []) {
+function entity_create($entity_type, array $values = array()) {
   return \Drupal::entityManager()
     ->getStorage($entity_type)
     ->create($values);
@@ -483,12 +483,12 @@ function entity_get_display($entity_type, $bundle, $view_mode) {
   // configuration entries are only created when a display object is explicitly
   // configured and saved.
   if (!$display) {
-    $display = EntityViewDisplay::create([
+    $display = EntityViewDisplay::create(array(
       'targetEntityType' => $entity_type,
       'bundle' => $bundle,
       'mode' => $view_mode,
       'status' => TRUE,
-    ]);
+    ));
   }
 
   return $display;
@@ -514,7 +514,7 @@ function entity_get_display($entity_type, $bundle, $view_mode) {
  *     'weight' => 1,
  *   ))
  *   ->setComponent('field_image', array(
- *     'region' => 'hidden',
+ *     'type' => 'hidden',
  *   ))
  *   ->save();
  * @endcode
@@ -563,12 +563,12 @@ function entity_get_form_display($entity_type, $bundle, $form_mode) {
   // configuration entries are only created when an entity form display is
   // explicitly configured and saved.
   if (!$entity_form_display) {
-    $entity_form_display = EntityFormDisplay::create([
+    $entity_form_display = EntityFormDisplay::create(array(
       'targetEntityType' => $entity_type,
       'bundle' => $bundle,
       'mode' => $form_mode,
       'status' => TRUE,
-    ]);
+    ));
   }
 
   return $entity_form_display;

@@ -162,14 +162,14 @@ use Drupal\Core\Language\LanguageInterface;
  * translated link text before going through the link generator, which will
  * just handle the path aliases.
  *
- * @param array $links
+ * @param $links
  *   Nested array of links keyed by language code.
- * @param string $type
+ * @param $type
  *   The language type the links will switch.
- * @param \Drupal\Core\Url $url
- *   The URL the switch links will be relative to.
+ * @param $path
+ *   The current path.
  */
-function hook_language_switch_links_alter(array &$links, $type, \Drupal\Core\Url $url) {
+function hook_language_switch_links_alter(array &$links, $type, $path) {
   $language_interface = \Drupal::languageManager()->getCurrentLanguage();
 
   if ($type == LanguageInterface::TYPE_CONTENT && isset($links[$language_interface->getId()])) {

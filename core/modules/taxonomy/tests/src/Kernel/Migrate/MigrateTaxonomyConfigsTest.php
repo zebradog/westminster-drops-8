@@ -2,7 +2,7 @@
 
 namespace Drupal\Tests\taxonomy\Kernel\Migrate;
 
-use Drupal\Tests\SchemaCheckTestTrait;
+use Drupal\config\Tests\SchemaCheckTestTrait;
 use Drupal\Tests\migrate_drupal\Kernel\d6\MigrateDrupal6TestBase;
 
 /**
@@ -17,7 +17,7 @@ class MigrateTaxonomyConfigsTest extends MigrateDrupal6TestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['taxonomy'];
+  public static $modules = array('taxonomy');
 
   /**
    * {@inheritdoc}

@@ -11,23 +11,23 @@ use Drupal\Core\Render\BubbleableMetadata;
  * Implements hook_token_info().
  */
 function statistics_token_info() {
-  $node['total-count'] = [
+  $node['total-count'] = array(
     'name' => t("Number of views"),
     'description' => t("The number of visitors who have read the node."),
-  ];
-  $node['day-count'] = [
+  );
+  $node['day-count'] = array(
     'name' => t("Views today"),
     'description' => t("The number of visitors who have read the node today."),
-  ];
-  $node['last-view'] = [
+  );
+  $node['last-view'] = array(
     'name' => t("Last view"),
     'description' => t("The date on which a visitor last read the node."),
     'type' => 'date',
-  ];
+  );
 
-  return [
-    'tokens' => ['node' => $node],
-  ];
+  return array(
+    'tokens' => array('node' => $node),
+  );
 }
 
 /**
@@ -36,7 +36,7 @@ function statistics_token_info() {
 function statistics_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
   $token_service = \Drupal::token();
 
-  $replacements = [];
+  $replacements = array();
 
   if ($type == 'node' & !empty($data['node'])) {
     $node = $data['node'];
@@ -58,7 +58,7 @@ function statistics_tokens($type, $tokens, array $data, array $options, Bubbleab
 
     if ($created_tokens = $token_service->findWithPrefix($tokens, 'last-view')) {
       $statistics = statistics_get($node->id());
-      $replacements += $token_service->generate('date', $created_tokens, ['date' => $statistics['timestamp']], $options, $bubbleable_metadata);
+      $replacements += $token_service->generate('date', $created_tokens, array('date' => $statistics['timestamp']), $options, $bubbleable_metadata);
     }
   }
 

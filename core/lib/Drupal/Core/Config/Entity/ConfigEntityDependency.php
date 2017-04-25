@@ -57,7 +57,7 @@ class ConfigEntityDependency {
    *   The list of dependencies of the supplied type.
    */
   public function getDependencies($type) {
-    $dependencies = [];
+    $dependencies = array();
     if (isset($this->dependencies[$type])) {
       $dependencies = $this->dependencies[$type];
     }

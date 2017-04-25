@@ -10,6 +10,7 @@ use Drupal\Core\State\StateInterface;
 use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Exception\RequirementsException;
 use Drupal\migrate\Plugin\migrate\source\SqlBase;
+use Drupal\migrate\Plugin\RequirementsInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -18,7 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Mainly to let children retrieve information from the origin system in an
  * easier way.
  */
-abstract class DrupalSqlBase extends SqlBase implements ContainerFactoryPluginInterface, DependentPluginInterface {
+abstract class DrupalSqlBase extends SqlBase implements ContainerFactoryPluginInterface, RequirementsInterface, DependentPluginInterface {
 
   use DependencyTrait;
 
@@ -59,7 +60,7 @@ abstract class DrupalSqlBase extends SqlBase implements ContainerFactoryPluginIn
    */
   public function getSystemData() {
     if (!isset($this->systemData)) {
-      $this->systemData = [];
+      $this->systemData = array();
       try {
         $results = $this->select('system', 's')
           ->fields('s')
@@ -105,7 +106,6 @@ abstract class DrupalSqlBase extends SqlBase implements ContainerFactoryPluginIn
         }
       }
     }
-    parent::checkRequirements();
   }
 
   /**
@@ -149,7 +149,7 @@ abstract class DrupalSqlBase extends SqlBase implements ContainerFactoryPluginIn
   protected function variableGet($name, $default) {
     try {
       $result = $this->select('variable', 'v')
-        ->fields('v', ['value'])
+        ->fields('v', array('value'))
         ->condition('name', $name)
         ->execute()
         ->fetchField();

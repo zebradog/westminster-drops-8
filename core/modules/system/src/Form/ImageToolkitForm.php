@@ -18,7 +18,7 @@ class ImageToolkitForm extends ConfigFormBase {
    *
    * @var \Drupal\Core\ImageToolkit\ImageToolkitInterface[]
    */
-  protected $availableToolkits = [];
+  protected $availableToolkits = array();
 
   /**
    * Constructs a ImageToolkitForm object.
@@ -66,30 +66,30 @@ class ImageToolkitForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $current_toolkit = $this->config('system.image')->get('toolkit');
 
-    $form['image_toolkit'] = [
+    $form['image_toolkit'] = array(
       '#type' => 'radios',
       '#title' => $this->t('Select an image processing toolkit'),
       '#default_value' => $current_toolkit,
-      '#options' => [],
-    ];
+      '#options' => array(),
+    );
 
     // If we have more than one image toolkit, allow the user to select the one
     // to use, and load each of the toolkits' settings form.
     foreach ($this->availableToolkits as $id => $toolkit) {
       $definition = $toolkit->getPluginDefinition();
       $form['image_toolkit']['#options'][$id] = $definition['title'];
-      $form['image_toolkit_settings'][$id] = [
+      $form['image_toolkit_settings'][$id] = array(
         '#type' => 'details',
-        '#title' => $this->t('@toolkit settings', ['@toolkit' => $definition['title']]),
+        '#title' => $this->t('@toolkit settings', array('@toolkit' => $definition['title'])),
         '#open' => TRUE,
         '#tree' => TRUE,
-        '#states' => [
-          'visible' => [
-            ':radio[name="image_toolkit"]' => ['value' => $id],
-          ],
-        ],
-      ];
-      $form['image_toolkit_settings'][$id] += $toolkit->buildConfigurationForm([], $form_state);
+        '#states' => array(
+          'visible' => array(
+            ':radio[name="image_toolkit"]' => array('value' => $id),
+          ),
+        ),
+      );
+      $form['image_toolkit_settings'][$id] += $toolkit->buildConfigurationForm(array(), $form_state);
     }
 
     return parent::buildForm($form, $form_state);

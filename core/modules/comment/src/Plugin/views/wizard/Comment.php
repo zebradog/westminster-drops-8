@@ -27,16 +27,16 @@ class Comment extends WizardPluginBase {
   /**
    * Set default values for the filters.
    */
-  protected $filters = [
-    'status' => [
+  protected $filters = array(
+    'status' => array(
       'value' => TRUE,
       'table' => 'comment_field_data',
       'field' => 'status',
       'plugin_id' => 'boolean',
       'entity_type' => 'comment',
       'entity_field' => 'status',
-    ],
-    'status_node' => [
+    ),
+    'status_node' => array(
       'value' => TRUE,
       'table' => 'node_field_data',
       'field' => 'status',
@@ -44,14 +44,14 @@ class Comment extends WizardPluginBase {
       'relationship' => 'node',
       'entity_type' => 'node',
       'entity_field' => 'status',
-    ],
-  ];
+    ),
+  );
 
   /**
    * {@inheritdoc}
    */
   protected function rowStyleOptions() {
-    $options = [];
+    $options = array();
     $options['entity:comment'] = $this->t('comments');
     $options['fields'] = $this->t('fields');
     return $options;

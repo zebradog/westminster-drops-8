@@ -53,39 +53,39 @@ class EntityTestBaseFieldDisplay extends EntityTest {
 
     $fields['test_display_configurable'] = BaseFieldDefinition::create('text')
       ->setLabel(t('Field with configurable display'))
-      ->setDisplayOptions('view', [
+      ->setDisplayOptions('view', array(
         'type' => 'text_default',
         'weight' => 10,
-      ])
+      ))
       ->setDisplayConfigurable('view', TRUE)
-      ->setDisplayOptions('form', [
+      ->setDisplayOptions('form', array(
         'type' => 'text_textfield',
         'weight' => 10,
-      ])
+      ))
       ->setDisplayConfigurable('form', TRUE);
 
     $fields['test_display_non_configurable'] = BaseFieldDefinition::create('text')
       ->setLabel(t('Field with non-configurable display'))
-      ->setDisplayOptions('view', [
+      ->setDisplayOptions('view', array(
         'type' => 'text_default',
         'weight' => 11,
-      ])
-      ->setDisplayOptions('form', [
+      ))
+      ->setDisplayOptions('form', array(
         'type' => 'text_textfield',
         'weight' => 11,
-      ]);
+      ));
 
     $fields['test_display_multiple'] = BaseFieldDefinition::create('text')
       ->setLabel(t('A field with multiple values'))
       ->setCardinality(FieldStorageDefinition::CARDINALITY_UNLIMITED)
-      ->setDisplayOptions('view', [
+      ->setDisplayOptions('view', array(
         'type' => 'text_default',
         'weight' => 12,
-      ])
-      ->setDisplayOptions('form', [
+      ))
+      ->setDisplayOptions('form', array(
         'type' => 'text_textfield',
         'weight' => 12,
-      ]);
+      ));
 
     return $fields;
   }

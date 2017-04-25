@@ -48,9 +48,9 @@ class AggregatorController extends ControllerBase {
    */
   public function feedAdd() {
     $feed = $this->entityManager()->getStorage('aggregator_feed')
-      ->create([
+      ->create(array(
         'refresh' => 3600,
-      ]);
+      ));
     return $this->entityFormBuilder()->getForm($feed);
   }
 
@@ -67,15 +67,15 @@ class AggregatorController extends ControllerBase {
    */
   protected function buildPageList(array $items, $feed_source = '') {
     // Assemble output.
-    $build = [
+    $build = array(
       '#type' => 'container',
-      '#attributes' => ['class' => ['aggregator-wrapper']],
-    ];
-    $build['feed_source'] = is_array($feed_source) ? $feed_source : ['#markup' => $feed_source];
+      '#attributes' => array('class' => array('aggregator-wrapper')),
+    );
+    $build['feed_source'] = is_array($feed_source) ? $feed_source : array('#markup' => $feed_source);
     if ($items) {
       $build['items'] = $this->entityManager()->getViewBuilder('aggregator_item')
         ->viewMultiple($items, 'default');
-      $build['pager'] = ['#type' => 'pager'];
+      $build['pager'] = array('#type' => 'pager');
     }
     return $build;
   }
@@ -94,8 +94,8 @@ class AggregatorController extends ControllerBase {
    */
   public function feedRefresh(FeedInterface $aggregator_feed) {
     $message = $aggregator_feed->refreshItems()
-      ? $this->t('There is new syndicated content from %site.', ['%site' => $aggregator_feed->label()])
-      : $this->t('There is no new syndicated content from %site.', ['%site' => $aggregator_feed->label()]);
+      ? $this->t('There is new syndicated content from %site.', array('%site' => $aggregator_feed->label()))
+      : $this->t('There is no new syndicated content from %site.', array('%site' => $aggregator_feed->label()));
     drupal_set_message($message);
     return $this->redirect('aggregator.admin_overview');
   }
@@ -111,22 +111,22 @@ class AggregatorController extends ControllerBase {
     $feeds = $entity_manager->getStorage('aggregator_feed')
       ->loadMultiple();
 
-    $header = [$this->t('Title'), $this->t('Items'), $this->t('Last update'), $this->t('Next update'), $this->t('Operations')];
-    $rows = [];
+    $header = array($this->t('Title'), $this->t('Items'), $this->t('Last update'), $this->t('Next update'), $this->t('Operations'));
+    $rows = array();
     /** @var \Drupal\aggregator\FeedInterface[] $feeds */
     foreach ($feeds as $feed) {
-      $row = [];
+      $row = array();
       $row[] = $feed->link();
       $row[] = $this->formatPlural($entity_manager->getStorage('aggregator_item')->getItemCount($feed), '1 item', '@count items');
       $last_checked = $feed->getLastCheckedTime();
       $refresh_rate = $feed->getRefreshRate();
 
-      $row[] = ($last_checked ? $this->t('@time ago', ['@time' => $this->dateFormatter->formatInterval(REQUEST_TIME - $last_checked)]) : $this->t('never'));
+      $row[] = ($last_checked ? $this->t('@time ago', array('@time' => $this->dateFormatter->formatInterval(REQUEST_TIME - $last_checked))) : $this->t('never'));
       if (!$last_checked && $refresh_rate) {
         $next_update = $this->t('imminently');
       }
       elseif ($last_checked && $refresh_rate) {
-        $next_update = $next = $this->t('%time left', ['%time' => $this->dateFormatter->formatInterval($last_checked + $refresh_rate - REQUEST_TIME)]);
+        $next_update = $next = $this->t('%time left', array('%time' => $this->dateFormatter->formatInterval($last_checked + $refresh_rate - REQUEST_TIME)));
       }
       else {
         $next_update = $this->t('never');
@@ -136,33 +136,33 @@ class AggregatorController extends ControllerBase {
         'title' => $this->t('Edit'),
         'url' => Url::fromRoute('entity.aggregator_feed.edit_form', ['aggregator_feed' => $feed->id()]),
       ];
-      $links['delete'] = [
+      $links['delete'] = array(
         'title' => $this->t('Delete'),
         'url' => Url::fromRoute('entity.aggregator_feed.delete_form', ['aggregator_feed' => $feed->id()]),
-      ];
-      $links['delete_items'] = [
+      );
+      $links['delete_items'] = array(
         'title' => $this->t('Delete items'),
         'url' => Url::fromRoute('aggregator.feed_items_delete', ['aggregator_feed' => $feed->id()]),
-      ];
-      $links['update'] = [
+      );
+      $links['update'] = array(
         'title' => $this->t('Update items'),
         'url' => Url::fromRoute('aggregator.feed_refresh', ['aggregator_feed' => $feed->id()]),
-      ];
-      $row[] = [
-        'data' => [
+      );
+      $row[] = array(
+        'data' => array(
           '#type' => 'operations',
           '#links' => $links,
-        ],
-      ];
+        ),
+      );
       $rows[] = $row;
     }
-    $build['feeds'] = [
+    $build['feeds'] = array(
       '#prefix' => '<h3>' . $this->t('Feed overview') . '</h3>',
       '#type' => 'table',
       '#header' => $header,
       '#rows' => $rows,
-      '#empty' => $this->t('No feeds available. <a href=":link">Add feed</a>.', [':link' => $this->url('aggregator.feed_add')]),
-    ];
+      '#empty' => $this->t('No feeds available. <a href=":link">Add feed</a>.', array(':link' => $this->url('aggregator.feed_add'))),
+    );
 
     return $build;
   }
@@ -176,7 +176,7 @@ class AggregatorController extends ControllerBase {
   public function pageLast() {
     $items = $this->entityManager()->getStorage('aggregator_item')->loadAll(20);
     $build = $this->buildPageList($items);
-    $build['#attached']['feed'][] = ['aggregator/rss', $this->config('system.site')->get('name') . ' ' . $this->t('aggregator')];
+    $build['#attached']['feed'][] = array('aggregator/rss', $this->config('system.site')->get('name') . ' ' . $this->t('aggregator'));
     return $build;
   }
 

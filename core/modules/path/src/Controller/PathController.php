@@ -69,63 +69,63 @@ class PathController extends ControllerBase {
     // alias with a language.
     $multilanguage = ($this->moduleHandler()->moduleExists('language') || $this->aliasStorage->languageAliasExists());
 
-    $header = [];
-    $header[] = ['data' => $this->t('Alias'), 'field' => 'alias', 'sort' => 'asc'];
-    $header[] = ['data' => $this->t('System'), 'field' => 'source'];
+    $header = array();
+    $header[] = array('data' => $this->t('Alias'), 'field' => 'alias', 'sort' => 'asc');
+    $header[] = array('data' => $this->t('System'), 'field' => 'source');
     if ($multilanguage) {
-      $header[] = ['data' => $this->t('Language'), 'field' => 'langcode'];
+      $header[] = array('data' => $this->t('Language'), 'field' => 'langcode');
     }
     $header[] = $this->t('Operations');
 
-    $rows = [];
+    $rows = array();
     $destination = $this->getDestinationArray();
     foreach ($this->aliasStorage->getAliasesForAdminListing($header, $keys) as $data) {
-      $row = [];
+      $row = array();
       // @todo Should Path module store leading slashes? See
       //   https://www.drupal.org/node/2430593.
-      $row['data']['alias'] = $this->l(Unicode::truncate($data->alias, 50, FALSE, TRUE), Url::fromUserInput($data->source, [
-        'attributes' => ['title' => $data->alias],
-      ]));
-      $row['data']['source'] = $this->l(Unicode::truncate($data->source, 50, FALSE, TRUE), Url::fromUserInput($data->source, [
+      $row['data']['alias'] = $this->l(Unicode::truncate($data->alias, 50, FALSE, TRUE), Url::fromUserInput($data->source, array(
+        'attributes' => array('title' => $data->alias),
+      )));
+      $row['data']['source'] = $this->l(Unicode::truncate($data->source, 50, FALSE, TRUE), Url::fromUserInput($data->source, array(
         'alias' => TRUE,
-        'attributes' => ['title' => $data->source],
-      ]));
+        'attributes' => array('title' => $data->source),
+      )));
       if ($multilanguage) {
         $row['data']['language_name'] = $this->languageManager()->getLanguageName($data->langcode);
       }
 
-      $operations = [];
-      $operations['edit'] = [
+      $operations = array();
+      $operations['edit'] = array(
         'title' => $this->t('Edit'),
         'url' => Url::fromRoute('path.admin_edit', ['pid' => $data->pid], ['query' => $destination]),
-      ];
-      $operations['delete'] = [
+      );
+      $operations['delete'] = array(
         'title' => $this->t('Delete'),
         'url' => Url::fromRoute('path.delete', ['pid' => $data->pid], ['query' => $destination]),
-      ];
-      $row['data']['operations'] = [
-        'data' => [
+      );
+      $row['data']['operations'] = array(
+        'data' => array(
           '#type' => 'operations',
           '#links' => $operations,
-        ],
-      ];
+        ),
+      );
 
       // If the system path maps to a different URL alias, highlight this table
       // row to let the user know of old aliases.
       if ($data->alias != $this->aliasManager->getAliasByPath($data->source, $data->langcode)) {
-        $row['class'] = ['warning'];
+        $row['class'] = array('warning');
       }
 
       $rows[] = $row;
     }
 
-    $build['path_table'] = [
+    $build['path_table'] = array(
       '#type' => 'table',
       '#header' => $header,
       '#rows' => $rows,
-      '#empty' => $this->t('No URL aliases available. <a href=":link">Add URL alias</a>.', [':link' => $this->url('path.admin_add')]),
-    ];
-    $build['path_pager'] = ['#type' => 'pager'];
+      '#empty' => $this->t('No URL aliases available. <a href=":link">Add URL alias</a>.', array(':link' => $this->url('path.admin_add'))),
+    );
+    $build['path_pager'] = array('#type' => 'pager');
 
     return $build;
   }

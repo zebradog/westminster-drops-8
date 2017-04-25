@@ -39,10 +39,10 @@ class AddCssCommand implements CommandInterface {
    */
   public function render() {
 
-    return [
+    return array(
       'command' => 'add_css',
       'data' => $this->styles,
-    ];
+    );
   }
 
 }

@@ -73,11 +73,11 @@ class NodeAccessTest extends KernelTestBase {
     $this->drupalCreateUser();
 
     // Create a node type.
-    $this->drupalCreateContentType([
+    $this->drupalCreateContentType(array(
       'type' => 'page',
       'name' => 'Basic page',
       'display_submitted' => FALSE,
-    ]);
+    ));
   }
 
   /**

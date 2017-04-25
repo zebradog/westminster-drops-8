@@ -12,7 +12,7 @@ class DerivativeTest extends PluginTestBase {
   /**
    * Tests getDefinitions() and getDefinition() with a derivativeDecorator.
    */
-  public function testDerivativeDecorator() {
+  function testDerivativeDecorator() {
     // Ensure that getDefinitions() returns the expected definitions.
     $this->assertEqual($this->mockBlockManager->getDefinitions(), $this->mockBlockExpectedDefinitions);
 

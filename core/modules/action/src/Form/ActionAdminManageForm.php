@@ -50,33 +50,33 @@ class ActionAdminManageForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $actions = [];
+    $actions = array();
     foreach ($this->manager->getDefinitions() as $id => $definition) {
       if (is_subclass_of($definition['class'], '\Drupal\Core\Plugin\PluginFormInterface')) {
         $key = Crypt::hashBase64($id);
         $actions[$key] = $definition['label'] . '...';
       }
     }
-    $form['parent'] = [
+    $form['parent'] = array(
       '#type' => 'details',
       '#title' => $this->t('Create an advanced action'),
-      '#attributes' => ['class' => ['container-inline']],
+      '#attributes' => array('class' => array('container-inline')),
       '#open' => TRUE,
-    ];
-    $form['parent']['action'] = [
+    );
+    $form['parent']['action'] = array(
       '#type' => 'select',
       '#title' => $this->t('Action'),
       '#title_display' => 'invisible',
       '#options' => $actions,
       '#empty_option' => $this->t('Choose an advanced action'),
-    ];
-    $form['parent']['actions'] = [
+    );
+    $form['parent']['actions'] = array(
       '#type' => 'actions'
-    ];
-    $form['parent']['actions']['submit'] = [
+    );
+    $form['parent']['actions']['submit'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Create'),
-    ];
+    );
     return $form;
   }
 
@@ -87,7 +87,7 @@ class ActionAdminManageForm extends FormBase {
     if ($form_state->getValue('action')) {
       $form_state->setRedirect(
         'action.admin_add',
-        ['action_id' => $form_state->getValue('action')]
+        array('action_id' => $form_state->getValue('action'))
       );
     }
   }

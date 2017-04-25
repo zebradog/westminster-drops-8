@@ -20,7 +20,7 @@ class FileSize extends FieldPluginBase {
   protected function defineOptions() {
     $options = parent::defineOptions();
 
-    $options['file_size_display'] = ['default' => 'formatted'];
+    $options['file_size_display'] = array('default' => 'formatted');
 
     return $options;
   }
@@ -30,14 +30,14 @@ class FileSize extends FieldPluginBase {
    */
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
     parent::buildOptionsForm($form, $form_state);
-    $form['file_size_display'] = [
+    $form['file_size_display'] = array(
       '#title' => $this->t('File size display'),
       '#type' => 'select',
-      '#options' => [
+      '#options' => array(
         'formatted' => $this->t('Formatted (in KB or MB)'),
         'bytes' => $this->t('Raw bytes'),
-      ],
-    ];
+      ),
+    );
   }
 
   /**

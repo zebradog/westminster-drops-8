@@ -54,16 +54,16 @@ class VerticalTabs extends RenderElement {
    */
   public function getInfo() {
     $class = get_class($this);
-    return [
+    return array(
       '#default_tab' => '',
-      '#process' => [
-        [$class, 'processVerticalTabs'],
-      ],
-      '#pre_render' => [
-        [$class, 'preRenderVerticalTabs'],
-      ],
-      '#theme_wrappers' => ['vertical_tabs', 'form_element'],
-    ];
+      '#process' => array(
+        array($class, 'processVerticalTabs'),
+      ),
+      '#pre_render' => array(
+        array($class, 'preRenderVerticalTabs'),
+      ),
+      '#theme_wrappers' => array('vertical_tabs', 'form_element'),
+    );
   }
 
   /**
@@ -106,11 +106,11 @@ class VerticalTabs extends RenderElement {
 
     // Inject a new details as child, so that form_process_details() processes
     // this details element like any other details.
-    $element['group'] = [
+    $element['group'] = array(
       '#type' => 'details',
-      '#theme_wrappers' => [],
+      '#theme_wrappers' => array(),
       '#parents' => $element['#parents'],
-    ];
+    );
 
     // Add an invisible label for accessibility.
     if (!isset($element['#title'])) {
@@ -128,11 +128,11 @@ class VerticalTabs extends RenderElement {
     if ($form_state->hasValue($name . '__active_tab')) {
       $element['#default_tab'] = $form_state->getValue($name . '__active_tab');
     }
-    $element[$name . '__active_tab'] = [
+    $element[$name . '__active_tab'] = array(
       '#type' => 'hidden',
       '#default_value' => $element['#default_tab'],
-      '#attributes' => ['class' => ['vertical-tabs__active-tab']],
-    ];
+      '#attributes' => array('class' => array('vertical-tabs__active-tab')),
+    );
     // Clean up the active tab value so it's not accidentally stored in
     // settings forms.
     $form_state->addCleanValueKey($name . '__active_tab');

@@ -52,7 +52,7 @@ class RolesRid extends ManyToOne {
    */
   public function titleQuery() {
     $entities = $this->roleStorage->loadMultiple($this->value);
-    $titles = [];
+    $titles = array();
     foreach ($entities as $entity) {
       $titles[] = $entity->label();
     }

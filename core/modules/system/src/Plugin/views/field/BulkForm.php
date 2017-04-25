@@ -49,7 +49,7 @@ class BulkForm extends FieldPluginBase implements CacheableDependencyInterface {
    *
    * @var \Drupal\system\ActionConfigEntityInterface[]
    */
-  protected $actions = [];
+  protected $actions = array();
 
   /**
    * The language manager.
@@ -162,13 +162,13 @@ class BulkForm extends FieldPluginBase implements CacheableDependencyInterface {
    */
   protected function defineOptions() {
     $options = parent::defineOptions();
-    $options['action_title'] = ['default' => $this->t('Action')];
-    $options['include_exclude'] = [
+    $options['action_title'] = array('default' => $this->t('Action'));
+    $options['include_exclude'] = array(
       'default' => 'exclude',
-    ];
-    $options['selected_actions'] = [
-      'default' => [],
-    ];
+    );
+    $options['selected_actions'] = array(
+      'default' => array(),
+    );
     return $options;
   }
 
@@ -176,28 +176,28 @@ class BulkForm extends FieldPluginBase implements CacheableDependencyInterface {
    * {@inheritdoc}
    */
   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
-    $form['action_title'] = [
+    $form['action_title'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Action title'),
       '#default_value' => $this->options['action_title'],
       '#description' => $this->t('The title shown above the actions dropdown.'),
-    ];
+    );
 
-    $form['include_exclude'] = [
+    $form['include_exclude'] = array(
       '#type' => 'radios',
       '#title' => $this->t('Available actions'),
-      '#options' => [
+      '#options' => array(
         'exclude' => $this->t('All actions, except selected'),
         'include' => $this->t('Only selected actions'),
-      ],
+      ),
       '#default_value' => $this->options['include_exclude'],
-    ];
-    $form['selected_actions'] = [
+    );
+    $form['selected_actions'] = array(
       '#type' => 'checkboxes',
       '#title' => $this->t('Selected actions'),
       '#options' => $this->getBulkOptions(FALSE),
       '#default_value' => $this->options['selected_actions'],
-    ];
+    );
 
     parent::buildOptionsForm($form, $form_state);
   }
@@ -208,8 +208,8 @@ class BulkForm extends FieldPluginBase implements CacheableDependencyInterface {
   public function validateOptionsForm(&$form, FormStateInterface $form_state) {
     parent::validateOptionsForm($form, $form_state);
 
-    $selected_actions = $form_state->getValue(['options', 'selected_actions']);
-    $form_state->setValue(['options', 'selected_actions'], array_values(array_filter($selected_actions)));
+    $selected_actions = $form_state->getValue(array('options', 'selected_actions'));
+    $form_state->setValue(array('options', 'selected_actions'), array_values(array_filter($selected_actions)));
   }
 
   /**
@@ -259,7 +259,7 @@ class BulkForm extends FieldPluginBase implements CacheableDependencyInterface {
       foreach ($this->view->result as $row_index => $row) {
         $entity = $this->getEntityTranslation($this->getEntity($row), $row);
 
-        $form[$this->options['id']][$row_index] = [
+        $form[$this->options['id']][$row_index] = array(
           '#type' => 'checkbox',
           // We are not able to determine a main "title" for each row, so we can
           // only output a generic label.
@@ -267,28 +267,28 @@ class BulkForm extends FieldPluginBase implements CacheableDependencyInterface {
           '#title_display' => 'invisible',
           '#default_value' => !empty($form_state->getValue($this->options['id'])[$row_index]) ? 1 : NULL,
           '#return_value' => $this->calculateEntityBulkFormKey($entity, $use_revision),
-        ];
+        );
       }
 
       // Replace the form submit button label.
       $form['actions']['submit']['#value'] = $this->t('Apply to selected items');
 
       // Ensure a consistent container for filters/operations in the view header.
-      $form['header'] = [
+      $form['header'] = array(
         '#type' => 'container',
         '#weight' => -100,
-      ];
+      );
 
       // Build the bulk operations action widget for the header.
       // Allow themes to apply .container-inline on this separate container.
-      $form['header'][$this->options['id']] = [
+      $form['header'][$this->options['id']] = array(
         '#type' => 'container',
-      ];
-      $form['header'][$this->options['id']]['action'] = [
+      );
+      $form['header'][$this->options['id']]['action'] = array(
         '#type' => 'select',
         '#title' => $this->options['action_title'],
         '#options' => $this->getBulkOptions(),
-      ];
+      );
 
       // Duplicate the form actions into the action container in the header.
       $form['header'][$this->options['id']]['actions'] = $form['actions'];
@@ -308,7 +308,7 @@ class BulkForm extends FieldPluginBase implements CacheableDependencyInterface {
    *   An associative array of operations, suitable for a select element.
    */
   protected function getBulkOptions($filtered = TRUE) {
-    $options = [];
+    $options = array();
     // Filter the action list.
     foreach ($this->actions as $id => $action) {
       if ($filtered) {
@@ -344,12 +344,9 @@ class BulkForm extends FieldPluginBase implements CacheableDependencyInterface {
    */
   public function viewsFormSubmit(&$form, FormStateInterface $form_state) {
     if ($form_state->get('step') == 'views_form_views_form') {
-      // Filter only selected checkboxes. Use the actual user input rather than
-      // the raw form values array, since the site data may change before the
-      // bulk form is submitted, which can lead to data loss.
-      $user_input = $form_state->getUserInput();
-      $selected = array_filter($user_input[$this->options['id']]);
-      $entities = [];
+      // Filter only selected checkboxes.
+      $selected = array_filter($form_state->getValue($this->options['id']));
+      $entities = array();
       $action = $this->actions[$form_state->getValue('action')];
       $count = 0;
 
@@ -375,18 +372,18 @@ class BulkForm extends FieldPluginBase implements CacheableDependencyInterface {
 
       $operation_definition = $action->getPluginDefinition();
       if (!empty($operation_definition['confirm_form_route_name'])) {
-        $options = [
+        $options = array(
           'query' => $this->getDestinationArray(),
-        ];
-        $form_state->setRedirect($operation_definition['confirm_form_route_name'], [], $options);
+        );
+        $form_state->setRedirect($operation_definition['confirm_form_route_name'], array(), $options);
       }
       else {
         // Don't display the message unless there are some elements affected and
         // there is no confirmation form.
         if ($count) {
-          drupal_set_message($this->formatPlural($count, '%action was applied to @count item.', '%action was applied to @count items.', [
+          drupal_set_message($this->formatPlural($count, '%action was applied to @count item.', '%action was applied to @count items.', array(
             '%action' => $action->label(),
-          ]));
+          )));
         }
       }
     }

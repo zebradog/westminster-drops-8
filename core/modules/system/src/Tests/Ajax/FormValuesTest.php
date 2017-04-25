@@ -13,28 +13,28 @@ class FormValuesTest extends AjaxTestBase {
   protected function setUp() {
     parent::setUp();
 
-    $this->drupalLogin($this->drupalCreateUser(['access content']));
+    $this->drupalLogin($this->drupalCreateUser(array('access content')));
   }
 
   /**
    * Submits forms with select and checkbox elements via Ajax.
    */
-  public function testSimpleAjaxFormValue() {
+  function testSimpleAjaxFormValue() {
     // Verify form values of a select element.
-    foreach (['red', 'green', 'blue'] as $item) {
-      $edit = [
+    foreach (array('red', 'green', 'blue') as $item) {
+      $edit = array(
         'select' => $item,
-      ];
+      );
       $commands = $this->drupalPostAjaxForm('ajax_forms_test_get_form', $edit, 'select');
       $expected = new DataCommand('#ajax_selected_color', 'form_state_value_select', $item);
       $this->assertCommand($commands, $expected->render(), 'Verification of AJAX form values from a selectbox issued with a correct value.');
     }
 
     // Verify form values of a checkbox element.
-    foreach ([FALSE, TRUE] as $item) {
-      $edit = [
+    foreach (array(FALSE, TRUE) as $item) {
+      $edit = array(
         'checkbox' => $item,
-      ];
+      );
       $commands = $this->drupalPostAjaxForm('ajax_forms_test_get_form', $edit, 'checkbox');
       $expected = new DataCommand('#ajax_checkbox_value', 'form_state_value_select', (int) $item);
       $this->assertCommand($commands, $expected->render(), 'Verification of AJAX form values from a checkbox issued with a correct value.');
@@ -46,11 +46,11 @@ class FormValuesTest extends AjaxTestBase {
     // We don't need to check for the X-Drupal-Ajax-Token header with these
     // invalid requests.
     $this->assertAjaxHeader = FALSE;
-    foreach (['null', 'empty', 'nonexistent'] as $key) {
+    foreach (array('null', 'empty', 'nonexistent') as $key) {
       $element_name = 'select_' . $key . '_callback';
-      $edit = [
+      $edit = array(
         $element_name => 'red',
-      ];
+      );
       $commands = $this->drupalPostAjaxForm('ajax_forms_test_get_form', $edit, $element_name);
       $this->assertResponse(500);
     }

@@ -125,7 +125,7 @@ class FileStorage implements StorageInterface {
    * {@inheritdoc}
    */
   public function readMultiple(array $names) {
-    $list = [];
+    $list = array();
     foreach ($names as $name) {
       if ($data = $this->read($name)) {
         $list[$name] = $data;
@@ -217,7 +217,7 @@ class FileStorage implements StorageInterface {
   public function listAll($prefix = '') {
     $dir = $this->getCollectionDirectory();
     if (!is_dir($dir)) {
-      return [];
+      return array();
     }
     $extension = '.' . static::getFileExtension();
 
@@ -227,7 +227,7 @@ class FileStorage implements StorageInterface {
     // @see https://github.com/mikey179/vfsStream/issues/2
     $files = scandir($dir);
 
-    $names = [];
+    $names = array();
     $pattern = '/^' . preg_quote($prefix, '/') . '.*' . preg_quote($extension, '/') . '$/';
     foreach ($files as $file) {
       if ($file[0] !== '.' && preg_match($pattern, $file)) {
@@ -311,7 +311,7 @@ class FileStorage implements StorageInterface {
    *   A list of collection names contained within the provided directory.
    */
   protected function getAllCollectionNamesHelper($directory) {
-    $collections = [];
+    $collections = array();
     $pattern = '/\.' . preg_quote($this->getFileExtension(), '/') . '$/';
     foreach (new \DirectoryIterator($directory) as $fileinfo) {
       if ($fileinfo->isDir() && !$fileinfo->isDot()) {

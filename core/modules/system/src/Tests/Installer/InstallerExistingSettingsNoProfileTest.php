@@ -3,6 +3,7 @@
 namespace Drupal\system\Tests\Installer;
 
 use Drupal\Core\DrupalKernel;
+use Drupal\Core\Site\Settings;
 use Drupal\simpletest\InstallerTestBase;
 use Drupal\Core\Database\Database;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,28 +24,28 @@ class InstallerExistingSettingsNoProfileTest extends InstallerTestBase {
   protected function setUp() {
     // Pre-configure hash salt.
     // Any string is valid, so simply use the class name of this test.
-    $this->settings['settings']['hash_salt'] = (object) [
+    $this->settings['settings']['hash_salt'] = (object) array(
       'value' => __CLASS__,
       'required' => TRUE,
-    ];
+    );
 
     // Pre-configure database credentials.
     $connection_info = Database::getConnectionInfo();
     unset($connection_info['default']['pdo']);
     unset($connection_info['default']['init_commands']);
 
-    $this->settings['databases']['default'] = (object) [
+    $this->settings['databases']['default'] = (object) array(
       'value' => $connection_info,
       'required' => TRUE,
-    ];
+    );
 
     // Pre-configure config directories.
-    $this->settings['config_directories'] = [
-      CONFIG_SYNC_DIRECTORY => (object) [
+    $this->settings['config_directories'] = array(
+      CONFIG_SYNC_DIRECTORY => (object) array(
         'value' => DrupalKernel::findSitePath(Request::createFromGlobals()) . '/files/config_sync',
         'required' => TRUE,
-      ],
-    ];
+      ),
+    );
     mkdir($this->settings['config_directories'][CONFIG_SYNC_DIRECTORY]->value, 0777, TRUE);
 
     parent::setUp();
@@ -64,7 +65,7 @@ class InstallerExistingSettingsNoProfileTest extends InstallerTestBase {
   public function testInstaller() {
     $this->assertUrl('user/1');
     $this->assertResponse(200);
-    $this->assertEqual('testing', \Drupal::installProfile());
+    $this->assertEqual('testing', Settings::get('install_profile'));
   }
 
 }

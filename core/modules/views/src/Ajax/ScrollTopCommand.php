@@ -32,10 +32,10 @@ class ScrollTopCommand implements CommandInterface {
    * {@inheritdoc}
    */
   public function render() {
-    return [
+    return array(
       'command' => 'viewsScrollTop',
       'selector' => $this->selector,
-    ];
+    );
   }
 
 }

@@ -24,53 +24,53 @@ class FormTestCheckboxesRadiosForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state, $customize = FALSE) {
     // Expand #type checkboxes, setting custom element properties for some but not
     // all options.
-    $form['checkboxes'] = [
+    $form['checkboxes'] = array(
       '#type' => 'checkboxes',
       '#title' => 'Checkboxes',
-      '#options' => [
+      '#options' => array(
         0 => 'Zero',
         'foo' => 'Foo',
         1 => 'One',
         'bar' => $this->t('<em>Bar - checkboxes</em>'),
         '>' => "<em>Special Char</em><script>alert('checkboxes');</script>",
-      ],
-    ];
+      ),
+    );
     if ($customize) {
-      $form['checkboxes'] += [
-        'foo' => [
+      $form['checkboxes'] += array(
+        'foo' => array(
           '#description' => 'Enable to foo.',
-        ],
-        1 => [
+        ),
+        1 => array(
           '#weight' => 10,
-        ],
-      ];
+        ),
+      );
     }
 
     // Expand #type radios, setting custom element properties for some but not
     // all options.
-    $form['radios'] = [
+    $form['radios'] = array(
       '#type' => 'radios',
       '#title' => 'Radios',
-      '#options' => [
+      '#options' => array(
         0 => 'Zero',
         'foo' => 'Foo',
         1 => 'One',
         'bar' => '<em>Bar - radios</em>',
         '>' => "<em>Special Char</em><script>alert('radios');</script>",
-      ],
-    ];
+      ),
+    );
     if ($customize) {
-      $form['radios'] += [
-        'foo' => [
+      $form['radios'] += array(
+        'foo' => array(
           '#description' => 'Enable to foo.',
-        ],
-        1 => [
+        ),
+        1 => array(
           '#weight' => 10,
-        ],
-      ];
+        ),
+      );
     }
 
-    $form['submit'] = ['#type' => 'submit', '#value' => 'Submit'];
+    $form['submit'] = array('#type' => 'submit', '#value' => 'Submit');
 
     return $form;
   }

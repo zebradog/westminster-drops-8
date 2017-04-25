@@ -6,7 +6,6 @@ use Drupal\comment\Tests\CommentTestTrait;
 use Drupal\Core\Extension\ExtensionDiscovery;
 use Drupal\comment\CommentInterface;
 use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
-use Drupal\node\NodeInterface;
 use Drupal\simpletest\WebTestBase;
 use Drupal\comment\Entity\Comment;
 use Drupal\taxonomy\Entity\Term;
@@ -85,7 +84,7 @@ class EntityFilteringThemeTest extends WebTestBase {
     \Drupal::service('theme_handler')->install(array_keys($this->themes));
 
     // Create a test user.
-    $this->user = $this->drupalCreateUser(['access content', 'access user profiles']);
+    $this->user = $this->drupalCreateUser(array('access content', 'access user profiles'));
     $this->user->name = $this->xssLabel;
     $this->user->save();
     $this->drupalLogin($this->user);
@@ -100,36 +99,36 @@ class EntityFilteringThemeTest extends WebTestBase {
     // Add a comment field.
     $this->addDefaultCommentField('node', 'article', 'comment', CommentItemInterface::OPEN);
     // Create a test node tagged with the test term.
-    $this->node = $this->drupalCreateNode([
+    $this->node = $this->drupalCreateNode(array(
       'title' => $this->xssLabel,
       'type' => 'article',
-      'promote' => NodeInterface::PROMOTED,
-      'field_tags' => [['target_id' => $this->term->id()]],
-    ]);
+      'promote' => NODE_PROMOTED,
+      'field_tags' => array(array('target_id' => $this->term->id())),
+    ));
 
     // Create a test comment on the test node.
-    $this->comment = Comment::create([
+    $this->comment = Comment::create(array(
       'entity_id' => $this->node->id(),
       'entity_type' => 'node',
       'field_name' => 'comment',
       'status' => CommentInterface::PUBLISHED,
       'subject' => $this->xssLabel,
-      'comment_body' => [$this->randomMachineName()],
-    ]);
+      'comment_body' => array($this->randomMachineName()),
+    ));
     $this->comment->save();
   }
 
   /**
    * Checks each themed entity for XSS filtering in available themes.
    */
-  public function testThemedEntity() {
+  function testThemedEntity() {
     // Check paths where various view modes of the entities are rendered.
-    $paths = [
+    $paths = array(
       'user',
       'node',
       'node/' . $this->node->id(),
       'taxonomy/term/' . $this->term->id(),
-    ];
+    );
 
     // Check each path in all available themes.
     foreach ($this->themes as $name => $theme) {

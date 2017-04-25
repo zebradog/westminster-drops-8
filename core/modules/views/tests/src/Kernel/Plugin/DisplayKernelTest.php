@@ -24,14 +24,14 @@ class DisplayKernelTest extends ViewsKernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['block', 'node', 'field', 'user'];
+  public static $modules = array('block', 'node', 'field', 'user');
 
   /**
    * Views plugin types to test.
    *
    * @var array
    */
-  protected $pluginTypes = [
+  protected $pluginTypes = array(
     'access',
     'cache',
     'query',
@@ -39,24 +39,24 @@ class DisplayKernelTest extends ViewsKernelTestBase {
     'pager',
     'style',
     'row',
-  ];
+  );
 
   /**
    * Views handler types to test.
    *
    * @var array
    */
-  protected $handlerTypes = [
+  protected $handlerTypes = array(
     'fields',
     'sorts',
-  ];
+  );
 
   /**
    * Views used by this test.
    *
    * @var array
    */
-  public static $testViews = ['test_display_defaults'];
+  public static $testViews = array('test_display_defaults');
 
   /**
    * Tests the default display options.

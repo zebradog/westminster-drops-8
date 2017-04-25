@@ -58,9 +58,9 @@ class ImageTest extends UnitTestCase {
    *
    * @return \PHPUnit_Framework_MockObject_MockObject
    */
-  protected function getToolkitMock(array $stubs = []) {
+  protected function getToolkitMock(array $stubs = array()) {
     $mock_builder = $this->getMockBuilder('Drupal\system\Plugin\ImageToolkit\GDToolkit');
-    $stubs = array_merge(['getPluginId', 'save'], $stubs);
+    $stubs = array_merge(array('getPluginId', 'save'), $stubs);
     return $mock_builder
       ->disableOriginalConstructor()
       ->setMethods($stubs)
@@ -81,8 +81,8 @@ class ImageTest extends UnitTestCase {
     $mock_builder = $this->getMockBuilder('Drupal\system\Plugin\ImageToolkit\Operation\gd\\' . $class_name);
     $logger = $this->getMock('Psr\Log\LoggerInterface');
     return $mock_builder
-      ->setMethods(['execute'])
-      ->setConstructorArgs([[], '', [], $toolkit, $logger])
+      ->setMethods(array('execute'))
+      ->setConstructorArgs(array(array(), '', array(), $toolkit, $logger))
       ->getMock();
   }
 
@@ -98,9 +98,9 @@ class ImageTest extends UnitTestCase {
    * @return \Drupal\Core\Image\Image
    *   An image object.
    */
-  protected function getTestImage($load_expected = TRUE, array $stubs = []) {
+  protected function getTestImage($load_expected = TRUE, array $stubs = array()) {
     if (!$load_expected && !in_array('load', $stubs)) {
-      $stubs = array_merge(['load'], $stubs);
+      $stubs = array_merge(array('load'), $stubs);
     }
 
     $this->toolkit = $this->getToolkitMock($stubs);
@@ -127,7 +127,7 @@ class ImageTest extends UnitTestCase {
    *   An image object.
    */
   protected function getTestImageForOperation($class_name) {
-    $this->toolkit = $this->getToolkitMock(['getToolkitOperation']);
+    $this->toolkit = $this->getToolkitMock(array('getToolkitOperation'));
     $this->toolkitOperation = $this->getToolkitOperationMock($class_name, $this->toolkit);
 
     $this->toolkit->expects($this->any())
@@ -209,7 +209,7 @@ class ImageTest extends UnitTestCase {
       ->method('save')
       ->will($this->returnValue(TRUE));
 
-    $image = $this->getMock('Drupal\Core\Image\Image', ['chmod'], [$toolkit, $this->image->getSource()]);
+    $image = $this->getMock('Drupal\Core\Image\Image', array('chmod'), array($toolkit, $this->image->getSource()));
     $image->expects($this->any())
       ->method('chmod')
       ->will($this->returnValue(TRUE));
@@ -241,7 +241,7 @@ class ImageTest extends UnitTestCase {
       ->method('save')
       ->will($this->returnValue(TRUE));
 
-    $image = $this->getMock('Drupal\Core\Image\Image', ['chmod'], [$toolkit, $this->image->getSource()]);
+    $image = $this->getMock('Drupal\Core\Image\Image', array('chmod'), array($toolkit, $this->image->getSource()));
     $image->expects($this->any())
       ->method('chmod')
       ->will($this->returnValue(FALSE));

@@ -40,11 +40,11 @@ class UserStorage extends SqlContentEntityStorage implements UserStorageInterfac
    */
   public function updateLastLoginTimestamp(UserInterface $account) {
     $this->database->update('users_field_data')
-      ->fields(['login' => $account->getLastLoginTime()])
+      ->fields(array('login' => $account->getLastLoginTime()))
       ->condition('uid', $account->id())
       ->execute();
     // Ensure that the entity cache is cleared.
-    $this->resetCache([$account->id()]);
+    $this->resetCache(array($account->id()));
   }
 
   /**
@@ -52,13 +52,13 @@ class UserStorage extends SqlContentEntityStorage implements UserStorageInterfac
    */
   public function updateLastAccessTimestamp(AccountInterface $account, $timestamp) {
     $this->database->update('users_field_data')
-      ->fields([
+      ->fields(array(
         'access' => $timestamp,
-      ])
+      ))
       ->condition('uid', $account->id())
       ->execute();
     // Ensure that the entity cache is cleared.
-    $this->resetCache([$account->id()]);
+    $this->resetCache(array($account->id()));
   }
 
   /**
@@ -67,8 +67,8 @@ class UserStorage extends SqlContentEntityStorage implements UserStorageInterfac
   public function deleteRoleReferences(array $rids) {
     // Remove the role from all users.
     $this->database->delete('user__roles')
-      ->condition('roles_target_id', $rids)
-      ->execute();
+        ->condition('roles_target_id', $rids)
+        ->execute();
 
     $this->resetCache();
   }

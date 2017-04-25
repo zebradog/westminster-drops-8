@@ -17,13 +17,13 @@ class ThemeHandler implements ThemeHandlerInterface {
    *
    * @see _system_default_theme_features()
    */
-  protected $defaultFeatures = [
+  protected $defaultFeatures = array(
     'favicon',
     'logo',
     'node_user_picture',
     'comment_user_picture',
     'comment_user_verification',
-  ];
+  );
 
   /**
    * A list of all currently available themes.
@@ -178,14 +178,14 @@ class ThemeHandler implements ThemeHandlerInterface {
    */
   public function listInfo() {
     if (!isset($this->list)) {
-      $this->list = [];
+      $this->list = array();
       $themes = $this->systemThemeList();
       // @todo Ensure that systemThemeList() does not contain an empty list
       //   during the batch installer, see https://www.drupal.org/node/2322619.
       if (empty($themes)) {
         $this->refreshInfo();
-        $this->list = $this->list ?: [];
-        $themes = \Drupal::state()->get('system.theme.data', []);
+        $this->list = $this->list ?: array();
+        $themes = \Drupal::state()->get('system.theme.data', array());
       }
       foreach ($themes as $theme) {
         $this->addTheme($theme);
@@ -247,13 +247,13 @@ class ThemeHandler implements ThemeHandlerInterface {
     $themes = $listing->scan('theme');
     $engines = $listing->scan('theme_engine');
     $extension_config = $this->configFactory->get('core.extension');
-    $installed = $extension_config->get('theme') ?: [];
+    $installed = $extension_config->get('theme') ?: array();
 
     // Set defaults for theme info.
-    $defaults = [
+    $defaults = array(
       'engine' => 'twig',
       'base theme' => 'stable',
-      'regions' => [
+      'regions' => array(
         'sidebar_first' => 'Left sidebar',
         'sidebar_second' => 'Right sidebar',
         'content' => 'Content',
@@ -266,17 +266,17 @@ class ThemeHandler implements ThemeHandlerInterface {
         'page_top' => 'Page top',
         'page_bottom' => 'Page bottom',
         'breadcrumb' => 'Breadcrumb',
-      ],
+      ),
       'description' => '',
       'features' => $this->defaultFeatures,
       'screenshot' => 'screenshot.png',
       'php' => DRUPAL_MINIMUM_PHP,
-      'libraries' => [],
-    ];
+      'libraries' => array(),
+    );
 
-    $sub_themes = [];
-    $files_theme = [];
-    $files_theme_engine = [];
+    $sub_themes = array();
+    $files_theme = array();
+    $files_theme_engine = array();
     // Read info files for each theme.
     foreach ($themes as $key => $theme) {
       // @todo Remove all code that relies on the $status property.
@@ -382,18 +382,18 @@ class ThemeHandler implements ThemeHandlerInterface {
    * @return array
    *   An array of base themes.
    */
-  protected function doGetBaseThemes(array $themes, $theme, $used_themes = []) {
+  protected function doGetBaseThemes(array $themes, $theme, $used_themes = array()) {
     if (!isset($themes[$theme]->info['base theme'])) {
-      return [];
+      return array();
     }
 
     $base_key = $themes[$theme]->info['base theme'];
     // Does the base theme exist?
     if (!isset($themes[$base_key])) {
-      return [$base_key => NULL];
+      return array($base_key => NULL);
     }
 
-    $current_base_theme = [$base_key => $themes[$base_key]->info['name']];
+    $current_base_theme = array($base_key => $themes[$base_key]->info['name']);
 
     // Is the base theme itself a child of another theme?
     if (isset($themes[$base_key]->info['base theme'])) {
@@ -403,7 +403,7 @@ class ThemeHandler implements ThemeHandlerInterface {
       }
       // Prevent loops.
       if (!empty($used_themes[$base_key])) {
-        return [$base_key => NULL];
+        return array($base_key => NULL);
       }
       $used_themes[$base_key] = TRUE;
       return $this->doGetBaseThemes($themes, $base_key, $used_themes) + $current_base_theme;
@@ -457,7 +457,7 @@ class ThemeHandler implements ThemeHandlerInterface {
    * {@inheritdoc}
    */
   public function getThemeDirectories() {
-    $dirs = [];
+    $dirs = array();
     foreach ($this->listInfo() as $name => $theme) {
       $dirs[$name] = $this->root . '/' . $theme->getPath();
     }

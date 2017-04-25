@@ -33,15 +33,15 @@ class Weight extends FormElement {
    */
   public function getInfo() {
     $class = get_class($this);
-    return [
+    return array(
       '#input' => TRUE,
       '#delta' => 10,
       '#default_value' => 0,
-      '#process' => [
-        [$class, 'processWeight'],
-        [$class, 'processAjaxForm'],
-      ],
-    ];
+      '#process' => array(
+        array($class, 'processWeight'),
+        array($class, 'processAjaxForm'),
+      ),
+    );
   }
 
   /**
@@ -55,7 +55,7 @@ class Weight extends FormElement {
     $max_elements = \Drupal::config('system.site')->get('weight_select_max');
     if ($element['#delta'] <= $max_elements) {
       $element['#type'] = 'select';
-      $weights = [];
+      $weights = array();
       for ($n = (-1 * $element['#delta']); $n <= $element['#delta']; $n++) {
         $weights[$n] = $n;
       }

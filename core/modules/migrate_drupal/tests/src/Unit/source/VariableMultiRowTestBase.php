@@ -14,27 +14,27 @@ abstract class VariableMultiRowTestBase extends MigrateSqlSourceTestCase {
   const PLUGIN_CLASS = 'Drupal\migrate_drupal\Plugin\migrate\source\VariableMultiRow';
 
   // The fake Migration configuration entity.
-  protected $migrationConfiguration = [
+  protected $migrationConfiguration = array(
     'id' => 'test',
-    'source' => [
+    'source' => array(
       'plugin' => 'd6_variable_multirow',
-      'variables' => [
+      'variables' => array(
         'foo',
         'bar',
-      ],
-    ],
-  ];
+      ),
+    ),
+  );
 
-  protected $expectedResults = [
-    ['name' => 'foo', 'value' => 1],
-    ['name' => 'bar', 'value' => FALSE],
-  ];
+  protected $expectedResults = array(
+    array('name' => 'foo', 'value' => 1),
+    array('name' => 'bar', 'value' => FALSE),
+  );
 
-  protected $databaseContents = [
-    'variable' => [
-      ['name' => 'foo', 'value' => 'i:1;'],
-      ['name' => 'bar', 'value' => 'b:0;'],
-    ],
-  ];
+  protected $databaseContents = array(
+    'variable' => array(
+      array('name' => 'foo', 'value' => 'i:1;'),
+      array('name' => 'bar', 'value' => 'b:0;'),
+    ),
+  );
 
 }

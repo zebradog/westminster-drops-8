@@ -51,83 +51,83 @@ class ViewAddForm extends ViewFormBase {
    */
   public function form(array $form, FormStateInterface $form_state) {
     $form['#attached']['library'][] = 'views_ui/views_ui.admin';
-    $form['#attributes']['class'] = ['views-admin'];
+    $form['#attributes']['class'] = array('views-admin');
 
-    $form['name'] = [
+    $form['name'] = array(
       '#type' => 'fieldset',
       '#title' => t('View basic information'),
-      '#attributes' => ['class' => ['fieldset-no-legend']],
-    ];
+      '#attributes' => array('class' => array('fieldset-no-legend')),
+    );
 
-    $form['name']['label'] = [
+    $form['name']['label'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('View name'),
       '#required' => TRUE,
       '#size' => 32,
       '#default_value' => '',
       '#maxlength' => 255,
-    ];
-    $form['name']['id'] = [
+    );
+    $form['name']['id'] = array(
       '#type' => 'machine_name',
       '#maxlength' => 128,
-      '#machine_name' => [
+      '#machine_name' => array(
         'exists' => '\Drupal\views\Views::getView',
-        'source' => ['name', 'label'],
-      ],
+        'source' => array('name', 'label'),
+      ),
       '#description' => $this->t('A unique machine-readable name for this View. It must only contain lowercase letters, numbers, and underscores.'),
-    ];
+    );
 
-    $form['name']['description_enable'] = [
+    $form['name']['description_enable'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Description'),
-    ];
-    $form['name']['description'] = [
+    );
+    $form['name']['description'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Provide description'),
       '#title_display' => 'invisible',
       '#size' => 64,
       '#default_value' => '',
-      '#states' => [
-        'visible' => [
-          ':input[name="description_enable"]' => ['checked' => TRUE],
-        ],
-      ],
-    ];
+      '#states' => array(
+        'visible' => array(
+          ':input[name="description_enable"]' => array('checked' => TRUE),
+        ),
+      ),
+    );
 
     // Create a wrapper for the entire dynamic portion of the form. Everything
     // that can be updated by AJAX goes somewhere inside here. For example, this
     // is needed by "Show" dropdown (below); it changes the base table of the
     // view and therefore potentially requires all options on the form to be
     // dynamically updated.
-    $form['displays'] = [];
+    $form['displays'] = array();
 
     // Create the part of the form that allows the user to select the basic
     // properties of what the view will display.
-    $form['displays']['show'] = [
+    $form['displays']['show'] = array(
       '#type' => 'fieldset',
       '#title' => t('View settings'),
       '#tree' => TRUE,
-      '#attributes' => ['class' => ['container-inline']],
-    ];
+      '#attributes' => array('class' => array('container-inline')),
+    );
 
     // Create the "Show" dropdown, which allows the base table of the view to be
     // selected.
     $wizard_plugins = $this->wizardManager->getDefinitions();
-    $options = [];
+    $options = array();
     foreach ($wizard_plugins as $key => $wizard) {
       $options[$key] = $wizard['title'];
     }
-    $form['displays']['show']['wizard_key'] = [
+    $form['displays']['show']['wizard_key'] = array(
       '#type' => 'select',
       '#title' => $this->t('Show'),
       '#options' => $options,
-    ];
+    );
     $show_form = &$form['displays']['show'];
     $default_value = \Drupal::moduleHandler()->moduleExists('node') ? 'node' : 'users';
-    $show_form['wizard_key']['#default_value'] = WizardPluginBase::getSelected($form_state, ['show', 'wizard_key'], $default_value, $show_form['wizard_key']);
+    $show_form['wizard_key']['#default_value'] = WizardPluginBase::getSelected($form_state, array('show', 'wizard_key'), $default_value, $show_form['wizard_key']);
     // Changing this dropdown updates the entire content of $form['displays'] via
     // AJAX.
-    views_ui_add_ajax_trigger($show_form, 'wizard_key', ['displays']);
+    views_ui_add_ajax_trigger($show_form, 'wizard_key', array('displays'));
 
     // Build the rest of the form based on the currently selected wizard plugin.
     $wizard_key = $show_form['wizard_key']['#default_value'];
@@ -144,13 +144,13 @@ class ViewAddForm extends ViewFormBase {
     $actions = parent::actions($form, $form_state);
     $actions['submit']['#value'] = $this->t('Save and edit');
     // Remove EntityFormController::save() form the submission handlers.
-    $actions['submit']['#submit'] = [[$this, 'submitForm']];
-    $actions['cancel'] = [
+    $actions['submit']['#submit'] = array(array($this, 'submitForm'));
+    $actions['cancel'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Cancel'),
-      '#submit' => ['::cancel'],
-      '#limit_validation_errors' => [],
-    ];
+      '#submit' => array('::cancel'),
+      '#limit_validation_errors' => array(),
+    );
     return $actions;
   }
 
@@ -158,7 +158,7 @@ class ViewAddForm extends ViewFormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    $wizard_type = $form_state->getValue(['show', 'wizard_key']);
+    $wizard_type = $form_state->getValue(array('show', 'wizard_key'));
     $wizard_instance = $this->wizardManager->createInstance($wizard_type);
     $form_state->set('wizard', $wizard_instance->getPluginDefinition());
     $form_state->set('wizard_instance', $wizard_instance);
@@ -187,7 +187,7 @@ class ViewAddForm extends ViewFormBase {
       return;
     }
     $this->entity->save();
-    drupal_set_message($this->t('The view %name has been saved.', ['%name' => $form_state->getValue('label')]));
+    drupal_set_message($this->t('The view %name has been saved.', array('%name' => $form_state->getValue('label'))));
     $form_state->setRedirectUrl($this->entity->urlInfo('edit-form'));
   }
 

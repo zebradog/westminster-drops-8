@@ -6,7 +6,6 @@ use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Render\Markup;
 use Drupal\Tests\UnitTestCase;
 use Drupal\Core\Config\Config;
-use Drupal\Core\Config\ConfigValueException;
 
 /**
  * Tests the Config.
@@ -88,16 +87,16 @@ class ConfigTest extends UnitTestCase {
    * @see \Drupal\Tests\Core\Config\ConfigTest::testSetName()
    */
   public function setNameProvider() {
-    return [
+    return array(
       // Valid name with dot.
-      [
+      array(
         'test.name',
-      ],
+      ),
       // Maximum length.
-      [
+      array(
         'test.' . str_repeat('a', Config::MAX_NAME_LENGTH - 5),
-      ],
-    ];
+      ),
+    );
   }
 
   /**
@@ -231,21 +230,21 @@ class ConfigTest extends UnitTestCase {
 
   /**
    * @covers ::set
+   * @expectedException \Drupal\Core\Config\ConfigValueException
    */
   public function testSetValidation() {
-    $this->setExpectedException(ConfigValueException::class);
-    $this->config->set('testData', ['dot.key' => 1]);
+    $this->config->set('testData', array('dot.key' => 1));
   }
 
   /**
    * @covers ::set
+   * @expectedException PHPUnit_Framework_Error_Warning
    */
   public function testSetIllegalOffsetValue() {
     // Set a single value.
     $this->config->set('testData', 1);
 
     // Attempt to treat the single value as a nested item.
-    $this->setExpectedException(\PHPUnit_Framework_Error_Warning::class);
     $this->config->set('testData.illegalOffset', 1);
   }
 
@@ -370,20 +369,21 @@ class ConfigTest extends UnitTestCase {
    * @see \Drupal\Tests\Core\Config\ConfigTest::testMerge()
    */
   public function mergeDataProvider() {
-    return [
-      [
+    return array(
+      array(
         // Data.
-        ['a' => 1, 'b' => 2, 'c' => ['d' => 3]],
+        array('a' => 1, 'b' => 2, 'c' => array('d' => 3)),
         // Data to merge.
-        ['a' => 2, 'e' => 4, 'c' => ['f' => 5]],
+        array('a' => 2, 'e' => 4, 'c' => array('f' => 5)),
         // Data merged.
-        ['a' => 2, 'b' => 2, 'c' => ['d' => 3, 'f' => 5], 'e' => 4],
-      ],
-    ];
+        array('a' => 2, 'b' => 2, 'c' => array('d' => 3, 'f' => 5), 'e' => 4),
+      ),
+    );
   }
 
   /**
    * @covers ::validateName
+   * @expectedException \Drupal\Core\Config\ConfigNameException
    * @dataProvider validateNameProvider
    */
   public function testValidateNameException($name, $exception_message) {
@@ -404,25 +404,25 @@ class ConfigTest extends UnitTestCase {
    * @see \Drupal\Tests\Core\Config\ConfigTest::testValidateNameException()
    */
   public function validateNameProvider() {
-    $return = [
+    $return = array(
       // Name missing namespace (dot).
-      [
+      array(
         'MissingNamespace',
         'Missing namespace in Config object name MissingNamespace.',
-      ],
+      ),
       // Exceeds length (max length plus an extra dot).
-      [
+      array(
         str_repeat('a', Config::MAX_NAME_LENGTH) . ".",
         'Config object name ' . str_repeat('a', Config::MAX_NAME_LENGTH) . '. exceeds maximum allowed length of ' . Config::MAX_NAME_LENGTH . ' characters.',
-      ],
-    ];
+      ),
+    );
     // Name must not contain : ? * < > " ' / \
-    foreach ([':', '?', '*', '<', '>', '"', "'", '/', '\\'] as $char) {
+    foreach (array(':', '?', '*', '<', '>', '"', "'", '/', '\\') as $char) {
       $name = 'name.' . $char;
-      $return[] = [
+      $return[] = array(
         $name,
         "Invalid character in Config object name $name.",
-      ];
+      );
     }
     return $return;
   }
@@ -434,22 +434,22 @@ class ConfigTest extends UnitTestCase {
    * @see \Drupal\Tests\Core\Config\ConfigTest::testDelete()
    */
   public function overrideDataProvider() {
-    return [
-      [
+    return array(
+      array(
         // Original data.
-        [
+        array(
           'a' => 'originalValue',
-        ],
+        ),
         // Module overrides.
-        [
+        array(
           'a' => 'moduleValue',
-        ],
+        ),
         // Setting overrides.
-        [
+        array(
           'a' => 'settingValue',
-        ],
-      ],
-    ];
+        ),
+      ),
+    );
   }
 
   /**
@@ -458,15 +458,15 @@ class ConfigTest extends UnitTestCase {
    * @see \Drupal\Tests\Core\Config\ConfigTest::testClear()
    */
   public function simpleDataProvider() {
-    return [
-      [
-        [
+    return array(
+      array(
+        array(
           'a' => '1',
           'b' => '2',
           'c' => '3',
-        ],
-      ],
-    ];
+        ),
+      ),
+    );
   }
 
   /**
@@ -479,21 +479,21 @@ class ConfigTest extends UnitTestCase {
    * @see \Drupal\Tests\Core\Config\ConfigTest::testNestedClear()
    */
   public function nestedDataProvider() {
-    return [
-      [
-        [
-          'a' => [
+    return array(
+      array(
+        array(
+          'a' => array(
             'd' => 1,
-          ],
-          'b' => [
+          ),
+          'b' => array(
             'e' => 2,
-          ],
-          'c' => [
+          ),
+          'c' => array(
             'f' => 3,
-          ],
-        ],
-      ],
-    ];
+          ),
+        ),
+      ),
+    );
   }
 
   /**

@@ -16,7 +16,7 @@ class HtmlTagTest extends UnitTestCase {
    * @covers ::getInfo
    */
   public function testGetInfo() {
-    $htmlTag = new HtmlTag([], 'test', 'test');
+    $htmlTag = new HtmlTag(array(), 'test', 'test');
     $info = $htmlTag->getInfo();
     $this->assertArrayHasKey('#pre_render', $info);
     $this->assertArrayHasKey('#attributes', $info);
@@ -37,60 +37,60 @@ class HtmlTagTest extends UnitTestCase {
    * Data provider for preRenderHtmlTag test.
    */
   public function providerPreRenderHtmlTag() {
-    $tags = [];
+    $tags = array();
 
     // Value prefix/suffix.
-    $element = [
+    $element = array(
       '#value' => 'value',
       '#tag' => 'p',
-    ];
-    $tags[] = [$element, '<p>value</p>' . "\n"];
+    );
+    $tags[] = array($element, '<p>value</p>' . "\n");
 
     // Normal element without a value should not result in a void element.
-    $element = [
+    $element = array(
       '#tag' => 'p',
       '#value' => NULL,
-    ];
-    $tags[] = [$element, "<p></p>\n"];
+    );
+    $tags[] = array($element, "<p></p>\n");
 
     // A void element.
-    $element = [
+    $element = array(
       '#tag' => 'br',
-    ];
-    $tags[] = [$element, "<br />\n"];
+    );
+    $tags[] = array($element, "<br />\n");
 
     // Attributes.
-    $element = [
+    $element = array(
       '#tag' => 'div',
-      '#attributes' => ['class' => 'test', 'id' => 'id'],
+      '#attributes' => array('class' => 'test', 'id' => 'id'),
       '#value' => 'value',
-    ];
-    $tags[] = [$element, '<div class="test" id="id">value</div>' . "\n"];
+    );
+    $tags[] = array($element, '<div class="test" id="id">value</div>' . "\n");
 
     // No script tags.
     $element['#noscript'] = TRUE;
-    $tags[] = [$element, '<noscript><div class="test" id="id">value</div>' . "\n" . '</noscript>'];
+    $tags[] = array($element, '<noscript><div class="test" id="id">value</div>' . "\n" . '</noscript>');
 
     // Ensure that #tag is sanitised.
-    $element = [
+    $element = array(
       '#tag' => 'p><script>alert()</script><p',
       '#value' => 'value',
-    ];
-    $tags[] = [$element, "<p&gt;&lt;script&gt;alert()&lt;/script&gt;&lt;p>value</p&gt;&lt;script&gt;alert()&lt;/script&gt;&lt;p>\n"];
+    );
+    $tags[] = array($element, "<p&gt;&lt;script&gt;alert()&lt;/script&gt;&lt;p>value</p&gt;&lt;script&gt;alert()&lt;/script&gt;&lt;p>\n");
 
     // Ensure that #value is not filtered if it is marked as safe.
-    $element = [
+    $element = array(
       '#tag' => 'p',
       '#value' => Markup::create('<script>value</script>'),
-    ];
-    $tags[] = [$element, "<p><script>value</script></p>\n"];
+    );
+    $tags[] = array($element, "<p><script>value</script></p>\n");
 
     // Ensure that #value is filtered if it is not safe.
-    $element = [
+    $element = array(
       '#tag' => 'p',
       '#value' => '<script>value</script>',
-    ];
-    $tags[] = [$element, "<p>value</p>\n"];
+    );
+    $tags[] = array($element, "<p>value</p>\n");
 
     return $tags;
   }
@@ -112,74 +112,74 @@ class HtmlTagTest extends UnitTestCase {
    */
   public function providerPreRenderConditionalComments() {
     // No browser specification.
-    $element = [
+    $element = array(
       '#tag' => 'link',
-    ];
-    $tags[] = [$element, $element];
+    );
+    $tags[] = array($element, $element);
 
     // Specify all browsers.
-    $element['#browsers'] = [
+    $element['#browsers'] = array(
       'IE' => TRUE,
       '!IE' => TRUE,
-    ];
-    $tags[] = [$element, $element];
+    );
+    $tags[] = array($element, $element);
 
     // All IE.
-    $element = [
+    $element = array(
       '#tag' => 'link',
-      '#browsers' => [
+      '#browsers' => array(
         'IE' => TRUE,
         '!IE' => FALSE,
-      ],
-    ];
+      ),
+    );
     $expected = $element;
     $expected['#prefix'] = "\n<!--[if IE]>\n";
     $expected['#suffix'] = "<![endif]-->\n";
-    $tags[] = [$element, $expected];
+    $tags[] = array($element, $expected);
 
     // Exclude IE.
-    $element = [
+    $element = array(
       '#tag' => 'link',
-      '#browsers' => [
+      '#browsers' => array(
         'IE' => FALSE,
-      ],
-    ];
+      ),
+    );
     $expected = $element;
     $expected['#prefix'] = "\n<!--[if !IE]><!-->\n";
     $expected['#suffix'] = "<!--<![endif]-->\n";
-    $tags[] = [$element, $expected];
+    $tags[] = array($element, $expected);
 
     // IE gt 8
-    $element = [
+    $element = array(
       '#tag' => 'link',
-      '#browsers' => [
+      '#browsers' => array(
         'IE' => 'gt IE 8',
-      ],
-    ];
+      ),
+    );
     $expected = $element;
     $expected['#prefix'] = "\n<!--[if gt IE 8]><!-->\n";
     $expected['#suffix'] = "<!--<![endif]-->\n";
-    $tags[] = [$element, $expected];
+    $tags[] = array($element, $expected);
 
     // Prefix and suffix filtering if not safe.
-    $element = [
+    $element = array(
       '#tag' => 'link',
-      '#browsers' => [
+      '#browsers' => array(
         'IE' => FALSE,
-      ],
+      ),
       '#prefix' => '<blink>prefix</blink>',
       '#suffix' => '<blink>suffix</blink>',
-    ];
+    );
     $expected = $element;
     $expected['#prefix'] = "\n<!--[if !IE]><!-->\nprefix";
     $expected['#suffix'] = "suffix<!--<![endif]-->\n";
-    $tags[] = [$element, $expected];
+    $tags[] = array($element, $expected);
 
     // Prefix and suffix filtering if marked as safe. This has to come after the
     // previous test case.
     $expected['#prefix'] = "\n<!--[if !IE]><!-->\n<blink>prefix</blink>";
     $expected['#suffix'] = "<blink>suffix</blink><!--<![endif]-->\n";
-    $tags[] = [$element, $expected, TRUE];
+    $tags[] = array($element, $expected, TRUE);
 
     return $tags;
   }
