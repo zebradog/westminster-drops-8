@@ -1,0 +1,8 @@
+name: Westminster Helper
+description: Contains additional code related to Westminster.
+package: Westminster
+
+type: module
+core: 8.x
+
+hidden: true

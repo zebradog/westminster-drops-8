@@ -38,6 +38,7 @@ dependencies:
   - block_page_layout
   - prepopulate
   - crop
+  - westminster_helper
 themes:
   - westminster_theme
   - yorkshire

@@ -32,7 +32,7 @@ module:
   views_ui: 0
   menu_link_content: 1
   views: 10
-  westminster: 1000
+  westminster_helper: 1000
 theme:
   classy: 0
   yorkshire: 0
