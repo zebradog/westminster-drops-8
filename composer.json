@@ -9,7 +9,8 @@
         "aws/aws-sdk-php": "^3.28",
         "drupal/flysystem": "^1.0@alpha",
         "league/flysystem-memory": "^1.0",
-        "league/flysystem-aws-s3-v3": "^1.0"
+        "league/flysystem-aws-s3-v3": "^1.0",
+        "google/apiclient": "^2.0"
     },
     "replace": {
         "drupal/core": "~8.3"
