@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Contains draggableviews.module.
@@ -9,8 +10,8 @@
  */
 function draggableviews_views_data_alter(&$data) {
   $data['draggableviews_structure']['weight'] = array(
-    'title' => t('Weight'),
-    'group' => t('Draggableviews'),
+    'title' => t('DraggableViews Weight'),
+    'group' => t('Global'),
     'help' => t('Display the weight value.'),
     'field' => array(
       'id' => 'numeric',
@@ -134,6 +135,7 @@ function draggableviews_form_alter(&$form, \Drupal\Core\Form\FormStateInterface 
 function draggableviews_views_submit(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
   $input = $form_state->getUserInput();
 
+  /** @var \Drupal\views\ViewExecutable $view */
   $view = $form_state->getBuildInfo()['args'][0];
   $view_name = $view->id();
   $view_display = $view->current_display;
@@ -166,7 +168,16 @@ function draggableviews_views_submit(&$form, \Drupal\Core\Form\FormStateInterfac
       $connection->insert('draggableviews_structure')->fields($record)->execute();
       $weight++;
     }
-    \Drupal\Core\Cache\Cache::invalidateTags(array("config:views.view.".$view_name));
+    // We invalidate the entity list cache, so other views are also aware of the
+    // cache.
+    $views_entity_table_info = $view->query->getEntityTableInfo();
+    // Find the entity type used by the view.
+    $result = array_keys(array_filter($views_entity_table_info, function($info) {
+      return $info['relationship_id'] == 'none';
+    }));
+    $entity_type_id = reset($result);
+    $list_cache_tags = \Drupal::entityTypeManager()->getDefinition($entity_type_id)->getListCacheTags();
+    \Drupal\Core\Cache\Cache::invalidateTags($list_cache_tags);
   }
   catch (\Exception $e) {
     $transaction->rollback();

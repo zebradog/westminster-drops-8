@@ -1,8 +1,7 @@
 <?php
 
-namespace NoDrupal\Tests\flysystem\Unit\Form {
+namespace Drupal\Tests\flysystem\Unit\Form {
 
-use Drupal\Component\Utility\SafeMarkup;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Tests\UnitTestCase;
@@ -121,7 +120,8 @@ class ConfigFormTest extends UnitTestCase {
     $form_state->setValue('sync_to', 'to_empty');
 
     $this->form->submitForm($form, $form_state);
-    $batch = batch_set();
+    $batch = \Drupal\flysystem\Form\batch_set();
+
     $this->assertSame(ConfigForm::class . '::finishBatch', $batch['finished']);
     $this->assertSame(0, count($batch['operations']));
 
@@ -137,7 +137,7 @@ class ConfigFormTest extends UnitTestCase {
 
     $batch_files = array_map(function (array $operation) {
       return $operation[1][2];
-    }, batch_set()['operations']);
+    }, \Drupal\flysystem\Form\batch_set()['operations']);
 
     $this->assertSame(['dir/test.txt', 'test.txt'], $batch_files);
 
@@ -149,7 +149,7 @@ class ConfigFormTest extends UnitTestCase {
 
     $batch_files = array_map(function (array $operation) {
       return $operation[1][2];
-    }, batch_set()['operations']);
+    }, \Drupal\flysystem\Form\batch_set()['operations']);
 
     $this->assertSame(['dir/test.txt', 'test.txt'], $batch_files);
   }
@@ -250,33 +250,23 @@ class ConfigFormTest extends UnitTestCase {
 }
 }
 
-namespace {
-  if (!function_exists('drupal_set_message')) {
-    function drupal_set_message() {}
+namespace Drupal\flysystem\Form {
+  function drupal_set_message() {}
+
+  function batch_set($batch = NULL) {
+    static $last_batch;
+
+    if (isset($batch)) {
+      $last_batch = $batch;
+    }
+    return $last_batch;
   }
 
-  if (!function_exists('batch_set')) {
-    function batch_set($batch = NULL) {
-      static $last_batch;
-
-      if (isset($batch)) {
-        $last_batch = $batch;
-      }
-      return $last_batch;
+  function drupal_set_time_limit($limit) {
+    if ($limit !== 0) {
+      throw new \Exception();
     }
   }
 
-  if (!function_exists('drupal_set_time_limit')) {
-    function drupal_set_time_limit($limit) {
-      if ($limit !== 0) {
-        throw new \Exception();
-      }
-    }
-  }
-
-  if (!function_exists('watchdog_exception')) {
-    function watchdog_exception() {
-
-    }
-  }
+  function watchdog_exception() {}
 }

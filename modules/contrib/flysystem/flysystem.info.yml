@@ -5,8 +5,8 @@ type: module
 # core: 8.x
 # version: 8.0-dev
 
-# Information added by Drupal.org packaging script on 2016-07-21
-version: '8.x-1.0-alpha4'
+# Information added by Drupal.org packaging script on 2017-06-16
+version: '8.x-1.0'
 core: '8.x'
 project: 'flysystem'
-datestamp: 1469068744
+datestamp: 1497585845

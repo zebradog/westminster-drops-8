@@ -2,11 +2,11 @@ name: DraggableViews
 type: module
 description: Complete rewrite of D7 draggableviews
 # core: 8.x
-package: YMCA
 dependencies:
   - views
-# Information added by Drupal.org packaging script on 2015-11-16
-version: '8.x-1.x-dev'
+
+# Information added by Drupal.org packaging script on 2016-10-21
+version: '8.x-1.0'
 core: '8.x'
 project: 'draggableviews'
-datestamp: 1447691373
+datestamp: 1477076053
