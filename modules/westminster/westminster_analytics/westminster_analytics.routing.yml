@@ -1,0 +1,7 @@
+westminster_analytics.configurationForm:
+  path: '/admin/config/westminster/analytics'
+  defaults:
+    _title: 'Westminster Analytics Configuration'
+    _form: '\Drupal\westminster_analytics\Form\ConfigurationForm'
+  requirements:
+    _permission: 'westminster analytics configuration'

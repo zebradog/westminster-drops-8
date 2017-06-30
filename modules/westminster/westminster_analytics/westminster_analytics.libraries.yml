@@ -1,0 +1,5 @@
+gapi:
+  header: true
+  js:
+    js/gapi.js: {}
+    js/authorize.js: {}

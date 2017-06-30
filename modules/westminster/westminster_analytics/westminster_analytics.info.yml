@@ -1,0 +1,6 @@
+name: Westminster Analytics
+description: Provides basic functionality for embedding Google Analytics.
+package: Westminster
+
+type: module
+core: 8.x

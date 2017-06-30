@@ -1,0 +1,20 @@
+<?php
+
+  use Drupal\westminster_analytics\ConfigurationHelper;
+  use Drupal\westminster_analytics\GoogleHelper;
+
+  function westminster_analytics_preprocess_page(&$variables) {
+    if (\Drupal::currentUser()->isAuthenticated()) {
+      westminster_analytics_attachGapiLibrary($variables);
+    }
+  }
+
+  function westminster_analytics_attachGapiLibrary(&$variables) {
+    $configurationHelper = new ConfigurationHelper();
+    $googleHelper = new GoogleHelper();
+
+    if ($configurationHelper->hasCredentials()) {
+      $variables['#attached']['library'][] = 'westminster_analytics/gapi';
+      $variables['#attached']['drupalSettings']['westminster_analytics']['serverAuth'] = $googleHelper->getInjectableServerAuthorization();
+    }
+  }

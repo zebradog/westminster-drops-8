@@ -1,0 +1,5 @@
+westminster_analytics.configurationForm:
+  title: 'Westminster Analytics'
+  description: 'Upload and review your Google account credentials and access token.'
+  parent: system.admin_config_services
+  route_name: westminster_analytics.configurationForm
