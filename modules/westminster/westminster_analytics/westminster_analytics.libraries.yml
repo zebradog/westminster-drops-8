@@ -1,8 +1,6 @@
 gapi:
   header: true
   js:
-    https://www.google.com/jsapi:
-      type: external
     https://www.gstatic.com/charts/loader.js:
       type: external
     js/charts.js: {}
