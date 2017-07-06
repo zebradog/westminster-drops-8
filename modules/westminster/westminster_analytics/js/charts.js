@@ -1,6 +1,7 @@
 if (google && google.charts && google.charts.load) {
   google.charts.load('current', {
     packages: [
+      'bar',
       'corechart',
       'line',
       'table'
@@ -9,6 +10,7 @@ if (google && google.charts && google.charts.load) {
 } else if (google && google.load) {
   google.load('visualization', '1.0', {
     packages: [
+      'bar',
       'corechart',
       'line',
       'table'
