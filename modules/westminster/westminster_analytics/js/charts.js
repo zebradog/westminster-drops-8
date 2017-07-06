@@ -5,4 +5,11 @@ if (google && google.charts && google.charts.load) {
       'table'
     ]
   });
+} else if (google && google.load) {
+  google.load('visualization', '1.0', {
+    packages: [
+      'corechart',
+      'table'
+    ]
+  });
 }
