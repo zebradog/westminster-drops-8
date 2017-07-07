@@ -14,7 +14,8 @@
     $googleHelper = new GoogleHelper();
 
     if ($configurationHelper->hasCredentials()) {
-      $variables['#attached']['library'][] = 'westminster_analytics/gapi';
+      $variables['#attached']['library'][] = 'westminster_analytics/google';
+      $variables['#attached']['library'][] = 'westminster_analytics/main';
       $variables['#attached']['drupalSettings']['westminster_analytics']['serverAuth'] = $googleHelper->getInjectableServerAuthorization();
     }
   }

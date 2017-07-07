@@ -1,8 +1,14 @@
-gapi:
+google:
   header: true
   js:
     https://www.google.com/jsapi:
       type: external
-    js/charts.js: {}
-    js/gapi.js: {}
-    js/authorize.js: {}
+    js/library/google/charts.js: {}
+    js/library/google/gapi.js: {}
+    js/library/google/authorize.js: {}
+
+main:
+  js:
+    js/library/main/wa.js: {}
+  dependencies:
+    - core/jquery
