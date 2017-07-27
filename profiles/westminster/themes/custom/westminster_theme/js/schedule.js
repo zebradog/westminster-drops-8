@@ -3,7 +3,7 @@ $(function() {
   var FORM_DATE_FORMAT_MOMENT = "YYYY-MM-DD";
   var FORM_TIME_FORMAT_MOMENT = "HH:mm";
   var CMS_DATE_FORMAT = "YYYY-MM-DDTHH:mm:ss";
-  var DOMAIN = window.location.protocol + "//" + window.location.hostname;
+  var DOMAIN = "http://" + window.location.hostname;
   var HEX_VALS = {
     '0': 0,
     '1': 1,
