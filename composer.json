@@ -5,15 +5,15 @@
     "license": "GPL-2.0+",
     "require": {
         "composer/installers": "^1.0.24",
-        "wikimedia/composer-merge-plugin": "~1.4",
-        "aws/aws-sdk-php": "^3.28",
-        "drupal/flysystem": "^1.0@alpha",
+        "wikimedia/composer-merge-plugin": "^1.4",
+        "aws/aws-sdk-php": "^3.36",
+        "drupal/flysystem": "^1.0",
         "league/flysystem-memory": "^1.0",
         "league/flysystem-aws-s3-v3": "^1.0",
-        "google/apiclient": "^2.0"
+        "google/apiclient": "^2.2"
     },
     "replace": {
-        "drupal/core": "~8.3"
+        "drupal/core": "^8.4"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

@@ -444,7 +444,7 @@ class RestExport extends PathPluginBase implements ResponseDisplayPluginInterfac
       $build['#markup'] = ViewsRenderPipelineMarkup::create($build['#markup']);
     }
 
-    parent::applyDisplayCachablityMetadata($build);
+    parent::applyDisplayCacheabilityMetadata($build);
 
     return $build;
   }

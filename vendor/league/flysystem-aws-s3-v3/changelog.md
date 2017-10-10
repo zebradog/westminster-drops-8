@@ -1,6 +1,18 @@
 # Changelog
 
-##1.0.16 - 2017-06-08
+## 1.0.18 - 2017-06-30
+
+### Fixed
+
+* Allow metadata to be returned through the getMetadata method.
+
+## 1.0.17 - 2017-06-30
+
+### Fixed
+
+* Allow passing options to methods that don't accept options.
+
+## 1.0.16 - 2017-06-08
 
 ### Improved
 

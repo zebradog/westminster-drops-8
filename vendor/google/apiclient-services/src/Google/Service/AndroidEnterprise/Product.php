@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016 Google Inc.
+ * Copyright 2014 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,10 +17,11 @@
 
 class Google_Service_AndroidEnterprise_Product extends Google_Collection
 {
-  protected $collection_key = 'appVersion';
+  protected $collection_key = 'availableTracks';
   protected $appVersionType = 'Google_Service_AndroidEnterprise_AppVersion';
   protected $appVersionDataType = 'array';
   public $authorName;
+  public $availableTracks;
   public $detailsUrl;
   public $distributionChannel;
   public $iconUrl;
@@ -28,14 +29,22 @@ class Google_Service_AndroidEnterprise_Product extends Google_Collection
   public $productId;
   public $productPricing;
   public $requiresContainerApp;
+  protected $signingCertificateType = 'Google_Service_AndroidEnterprise_ProductSigningCertificate';
+  protected $signingCertificateDataType = '';
   public $smallIconUrl;
   public $title;
   public $workDetailsUrl;
 
+  /**
+   * @param Google_Service_AndroidEnterprise_AppVersion
+   */
   public function setAppVersion($appVersion)
   {
     $this->appVersion = $appVersion;
   }
+  /**
+   * @return Google_Service_AndroidEnterprise_AppVersion
+   */
   public function getAppVersion()
   {
     return $this->appVersion;
@@ -47,6 +56,14 @@ class Google_Service_AndroidEnterprise_Product extends Google_Collection
   public function getAuthorName()
   {
     return $this->authorName;
+  }
+  public function setAvailableTracks($availableTracks)
+  {
+    $this->availableTracks = $availableTracks;
+  }
+  public function getAvailableTracks()
+  {
+    return $this->availableTracks;
   }
   public function setDetailsUrl($detailsUrl)
   {
@@ -103,6 +120,20 @@ class Google_Service_AndroidEnterprise_Product extends Google_Collection
   public function getRequiresContainerApp()
   {
     return $this->requiresContainerApp;
+  }
+  /**
+   * @param Google_Service_AndroidEnterprise_ProductSigningCertificate
+   */
+  public function setSigningCertificate(Google_Service_AndroidEnterprise_ProductSigningCertificate $signingCertificate)
+  {
+    $this->signingCertificate = $signingCertificate;
+  }
+  /**
+   * @return Google_Service_AndroidEnterprise_ProductSigningCertificate
+   */
+  public function getSigningCertificate()
+  {
+    return $this->signingCertificate;
   }
   public function setSmallIconUrl($smallIconUrl)
   {
