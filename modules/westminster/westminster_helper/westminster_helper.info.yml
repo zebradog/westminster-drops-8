@@ -4,5 +4,3 @@ package: Westminster
 
 type: module
 core: 8.x
-
-hidden: true
