@@ -21,6 +21,7 @@ class Google_Service_Compute_Instance extends Google_Collection
   public $canIpForward;
   public $cpuPlatform;
   public $creationTimestamp;
+  public $deletionProtection;
   public $description;
   protected $disksType = 'Google_Service_Compute_AttachedDisk';
   protected $disksDataType = 'array';
@@ -72,6 +73,14 @@ class Google_Service_Compute_Instance extends Google_Collection
   public function getCreationTimestamp()
   {
     return $this->creationTimestamp;
+  }
+  public function setDeletionProtection($deletionProtection)
+  {
+    $this->deletionProtection = $deletionProtection;
+  }
+  public function getDeletionProtection()
+  {
+    return $this->deletionProtection;
   }
   public function setDescription($description)
   {

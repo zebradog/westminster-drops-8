@@ -37,10 +37,10 @@ class Google_Service_StreetViewPublish_Resource_Photo extends Google_Service_Res
    *
    * This method returns the following error codes:
    *
-   * * google.rpc.Code.INVALID_ARGUMENT if the request is malformed. *
-   * google.rpc.Code.NOT_FOUND if the upload reference does not exist. *
-   * google.rpc.Code.RESOURCE_EXHAUSTED if the account has reached the storage
-   * limit. (photo.create)
+   * * google.rpc.Code.INVALID_ARGUMENT if the request is malformed or if the
+   * uploaded photo is not a 360 photo. * google.rpc.Code.NOT_FOUND if the upload
+   * reference does not exist. * google.rpc.Code.RESOURCE_EXHAUSTED if the account
+   * has reached the storage limit. (photo.create)
    *
    * @param Google_Service_StreetViewPublish_Photo $postBody
    * @param array $optParams Optional parameters.

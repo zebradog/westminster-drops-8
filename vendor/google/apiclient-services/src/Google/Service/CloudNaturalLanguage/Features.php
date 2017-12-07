@@ -17,11 +17,20 @@
 
 class Google_Service_CloudNaturalLanguage_Features extends Google_Model
 {
+  public $classifyText;
   public $extractDocumentSentiment;
   public $extractEntities;
   public $extractEntitySentiment;
   public $extractSyntax;
 
+  public function setClassifyText($classifyText)
+  {
+    $this->classifyText = $classifyText;
+  }
+  public function getClassifyText()
+  {
+    return $this->classifyText;
+  }
   public function setExtractDocumentSentiment($extractDocumentSentiment)
   {
     $this->extractDocumentSentiment = $extractDocumentSentiment;

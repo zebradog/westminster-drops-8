@@ -80,6 +80,10 @@ class Google_Service_CloudNaturalLanguage extends Google_Service
               'path' => 'v1/documents:annotateText',
               'httpMethod' => 'POST',
               'parameters' => array(),
+            ),'classifyText' => array(
+              'path' => 'v1/documents:classifyText',
+              'httpMethod' => 'POST',
+              'parameters' => array(),
             ),
           )
         )

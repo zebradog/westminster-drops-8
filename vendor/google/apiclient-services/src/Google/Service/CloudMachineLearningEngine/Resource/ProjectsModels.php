@@ -101,6 +101,8 @@ class Google_Service_CloudMachineLearningEngine_Resource_ProjectsModels extends 
    * be listed.
    * @param array $optParams Optional parameters.
    *
+   * @opt_param string filter Optional. Specifies the subset of models to
+   * retrieve.
    * @opt_param string pageToken Optional. A page token to request the next page
    * of results.
    *

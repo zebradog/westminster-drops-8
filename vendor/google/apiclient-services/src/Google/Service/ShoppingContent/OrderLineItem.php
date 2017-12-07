@@ -20,7 +20,6 @@ class Google_Service_ShoppingContent_OrderLineItem extends Google_Collection
   protected $collection_key = 'returns';
   protected $cancellationsType = 'Google_Service_ShoppingContent_OrderCancellation';
   protected $cancellationsDataType = 'array';
-  public $channelType;
   public $id;
   protected $priceType = 'Google_Service_ShoppingContent_Price';
   protected $priceDataType = '';
@@ -54,14 +53,6 @@ class Google_Service_ShoppingContent_OrderLineItem extends Google_Collection
   public function getCancellations()
   {
     return $this->cancellations;
-  }
-  public function setChannelType($channelType)
-  {
-    $this->channelType = $channelType;
-  }
-  public function getChannelType()
-  {
-    return $this->channelType;
   }
   public function setId($id)
   {

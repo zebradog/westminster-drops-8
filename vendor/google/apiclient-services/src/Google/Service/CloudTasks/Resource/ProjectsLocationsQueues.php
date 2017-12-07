@@ -28,10 +28,10 @@ class Google_Service_CloudTasks_Resource_ProjectsLocationsQueues extends Google_
   /**
    * Creates a queue.
    *
-   * WARNING: This method is only available to whitelisted users. Using this
-   * method carries some risk. Read [Overview of Queue Management and queue.yaml
-   * ](/cloud-tasks/docs/queue-yaml) carefully and then sign up for [whitelist
-   * access to this method](https://goo.gl/Fe5mUy). (queues.create)
+   * WARNING: Using this method may have unintended side effects if you are using
+   * an App Engine `queue.yaml` or `queue.xml` file to manage your queues. Read
+   * [Overview of Queue Management and queue.yaml](/cloud-tasks/docs/queue-yaml)
+   * carefully before using this method. (queues.create)
    *
    * @param string $parent Required.
    *
@@ -58,10 +58,10 @@ class Google_Service_CloudTasks_Resource_ProjectsLocationsQueues extends Google_
    * Note: If you delete a queue, a queue with the same name can't be created for
    * 7 days.
    *
-   * WARNING: This method is only available to whitelisted users. Using this
-   * method carries some risk. Read [Overview of Queue Management and queue.yaml
-   * ](/cloud-tasks/docs/queue-yaml) carefully and then sign up for [whitelist
-   * access to this method](https://goo.gl/Fe5mUy). (queues.delete)
+   * WARNING: Using this method may have unintended side effects if you are using
+   * an App Engine `queue.yaml` or `queue.xml` file to manage your queues. Read
+   * [Overview of Queue Management and queue.yaml](/cloud-tasks/docs/queue-yaml)
+   * carefully before using this method. (queues.delete)
    *
    * @param string $name Required.
    *
@@ -99,7 +99,7 @@ class Google_Service_CloudTasks_Resource_ProjectsLocationsQueues extends Google_
    * Authorization requires the following [Google IAM](/iam) permission on the
    * specified resource parent:
    *
-   * * `cloudtasks.queues.getIamPolicy`  (queues.getIamPolicy)
+   * * `cloudtasks.queues.getIamPolicy` (queues.getIamPolicy)
    *
    * @param string $resource REQUIRED: The resource for which the policy is being
    * requested. See the operation documentation for the appropriate value for this
@@ -125,6 +125,12 @@ class Google_Service_CloudTasks_Resource_ProjectsLocationsQueues extends Google_
    * The location name. For example: `projects/PROJECT_ID/locations/LOCATION_ID`
    * @param array $optParams Optional parameters.
    *
+   * @opt_param int pageSize Requested page size.
+   *
+   * The maximum page size is 9800. If unspecified, the page size will be the
+   * maximum. Fewer queues than requested might be returned, even if more queues
+   * exist; use ListQueuesResponse.next_page_token to determine if more queues
+   * exist.
    * @opt_param string filter `filter` can be used to specify a subset of queues.
    * Any Queue field can be used as a filter and several operators as supported.
    * For example: `<=, <, >=, >, !=, =, :`. The filter syntax is the same as
@@ -143,12 +149,6 @@ class Google_Service_CloudTasks_Resource_ProjectsLocationsQueues extends Google_
    * ListQueuesResponse.next_page_token returned from the previous call to
    * CloudTasks.ListQueues method. It is an error to switch the value of
    * ListQueuesRequest.filter while iterating through pages.
-   * @opt_param int pageSize Requested page size.
-   *
-   * The maximum page size is 9800. If unspecified, the page size will be the
-   * maximum. Fewer queues than requested might be returned, even if more queues
-   * exist; use ListQueuesResponse.next_page_token to determine if more queues
-   * exist.
    * @return Google_Service_CloudTasks_ListQueuesResponse
    */
   public function listProjectsLocationsQueues($parent, $optParams = array())
@@ -163,21 +163,23 @@ class Google_Service_CloudTasks_Resource_ProjectsLocationsQueues extends Google_
    * This method creates the queue if it does not exist and updates the queue if
    * it does exist.
    *
-   * WARNING: This method is only available to whitelisted users. Using this
-   * method carries some risk. Read [Overview of Queue Management and queue.yaml
-   * ](/cloud-tasks/docs/queue-yaml) carefully and then sign up for [whitelist
-   * access to this method](https://goo.gl/Fe5mUy). (queues.patch)
+   * WARNING: Using this method may have unintended side effects if you are using
+   * an App Engine `queue.yaml` or `queue.xml` file to manage your queues. Read
+   * [Overview of Queue Management and queue.yaml](/cloud-tasks/docs/queue-yaml)
+   * carefully before using this method. (queues.patch)
    *
    * @param string $name The queue name.
    *
    * The queue name must have the following format:
    * `projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID`
    *
-   * * `PROJECT_ID` can contain uppercase and lowercase letters,   numbers,
-   * hyphens, colons, and periods; that is, it must match   the regular
-   * expression: `[a-zA-Z\\d-:\\.]+`. * `QUEUE_ID` can contain uppercase and
-   * lowercase letters,   numbers, and hyphens; that is, it must match the regular
-   * expression: `[a-zA-Z\\d-]+`. The maximum length is 100   characters.
+   * * `PROJECT_ID` can contain letters ([A-Za-z]), numbers ([0-9]),    hyphens
+   * (-), colons (:), or periods (.). * `LOCATION_ID` is the canonical ID for the
+   * queue's location.    The list of available locations can be obtained by
+   * calling    google.cloud.location.Locations.ListLocations.    For more
+   * information, see https://cloud.google.com/about/locations/. * `QUEUE_ID` can
+   * contain letters ([A-Za-z]), numbers ([0-9]), or   hyphens (-). The maximum
+   * length is 100 characters.
    *
    * Caller-specified and required in CreateQueueRequest, after which it becomes
    * output only.
@@ -202,12 +204,7 @@ class Google_Service_CloudTasks_Resource_ProjectsLocationsQueues extends Google_
    * If a queue is paused then the system will stop executing the tasks in the
    * queue until it is resumed via CloudTasks.ResumeQueue. Tasks can still be
    * added when the queue is paused. The state of the queue is stored in
-   * Queue.queue_state; if paused it will be set to Queue.QueueState.PAUSED.
-   *
-   * WARNING: This method is only available to whitelisted users. Using this
-   * method carries some risk. Read [Overview of Queue Management and queue.yaml
-   * ](/cloud-tasks/docs/queue-yaml) carefully and then sign up for [whitelist
-   * access to this method](https://goo.gl/Fe5mUy). (queues.pause)
+   * Queue.state; if paused it will be set to Queue.State.PAUSED. (queues.pause)
    *
    * @param string $name Required.
    *
@@ -249,15 +246,9 @@ class Google_Service_CloudTasks_Resource_ProjectsLocationsQueues extends Google_
   /**
    * Resume a queue.
    *
-   * This method resumes a queue after it has been Queue.QueueState.PAUSED or
-   * Queue.QueueState.DISABLED. The state of a queue is stored in
-   * Queue.queue_state; after calling this method it will be set to
-   * Queue.QueueState.RUNNING.
-   *
-   * WARNING: This method is only available to whitelisted users. Using this
-   * method carries some risk. Read [Overview of Queue Management and queue.yaml
-   * ](/cloud-tasks/docs/queue-yaml) carefully and then sign up for [whitelist
-   * access to this method](https://goo.gl/Fe5mUy).
+   * This method resumes a queue after it has been Queue.State.PAUSED or
+   * Queue.State.DISABLED. The state of a queue is stored in Queue.state; after
+   * calling this method it will be set to Queue.State.RUNNING.
    *
    * WARNING: Resuming many high-QPS queues at the same time can lead to target
    * overloading. If you are resuming high-QPS queues, follow the 500/50/5 pattern
@@ -281,10 +272,13 @@ class Google_Service_CloudTasks_Resource_ProjectsLocationsQueues extends Google_
   /**
    * Sets the access control policy for a Queue. Replaces any existing policy.
    *
+   * Note: The Cloud Console does not check queue-level IAM permissions yet.
+   * Project-level permissions are required to use the Cloud Console.
+   *
    * Authorization requires the following [Google IAM](/iam) permission on the
    * specified resource parent:
    *
-   * * `cloudtasks.queues.setIamPolicy`  (queues.setIamPolicy)
+   * * `cloudtasks.queues.setIamPolicy` (queues.setIamPolicy)
    *
    * @param string $resource REQUIRED: The resource for which the policy is being
    * specified. See the operation documentation for the appropriate value for this
@@ -306,7 +300,7 @@ class Google_Service_CloudTasks_Resource_ProjectsLocationsQueues extends Google_
    *
    * Note: This operation is designed to be used for building permission-aware UIs
    * and command-line tools, not for authorization checking. This operation may
-   * "fail open" without warning.  (queues.testIamPermissions)
+   * "fail open" without warning. (queues.testIamPermissions)
    *
    * @param string $resource REQUIRED: The resource for which the policy detail is
    * being requested. See the operation documentation for the appropriate value
