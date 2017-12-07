@@ -49,6 +49,7 @@ class GetFilenameTest extends KernelTestBase {
     // a fixed location and naming.
     $this->assertIdentical(drupal_get_filename('profile', 'testing'), 'core/profiles/testing/testing.info.yml');
 
+
     // Generate a non-existing module name.
     $non_existing_module = uniqid("", TRUE);
 

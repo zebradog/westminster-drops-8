@@ -46,7 +46,7 @@ class FlysystemStreamWrapper
      * @var array
      */
     protected static $defaultConfiguration = [
-        'permissions' => [
+        'permissions' =>[
             'dir' => [
                 'private' => 0700,
                 'public' => 0755,
@@ -127,13 +127,6 @@ class FlysystemStreamWrapper
     protected $needsFlush = false;
 
     /**
-     * The handle used for calls to stream_lock.
-     *
-     * @var resource
-     */
-    protected $lockHandle;
-
-    /**
      * If stream_set_write_buffer() is called, the arguments.
      *
      * @var int
@@ -155,11 +148,10 @@ class FlysystemStreamWrapper
      * @param string              $protocol      The protocol.
      * @param FilesystemInterface $filesystem    The filesystem.
      * @param array|null          $configuration Optional configuration.
-     * @param int                 $flags         Should be set to STREAM_IS_URL if protocol is a URL protocol. Default is 0, local stream.
      *
      * @return bool True if the protocal was registered, false if not.
      */
-    public static function register($protocol, FilesystemInterface $filesystem, array $configuration = null, $flags = 0)
+    public static function register($protocol, FilesystemInterface $filesystem, array $configuration = null)
     {
         if (static::streamWrapperExists($protocol)) {
             return false;
@@ -169,7 +161,7 @@ class FlysystemStreamWrapper
         static::registerPlugins($protocol, $filesystem);
         static::$filesystems[$protocol] = $filesystem;
 
-        return stream_wrapper_register($protocol, __CLASS__, $flags);
+        return stream_wrapper_register($protocol, __CLASS__);
     }
 
     /**
@@ -181,31 +173,13 @@ class FlysystemStreamWrapper
      */
     public static function unregister($protocol)
     {
-        if ( ! static::streamWrapperExists($protocol)) {
+        if (!static::streamWrapperExists($protocol)) {
             return false;
         }
 
         unset(static::$filesystems[$protocol]);
 
         return stream_wrapper_unregister($protocol);
-    }
-
-    /**
-     * Unregisters all controlled stream wrappers.
-     */
-    public static function unregisterAll()
-    {
-        foreach (static::getRegisteredProtocols() as $protocol) {
-            static::unregister($protocol);
-        }
-    }
-
-    /**
-     * @return array The list of registered protocols.
-     */
-    public static function getRegisteredProtocols()
-    {
-        return array_keys(static::$filesystems);
     }
 
     /**
@@ -273,7 +247,7 @@ class FlysystemStreamWrapper
             return false;
         }
 
-        if ( ! $dirlen = strlen($path)) {
+        if (!$dirlen = strlen($path)) {
             return true;
         }
 
@@ -404,7 +378,7 @@ class FlysystemStreamWrapper
      */
     public function stream_flush()
     {
-        if ( ! $this->needsFlush) {
+        if (!$this->needsFlush) {
             return true;
         }
 
@@ -432,21 +406,16 @@ class FlysystemStreamWrapper
      */
     public function stream_lock($operation)
     {
-        $operation = (int) $operation;
+        // Normalize paths so that locks are consistent.
+        $normalized = $this->getProtocol() . '://' . Util::normalizePath($this->getTarget());
 
-        if (($operation & \LOCK_UN) === \LOCK_UN) {
-            return $this->releaseLock($operation);
-        }
+        // Relay the lock to a real filesystem lock.
+        $lockfile = sys_get_temp_dir() . '/flysystem-stream-wrapper-' . sha1($normalized) . '.lock';
+        $handle = fopen($lockfile, 'w');
+        $success = flock($handle, $operation);
+        fclose($handle);
 
-        // If the caller calls flock() twice, there's no reason to re-create the
-        // lock handle.
-        if (is_resource($this->lockHandle)) {
-            return flock($this->lockHandle, $operation);
-        }
-
-        $this->lockHandle = $this->openLockHandle();
-
-        return is_resource($this->lockHandle) && flock($this->lockHandle, $operation);
+        return $success;
     }
 
     /**
@@ -470,11 +439,12 @@ class FlysystemStreamWrapper
 
                 try {
                     return $this->getFilesystem()->setVisibility($this->getTarget(), $visibility);
+
                 } catch (\LogicException $e) {
                     // The adapter doesn't support visibility.
+
                 } catch (\Exception $e) {
                     $this->triggerError('chmod', $e);
-
                     return false;
                 }
 
@@ -616,7 +586,6 @@ class FlysystemStreamWrapper
         if ($this->isAppendMode) {
             return 0;
         }
-
         return ftell($this->handle);
     }
 
@@ -698,11 +667,13 @@ class FlysystemStreamWrapper
 
         try {
             return $this->getFilesystem()->stat($this->getTarget(), $flags);
+
         } catch (FileNotFoundException $e) {
             // File doesn't exist.
-            if ( ! ($flags & STREAM_URL_STAT_QUIET)) {
+            if (!($flags & STREAM_URL_STAT_QUIET)) {
                 $this->triggerError('stat', $e);
             }
+
         } catch (\Exception $e) {
             $this->triggerError('stat', $e);
         }
@@ -723,12 +694,10 @@ class FlysystemStreamWrapper
         switch ($mode[0]) {
             case 'r':
                 $this->needsCowCheck = true;
-
                 return $this->getFilesystem()->readStream($path);
 
             case 'w':
                 $this->needsFlush = true;
-
                 return fopen('php://temp', 'w+b');
 
             case 'a':
@@ -756,6 +725,7 @@ class FlysystemStreamWrapper
         try {
             $handle = $this->getFilesystem()->readStream($path);
             $this->needsCowCheck = true;
+
         } catch (FileNotFoundException $e) {
             $handle = fopen('php://temp', 'w+b');
             $this->needsFlush = true;
@@ -807,7 +777,7 @@ class FlysystemStreamWrapper
      */
     protected function ensureWritableHandle()
     {
-        if ( ! $this->needsCowCheck) {
+        if (!$this->needsCowCheck) {
             return;
         }
 
@@ -839,7 +809,7 @@ class FlysystemStreamWrapper
      */
     protected function getTarget($uri = null)
     {
-        if ( ! isset($uri)) {
+        if (!isset($uri)) {
             $uri = $this->uri;
         }
 
@@ -890,6 +860,7 @@ class FlysystemStreamWrapper
     {
         try {
             return call_user_func_array([$objet, $method], $args);
+
         } catch (\Exception $e) {
             $errorname = $errorname ?: $method;
             $this->triggerError($errorname, $e);
@@ -908,76 +879,20 @@ class FlysystemStreamWrapper
     {
         if ($e instanceof TriggerErrorException) {
             trigger_error($e->formatMessage($function), E_USER_WARNING);
-
             return;
         }
 
         switch (get_class($e)) {
             case 'League\Flysystem\FileNotFoundException':
                 trigger_error(sprintf('%s(): No such file or directory', $function), E_USER_WARNING);
-
                 return;
 
             case 'League\Flysystem\RootViolationException':
                 trigger_error(sprintf('%s(): Cannot remove the root directory', $function), E_USER_WARNING);
-
                 return;
         }
 
         // Don't allow any exceptions to leak.
         trigger_error($e->getMessage(), E_USER_WARNING);
-    }
-
-    /**
-     * Creates an advisory lock handle.
-     *
-     * @return resource|false
-     */
-    protected function openLockHandle()
-    {
-        // PHP allows periods, '.', to be scheme names. Normalize the scheme
-        // name to something that won't cause problems. Also, avoid problems
-        // with case-insensitive filesystems. We use bin2hex() rather than a
-        // hashing function since most scheme names are small, and bin2hex()
-        // only doubles the string length.
-        $sub_dir = bin2hex($this->getProtocol());
-
-        // Since we're flattening out whole filesystems, at least create a
-        // sub-directory for each scheme to attempt to reduce the number of
-        // files per directory.
-        $temp_dir = sys_get_temp_dir() . '/flysystem-stream-wrapper/' . $sub_dir;
-
-        // Race free directory creation. If @mkdir() fails, fopen() will fail
-        // later, so there's no reason to test again.
-        ! is_dir($temp_dir) && @mkdir($temp_dir, 0777, true);
-
-        // Normalize paths so that locks are consistent.
-        // We are using sha1() to avoid the file name limits, and case
-        // insensitivity on Windows. This is not security sensitive.
-        $lock_key = sha1(Util::normalizePath($this->getTarget()));
-
-        // Relay the lock to a real filesystem lock.
-        return fopen($temp_dir . '/' . $lock_key, 'c');
-    }
-
-    /**
-     * Releases the advisory lock.
-     *
-     * @param int $operation
-     *
-     * @return bool
-     *
-     * @see FlysystemStreamWrapper::stream_lock()
-     */
-    protected function releaseLock($operation)
-    {
-        $exists = is_resource($this->lockHandle);
-
-        $success = $exists && flock($this->lockHandle, $operation);
-
-        $exists && fclose($this->lockHandle);
-        $this->lockHandle = null;
-
-        return $success;
     }
 }

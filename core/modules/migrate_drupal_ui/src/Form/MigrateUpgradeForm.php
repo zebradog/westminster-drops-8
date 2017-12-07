@@ -236,6 +236,7 @@ class MigrateUpgradeForm extends ConfirmFormBase {
 
     $default_options = [];
 
+
     $form['version'] = [
       '#type' => 'radios',
       '#default_value' => 7,

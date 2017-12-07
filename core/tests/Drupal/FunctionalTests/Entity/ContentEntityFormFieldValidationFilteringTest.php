@@ -112,6 +112,7 @@ class ContentEntityFormFieldValidationFilteringTest extends BrowserTestBase {
       'translatable' => FALSE,
     ])->save();
 
+
     entity_get_form_display($this->entityTypeId, $this->entityTypeId, 'default')
       ->setComponent($this->fieldNameSingle, ['type' => 'test_field_widget'])
       ->setComponent($this->fieldNameMultiple, ['type' => 'test_field_widget'])

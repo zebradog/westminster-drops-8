@@ -42,11 +42,12 @@ class Google_Service_ShoppingContent_Resource_Shippingsettings extends Google_Se
     return $this->call('custombatch', array($params), "Google_Service_ShoppingContent_ShippingsettingsCustomBatchResponse");
   }
   /**
-   * Retrieves the shipping settings of the account. (shippingsettings.get)
+   * Retrieves the shipping settings of the account. This method can only be
+   * called for accounts to which the managing account has access: either the
+   * managing account itself for any Merchant Center account, or any sub-account
+   * when the managing account is a multi-client account. (shippingsettings.get)
    *
-   * @param string $merchantId The ID of the managing account. If this parameter
-   * is not the same as accountId, then this account must be a multi-client
-   * account and accountId must be the ID of a sub-account of this account.
+   * @param string $merchantId The ID of the managing account.
    * @param string $accountId The ID of the account for which to get/update
    * shipping settings.
    * @param array $optParams Optional parameters.
@@ -75,10 +76,10 @@ class Google_Service_ShoppingContent_Resource_Shippingsettings extends Google_Se
   }
   /**
    * Lists the shipping settings of the sub-accounts in your Merchant Center
-   * account. (shippingsettings.listShippingsettings)
+   * account. This method can only be called for multi-client accounts.
+   * (shippingsettings.listShippingsettings)
    *
-   * @param string $merchantId The ID of the managing account. This must be a
-   * multi-client account.
+   * @param string $merchantId The ID of the managing account.
    * @param array $optParams Optional parameters.
    *
    * @opt_param string maxResults The maximum number of shipping settings to
@@ -93,12 +94,13 @@ class Google_Service_ShoppingContent_Resource_Shippingsettings extends Google_Se
     return $this->call('list', array($params), "Google_Service_ShoppingContent_ShippingsettingsListResponse");
   }
   /**
-   * Updates the shipping settings of the account. This method supports patch
+   * Updates the shipping settings of the account. This method can only be called
+   * for accounts to which the managing account has access: either the managing
+   * account itself for any Merchant Center account, or any sub-account when the
+   * managing account is a multi-client account. This method supports patch
    * semantics. (shippingsettings.patch)
    *
-   * @param string $merchantId The ID of the managing account. If this parameter
-   * is not the same as accountId, then this account must be a multi-client
-   * account and accountId must be the ID of a sub-account of this account.
+   * @param string $merchantId The ID of the managing account.
    * @param string $accountId The ID of the account for which to get/update
    * shipping settings.
    * @param Google_Service_ShoppingContent_ShippingSettings $postBody
@@ -114,11 +116,12 @@ class Google_Service_ShoppingContent_Resource_Shippingsettings extends Google_Se
     return $this->call('patch', array($params), "Google_Service_ShoppingContent_ShippingSettings");
   }
   /**
-   * Updates the shipping settings of the account. (shippingsettings.update)
+   * Updates the shipping settings of the account. This method can only be called
+   * for accounts to which the managing account has access: either the managing
+   * account itself for any Merchant Center account, or any sub-account when the
+   * managing account is a multi-client account. (shippingsettings.update)
    *
-   * @param string $merchantId The ID of the managing account. If this parameter
-   * is not the same as accountId, then this account must be a multi-client
-   * account and accountId must be the ID of a sub-account of this account.
+   * @param string $merchantId The ID of the managing account.
    * @param string $accountId The ID of the account for which to get/update
    * shipping settings.
    * @param Google_Service_ShoppingContent_ShippingSettings $postBody

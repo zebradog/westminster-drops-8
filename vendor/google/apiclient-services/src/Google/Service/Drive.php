@@ -562,10 +562,6 @@ class Google_Service_Drive extends Google_Service
                   'location' => 'query',
                   'type' => 'boolean',
                 ),
-                'useDomainAdminAccess' => array(
-                  'location' => 'query',
-                  'type' => 'boolean',
-                ),
               ),
             ),'delete' => array(
               'path' => 'files/{fileId}/permissions/{permissionId}',
@@ -582,10 +578,6 @@ class Google_Service_Drive extends Google_Service
                   'required' => true,
                 ),
                 'supportsTeamDrives' => array(
-                  'location' => 'query',
-                  'type' => 'boolean',
-                ),
-                'useDomainAdminAccess' => array(
                   'location' => 'query',
                   'type' => 'boolean',
                 ),
@@ -608,10 +600,6 @@ class Google_Service_Drive extends Google_Service
                   'location' => 'query',
                   'type' => 'boolean',
                 ),
-                'useDomainAdminAccess' => array(
-                  'location' => 'query',
-                  'type' => 'boolean',
-                ),
               ),
             ),'list' => array(
               'path' => 'files/{fileId}/permissions',
@@ -631,10 +619,6 @@ class Google_Service_Drive extends Google_Service
                   'type' => 'string',
                 ),
                 'supportsTeamDrives' => array(
-                  'location' => 'query',
-                  'type' => 'boolean',
-                ),
-                'useDomainAdminAccess' => array(
                   'location' => 'query',
                   'type' => 'boolean',
                 ),
@@ -662,10 +646,6 @@ class Google_Service_Drive extends Google_Service
                   'type' => 'boolean',
                 ),
                 'transferOwnership' => array(
-                  'location' => 'query',
-                  'type' => 'boolean',
-                ),
-                'useDomainAdminAccess' => array(
                   'location' => 'query',
                   'type' => 'boolean',
                 ),
@@ -902,10 +882,6 @@ class Google_Service_Drive extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'useDomainAdminAccess' => array(
-                  'location' => 'query',
-                  'type' => 'boolean',
-                ),
               ),
             ),'list' => array(
               'path' => 'teamdrives',
@@ -918,14 +894,6 @@ class Google_Service_Drive extends Google_Service
                 'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
-                ),
-                'q' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'useDomainAdminAccess' => array(
-                  'location' => 'query',
-                  'type' => 'boolean',
                 ),
               ),
             ),'update' => array(

@@ -92,7 +92,8 @@ class TaxonomyTermViewTest extends TaxonomyTestBase {
     $this->assertText($node->label());
 
     \Drupal::service('module_installer')->install(['language', 'content_translation']);
-    ConfigurableLanguage::createFromLangcode('ur')->save();
+    $language = ConfigurableLanguage::createFromLangcode('ur');
+    $language->save();
     // Enable translation for the article content type and ensure the change is
     // picked up.
     \Drupal::service('content_translation.manager')->setEnabled('node', 'article', TRUE);

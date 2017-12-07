@@ -27,7 +27,6 @@ class Google_Service_CloudMachineLearningEngine_GoogleCloudMlV1TrainingInput ext
   public $parameterServerCount;
   public $parameterServerType;
   public $pythonModule;
-  public $pythonVersion;
   public $region;
   public $runtimeVersion;
   public $scaleTier;
@@ -103,14 +102,6 @@ class Google_Service_CloudMachineLearningEngine_GoogleCloudMlV1TrainingInput ext
   public function getPythonModule()
   {
     return $this->pythonModule;
-  }
-  public function setPythonVersion($pythonVersion)
-  {
-    $this->pythonVersion = $pythonVersion;
-  }
-  public function getPythonVersion()
-  {
-    return $this->pythonVersion;
   }
   public function setRegion($region)
   {

@@ -20,9 +20,6 @@ class Google_Service_Bigquery_JobStatistics2 extends Google_Collection
   protected $collection_key = 'undeclaredQueryParameters';
   public $billingTier;
   public $cacheHit;
-  public $ddlOperationPerformed;
-  protected $ddlTargetTableType = 'Google_Service_Bigquery_TableReference';
-  protected $ddlTargetTableDataType = '';
   public $numDmlAffectedRows;
   protected $queryPlanType = 'Google_Service_Bigquery_ExplainQueryStage';
   protected $queryPlanDataType = 'array';
@@ -52,28 +49,6 @@ class Google_Service_Bigquery_JobStatistics2 extends Google_Collection
   public function getCacheHit()
   {
     return $this->cacheHit;
-  }
-  public function setDdlOperationPerformed($ddlOperationPerformed)
-  {
-    $this->ddlOperationPerformed = $ddlOperationPerformed;
-  }
-  public function getDdlOperationPerformed()
-  {
-    return $this->ddlOperationPerformed;
-  }
-  /**
-   * @param Google_Service_Bigquery_TableReference
-   */
-  public function setDdlTargetTable(Google_Service_Bigquery_TableReference $ddlTargetTable)
-  {
-    $this->ddlTargetTable = $ddlTargetTable;
-  }
-  /**
-   * @return Google_Service_Bigquery_TableReference
-   */
-  public function getDdlTargetTable()
-  {
-    return $this->ddlTargetTable;
   }
   public function setNumDmlAffectedRows($numDmlAffectedRows)
   {

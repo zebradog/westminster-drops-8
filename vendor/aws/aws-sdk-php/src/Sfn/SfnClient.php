@@ -19,8 +19,6 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise describeExecutionAsync(array $args = [])
  * @method \Aws\Result describeStateMachine(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeStateMachineAsync(array $args = [])
- * @method \Aws\Result describeStateMachineForExecution(array $args = [])
- * @method \GuzzleHttp\Promise\Promise describeStateMachineForExecutionAsync(array $args = [])
  * @method \Aws\Result getActivityTask(array $args = [])
  * @method \GuzzleHttp\Promise\Promise getActivityTaskAsync(array $args = [])
  * @method \Aws\Result getExecutionHistory(array $args = [])
@@ -41,7 +39,5 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise startExecutionAsync(array $args = [])
  * @method \Aws\Result stopExecution(array $args = [])
  * @method \GuzzleHttp\Promise\Promise stopExecutionAsync(array $args = [])
- * @method \Aws\Result updateStateMachine(array $args = [])
- * @method \GuzzleHttp\Promise\Promise updateStateMachineAsync(array $args = [])
  */
 class SfnClient extends AwsClient {}

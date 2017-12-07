@@ -23,7 +23,6 @@ class Google_Service_Drive_TeamDrive extends Google_Model
   protected $capabilitiesType = 'Google_Service_Drive_TeamDriveCapabilities';
   protected $capabilitiesDataType = '';
   public $colorRgb;
-  public $createdTime;
   public $id;
   public $kind;
   public $name;
@@ -72,14 +71,6 @@ class Google_Service_Drive_TeamDrive extends Google_Model
   public function getColorRgb()
   {
     return $this->colorRgb;
-  }
-  public function setCreatedTime($createdTime)
-  {
-    $this->createdTime = $createdTime;
-  }
-  public function getCreatedTime()
-  {
-    return $this->createdTime;
   }
   public function setId($id)
   {

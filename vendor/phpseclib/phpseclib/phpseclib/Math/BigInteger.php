@@ -360,12 +360,8 @@ class BigInteger
             case 256:
                 switch (MATH_BIGINTEGER_MODE) {
                     case self::MODE_GMP:
-                        $this->value = function_exists('gmp_import') ?
-                            gmp_import($x) :
-                            gmp_init('0x' . bin2hex($x));
-                        if ($this->is_negative) {
-                            $this->value = gmp_neg($this->value);
-                        }
+                        $sign = $this->is_negative ? '-' : '';
+                        $this->value = gmp_init($sign . '0x' . bin2hex($x));
                         break;
                     case self::MODE_BCMATH:
                         // round $len to the nearest 4 (thanks, DavidMJ!)
@@ -552,13 +548,9 @@ class BigInteger
                     return $this->precision > 0 ? str_repeat(chr(0), ($this->precision + 1) >> 3) : '';
                 }
 
-                if (function_exists('gmp_export')) {
-                    $temp = gmp_export($this->value);
-                } else {
-                    $temp = gmp_strval(gmp_abs($this->value), 16);
-                    $temp = (strlen($temp) & 1) ? '0' . $temp : $temp;
-                    $temp = pack('H*', $temp);
-                }
+                $temp = gmp_strval(gmp_abs($this->value), 16);
+                $temp = (strlen($temp) & 1) ? '0' . $temp : $temp;
+                $temp = pack('H*', $temp);
 
                 return $this->precision > 0 ?
                     substr(str_pad($temp, $this->precision >> 3, chr(0), STR_PAD_LEFT), -($this->precision >> 3)) :
@@ -2908,7 +2900,7 @@ class BigInteger
         // (will always result in a smaller number.  ie. ~1 isn't 1111 1110 - it's 0)
         $temp = $this->toBytes();
         if ($temp == '') {
-            return $this->_normalize(new static());
+            return '';
         }
         $pre_msb = decbin(ord($temp[0]));
         $temp = ~$temp;
@@ -3443,7 +3435,7 @@ class BigInteger
                     break;
                 }
             }
-            $s = 26 * $i + $j;
+            $s = 26 * $i + $j - 1;
             $r->_rshift($s);
         }
 

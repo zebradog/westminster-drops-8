@@ -259,8 +259,7 @@ class Marshaler
      */
     public function unmarshalValue(array $value, $mapAsObject = false)
     {
-        $type = key($value);
-        $value = $value[$type];
+        list($type, $value) = each($value);
         switch ($type) {
             case 'S':
             case 'BOOL':

@@ -452,7 +452,7 @@ class ManageDisplayTest extends WebTestBase {
   /**
    * Asserts that a string is found in the rendered node in a view mode.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $node
+   * @param EntityInterface $node
    *   The node.
    * @param $view_mode
    *   The view mode in which the node should be displayed.
@@ -471,7 +471,7 @@ class ManageDisplayTest extends WebTestBase {
   /**
    * Asserts that a string is not found in the rendered node in a view mode.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $node
+   * @param EntityInterface $node
    *   The node.
    * @param $view_mode
    *   The view mode in which the node should be displayed.
@@ -492,7 +492,7 @@ class ManageDisplayTest extends WebTestBase {
    * This helper function is used by assertNodeViewText() and
    * assertNodeViewNoText().
    *
-   * @param \Drupal\Core\Entity\EntityInterface $node
+   * @param EntityInterface $node
    *   The node.
    * @param $view_mode
    *   The view mode in which the node should be displayed.

@@ -206,7 +206,6 @@ class ModerationFormTest extends ModerationStateTestBase {
     // Make a pending revision.
     $node->title = $this->randomMachineName();
     $node->moderation_state->value = 'draft';
-    $node->setRevisionCreationTime(12345);
     $node->save();
 
     $another_user = $this->drupalCreateUser($this->permissions);
@@ -218,10 +217,6 @@ class ModerationFormTest extends ModerationStateTestBase {
 
     $this->drupalGet(sprintf('node/%d/revisions', $node->id()));
     $this->assertText('by ' . $another_user->getAccountName());
-
-    // Verify the revision creation time has been updated.
-    $node = $node->load($node->id());
-    $this->assertGreaterThan(12345, $node->getRevisionCreationTime());
   }
 
   /**

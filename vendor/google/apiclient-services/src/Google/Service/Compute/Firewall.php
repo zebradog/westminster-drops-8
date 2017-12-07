@@ -33,9 +33,7 @@ class Google_Service_Compute_Firewall extends Google_Collection
   public $priority;
   public $selfLink;
   public $sourceRanges;
-  public $sourceServiceAccounts;
   public $sourceTags;
-  public $targetServiceAccounts;
   public $targetTags;
 
   /**
@@ -154,14 +152,6 @@ class Google_Service_Compute_Firewall extends Google_Collection
   {
     return $this->sourceRanges;
   }
-  public function setSourceServiceAccounts($sourceServiceAccounts)
-  {
-    $this->sourceServiceAccounts = $sourceServiceAccounts;
-  }
-  public function getSourceServiceAccounts()
-  {
-    return $this->sourceServiceAccounts;
-  }
   public function setSourceTags($sourceTags)
   {
     $this->sourceTags = $sourceTags;
@@ -169,14 +159,6 @@ class Google_Service_Compute_Firewall extends Google_Collection
   public function getSourceTags()
   {
     return $this->sourceTags;
-  }
-  public function setTargetServiceAccounts($targetServiceAccounts)
-  {
-    $this->targetServiceAccounts = $targetServiceAccounts;
-  }
-  public function getTargetServiceAccounts()
-  {
-    return $this->targetServiceAccounts;
   }
   public function setTargetTags($targetTags)
   {

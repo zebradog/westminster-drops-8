@@ -633,10 +633,4 @@ class BrowserTestBaseTest extends BrowserTestBase {
     $this->assertSession()->pageTextContains('Test page text.');
   }
 
-  public function testGetDefaultDriveInstance() {
-    putenv('MINK_DRIVER_ARGS=' . json_encode([NULL, ['key1' => ['key2' => ['key3' => 3, 'key3.1' => 3.1]]]]));
-    $this->getDefaultDriverInstance();
-    $this->assertEquals([NULL, ['key1' => ['key2' => ['key3' => 3, 'key3.1' => 3.1]]]], $this->minkDefaultDriverArgs);
-  }
-
 }

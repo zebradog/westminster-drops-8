@@ -52,6 +52,7 @@ class ForumBlockTest extends BrowserTestBase {
     // Create 5 forum topics.
     $topics = $this->createForumTopics();
 
+
     $this->assertLink(t('More'), 0, 'New forum topics block has a "more"-link.');
     $this->assertLinkByHref('forum', 0, 'New forum topics block has a "more"-link.');
 

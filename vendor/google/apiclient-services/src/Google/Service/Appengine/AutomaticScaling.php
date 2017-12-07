@@ -33,8 +33,6 @@ class Google_Service_Appengine_AutomaticScaling extends Google_Model
   protected $networkUtilizationDataType = '';
   protected $requestUtilizationType = 'Google_Service_Appengine_RequestUtilization';
   protected $requestUtilizationDataType = '';
-  protected $standardSchedulerSettingsType = 'Google_Service_Appengine_StandardSchedulerSettings';
-  protected $standardSchedulerSettingsDataType = '';
 
   public function setCoolDownPeriod($coolDownPeriod)
   {
@@ -155,19 +153,5 @@ class Google_Service_Appengine_AutomaticScaling extends Google_Model
   public function getRequestUtilization()
   {
     return $this->requestUtilization;
-  }
-  /**
-   * @param Google_Service_Appengine_StandardSchedulerSettings
-   */
-  public function setStandardSchedulerSettings(Google_Service_Appengine_StandardSchedulerSettings $standardSchedulerSettings)
-  {
-    $this->standardSchedulerSettings = $standardSchedulerSettings;
-  }
-  /**
-   * @return Google_Service_Appengine_StandardSchedulerSettings
-   */
-  public function getStandardSchedulerSettings()
-  {
-    return $this->standardSchedulerSettings;
   }
 }

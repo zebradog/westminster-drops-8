@@ -10,6 +10,7 @@
 namespace Zend\Feed\Writer\Extension\ITunes;
 
 use Zend\Feed\Writer;
+use Zend\Feed\Writer\Extension;
 use Zend\Stdlib\StringUtils;
 use Zend\Stdlib\StringWrapper\StringWrapperInterface;
 

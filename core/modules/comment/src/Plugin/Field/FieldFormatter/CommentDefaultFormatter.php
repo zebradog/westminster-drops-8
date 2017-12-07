@@ -78,7 +78,7 @@ class CommentDefaultFormatter extends FormatterBase implements ContainerFactoryP
   protected $entityFormBuilder;
 
   /**
-   * @var \Drupal\Core\Routing\RouteMatchInterface
+   * @param \Drupal\Core\Routing\RouteMatchInterface $routeMatch
    */
   protected $routeMatch;
 

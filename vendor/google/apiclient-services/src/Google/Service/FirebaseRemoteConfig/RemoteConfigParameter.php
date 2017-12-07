@@ -21,7 +21,6 @@ class Google_Service_FirebaseRemoteConfig_RemoteConfigParameter extends Google_M
   protected $conditionalValuesDataType = 'map';
   protected $defaultValueType = 'Google_Service_FirebaseRemoteConfig_RemoteConfigParameterValue';
   protected $defaultValueDataType = '';
-  public $description;
 
   /**
    * @param Google_Service_FirebaseRemoteConfig_RemoteConfigParameterValue
@@ -50,13 +49,5 @@ class Google_Service_FirebaseRemoteConfig_RemoteConfigParameter extends Google_M
   public function getDefaultValue()
   {
     return $this->defaultValue;
-  }
-  public function setDescription($description)
-  {
-    $this->description = $description;
-  }
-  public function getDescription()
-  {
-    return $this->description;
   }
 }

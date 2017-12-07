@@ -64,9 +64,6 @@ class Google_Service_Calendar_Resource_Acl extends Google_Service_Resource
    * the currently logged in user, use the "primary" keyword.
    * @param Google_Service_Calendar_AclRule $postBody
    * @param array $optParams Optional parameters.
-   *
-   * @opt_param bool sendNotifications Whether to send notifications about the
-   * calendar sharing change. Optional. The default is True.
    * @return Google_Service_Calendar_AclRule
    */
   public function insert($calendarId, Google_Service_Calendar_AclRule $postBody, $optParams = array())
@@ -118,10 +115,6 @@ class Google_Service_Calendar_Resource_Acl extends Google_Service_Resource
    * @param string $ruleId ACL rule identifier.
    * @param Google_Service_Calendar_AclRule $postBody
    * @param array $optParams Optional parameters.
-   *
-   * @opt_param bool sendNotifications Whether to send notifications about the
-   * calendar sharing change. Note that there are no notifications on access
-   * removal. Optional. The default is True.
    * @return Google_Service_Calendar_AclRule
    */
   public function patch($calendarId, $ruleId, Google_Service_Calendar_AclRule $postBody, $optParams = array())
@@ -139,10 +132,6 @@ class Google_Service_Calendar_Resource_Acl extends Google_Service_Resource
    * @param string $ruleId ACL rule identifier.
    * @param Google_Service_Calendar_AclRule $postBody
    * @param array $optParams Optional parameters.
-   *
-   * @opt_param bool sendNotifications Whether to send notifications about the
-   * calendar sharing change. Note that there are no notifications on access
-   * removal. Optional. The default is True.
    * @return Google_Service_Calendar_AclRule
    */
   public function update($calendarId, $ruleId, Google_Service_Calendar_AclRule $postBody, $optParams = array())

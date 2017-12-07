@@ -107,7 +107,7 @@ class RC4 extends Base
      * @var string
      * @access private
      */
-    var $key;
+    var $key = "\0";
 
     /**
      * The Key Stream for decryption and encryption

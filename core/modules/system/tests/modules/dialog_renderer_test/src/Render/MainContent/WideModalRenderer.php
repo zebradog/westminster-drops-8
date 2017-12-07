@@ -70,6 +70,7 @@ class WideModalRenderer extends ModalRenderer {
         break;
     }
 
+
     $response->addCommand(new OpenModalDialogCommand($title, $content, $options));
     return $response;
   }

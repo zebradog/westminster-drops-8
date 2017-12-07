@@ -17,17 +17,17 @@
 
 class Google_Service_CloudTasks_RenewLeaseRequest extends Google_Model
 {
-  public $leaseDuration;
+  public $newLeaseDuration;
   public $responseView;
   public $scheduleTime;
 
-  public function setLeaseDuration($leaseDuration)
+  public function setNewLeaseDuration($newLeaseDuration)
   {
-    $this->leaseDuration = $leaseDuration;
+    $this->newLeaseDuration = $newLeaseDuration;
   }
-  public function getLeaseDuration()
+  public function getNewLeaseDuration()
   {
-    return $this->leaseDuration;
+    return $this->newLeaseDuration;
   }
   public function setResponseView($responseView)
   {

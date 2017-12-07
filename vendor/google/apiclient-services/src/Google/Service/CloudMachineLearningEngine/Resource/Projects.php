@@ -42,10 +42,9 @@ class Google_Service_CloudMachineLearningEngine_Resource_Projects extends Google
     return $this->call('getConfig', array($params), "Google_Service_CloudMachineLearningEngine_GoogleCloudMlV1GetConfigResponse");
   }
   /**
-   * Performs prediction on the data in the request. Cloud ML Engine implements a
-   * custom `predict` verb on top of an HTTP POST method. For details of the
-   * format, see the **guide to the [predict request format](/ml-engine/docs/v1
-   * /predict-request)**. (projects.predict)
+   * Performs prediction on the data in the request.
+   *
+   * **** REMOVE FROM GENERATED DOCUMENTATION (projects.predict)
    *
    * @param string $name Required. The resource name of a model or a version.
    *

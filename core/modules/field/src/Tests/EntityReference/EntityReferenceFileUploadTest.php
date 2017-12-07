@@ -77,6 +77,7 @@ class EntityReferenceFileUploadTest extends WebTestBase {
       ],
     ])->save();
 
+
     // Create a file field.
     $file_field_name = 'file_field';
     $field_storage = FieldStorageConfig::create([

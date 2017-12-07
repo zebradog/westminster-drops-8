@@ -65,7 +65,9 @@ class RendererTest extends RendererTestBase {
   public function providerTestRenderBasic() {
     $data = [];
 
+
     // Part 1: the most simplistic render arrays possible, none using #theme.
+
 
     // Pass a NULL.
     $data[] = [NULL, ''];
@@ -214,6 +216,7 @@ class RendererTest extends RendererTestBase {
 
     // Part 2: render arrays using #theme and #theme_wrappers.
 
+
     // Tests that #theme and #theme_wrappers can co-exist on an element.
     $build = [
       '#theme' => 'common_test_foo',
@@ -299,7 +302,9 @@ class RendererTest extends RendererTestBase {
     };
     $data[] = [$build, '<div class="foo"></div>' . "\n", $setup_code];
 
+
     // Part 3: render arrays using #markup as a fallback for #theme hooks.
+
 
     // Theme suggestion is not implemented, #markup should be rendered.
     $build = [
@@ -352,7 +357,9 @@ class RendererTest extends RendererTestBase {
     ];
     $data[] = [$build, $theme_function_output, $setup_code];
 
+
     // Part 4: handling of #children and child renderable elements.
+
 
     // #theme is implemented so the values of both #children and 'child' will
     // be ignored - it is the responsibility of the theme hook to render these

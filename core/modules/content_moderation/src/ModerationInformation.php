@@ -84,12 +84,14 @@ class ModerationInformation implements ModerationInformationInterface {
    */
   public function getLatestRevisionId($entity_type_id, $entity_id) {
     if ($storage = $this->entityTypeManager->getStorage($entity_type_id)) {
-      $result = $storage->getQuery()
-        ->latestRevision()
+      $revision_ids = $storage->getQuery()
+        ->allRevisions()
         ->condition($this->entityTypeManager->getDefinition($entity_type_id)->getKey('id'), $entity_id)
+        ->sort($this->entityTypeManager->getDefinition($entity_type_id)->getKey('revision'), 'DESC')
+        ->range(0, 1)
         ->execute();
-      if ($result) {
-        return key($result);
+      if ($revision_ids) {
+        return array_keys($revision_ids)[0];
       }
     }
   }
@@ -99,12 +101,13 @@ class ModerationInformation implements ModerationInformationInterface {
    */
   public function getDefaultRevisionId($entity_type_id, $entity_id) {
     if ($storage = $this->entityTypeManager->getStorage($entity_type_id)) {
-      $result = $storage->getQuery()
-        ->currentRevision()
+      $revision_ids = $storage->getQuery()
         ->condition($this->entityTypeManager->getDefinition($entity_type_id)->getKey('id'), $entity_id)
+        ->sort($this->entityTypeManager->getDefinition($entity_type_id)->getKey('revision'), 'DESC')
+        ->range(0, 1)
         ->execute();
-      if ($result) {
-        return key($result);
+      if ($revision_ids) {
+        return array_keys($revision_ids)[0];
       }
     }
   }

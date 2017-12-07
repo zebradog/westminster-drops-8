@@ -141,6 +141,7 @@ class MatcherDumper implements MatcherDumperInterface {
         $insert->execute();
       }
 
+
     }
     catch (\Exception $e) {
       $transaction->rollBack();

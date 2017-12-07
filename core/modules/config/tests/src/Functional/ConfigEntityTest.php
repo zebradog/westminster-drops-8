@@ -35,8 +35,7 @@ class ConfigEntityTest extends BrowserTestBase {
   public function testCRUD() {
     $default_langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
     // Verify default properties on a newly created empty entity.
-    $storage = \Drupal::entityTypeManager()->getStorage('config_test');
-    $empty = $storage->create();
+    $empty = entity_create('config_test');
     $this->assertTrue($empty->uuid());
     $this->assertIdentical($empty->label, NULL);
     $this->assertIdentical($empty->style, NULL);
@@ -77,7 +76,7 @@ class ConfigEntityTest extends BrowserTestBase {
     }
 
     // Verify that an entity with an empty ID string is considered empty, too.
-    $empty_id = $storage->create([
+    $empty_id = entity_create('config_test', [
       'id' => '',
     ]);
     $this->assertIdentical($empty_id->isNew(), TRUE);
@@ -90,7 +89,7 @@ class ConfigEntityTest extends BrowserTestBase {
     }
 
     // Verify properties on a newly created entity.
-    $config_test = $storage->create($expected = [
+    $config_test = entity_create('config_test', $expected = [
       'id' => $this->randomMachineName(),
       'label' => $this->randomString(),
       'style' => $this->randomMachineName(),
@@ -142,7 +141,7 @@ class ConfigEntityTest extends BrowserTestBase {
     // maximum allowed length, but not longer.
 
     // Test with a short ID.
-    $id_length_config_test = $storage->create([
+    $id_length_config_test = entity_create('config_test', [
       'id' => $this->randomMachineName(8),
     ]);
     try {
@@ -156,7 +155,7 @@ class ConfigEntityTest extends BrowserTestBase {
     }
 
     // Test with an ID of the maximum allowed length.
-    $id_length_config_test = $storage->create([
+    $id_length_config_test = entity_create('config_test', [
       'id' => $this->randomMachineName(static::MAX_ID_LENGTH),
     ]);
     try {
@@ -170,7 +169,7 @@ class ConfigEntityTest extends BrowserTestBase {
     }
 
     // Test with an ID exceeding the maximum allowed length.
-    $id_length_config_test = $storage->create([
+    $id_length_config_test = entity_create('config_test', [
       'id' => $this->randomMachineName(static::MAX_ID_LENGTH + 1),
     ]);
     try {
@@ -189,7 +188,7 @@ class ConfigEntityTest extends BrowserTestBase {
 
     // Ensure that creating an entity with the same id as an existing one is not
     // possible.
-    $same_id = $storage->create([
+    $same_id = entity_create('config_test', [
       'id' => $config_test->id(),
     ]);
     $this->assertIdentical($same_id->isNew(), TRUE);
@@ -224,7 +223,7 @@ class ConfigEntityTest extends BrowserTestBase {
 
     // Test config entity prepopulation.
     \Drupal::state()->set('config_test.prepopulate', TRUE);
-    $config_test = $storage->create(['foo' => 'bar']);
+    $config_test = entity_create('config_test', ['foo' => 'bar']);
     $this->assertEqual($config_test->get('foo'), 'baz', 'Initial value correctly populated');
   }
 

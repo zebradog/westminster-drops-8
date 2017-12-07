@@ -24,8 +24,6 @@ class FilterDateTimeTest extends DateTimeHandlerTestBase {
 
   /**
    * Use a non-UTC timezone.
-   *
-   * @var string
    */
   protected static $timezone = 'America/Vancouver';
 

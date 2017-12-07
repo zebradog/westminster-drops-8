@@ -16,7 +16,7 @@ class DeleteForm extends ConfirmFormBase {
   /**
    * The alias storage service.
    *
-   * @var \Drupal\Core\Path\AliasStorageInterface
+   * @var AliasStorageInterface
    */
   protected $aliasStorage;
 

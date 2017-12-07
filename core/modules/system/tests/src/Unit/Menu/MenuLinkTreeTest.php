@@ -182,6 +182,7 @@ class MenuLinkTreeTest extends UnitTestCase {
       ],
     ];
 
+
     $data = [];
 
     // Empty tree.

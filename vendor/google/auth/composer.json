@@ -18,6 +18,9 @@
     "friendsofphp/php-cs-fixer": "^1.11"
   },
   "autoload": {
+    "classmap": [
+      "src/"
+    ],
     "psr-4": {
       "Google\\Auth\\": "src"
     }

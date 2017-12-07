@@ -25,14 +25,6 @@ abstract class Twig_Test_IntegrationTestCase extends TestCase
     abstract protected function getFixturesDir();
 
     /**
-     * @return Twig_RuntimeLoaderInterface[]
-     */
-    protected function getRuntimeLoaders()
-    {
-        return array();
-    }
-
-    /**
      * @return Twig_ExtensionInterface[]
      */
     protected function getExtensions()
@@ -151,10 +143,6 @@ abstract class Twig_Test_IntegrationTestCase extends TestCase
             ), $match[2] ? eval($match[2].';') : array());
             $twig = new Twig_Environment($loader, $config);
             $twig->addGlobal('global', 'global');
-            foreach ($this->getRuntimeLoaders() as $runtimeLoader) {
-                $twig->addRuntimeLoader($runtimeLoader);
-            }
-
             foreach ($this->getExtensions() as $extension) {
                 $twig->addExtension($extension);
             }

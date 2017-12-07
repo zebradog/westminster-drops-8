@@ -31,7 +31,6 @@ class Google_Service_Partners_UserProfile extends Google_Collection
   public $jobFunctions;
   public $languages;
   public $markets;
-  public $migrateToAfa;
   public $phoneNumber;
   public $primaryCountryCode;
   public $profilePublic;
@@ -135,14 +134,6 @@ class Google_Service_Partners_UserProfile extends Google_Collection
   public function getMarkets()
   {
     return $this->markets;
-  }
-  public function setMigrateToAfa($migrateToAfa)
-  {
-    $this->migrateToAfa = $migrateToAfa;
-  }
-  public function getMigrateToAfa()
-  {
-    return $this->migrateToAfa;
   }
   public function setPhoneNumber($phoneNumber)
   {

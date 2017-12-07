@@ -127,7 +127,6 @@ class Google_Service_Directory extends Google_Service
   public $notifications;
   public $orgunits;
   public $privileges;
-  public $resolvedAppAccessSettings;
   public $resources_calendars;
   public $roleAssignments;
   public $roles;
@@ -674,21 +673,6 @@ class Google_Service_Directory extends Google_Service
                   'required' => true,
                 ),
               ),
-            ),'hasMember' => array(
-              'path' => 'groups/{groupKey}/hasMember/{memberKey}',
-              'httpMethod' => 'GET',
-              'parameters' => array(
-                'groupKey' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'memberKey' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
             ),'insert' => array(
               'path' => 'groups/{groupKey}/members',
               'httpMethod' => 'POST',
@@ -1058,24 +1042,6 @@ class Google_Service_Directory extends Google_Service
                   'required' => true,
                 ),
               ),
-            ),
-          )
-        )
-    );
-    $this->resolvedAppAccessSettings = new Google_Service_Directory_Resource_ResolvedAppAccessSettings(
-        $this,
-        $this->serviceName,
-        'resolvedAppAccessSettings',
-        array(
-          'methods' => array(
-            'GetSettings' => array(
-              'path' => 'resolvedappaccesssettings',
-              'httpMethod' => 'GET',
-              'parameters' => array(),
-            ),'ListTrustedApps' => array(
-              'path' => 'trustedapps',
-              'httpMethod' => 'GET',
-              'parameters' => array(),
             ),
           )
         )

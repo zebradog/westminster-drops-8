@@ -19,9 +19,10 @@
  * Service definition for CloudTrace (v2).
  *
  * <p>
- * Sends application trace data to Stackdriver Trace for viewing. Trace data is
- * collected for all App Engine applications by default. Trace data from other
- * applications can be provided using this API.</p>
+ * Send and retrieve trace data from Stackdriver Trace. Data is generated and
+ * available by default for all App Engine applications. Data from other
+ * applications can be written to Stackdriver Trace for display, reporting, and
+ * analysis.</p>
  *
  * <p>
  * For more information about this service, see the API
@@ -82,8 +83,8 @@ class Google_Service_CloudTrace extends Google_Service
         array(
           'methods' => array(
             'create' => array(
-              'path' => 'v2/{+name}/spans',
-              'httpMethod' => 'POST',
+              'path' => 'v2/{+name}',
+              'httpMethod' => 'PUT',
               'parameters' => array(
                 'name' => array(
                   'location' => 'path',

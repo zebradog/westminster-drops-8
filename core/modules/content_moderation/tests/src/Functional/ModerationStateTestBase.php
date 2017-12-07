@@ -13,8 +13,6 @@ abstract class ModerationStateTestBase extends BrowserTestBase {
 
   /**
    * Profile to use.
-   *
-   * @var string
    */
   protected $profile = 'testing';
 

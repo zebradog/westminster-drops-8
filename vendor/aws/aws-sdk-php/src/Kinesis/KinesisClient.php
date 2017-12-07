@@ -18,8 +18,6 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise describeLimitsAsync(array $args = [])
  * @method \Aws\Result describeStream(array $args = [])
  * @method \GuzzleHttp\Promise\Promise describeStreamAsync(array $args = [])
- * @method \Aws\Result describeStreamSummary(array $args = [])
- * @method \GuzzleHttp\Promise\Promise describeStreamSummaryAsync(array $args = [])
  * @method \Aws\Result disableEnhancedMonitoring(array $args = [])
  * @method \GuzzleHttp\Promise\Promise disableEnhancedMonitoringAsync(array $args = [])
  * @method \Aws\Result enableEnhancedMonitoring(array $args = [])

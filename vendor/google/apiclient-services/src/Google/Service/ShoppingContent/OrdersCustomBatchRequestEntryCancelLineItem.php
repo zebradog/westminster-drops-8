@@ -19,12 +19,7 @@ class Google_Service_ShoppingContent_OrdersCustomBatchRequestEntryCancelLineItem
 {
   protected $amountType = 'Google_Service_ShoppingContent_Price';
   protected $amountDataType = '';
-  protected $amountPretaxType = 'Google_Service_ShoppingContent_Price';
-  protected $amountPretaxDataType = '';
-  protected $amountTaxType = 'Google_Service_ShoppingContent_Price';
-  protected $amountTaxDataType = '';
   public $lineItemId;
-  public $productId;
   public $quantity;
   public $reason;
   public $reasonText;
@@ -43,34 +38,6 @@ class Google_Service_ShoppingContent_OrdersCustomBatchRequestEntryCancelLineItem
   {
     return $this->amount;
   }
-  /**
-   * @param Google_Service_ShoppingContent_Price
-   */
-  public function setAmountPretax(Google_Service_ShoppingContent_Price $amountPretax)
-  {
-    $this->amountPretax = $amountPretax;
-  }
-  /**
-   * @return Google_Service_ShoppingContent_Price
-   */
-  public function getAmountPretax()
-  {
-    return $this->amountPretax;
-  }
-  /**
-   * @param Google_Service_ShoppingContent_Price
-   */
-  public function setAmountTax(Google_Service_ShoppingContent_Price $amountTax)
-  {
-    $this->amountTax = $amountTax;
-  }
-  /**
-   * @return Google_Service_ShoppingContent_Price
-   */
-  public function getAmountTax()
-  {
-    return $this->amountTax;
-  }
   public function setLineItemId($lineItemId)
   {
     $this->lineItemId = $lineItemId;
@@ -78,14 +45,6 @@ class Google_Service_ShoppingContent_OrdersCustomBatchRequestEntryCancelLineItem
   public function getLineItemId()
   {
     return $this->lineItemId;
-  }
-  public function setProductId($productId)
-  {
-    $this->productId = $productId;
-  }
-  public function getProductId()
-  {
-    return $this->productId;
   }
   public function setQuantity($quantity)
   {

@@ -12,6 +12,8 @@
 namespace Symfony\Component\BrowserKit;
 
 /**
+ * Response object.
+ *
  * @author Fabien Potencier <fabien@symfony.com>
  */
 class Response
@@ -21,6 +23,8 @@ class Response
     protected $headers;
 
     /**
+     * Constructor.
+     *
      * The headers array is a set of key/value pairs. If a header is present multiple times
      * then the value is an array of all the values.
      *

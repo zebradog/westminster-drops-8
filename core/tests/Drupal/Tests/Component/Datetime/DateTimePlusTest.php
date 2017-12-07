@@ -167,7 +167,7 @@ class DateTimePlusTest extends TestCase {
    * Assertion helper for testTimestamp and testDateTimestamp since they need
    * different dataProviders.
    *
-   * @param \Drupal\Component\Datetime\DateTimePlus $date
+   * @param DateTimePlus $date
    *   DateTimePlus to test.
    * @input mixed $input
    *   The original input passed to the test method.

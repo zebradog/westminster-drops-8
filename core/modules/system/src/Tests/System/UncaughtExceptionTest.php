@@ -199,6 +199,7 @@ class UncaughtExceptionTest extends WebTestBase {
     $this->drupalGet('');
     $this->assertResponse(500);
 
+
     $this->assertRaw('The website encountered an unexpected error');
     $this->assertRaw($this->expectedExceptionMessage);
     $this->assertErrorLogged($this->expectedExceptionMessage);

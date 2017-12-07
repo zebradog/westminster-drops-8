@@ -17,7 +17,6 @@
 
 class Google_Service_YouTube_Video extends Google_Model
 {
-  public $accessToken;
   protected $ageGatingType = 'Google_Service_YouTube_VideoAgeGating';
   protected $ageGatingDataType = '';
   protected $contentDetailsType = 'Google_Service_YouTube_VideoContentDetails';
@@ -52,14 +51,6 @@ class Google_Service_YouTube_Video extends Google_Model
   protected $topicDetailsType = 'Google_Service_YouTube_VideoTopicDetails';
   protected $topicDetailsDataType = '';
 
-  public function setAccessToken($accessToken)
-  {
-    $this->accessToken = $accessToken;
-  }
-  public function getAccessToken()
-  {
-    return $this->accessToken;
-  }
   /**
    * @param Google_Service_YouTube_VideoAgeGating
    */

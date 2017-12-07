@@ -113,7 +113,7 @@ class ScopedAccessTokenMiddleware
      *   $client = new Client([
      *       'handler' => $stack,
      *       'base_url' => 'https://www.googleapis.com/taskqueue/v1beta2/projects/',
-     *       'auth' => 'scoped' // authorize all requests
+     *       'auth' => 'google_auth' // authorize all requests
      *   ]);
      *
      *   $res = $client->get('myproject/taskqueues/myqueue');

@@ -22,8 +22,6 @@ class PresignUrlMiddleware
     private $serviceName;
     /** @var string */
     private $presignParam;
-    /** @var bool */
-    private $requireDifferentRegion;
 
     public function __construct(
         array $options,
@@ -37,7 +35,6 @@ class PresignUrlMiddleware
         $this->commandPool = $options['operations'];
         $this->serviceName = $options['service'];
         $this->presignParam = $options['presign_param'];
-        $this->requireDifferentRegion = !empty($options['require_different_region']);
     }
 
     public static function wrap(
@@ -56,13 +53,8 @@ class PresignUrlMiddleware
         if (in_array($cmd->getName(), $this->commandPool)
             && (!isset($cmd->{'__skip' . $cmd->getName()}))
         ) {
+            $cmd[$this->presignParam] = $this->createPresignedUrl($this->client, $cmd);
             $cmd['DestinationRegion'] = $this->client->getRegion();
-            if (!$this->requireDifferentRegion
-                || (!empty($cmd['SourceRegion'])
-                    && $cmd['SourceRegion'] !== $cmd['DestinationRegion'])
-            ) {
-                $cmd[$this->presignParam] = $this->createPresignedUrl($this->client, $cmd);
-            }
         }
 
         $f = $this->nextHandler;

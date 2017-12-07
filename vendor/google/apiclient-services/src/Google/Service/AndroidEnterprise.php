@@ -42,7 +42,6 @@ class Google_Service_AndroidEnterprise extends Google_Service
   public $installs;
   public $managedconfigurationsfordevice;
   public $managedconfigurationsforuser;
-  public $managedconfigurationssettings;
   public $permissions;
   public $products;
   public $serviceaccountkeys;
@@ -124,30 +123,6 @@ class Google_Service_AndroidEnterprise extends Google_Service
                   'required' => true,
                 ),
               ),
-            ),'patch' => array(
-              'path' => 'enterprises/{enterpriseId}/users/{userId}/devices/{deviceId}',
-              'httpMethod' => 'PATCH',
-              'parameters' => array(
-                'enterpriseId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'userId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'deviceId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'updateMask' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-              ),
             ),'setState' => array(
               'path' => 'enterprises/{enterpriseId}/users/{userId}/devices/{deviceId}/state',
               'httpMethod' => 'PUT',
@@ -166,30 +141,6 @@ class Google_Service_AndroidEnterprise extends Google_Service
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
-                ),
-              ),
-            ),'update' => array(
-              'path' => 'enterprises/{enterpriseId}/users/{userId}/devices/{deviceId}',
-              'httpMethod' => 'PUT',
-              'parameters' => array(
-                'enterpriseId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'userId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'deviceId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'updateMask' => array(
-                  'location' => 'query',
-                  'type' => 'string',
                 ),
               ),
             ),
@@ -928,31 +879,6 @@ class Google_Service_AndroidEnterprise extends Google_Service
           )
         )
     );
-    $this->managedconfigurationssettings = new Google_Service_AndroidEnterprise_Resource_Managedconfigurationssettings(
-        $this,
-        $this->serviceName,
-        'managedconfigurationssettings',
-        array(
-          'methods' => array(
-            'list' => array(
-              'path' => 'enterprises/{enterpriseId}/products/{productId}/managedConfigurationsSettings',
-              'httpMethod' => 'GET',
-              'parameters' => array(
-                'enterpriseId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'productId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),
-          )
-        )
-    );
     $this->permissions = new Google_Service_AndroidEnterprise_Resource_Permissions(
         $this,
         $this->serviceName,
@@ -1483,21 +1409,6 @@ class Google_Service_AndroidEnterprise extends Google_Service
             ),'patch' => array(
               'path' => 'enterprises/{enterpriseId}/users/{userId}',
               'httpMethod' => 'PATCH',
-              'parameters' => array(
-                'enterpriseId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-                'userId' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),'revokeDeviceAccess' => array(
-              'path' => 'enterprises/{enterpriseId}/users/{userId}/deviceAccess',
-              'httpMethod' => 'DELETE',
               'parameters' => array(
                 'enterpriseId' => array(
                   'location' => 'path',

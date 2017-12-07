@@ -191,7 +191,7 @@ class Table
      */
     public function setColumnWidth($columnIndex, $width)
     {
-        $this->columnWidths[(int) $columnIndex] = (int) $width;
+        $this->columnWidths[intval($columnIndex)] = intval($width);
 
         return $this;
     }

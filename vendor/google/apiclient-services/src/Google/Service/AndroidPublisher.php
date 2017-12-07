@@ -981,7 +981,11 @@ class Google_Service_AndroidPublisher extends Google_Service
         'inappproducts',
         array(
           'methods' => array(
-            'delete' => array(
+            'batch' => array(
+              'path' => 'inappproducts/batch',
+              'httpMethod' => 'POST',
+              'parameters' => array(),
+            ),'delete' => array(
               'path' => '{packageName}/inappproducts/{sku}',
               'httpMethod' => 'DELETE',
               'parameters' => array(

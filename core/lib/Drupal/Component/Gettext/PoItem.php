@@ -13,7 +13,7 @@ class PoItem {
   /**
    * The language code this translation is in.
    *
-   * @var string
+   * @car string
    */
   private $_langcode;
 
@@ -27,8 +27,7 @@ class PoItem {
   /**
    * The source string or array of strings if it has plurals.
    *
-   * @var string|array
-   *
+   * @var string or array
    * @see $_plural
    */
   private $_source;
@@ -50,7 +49,7 @@ class PoItem {
   /**
    * The translation string or array of strings if it has plurals.
    *
-   * @var string|array
+   * @var string or array
    * @see $_plural
    */
   private $_translation;

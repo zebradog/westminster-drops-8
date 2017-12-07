@@ -78,7 +78,7 @@ class UploadInstance extends DrupalSqlBase {
   /**
    * {@inheritdoc}
    */
-  public function count($refresh = FALSE) {
+  public function count() {
     return count($this->initializeIterator());
   }
 

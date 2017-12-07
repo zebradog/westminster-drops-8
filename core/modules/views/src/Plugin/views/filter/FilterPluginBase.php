@@ -53,8 +53,6 @@ abstract class FilterPluginBase extends HandlerBase implements CacheableDependen
 
   /**
    * Contains the operator which is used on the query.
-   *
-   * @var string
    */
   public $operator = '=';
 
@@ -105,6 +103,7 @@ abstract class FilterPluginBase extends HandlerBase implements CacheableDependen
       $this->group_info = array_filter($options['group_info']['default_group_multiple']);
       $this->options['expose']['multiple'] = TRUE;
     }
+
 
     // If there are relationships in the view, allow empty should be true
     // so that we can do IS NULL checks on items. Not all filters respect

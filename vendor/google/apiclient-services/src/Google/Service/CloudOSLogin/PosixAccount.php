@@ -17,7 +17,6 @@
 
 class Google_Service_CloudOSLogin_PosixAccount extends Google_Model
 {
-  public $accountId;
   public $gecos;
   public $gid;
   public $homeDirectory;
@@ -27,14 +26,6 @@ class Google_Service_CloudOSLogin_PosixAccount extends Google_Model
   public $uid;
   public $username;
 
-  public function setAccountId($accountId)
-  {
-    $this->accountId = $accountId;
-  }
-  public function getAccountId()
-  {
-    return $this->accountId;
-  }
   public function setGecos($gecos)
   {
     $this->gecos = $gecos;

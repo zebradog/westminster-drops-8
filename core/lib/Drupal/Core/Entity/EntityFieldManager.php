@@ -60,7 +60,7 @@ class EntityFieldManager implements EntityFieldManagerInterface {
    *   - type: The field type.
    *   - bundles: The bundles in which the field appears.
    *
-   * @var array
+   * @return array
    */
   protected $fieldMap = [];
 

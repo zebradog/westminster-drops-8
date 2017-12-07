@@ -109,6 +109,7 @@ class AjaxFormsTestSimpleForm extends FormBase {
       '#title' => $this->t('Another AJAX checkbox in a nested group'),
     ];
 
+
     return $form;
   }
 

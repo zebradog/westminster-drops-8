@@ -436,10 +436,7 @@ abstract class SourcePluginBase extends PluginBase implements MigrateSourceInter
    * Returns -1 if the source is not countable.
    *
    * @param bool $refresh
-   *   (optional) Whether or not to refresh the count. Defaults to FALSE. Not
-   *   all implementations support the reset flag. In such instances this
-   *   parameter is ignored and the result of calling the method will always be
-   *   up to date.
+   *   (optional) Whether or not to refresh the count. Defaults to FALSE.
    *
    * @return int
    *   The count.

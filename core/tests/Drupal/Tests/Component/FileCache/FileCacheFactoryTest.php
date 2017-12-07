@@ -125,6 +125,7 @@ class FileCacheFactoryTest extends TestCase {
       $class,
     ];
 
+
     // Test default configuration plus specific per collection setting.
     $data['default-plus-collection-setting'] = [
       [

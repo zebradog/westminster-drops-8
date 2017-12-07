@@ -87,9 +87,8 @@ class ConfigTranslationOverviewTest extends BrowserTestBase {
       $this->randomString(),
     ];
 
-    $storage = \Drupal::entityTypeManager()->getStorage('config_test');
     foreach ($labels as $label) {
-      $test_entity = $storage->create([
+      $test_entity = entity_create('config_test', [
         'id' => $this->randomMachineName(),
         'label' => $label,
       ]);

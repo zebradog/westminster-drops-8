@@ -115,6 +115,7 @@ class GroupwiseMax extends RelationshipPluginBase {
       '#default_value' => $this->options['subquery_namespace'],
     ];
 
+
     // WIP: This stuff doesn't work yet: namespacing issues.
     // A list of suitable views to pick one as the subview.
     $views = ['' => '- None -'];

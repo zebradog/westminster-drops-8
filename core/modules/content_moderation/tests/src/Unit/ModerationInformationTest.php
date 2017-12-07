@@ -22,7 +22,7 @@ class ModerationInformationTest extends UnitTestCase {
   /**
    * Builds a mock user.
    *
-   * @return \Drupal\Core\Session\AccountInterface
+   * @return AccountInterface
    *   The mocked user.
    */
   protected function getUser() {
@@ -32,7 +32,7 @@ class ModerationInformationTest extends UnitTestCase {
   /**
    * Returns a mock Entity Type Manager.
    *
-   * @return \Drupal\Core\Entity\EntityTypeManagerInterface
+   * @return EntityTypeManagerInterface
    *   The mocked entity type manager.
    */
   protected function getEntityTypeManager() {

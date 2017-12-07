@@ -38,11 +38,12 @@ class Google_Service_ShoppingContent_Resource_Accounts extends Google_Service_Re
     return $this->call('authinfo', array($params), "Google_Service_ShoppingContent_AccountsAuthInfoResponse");
   }
   /**
-   * Claims the website of a Merchant Center sub-account. (accounts.claimwebsite)
+   * Claims the website of a Merchant Center sub-account. This method can only be
+   * called for accounts to which the managing account has access: either the
+   * managing account itself for any Merchant Center account, or any sub-account
+   * when the managing account is a multi-client account. (accounts.claimwebsite)
    *
-   * @param string $merchantId The ID of the managing account. If this parameter
-   * is not the same as accountId, then this account must be a multi-client
-   * account and accountId must be the ID of a sub-account of this account.
+   * @param string $merchantId The ID of the managing account.
    * @param string $accountId The ID of the account whose website is claimed.
    * @param array $optParams Optional parameters.
    *
@@ -74,11 +75,10 @@ class Google_Service_ShoppingContent_Resource_Accounts extends Google_Service_Re
     return $this->call('custombatch', array($params), "Google_Service_ShoppingContent_AccountsCustomBatchResponse");
   }
   /**
-   * Deletes a Merchant Center sub-account. (accounts.delete)
+   * Deletes a Merchant Center sub-account. This method can only be called for
+   * multi-client accounts. (accounts.delete)
    *
-   * @param string $merchantId The ID of the managing account. This must be a
-   * multi-client account, and accountId must be the ID of a sub-account of this
-   * account.
+   * @param string $merchantId The ID of the managing account.
    * @param string $accountId The ID of the account.
    * @param array $optParams Optional parameters.
    *
@@ -93,11 +93,12 @@ class Google_Service_ShoppingContent_Resource_Accounts extends Google_Service_Re
     return $this->call('delete', array($params));
   }
   /**
-   * Retrieves a Merchant Center account. (accounts.get)
+   * Retrieves a Merchant Center account. This method can only be called for
+   * accounts to which the managing account has access: either the managing
+   * account itself for any Merchant Center account, or any sub-account when the
+   * managing account is a multi-client account. (accounts.get)
    *
-   * @param string $merchantId The ID of the managing account. If this parameter
-   * is not the same as accountId, then this account must be a multi-client
-   * account and accountId must be the ID of a sub-account of this account.
+   * @param string $merchantId The ID of the managing account.
    * @param string $accountId The ID of the account.
    * @param array $optParams Optional parameters.
    * @return Google_Service_ShoppingContent_Account
@@ -109,10 +110,10 @@ class Google_Service_ShoppingContent_Resource_Accounts extends Google_Service_Re
     return $this->call('get', array($params), "Google_Service_ShoppingContent_Account");
   }
   /**
-   * Creates a Merchant Center sub-account. (accounts.insert)
+   * Creates a Merchant Center sub-account. This method can only be called for
+   * multi-client accounts. (accounts.insert)
    *
-   * @param string $merchantId The ID of the managing account. This must be a
-   * multi-client account.
+   * @param string $merchantId The ID of the managing account.
    * @param Google_Service_ShoppingContent_Account $postBody
    * @param array $optParams Optional parameters.
    *
@@ -126,11 +127,10 @@ class Google_Service_ShoppingContent_Resource_Accounts extends Google_Service_Re
     return $this->call('insert', array($params), "Google_Service_ShoppingContent_Account");
   }
   /**
-   * Lists the sub-accounts in your Merchant Center account.
-   * (accounts.listAccounts)
+   * Lists the sub-accounts in your Merchant Center account. This method can only
+   * be called for multi-client accounts. (accounts.listAccounts)
    *
-   * @param string $merchantId The ID of the managing account. This must be a
-   * multi-client account.
+   * @param string $merchantId The ID of the managing account.
    * @param array $optParams Optional parameters.
    *
    * @opt_param string maxResults The maximum number of accounts to return in the
@@ -145,12 +145,13 @@ class Google_Service_ShoppingContent_Resource_Accounts extends Google_Service_Re
     return $this->call('list', array($params), "Google_Service_ShoppingContent_AccountsListResponse");
   }
   /**
-   * Updates a Merchant Center account. This method supports patch semantics.
-   * (accounts.patch)
+   * Updates a Merchant Center account. This method can only be called for
+   * accounts to which the managing account has access: either the managing
+   * account itself for any Merchant Center account, or any sub-account when the
+   * managing account is a multi-client account. This method supports patch
+   * semantics. (accounts.patch)
    *
-   * @param string $merchantId The ID of the managing account. If this parameter
-   * is not the same as accountId, then this account must be a multi-client
-   * account and accountId must be the ID of a sub-account of this account.
+   * @param string $merchantId The ID of the managing account.
    * @param string $accountId The ID of the account.
    * @param Google_Service_ShoppingContent_Account $postBody
    * @param array $optParams Optional parameters.
@@ -165,11 +166,12 @@ class Google_Service_ShoppingContent_Resource_Accounts extends Google_Service_Re
     return $this->call('patch', array($params), "Google_Service_ShoppingContent_Account");
   }
   /**
-   * Updates a Merchant Center account. (accounts.update)
+   * Updates a Merchant Center account. This method can only be called for
+   * accounts to which the managing account has access: either the managing
+   * account itself for any Merchant Center account, or any sub-account when the
+   * managing account is a multi-client account. (accounts.update)
    *
-   * @param string $merchantId The ID of the managing account. If this parameter
-   * is not the same as accountId, then this account must be a multi-client
-   * account and accountId must be the ID of a sub-account of this account.
+   * @param string $merchantId The ID of the managing account.
    * @param string $accountId The ID of the account.
    * @param Google_Service_ShoppingContent_Account $postBody
    * @param array $optParams Optional parameters.

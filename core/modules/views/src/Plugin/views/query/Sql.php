@@ -61,8 +61,6 @@ class Sql extends QueryPluginBase {
   /**
    * The default operator to use when connecting the WHERE groups. May be
    * AND or OR.
-   *
-   * @var string
    */
   protected $groupOperator = 'AND';
 
@@ -84,14 +82,9 @@ class Sql extends QueryPluginBase {
 
   /**
    * A flag as to whether or not to make the primary field distinct.
-   *
-   * @var bool
    */
   public $distinct = FALSE;
 
-  /**
-   * @var bool
-   */
   protected $hasAggregate = FALSE;
 
   /**

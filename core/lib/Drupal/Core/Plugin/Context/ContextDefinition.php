@@ -17,7 +17,7 @@ class ContextDefinition implements ContextDefinitionInterface {
   /**
    * The data type of the data.
    *
-   * @var string
+   * @return string
    *   The data type.
    */
   protected $dataType;
@@ -25,7 +25,7 @@ class ContextDefinition implements ContextDefinitionInterface {
   /**
    * The human-readable label.
    *
-   * @var string
+   * @return string
    *   The label.
    */
   protected $label;
@@ -33,7 +33,7 @@ class ContextDefinition implements ContextDefinitionInterface {
   /**
    * The human-readable description.
    *
-   * @var string|null
+   * @return string|null
    *   The description, or NULL if no description is available.
    */
   protected $description;

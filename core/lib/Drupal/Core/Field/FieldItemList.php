@@ -7,7 +7,6 @@ use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\TypedData\DataDefinitionInterface;
 use Drupal\Core\TypedData\Plugin\DataType\ItemList;
 
 /**
@@ -379,6 +378,7 @@ class FieldItemList extends ItemList implements FieldItemListInterface {
    * {@inheritdoc}
    */
   public function equals(FieldItemListInterface $list_to_compare) {
+    $columns = $this->getFieldDefinition()->getFieldStorageDefinition()->getColumns();
     $count1 = count($this);
     $count2 = count($list_to_compare);
     if ($count1 === 0 && $count2 === 0) {
@@ -396,13 +396,9 @@ class FieldItemList extends ItemList implements FieldItemListInterface {
     }
     // If the values are not equal ensure a consistent order of field item
     // properties and remove properties which will not be saved.
-    $property_definitions = $this->getFieldDefinition()->getFieldStorageDefinition()->getPropertyDefinitions();
-    $non_computed_properties = array_filter($property_definitions, function (DataDefinitionInterface $property) {
-      return !$property->isComputed();
-    });
-    $callback = function (&$value) use ($non_computed_properties) {
+    $callback = function (&$value) use ($columns) {
       if (is_array($value)) {
-        $value = array_intersect_key($value, $non_computed_properties);
+        $value = array_intersect_key($value, $columns);
         ksort($value);
       }
     };

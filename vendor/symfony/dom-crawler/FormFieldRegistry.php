@@ -26,6 +26,8 @@ class FormFieldRegistry
 
     /**
      * Adds a field to the registry.
+     *
+     * @param FormField $field The field
      */
     public function add(FormField $field)
     {

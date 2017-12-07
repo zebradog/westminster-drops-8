@@ -467,6 +467,7 @@ class SelectTest extends DatabaseTestBase {
       ],
     ];
 
+
     $database = $this->container->get('database');
     foreach ($test_groups as $test_group) {
       $query = $database->select('test', 't');

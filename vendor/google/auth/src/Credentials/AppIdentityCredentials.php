@@ -69,25 +69,15 @@ class AppIdentityCredentials extends CredentialsLoader
     }
 
     /**
-     * Determines if this an App Engine instance, by accessing the
-     * SERVER_SOFTWARE environment variable (prod) or the APPENGINE_RUNTIME
-     * environment variable (dev).
+     * Determines if this an App Engine instance, by accessing the SERVER_SOFTWARE
+     * environment variable.
      *
      * @return true if this an App Engine Instance, false otherwise
      */
     public static function onAppEngine()
     {
-        $appEngineProduction = isset($_SERVER['SERVER_SOFTWARE']) &&
-            0 === strpos($_SERVER['SERVER_SOFTWARE'], 'Google App Engine');
-        if ($appEngineProduction) {
-            return true;
-        }
-        $appEngineDevAppServer = isset($_SERVER['APPENGINE_RUNTIME']) &&
-            $_SERVER['APPENGINE_RUNTIME'] == 'php';
-        if ($appEngineDevAppServer) {
-            return true;
-        }
-        return false;
+        return isset($_SERVER['SERVER_SOFTWARE']) &&
+        strpos($_SERVER['SERVER_SOFTWARE'], 'Google App Engine') !== false;
     }
 
     /**

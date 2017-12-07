@@ -69,6 +69,7 @@ class ForumIndexTest extends BrowserTestBase {
     $this->assertCacheTag('taxonomy_term:' . $tid);
     $this->assertCacheTag('taxonomy_term:' . $tid_child);
 
+
     // Unpublish the node.
     $edit = ['status[value]' => FALSE];
     $this->drupalPostForm('node/' . $node->id() . '/edit', $edit, t('Save'));

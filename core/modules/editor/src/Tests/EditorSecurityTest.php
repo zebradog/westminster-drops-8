@@ -158,6 +158,7 @@ class EditorSecurityTest extends WebTestBase {
     ]);
     $editor->save();
 
+
     // Create node type.
     $this->drupalCreateContentType([
       'type' => 'article',

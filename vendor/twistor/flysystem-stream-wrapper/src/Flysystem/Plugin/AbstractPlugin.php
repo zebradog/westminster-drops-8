@@ -11,7 +11,6 @@ abstract class AbstractPlugin extends FlysystemPlugin
     {
         $config = new Config();
         $config->setFallback($this->filesystem->getConfig());
-
         return $config;
     }
 }

@@ -26,7 +26,8 @@
 class Google_Service_ShoppingContent_Resource_Products extends Google_Service_Resource
 {
   /**
-   * Retrieves, inserts, and deletes multiple products in a single request.
+   * Retrieves, inserts, and deletes multiple products in a single request. This
+   * method can only be called for non-multi-client accounts.
    * (products.custombatch)
    *
    * @param Google_Service_ShoppingContent_ProductsCustomBatchRequest $postBody
@@ -42,11 +43,11 @@ class Google_Service_ShoppingContent_Resource_Products extends Google_Service_Re
     return $this->call('custombatch', array($params), "Google_Service_ShoppingContent_ProductsCustomBatchResponse");
   }
   /**
-   * Deletes a product from your Merchant Center account. (products.delete)
+   * Deletes a product from your Merchant Center account. This method can only be
+   * called for non-multi-client accounts. (products.delete)
    *
-   * @param string $merchantId The ID of the account that contains the product.
-   * This account cannot be a multi-client account.
-   * @param string $productId The REST id of the product.
+   * @param string $merchantId The ID of the managing account.
+   * @param string $productId The ID of the product.
    * @param array $optParams Optional parameters.
    *
    * @opt_param bool dryRun Flag to run the request in dry-run mode.
@@ -58,11 +59,11 @@ class Google_Service_ShoppingContent_Resource_Products extends Google_Service_Re
     return $this->call('delete', array($params));
   }
   /**
-   * Retrieves a product from your Merchant Center account. (products.get)
+   * Retrieves a product from your Merchant Center account. This method can only
+   * be called for non-multi-client accounts. (products.get)
    *
-   * @param string $merchantId The ID of the account that contains the product.
-   * This account cannot be a multi-client account.
-   * @param string $productId The REST id of the product.
+   * @param string $merchantId The ID of the managing account.
+   * @param string $productId The ID of the product.
    * @param array $optParams Optional parameters.
    * @return Google_Service_ShoppingContent_Product
    */
@@ -75,10 +76,10 @@ class Google_Service_ShoppingContent_Resource_Products extends Google_Service_Re
   /**
    * Uploads a product to your Merchant Center account. If an item with the same
    * channel, contentLanguage, offerId, and targetCountry already exists, this
-   * method updates that entry. (products.insert)
+   * method updates that entry. This method can only be called for non-multi-
+   * client accounts. (products.insert)
    *
-   * @param string $merchantId The ID of the account that contains the product.
-   * This account cannot be a multi-client account.
+   * @param string $merchantId The ID of the managing account.
    * @param Google_Service_ShoppingContent_Product $postBody
    * @param array $optParams Optional parameters.
    *
@@ -92,10 +93,10 @@ class Google_Service_ShoppingContent_Resource_Products extends Google_Service_Re
     return $this->call('insert', array($params), "Google_Service_ShoppingContent_Product");
   }
   /**
-   * Lists the products in your Merchant Center account. (products.listProducts)
+   * Lists the products in your Merchant Center account. This method can only be
+   * called for non-multi-client accounts. (products.listProducts)
    *
-   * @param string $merchantId The ID of the account that contains the products.
-   * This account cannot be a multi-client account.
+   * @param string $merchantId The ID of the managing account.
    * @param array $optParams Optional parameters.
    *
    * @opt_param bool includeInvalidInsertedItems Flag to include the invalid

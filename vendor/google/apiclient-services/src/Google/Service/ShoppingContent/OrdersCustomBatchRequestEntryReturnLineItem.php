@@ -18,7 +18,6 @@
 class Google_Service_ShoppingContent_OrdersCustomBatchRequestEntryReturnLineItem extends Google_Model
 {
   public $lineItemId;
-  public $productId;
   public $quantity;
   public $reason;
   public $reasonText;
@@ -30,14 +29,6 @@ class Google_Service_ShoppingContent_OrdersCustomBatchRequestEntryReturnLineItem
   public function getLineItemId()
   {
     return $this->lineItemId;
-  }
-  public function setProductId($productId)
-  {
-    $this->productId = $productId;
-  }
-  public function getProductId()
-  {
-    return $this->productId;
   }
   public function setQuantity($quantity)
   {

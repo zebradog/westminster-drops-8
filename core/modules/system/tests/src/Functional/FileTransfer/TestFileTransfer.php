@@ -16,8 +16,6 @@ class TestFileTransfer extends FileTransfer {
 
   /**
    * This is for testing the CopyRecursive logic.
-   *
-   * @var bool
    */
   public $shouldIsDirectoryReturnTrue = FALSE;
 

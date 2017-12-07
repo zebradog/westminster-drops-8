@@ -58,7 +58,7 @@ class Variable extends DrupalSqlBase {
   /**
    * {@inheritdoc}
    */
-  public function count($refresh = FALSE) {
+  public function count() {
     return intval($this->query()->countQuery()->execute()->fetchField() > 0);
   }
 

@@ -34,8 +34,6 @@ class Search extends FilterPluginBase {
 
   /**
    * TRUE if the search query has been parsed.
-   *
-   * @var bool
    */
   protected $parsed = FALSE;
 
