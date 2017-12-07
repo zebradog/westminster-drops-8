@@ -1,0 +1,6 @@
+name: Westminster Debug
+description: Contains useful functions for debugging Westminster.
+package: Westminster
+
+type: module
+core: 8.x
