@@ -1,0 +1,7 @@
+westminster_security.configuration:
+  path: '/admin/config/westminster/security'
+  defaults:
+    _title: 'Westminster Security Configuration'
+    _form: '\Drupal\westminster_security\Form\ConfigurationForm'
+  requirements:
+    _permission: 'westminster security configuration'

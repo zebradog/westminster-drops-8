@@ -1,0 +1,5 @@
+services:
+  westminster_security.route_subscriber:
+    class: Drupal\westminster_security\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }

@@ -1,0 +1,6 @@
+name: Westminster Security
+description: Optional enhancements related to making Westminster more secure.
+package: Westminster
+
+type: module
+core: 8.x
