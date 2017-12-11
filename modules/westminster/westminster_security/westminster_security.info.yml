@@ -4,3 +4,8 @@ package: Westminster
 
 type: module
 core: 8.x
+
+dependencies:
+  - westminster_helper
+
+configure: westminster_security.configuration
