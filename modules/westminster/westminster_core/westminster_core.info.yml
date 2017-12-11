@@ -1,0 +1,6 @@
+name: Westminster
+description: Provides core functionality required by Westminster and its optional modules.
+package: Westminster
+
+type: module
+core: 8.x

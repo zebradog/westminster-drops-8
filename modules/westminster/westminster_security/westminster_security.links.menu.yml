@@ -1,5 +1,5 @@
-system.admin_config_westminster.security_configuration:
+system.admin_config_westminster_core.security_configuration:
   title: 'Westminster Security'
   description: 'Configure settings related to the Westminster Security module.'
-  parent: system.admin_config_westminster
+  parent: system.admin_config_westminster_core
   route_name: westminster_security.configuration

@@ -1,5 +1,5 @@
-system.admin_config_westminster.analytics_configuration:
+system.admin_config_westminster_core.analytics_configuration:
   title: 'Westminster Analytics'
   description: 'Upload and review your Google account credentials and access token.'
-  parent: system.admin_config_westminster
+  parent: system.admin_config_westminster_core
   route_name: westminster_analytics.configuration

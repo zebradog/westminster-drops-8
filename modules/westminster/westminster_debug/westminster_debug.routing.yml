@@ -1,5 +1,5 @@
 westminster_debug.routing:
-  path: '/westminster/debug/routing'
+  path: '/admin/config/westminster/debug/routing'
   defaults:
     _title: 'Westminster Debug: Routing'
     _form: '\Drupal\westminster_debug\Form\RoutingForm'
