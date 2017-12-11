@@ -17,9 +17,7 @@
     }
 
     protected function getEditableConfigNames() {
-      return [
-        ConfigurationHelper::CONFIGURATION_NAME,
-      ];
+      return [];
     }
 
     public function getFormId() {
@@ -27,7 +25,7 @@
     }
 
     public function submitForm(array &$form, FormStateInterface $form_state) {
-      \Drupal::service("router.builder")->rebuild();
+      \Drupal::service('router.builder')->rebuild();
 
       drupal_set_message($this->t('Routes have been successfully rebuilt.'));
     }
