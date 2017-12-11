@@ -1,8 +1,0 @@
-name: Westminster Helper (Deprecated)
-description: Deprecated. Please uninstall.
-package: Westminster
-
-type: module
-core: 8.x
-
-hidden: true
