@@ -1,5 +1,5 @@
 name: Westminster Debug
-description: Contains useful functions for debugging Westminster.
+description: Optional enhancements related to debugging Westminster.
 package: Westminster
 
 type: module

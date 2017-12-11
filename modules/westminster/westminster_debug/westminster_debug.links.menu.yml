@@ -1,0 +1,11 @@
+system.admin_config_westminster_debug:
+  title: 'Westminster Debug'
+  parent: system.admin_config
+  route_name: system.admin_config
+  weight: 101
+
+system.admin_config_westminster_debug.routing:
+  title: 'Debug Routing'
+  description: 'Troubleshoot basic routing issues by rebuilding routes.'
+  parent: system.admin_config_westminster_debug
+  route_name: westminster_debug.routing

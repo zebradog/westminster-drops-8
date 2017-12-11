@@ -1,4 +1,4 @@
-westminster_analytics.configurationForm:
+westminster_analytics.configuration:
   path: '/admin/config/westminster/analytics'
   defaults:
     _title: 'Westminster Analytics Configuration'

@@ -1,5 +1,5 @@
 name: Westminster Helper
-description: Contains additional code related to Westminster.
+description: Provides additional functionality required by Westminster.
 package: Westminster
 
 type: module
