@@ -1,0 +1,5 @@
+system.admin_config_westminster_core.schedule_configuration:
+  title: 'Westminster Schedule'
+  description: 'Decide which content types are schedulable.'
+  parent: system.admin_config_westminster_core
+  route_name: westminster_schedule.configuration

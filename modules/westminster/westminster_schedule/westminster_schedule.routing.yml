@@ -1,0 +1,7 @@
+westminster_schedule.configuration:
+  path: '/admin/config/westminster/scheduling'
+  defaults:
+    _title: 'Westminster Schedule Configuration'
+    _form: '\Drupal\westminster_schedule\Form\ConfigurationForm'
+  requirements:
+    _permission: 'westminster schedule configuration'

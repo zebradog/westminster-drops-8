@@ -1,0 +1,5 @@
+main:
+  js:
+    js/library/main/wa.js: {}
+  dependencies:
+    - core/jquery
