@@ -1,14 +1,13 @@
-uuid: c1d3bd55-44bc-41db-b588-13388b180f50
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_end_time
+    - field.storage.node.field_schedule_end_time
     - node.type.scheduled_content_2
   module:
     - datetime
-id: node.scheduled_content_2.field_end_time
-field_name: field_end_time
+id: node.scheduled_content_2.field_schedule_end_time
+field_name: field_schedule_end_time
 entity_type: node
 bundle: scheduled_content_2
 label: 'End Time'

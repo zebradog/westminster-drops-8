@@ -1,11 +1,10 @@
-uuid: 0a90ab9d-7fea-412d-accb-bd7e9af256ff
 langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.scheduled_content_2.field_end_time
+    - field.field.node.scheduled_content_2.field_schedule_end_time
     - field.field.node.scheduled_content_2.field_scheduled_item
-    - field.field.node.scheduled_content_2.field_start_time
+    - field.field.node.scheduled_content_2.field_schedule_start_time
     - node.type.scheduled_content_2
   module:
     - datetime
@@ -21,7 +20,7 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_end_time:
+  field_schedule_end_time:
     weight: 2
     settings: {  }
     third_party_settings: {  }
@@ -36,7 +35,7 @@ content:
     third_party_settings: {  }
     type: entity_reference_autocomplete
     region: content
-  field_start_time:
+  field_schedule_start_time:
     weight: 1
     settings: {  }
     third_party_settings: {  }

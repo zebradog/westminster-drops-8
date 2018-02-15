@@ -1,14 +1,9 @@
-uuid: 4f9b5dda-7e61-46e8-a296-ce4c23dfac1f
 langcode: en
 status: true
 dependencies:
-  module:
-    - menu_ui
-third_party_settings:
-  menu_ui:
-    available_menus:
-      - main
-    parent: 'main:'
+  enforced:
+    module:
+      - westminster_schedule
 name: 'Scheduled Content'
 type: scheduled_content_2
 description: ''

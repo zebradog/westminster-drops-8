@@ -25,7 +25,7 @@ if (file_exists($local_settings)) {
 }
 $settings['install_profile'] = 'westminster';
 
-$settings['hash_salt'] = 'Q2D3Z3MewEe81U79dQyJ_yz8dQpDN7NLRHc7lFvl7BuQSz4TNAYXfwK0i9h3qH3xgm-BESgwMg';
+$settings['hash_salt'] = 'drsqyyPKReeh1tm4CA0I1aNHAfCgEHkM5baZHe_ciJXWUDU0ktIMg5eS2w_katWPHAY7L7-vMA';
 
 /*$schemes = [
   's3' => [
@@ -46,3 +46,13 @@ $settings['hash_salt'] = 'Q2D3Z3MewEe81U79dQyJ_yz8dQpDN7NLRHc7lFvl7BuQSz4TNAYXfw
 ];
 
 $settings['flysystem'] = $schemes;*/
+$databases['default']['default'] = array (
+  'database' => 'westminster',
+  'username' => 'root',
+  'password' => 'root',
+  'prefix' => '',
+  'host' => 'localhost',
+  'port' => '3306',
+  'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+  'driver' => 'mysql',
+);

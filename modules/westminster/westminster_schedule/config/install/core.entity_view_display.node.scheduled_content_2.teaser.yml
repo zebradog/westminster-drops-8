@@ -1,12 +1,15 @@
-uuid: f45b13b4-6aad-4a65-9cde-f6c282a85ece
 langcode: en
 status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
+    - field.field.node.scheduled_content_2.field_schedule_end_time
+    - field.field.node.scheduled_content_2.field_schedule_start_time
+    - field.field.node.scheduled_content_2.field_scheduled_item
     - node.type.scheduled_content_2
   module:
     - user
+    - datetime
 id: node.scheduled_content_2.teaser
 targetEntityType: node
 bundle: scheduled_content_2

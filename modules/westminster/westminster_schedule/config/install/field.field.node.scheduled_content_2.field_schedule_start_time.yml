@@ -1,14 +1,13 @@
-uuid: 2d89f1f9-14c0-450c-b278-be0780ee5111
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_start_time
+    - field.storage.node.field_schedule_start_time
     - node.type.scheduled_content_2
   module:
     - datetime
-id: node.scheduled_content_2.field_start_time
-field_name: field_start_time
+id: node.scheduled_content_2.field_schedule_start_time
+field_name: field_schedule_start_time
 entity_type: node
 bundle: scheduled_content_2
 label: 'Start Time'
