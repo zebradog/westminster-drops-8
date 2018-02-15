@@ -2,10 +2,6 @@ uuid: 370b7c3b-46d9-442c-b100-d6c48f5dd771
 langcode: en
 status: true
 dependencies:
-  config:
-    - node.type.external_content
-    - node.type.scheduled_content
-    - node.type.slideshow
   module:
     - node
     - user
@@ -262,9 +258,6 @@ display:
           operator: in
           value:
             all: all
-            external_content: external_content
-            scheduled_content: scheduled_content
-            slideshow: slideshow
           group: 1
           exposed: false
           expose:
