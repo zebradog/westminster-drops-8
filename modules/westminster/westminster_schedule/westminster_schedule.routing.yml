@@ -9,7 +9,15 @@ westminster_schedule.configuration:
 westminster_schedule.scheduled_content:
   path: '/scheduling'
   defaults:
-    _title: 'Westminster Schedule Configuration'
+    _title: 'View Schedule For:'
+    _controller: '\Drupal\westminster_schedule\Controller\ScheduleController::scheduleSelectPage'
+  requirements:
+    _permission: 'access content'
+
+westminster_schedule.scheduled_content.content_type:
+  path: '/scheduling/{type}'
+  defaults:
+    _title: 'Scheduling'
     _controller: '\Drupal\westminster_schedule\Controller\ScheduleController::schedulePage'
   requirements:
     _permission: 'access content'

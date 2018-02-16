@@ -1,1 +1,38 @@
 <?php
+function westminster_schedule_theme() {
+  $configFactory = \Drupal::config('westminster_schedule.configuration');
+  $contentTypes = \Drupal::service('entity.manager')->getStorage('node_type')->loadMultiple();
+  $contentTypeArr = [];
+  $numSchedulable = 0;
+  foreach($contentTypes as $contentType) {
+    $id = $contentType->id();
+    $label = $contentType->label();
+    if ($id != 'scheduled_content_2') {
+      $schedulable = $configFactory->get($id);
+      if ($schedulable) {
+        $numSchedulable++;
+        $contentTypeArr[$id] = $label;
+      }
+    }
+  }
+
+  $theme['scheduling'] = [
+    'render element' => 'build',
+    'template' => 'page--scheduled-content'
+  ];
+  $theme['schedulingSelect'] = [
+    'render element' => 'build',
+    'template' => 'page--select-scheduled-content',
+    'variables' => [
+      'content_types' => $contentTypeArr
+    ]
+  ];
+
+  $theme['page__westminster_schedule__scheduled_content'] = [
+    'template' => 'page--westminster-schedule--scheduled-content'
+  ];
+  $theme['page__westminster_schedule__select_scheduled_content'] = [
+    'template' => 'page--westminster-schedule--select-scheduled-content'
+  ];
+  return $theme;
+}

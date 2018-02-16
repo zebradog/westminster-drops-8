@@ -5,10 +5,11 @@ use Drupal\Core\Controller\ControllerBase;
 
 class ScheduleController extends ControllerBase {
   public function schedulePage() {
-    die('DURPAL TOST');
-    $element = array(
-      '#markup' => t('Hello, world'),
-    );
-    return $element;
+    $build['#theme'] = 'scheduling';
+    return $build;
+  }
+  public function scheduleSelectPage() {
+    $build['#theme'] = 'schedulingSelect';
+    return $build;
   }
 }

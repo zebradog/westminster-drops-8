@@ -48,8 +48,6 @@
  * @see html.html.twig
  */
 #}
-{% extends "page.html.twig" %}
-{% block my_content %}
   {{ attach_library('westminster_theme/scheduled_content') }}
   <script type="text/javascript">
   var BASE_PATH = "{{base_path}}";
@@ -146,5 +144,3 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
-
-{% endblock %}
