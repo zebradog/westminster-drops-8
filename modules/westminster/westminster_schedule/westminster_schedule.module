@@ -18,7 +18,10 @@ function westminster_schedule_theme() {
 
   $theme['scheduling'] = [
     'render element' => 'build',
-    'template' => 'page--scheduled-content'
+    'template' => 'page--scheduled-content',
+    'variables' => [
+      'content_type' => $route
+    ]
   ];
   $theme['schedulingSelect'] = [
     'render element' => 'build',
@@ -35,4 +38,52 @@ function westminster_schedule_theme() {
     'template' => 'page--westminster-schedule--select-scheduled-content'
   ];
   return $theme;
+}
+
+function westminster_theme_preprocess_page__scheduling() {
+  $route = \Drupal::routeMatch()->getParameter('type');
+  if (strlen($route) > 0) {
+    prepareCalendar($route);
+  }
+}
+
+function prepareCalendar($type) {
+  $defaultView = 'agendaWeek';
+  $formDateFormat = 'YYYY-MM-DD';
+  $formTimeFormat = 'HH:mm';
+  $cmsDateFormat = 'YYYY-MM-DDTHH:mm:ss';
+  $hex_vals = [
+    '0' => 0,
+    '1' => 1,
+    '2' => 2,
+    '3' => 3,
+    '4' => 4,
+    '5' => 5,
+    '6' => 6,
+    '7' => 7,
+    '8' => 8,
+    '9' => 9,
+    'A' => 10,
+    'a' => 10,
+    'B' => 11,
+    'b' => 11,
+    'C' => 12,
+    'c' => 12,
+    'D' => 13,
+    'd' => 13,
+    'E' => 14,
+    'e' => 14,
+    'F' => 15,
+    'f' => 15
+  ];
+  $colors = [
+    'aqua', 'blue', 'light-blue', 'teal', 'yellow', 'orange',
+    'green', 'lime', 'red', 'purple', 'fuchsia', 'muted', 'navy'
+  ];
+
+  $bundle = 'scheduled_content_2';
+  $query = \Drupal::entityQuery('node');
+  $query->condition('status', 1);
+  $query->condition('type', $bundle);
+  $entity_ids = $query->execute();
 }
