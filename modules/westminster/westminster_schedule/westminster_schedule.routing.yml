@@ -5,3 +5,11 @@ westminster_schedule.configuration:
     _form: '\Drupal\westminster_schedule\Form\ConfigurationForm'
   requirements:
     _permission: 'westminster schedule configuration'
+
+westminster_schedule.scheduled_content:
+  path: '/scheduling'
+  defaults:
+    _title: 'Westminster Schedule Configuration'
+    _controller: '\Drupal\westminster_schedule\Controller\ScheduleController::schedulePage'
+  requirements:
+    _permission: 'access content'

@@ -8,4 +8,6 @@ core: 8.x
 dependencies:
   - westminster_core
 
-configure: westminster_schedule.configuration
+configure:
+  - westminster_schedule.configuration
+  - westminster_schedule.scheduled_content
