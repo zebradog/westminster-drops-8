@@ -20,4 +20,5 @@ scheduled_content:
       lib/ladda.min.css: {}
   dependencies:
     - core/jquery
+    - core/drupalSettings
     - yorkshire/base

@@ -1,20 +1,8 @@
 <?php
+use \Drupal\node\Entity\Node;
+
 function westminster_schedule_theme() {
-  $configFactory = \Drupal::config('westminster_schedule.configuration');
-  $contentTypes = \Drupal::service('entity.manager')->getStorage('node_type')->loadMultiple();
-  $contentTypeArr = [];
-  $numSchedulable = 0;
-  foreach($contentTypes as $contentType) {
-    $id = $contentType->id();
-    $label = $contentType->label();
-    if ($id != 'scheduled_content_2') {
-      $schedulable = $configFactory->get($id);
-      if ($schedulable) {
-        $numSchedulable++;
-        $contentTypeArr[$id] = $label;
-      }
-    }
-  }
+  $contentTypeArr = getAllSchedulableContentTypes();
 
   $theme['scheduling'] = [
     'render element' => 'build',
@@ -40,50 +28,84 @@ function westminster_schedule_theme() {
   return $theme;
 }
 
-function westminster_theme_preprocess_page__scheduling() {
+function westminster_theme_preprocess_page__scheduling(&$variables) {
   $route = \Drupal::routeMatch()->getParameter('type');
   if (strlen($route) > 0) {
-    prepareCalendar($route);
+    prepareCalendar($variables, $route);
   }
 }
 
-function prepareCalendar($type) {
-  $defaultView = 'agendaWeek';
-  $formDateFormat = 'YYYY-MM-DD';
-  $formTimeFormat = 'HH:mm';
-  $cmsDateFormat = 'YYYY-MM-DDTHH:mm:ss';
-  $hex_vals = [
-    '0' => 0,
-    '1' => 1,
-    '2' => 2,
-    '3' => 3,
-    '4' => 4,
-    '5' => 5,
-    '6' => 6,
-    '7' => 7,
-    '8' => 8,
-    '9' => 9,
-    'A' => 10,
-    'a' => 10,
-    'B' => 11,
-    'b' => 11,
-    'C' => 12,
-    'c' => 12,
-    'D' => 13,
-    'd' => 13,
-    'E' => 14,
-    'e' => 14,
-    'F' => 15,
-    'f' => 15
-  ];
-  $colors = [
-    'aqua', 'blue', 'light-blue', 'teal', 'yellow', 'orange',
-    'green', 'lime', 'red', 'purple', 'fuchsia', 'muted', 'navy'
-  ];
+function prepareCalendar(&$variables, $type) {
+  // first, grab all content of content type $type
+  $typesArr = [$type];
+  $schedulableContent = [];
+  if ($type = 'all') {
+    $typesArr = getAllSchedulableContentTypes();
+  }
+  foreach ($typesArr as $contentType) {
+    $schedulableContent = $schedulableContent + getNodes($contentType);
+  }
+  // now we have an array of all content types matching our current filter,
+  // keyed by id
+  // next we grab all scheduled content
+  $scheduledContent = getNodes('scheduled_content_2');
 
-  $bundle = 'scheduled_content_2';
+  // next step is to loop through scheduled content and only add it to the
+  // calendar if it is of the current filter type
+  $contentToShow = [];
+  $scheduleItems = [];
+  foreach ($scheduledContent as $scheduledItem) {
+    $itemId = $scheduledItem->get('field_scheduled_item')->getValue('id')[0]['target_id'];
+    if (isset($schedulableContent[$itemId])) {
+      $scheduleItems[$itemId] = [
+        '#info' => $scheduledItem,
+        '#referencedItem' => $schedulableContent[$itemId]
+      ];
+    }
+  }
+  $variables['#attached']['drupalSettings']['scheduleItems'] = serializeScheduleItems($scheduleItems);
+}
+
+function getAllSchedulableContentTypes() {
+  $configFactory = \Drupal::config('westminster_schedule.configuration');
+  $contentTypes = \Drupal::service('entity.manager')->getStorage('node_type')->loadMultiple();
+  $contentTypeArr = [];
+  foreach($contentTypes as $contentType) {
+    $id = $contentType->id();
+    $label = $contentType->label();
+    if ($id != 'scheduled_content_2') {
+      $schedulable = $configFactory->get($id);
+      if ($schedulable) {
+        $contentTypeArr[$id] = $label;
+      }
+    }
+  }
+  return $contentTypeArr;
+}
+
+function getNodes($contentType) {
+  $nodes = [];
   $query = \Drupal::entityQuery('node');
-  $query->condition('status', 1);
-  $query->condition('type', $bundle);
+  $query->condition('type', $contentType);
   $entity_ids = $query->execute();
+  $entities = Node::loadMultiple($entity_ids);
+  foreach($entities as $entity) {
+    $nodes[$entity->id()] = $entity;
+  }
+  return $nodes;
+}
+
+function serializeScheduleItems($scheduleItems) {
+  $response = [];
+  foreach($scheduleItems as $itemId => $scheduleItem) {
+    $response[$itemId] = [
+      "start" => ($scheduleItem['#info']->get('field_schedule_start_time')->getString()),
+      "end" => ($scheduleItem['#info']->get('field_schedule_end_time')->getString()),
+      "scheduled_item" => [
+        "label" => $scheduleItem['#referencedItem']->getTitle(),
+        "id" => $scheduleItem['#referencedItem']->id()
+      ]
+    ];
+  }
+  return $response;
 }
