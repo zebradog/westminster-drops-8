@@ -64,6 +64,7 @@ function prepareCalendar(&$variables, $type) {
     }
   }
   $variables['#attached']['drupalSettings']['scheduleItems'] = serializeScheduleItems($scheduleItems);
+  $variables['#attached']['drupalSettings']['scheduleType'] = $type;
 }
 
 function getAllSchedulableContentTypes() {
@@ -99,6 +100,8 @@ function serializeScheduleItems($scheduleItems) {
   $response = [];
   foreach($scheduleItems as $itemId => $scheduleItem) {
     $response[$itemId] = [
+      "title" => $scheduleItem['#info']->getTitle(),
+      "id" => $scheduleItem['#info']->id(),
       "start" => ($scheduleItem['#info']->get('field_schedule_start_time')->getString()),
       "end" => ($scheduleItem['#info']->get('field_schedule_end_time')->getString()),
       "scheduled_item" => [

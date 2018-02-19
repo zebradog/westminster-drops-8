@@ -18,17 +18,46 @@ $(function() {
 
   function populateScheduledContent() {
     if (drupalSettings.scheduleItems) {
-      /*var eventObj;
+      $('#calendar').fullCalendar({
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'month,agendaWeek,agendaDay'
+        },
+        buttonText: {
+          today: 'today',
+          month: 'month',
+          week: 'week',
+          day: 'day'
+        },
+        timezone: 'UTC',
+        slotDuration: '00:15:00',
+        defaultView: DEFAULT_VIEW,
+        editable: true,
+        droppable: true, // this allows things to be dropped onto the calendar !!!
+        drop: function(date, jsEvent, ui) { // this function is called when something is dropped
+
+        },
+        eventClick: function(event, jsEvent, view) {
+
+        },
+        eventResize: function(event, delta, revertFunc, jsEvent, ui, view) {
+
+        },
+        eventDrop: function(event, delta, revertFunc, jsEvent, ui, view) {
+
+        }
+      });
       $('#calendar').fullCalendar('removeEvents');
-      $.each(data, function(i, r) {
-        eventObj = {
+      $.each(drupalSettings.scheduleItems, function(i, r) {
+        var eventObj = {
           title: r.title,
-          start: moment(r.start),
-          end: moment(r.end),
-          nid: r.nid,
-        };
+          id: r.id,
+          start: r.start,
+          end: r.end
+        }
         $('#calendar').fullCalendar('renderEvent', eventObj, true);
-      });*/
+      });
     }
   }
 
@@ -87,37 +116,4 @@ $(function() {
     }
     return Math.floor(Math.random() * (max - min)) + min;
   }
-
-  /* initialize the calendar
-   -----------------------------------------------------------------*/
-  $('#calendar').fullCalendar({
-    header: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'month,agendaWeek,agendaDay'
-    },
-    buttonText: {
-      today: 'today',
-      month: 'month',
-      week: 'week',
-      day: 'day'
-    },
-    timezone: 'UTC',
-    slotDuration: '00:15:00',
-    defaultView: DEFAULT_VIEW,
-    editable: true,
-    droppable: true, // this allows things to be dropped onto the calendar !!!
-    drop: function(date, jsEvent, ui) { // this function is called when something is dropped
-
-    },
-    eventClick: function(event, jsEvent, view) {
-
-    },
-    eventResize: function(event, delta, revertFunc, jsEvent, ui, view) {
-
-    },
-    eventDrop: function(event, delta, revertFunc, jsEvent, ui, view) {
-
-    }
-  });
 });
