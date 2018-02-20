@@ -2,6 +2,7 @@
 use \Drupal\node\Entity\Node;
 
 function westminster_schedule_theme() {
+  $route = \Drupal::routeMatch()->getParameter('type');
   $contentTypeArr = getAllSchedulableContentTypes();
 
   $theme['scheduling'] = [
@@ -42,7 +43,7 @@ function prepareCalendar(&$variables, $type) {
   $typesArr = [$type];
   $schedulableContent = [];
   if ($type == 'all') {
-    $typesArr = getAllSchedulableContentTypes();
+    $typesArr = getAllSchedulableContentTypes(false);
   }
   foreach ($typesArr as $contentType) {
     $schedulableContent = $schedulableContent + getNodes($contentType);
@@ -70,7 +71,7 @@ function prepareCalendar(&$variables, $type) {
   $variables['#attached']['drupalSettings']['scheduleType'] = $type;
 }
 
-function getAllSchedulableContentTypes() {
+function getAllSchedulableContentTypes($keyed = true) {
   $configFactory = \Drupal::config('westminster_schedule.configuration');
   $contentTypes = \Drupal::service('entity.manager')->getStorage('node_type')->loadMultiple();
   $contentTypeArr = [];
@@ -80,7 +81,11 @@ function getAllSchedulableContentTypes() {
     if ($id != 'scheduled_content_2') {
       $schedulable = $configFactory->get($id);
       if ($schedulable) {
-        array_push($contentTypeArr, $id);
+        if ($keyed) {
+          $contentTypeArr[$id] = $label;
+        } else {
+          array_push($contentTypeArr, $id);
+        }
       }
     }
   }

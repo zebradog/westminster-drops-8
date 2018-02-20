@@ -48,7 +48,7 @@ $(function() {
       $.each(drupalSettings.scheduleChoices, function(i, c) {
         optionsString += '<option id="scheduled-item-option-' + i + '" value="' + i + '">' + c.title + '</option>';
       });
-      $selectList.append(optionsString).select2();
+      $selectList.append(optionsString).select2({ width: '75%' });
       $('#calendar').fullCalendar({
         header: {
           left: 'prev,next today',

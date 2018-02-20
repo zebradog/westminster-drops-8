@@ -20,6 +20,7 @@ scheduled_content:
       lib/datepicker/datepicker.min.css: {}
       lib/ladda/ladda.min.css: {}
       lib/select2/select2.min.css: {}
+      css/main.css: {}
   dependencies:
     - core/jquery
     - core/drupalSettings
