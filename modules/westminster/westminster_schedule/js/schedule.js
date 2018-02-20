@@ -230,8 +230,8 @@ $(function() {
   }
 
   function updateEventValues(e, callback) {
-    e.start = moment($('#sDate').val() + ' ' + $('#sTime').val() + ' UTC');
-    e.end = moment($('#eDate').val() + ' ' + $('#eTime').val() + ' UTC');
+    e.start = moment($('#sDate').val() + ' ' + $('#sTime').val());
+    e.end = moment($('#eDate').val() + ' ' + $('#eTime').val());
     e.title = $('#scheduled-item-title').val();
     e.scheduledItem = drupalSettings.scheduleChoices[$('#scheduled-item-entity > option:selected').val()];
     if(callback) callback(e);
