@@ -13,6 +13,8 @@ westminster_schedule.scheduled_content:
     _controller: '\Drupal\westminster_schedule\Controller\ScheduleController::scheduleSelectPage'
   requirements:
     _permission: 'access content'
+  options:
+    no_cache: 'TRUE'
 
 westminster_schedule.scheduled_content.content_type:
   path: '/scheduling/{type}'
@@ -21,3 +23,15 @@ westminster_schedule.scheduled_content.content_type:
     _controller: '\Drupal\westminster_schedule\Controller\ScheduleController::schedulePage'
   requirements:
     _permission: 'access content'
+  options:
+    no_cache: 'TRUE'
+
+westminster_schedule.scheduled_content.ajax_request:
+  path: '/scheduling/ajax'
+  defaults:
+    _title: 'Create New Scheduled Content'
+    _controller: '\Drupal\westminster_schedule\Controller\ScheduleController::ajax'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: 'TRUE'

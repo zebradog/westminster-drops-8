@@ -31,6 +31,8 @@ function westminster_schedule_theme() {
 function westminster_theme_preprocess_page__scheduling(&$variables) {
   $route = \Drupal::routeMatch()->getParameter('type');
   if (strlen($route) > 0) {
+    $variables['timezone'] = drupal_get_user_timezone();
+    $variables['basepath'] = base_path();
     prepareCalendar($variables, $route);
   }
 }
@@ -57,12 +59,13 @@ function prepareCalendar(&$variables, $type) {
   foreach ($scheduledContent as $scheduledItem) {
     $itemId = $scheduledItem->get('field_scheduled_item')->getValue('id')[0]['target_id'];
     if (isset($schedulableContent[$itemId])) {
-      $scheduleItems[$itemId] = [
+      $scheduleItems[$scheduledItem->id()] = [
         '#info' => $scheduledItem,
         '#referencedItem' => $schedulableContent[$itemId]
       ];
     }
   }
+  $variables['#attached']['drupalSettings']['scheduleChoices'] = serializeChoices($schedulableContent);
   $variables['#attached']['drupalSettings']['scheduleItems'] = serializeScheduleItems($scheduleItems);
   $variables['#attached']['drupalSettings']['scheduleType'] = $type;
 }
@@ -108,6 +111,17 @@ function serializeScheduleItems($scheduleItems) {
         "label" => $scheduleItem['#referencedItem']->getTitle(),
         "id" => $scheduleItem['#referencedItem']->id()
       ]
+    ];
+  }
+  return $response;
+}
+
+function serializeChoices($schedulableContent) {
+  $response = [];
+  foreach($schedulableContent as $itemId => $item) {
+    $response[$itemId] = [
+      "title" => $item->getTitle(),
+      "id" => $item->id()
     ];
   }
   return $response;

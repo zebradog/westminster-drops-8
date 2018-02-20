@@ -7,17 +7,45 @@ $(function() {
 
   var $myModal = $('#myModal');
   var calEvents = [];
+  var token = getToken();
 
   $myModal.on('hidden.bs.modal', function() {
     //if($('body').hasClass('refresh')) {
-      window.location.reload();
+      //window.location.reload();
     //}
   });
+
+  function getToken(refresh) {
+    if (!token || refresh) {
+      token = $.ajax({
+        url: Drupal.url("rest/session/token"),
+        dataType: 'text',
+        async: false,
+        error: function(data) {
+          alert("Encountered an error while grabbing a token:\n" + data.status + ": " + data.statusText);
+        }
+      }).responseText;
+    }
+    return token;
+  }
 
   populateScheduledContent();
 
   function populateScheduledContent() {
     if (drupalSettings.scheduleItems) {
+      $('.datepicker').datepicker({
+        zIndex: 9999,
+        format: 'yyyy-MM-dd'
+      });
+      $('#edit-submit').on('click', function(e) {
+        submitItem(e);
+      });
+      var $selectList = $('#scheduled-item-entity');
+      var optionsString = '';
+      $.each(drupalSettings.scheduleChoices, function(i, c) {
+        optionsString += '<option id="scheduled-item-option-' + i + '" value="' + i + '">' + c.title + '</option>';
+      });
+      $selectList.append(optionsString).select2();
       $('#calendar').fullCalendar({
         header: {
           left: 'prev,next today',
@@ -34,27 +62,39 @@ $(function() {
         slotDuration: '00:15:00',
         defaultView: DEFAULT_VIEW,
         editable: true,
-        droppable: true, // this allows things to be dropped onto the calendar !!!
-        drop: function(date, jsEvent, ui) { // this function is called when something is dropped
-
-        },
         eventClick: function(event, jsEvent, view) {
-
+          fillModal(event);
+          $myModal.data('event', event);
+          $myModal.data('orig-event-id', event._id);
+          $myModal.modal('show');
         },
         eventResize: function(event, delta, revertFunc, jsEvent, ui, view) {
-
+          if (revertFunc) {
+            revertFunc();
+          }
+          fillModal(event);
+          $myModal.data('event', event);
+          $myModal.data('orig-event-id', event._id);
+          $myModal.modal('show');
         },
-        eventDrop: function(event, delta, revertFunc, jsEvent, ui, view) {
-
+        dayClick: function(date, jsEvent, view) {
+          var event = {
+            start: date,
+            end: moment(date).add(2, 'hours')
+          };
+          fillModal(event);
+          $myModal.data('event', event);
+          $myModal.modal('show');
         }
       });
       $('#calendar').fullCalendar('removeEvents');
       $.each(drupalSettings.scheduleItems, function(i, r) {
         var eventObj = {
           title: r.title,
-          id: r.id,
+          nid: r.id,
           start: r.start,
-          end: r.end
+          end: r.end,
+          scheduledItem: r.scheduled_item
         }
         $('#calendar').fullCalendar('renderEvent', eventObj, true);
       });
@@ -115,5 +155,116 @@ $(function() {
       max = min + max;
     }
     return Math.floor(Math.random() * (max - min)) + min;
+  }
+
+  function fillModal(e) {
+    $myModal.find('#sDate').val(e.start.format(FORM_DATE_FORMAT_MOMENT));
+    $myModal.find('#sTime').val(e.start.format(FORM_TIME_FORMAT_MOMENT));
+    $myModal.find('#eDate').val(e.end.format(FORM_DATE_FORMAT_MOMENT));
+    $myModal.find('#eTime').val(e.end.format(FORM_TIME_FORMAT_MOMENT));
+    $myModal.find('#scheduled-event-title').val(e.title);
+    if (e.scheduledItem) {
+      $myModal.find('#scheduled-item-option-' + e.scheduledItem.id).prop('selected', true);
+    }
+  }
+
+  function submitItem(e) {
+    var origEventId = $myModal.data('orig-event-id');
+    var $errorMsg = $('#edit-error');
+    $errorMsg.text("");
+    var sDate = $('#sDate').val();
+    var sTime = $('#sTime').val();
+    var eDate = $('#eDate').val();
+    var eTime = $('#eTime').val();
+    var targetId = $('#scheduled-item-entity > option:selected').val();
+    if(!targetId || targetId < 0) {
+      $('#scheduled-item-entity').focus();
+      $errorMsg.text("Missing content to schedule.");
+      return false;
+    }
+    if(!sDate.length){
+      $('#sDate').focus();
+      $errorMsg.text("Missing start date.");
+      return false;
+    }
+    if(!sTime.length){
+      $('#sTime').focus();
+      $errorMsg.text("Missing start time.");
+      return false;
+    }
+    if(!eDate.length){
+      $('#eDate').focus();
+      $errorMsg.text("Missing end date.");
+      return false;
+    }
+    if(!eTime.length){
+      $('#eTime').focus();
+      $errorMsg.text("Missing end time.");
+      return false;
+    }
+    var sdt = moment(sDate + " " + sTime);
+    var edt = moment(eDate + " " + eTime);
+    if(!sdt.isBefore(edt)){
+      $('#sDate').focus();
+      $errorMsg.text("Start date/time must be an earlier date/time than end date/time.");
+      return false;
+    }
+    updateEventValues($myModal.data('event'), function(ev) {
+      updateEventOnCal(origEventId, ev);
+      saveEvent(ev);
+    });
+  }
+
+  function updateEventValues(e, callback) {
+    e.start = moment($('#sDate').val() + ' ' + $('#sTime').val() + ' UTC');
+    e.end = moment($('#eDate').val() + ' ' + $('#eTime').val() + ' UTC');
+    e.title = $('#scheduled-item-title').val();
+    e.scheduledItem = drupalSettings.scheduleChoices[$('#scheduled-item-entity > option:selected').val()];
+    if(callback) callback(e);
+  }
+
+  function updateEventOnCal(id, e) {
+    if (id && id > 0) {
+      $('#calendar').fullCalendar('removeEvents', id);
+      var eventObj = {
+        start: e.start,
+        end: e.end,
+        title: e.title,
+        scheduledItem: e.scheduledItem
+      };
+      $('#calendar').fullCalendar('renderEvent', eventObj, true);
+    }
+  }
+
+  function saveEvent(e) {
+    var l = Ladda.create($('#edit-submit').get(0));
+    l.start();
+    updateEvent(createFormData(e), l);
+  }
+
+  function createFormData(e) {
+    var formData = {
+      "title": e.title,
+      "nid": (e.nid ? e.nid : -1),
+      "target_id": e.scheduledItem.id,
+      "start": e.start.format(CMS_DATE_FORMAT),
+      "end": e.end.format(CMS_DATE_FORMAT),
+      "action": "create"
+    };
+    return formData;
+  }
+
+  function updateEvent(formData, l) {
+    $.ajax({
+      method: "POST",
+      url: Drupal.url('scheduling/ajax'),
+      data: formData,
+      error: function(data) {
+        alert("Encountered an error while trying to save:\n" + data.status + ": " + data.statusText);
+      }
+    }).always(function(data) {
+      l.stop();
+      $myModal.modal('hide');
+    });
   }
 });

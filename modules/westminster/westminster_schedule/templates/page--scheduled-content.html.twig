@@ -50,7 +50,7 @@
 #}
   {{ attach_library('westminster_schedule/scheduled_content') }}
   <script type="text/javascript">
-  var BASE_PATH = "{{ url('<front>') }}";
+  var BASE_PATH = "{{basepath}}";
   var TIMEZONE = "{{timezone}}";
   </script>
   <div class="row">
@@ -72,9 +72,17 @@
           <h4 class="modal-title">Schedule Content</h4>
         </div>
           <form id="event-modal-form" class="modal-body form-horizontal">
-            <input id="event-title" type="text" name="title" class="hidden"></input>
             <input id="event-nid" type="text" name="nid" class="hidden"></input>
-            <input id="event-scenario-nid" type="text" name="scenario" class="hidden"></input>
+            <div class="form-group">
+              <label class="col-sm-2">Title:</label>
+              <div class="col-sm-10">
+                <input class="form-control form-text" type="text" id="scheduled-item-title" name="scheduled-item-title"></input>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3">Scheduled Item:</label>
+              <select class="form-control form-text col-sm-10" id="scheduled-item-entity" name="scheduled-item-entity"></select>
+            </div>
             <div class="form-group"><!-- From Date -->
               <label class="col-sm-2">From</label>
               <div class="col-sm-5">
