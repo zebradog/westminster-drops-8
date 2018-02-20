@@ -30,7 +30,14 @@ class ScheduleController extends ControllerBase {
       $node->set('field_schedule_end_time', $request->request->get('end'));
       $node->set('field_schedule_start_time', $request->request->get('start'));
       $node->save();
-      return new JsonResponse(['status' => 'created']);
+      return new JsonResponse([
+        'status' => 'created',
+        'id' => $node->id(),
+        'title' => $node->getTitle(),
+        'start' => $request->request->get('start'),
+        'end' => $request->request->get('end'),
+        'scheduled_item' => $request->request->get('target_id')
+      ]);
     }
     else if ($request->request->get('action') == 'delete') {
       if ($request->request->get('nid') > 0) {

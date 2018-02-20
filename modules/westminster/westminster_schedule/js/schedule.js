@@ -273,8 +273,27 @@ $(function() {
       method: "POST",
       url: Drupal.url('scheduling/ajax'),
       data: formData,
+      dataType: 'json',
       error: function(data) {
         alert("Encountered an error while trying to save:\n" + data.status + ": " + data.statusText);
+      }
+    }).done(function(data) {
+      if (formData.action === "delete") {
+        $('#calendar').fullCalendar('removeEvents', $myModal.data('orig-event-id'));
+      } else if (formData.action === "create") {
+        if (formData.nid > 0) {
+          updateEventOnCal($myModal.data('orig-event-id'), $myModal.data('event'));
+        } else {
+          // new event, add new event to calendar
+          var eventObj = {
+            title: data.title,
+            nid: data.id,
+            start: data.start,
+            end: data.end,
+            scheduledItem: data.scheduled_item
+          }
+          $('#calendar').fullCalendar('renderEvent', eventObj, true);
+        }
       }
     }).always(function(data) {
       l.stop();
