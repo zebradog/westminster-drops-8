@@ -191,6 +191,12 @@ $(function() {
     var eDate = $('#eDate').val();
     var eTime = $('#eTime').val();
     var targetId = $('#scheduled-item-entity > option:selected').val();
+    var title = $('#scheduled-item-title').val();
+    if (!title || !title.length) {
+      $('#scheduled-item-title').focus();
+      $errorMsg.text('Missing title.');
+      return false;
+    }
     if(!targetId || targetId < 0) {
       $('#scheduled-item-entity').focus();
       $errorMsg.text("Missing content to schedule.");
