@@ -41,7 +41,7 @@ function prepareCalendar(&$variables, $type) {
   // first, grab all content of content type $type
   $typesArr = [$type];
   $schedulableContent = [];
-  if ($type = 'all') {
+  if ($type == 'all') {
     $typesArr = getAllSchedulableContentTypes();
   }
   foreach ($typesArr as $contentType) {
@@ -80,7 +80,7 @@ function getAllSchedulableContentTypes() {
     if ($id != 'scheduled_content_2') {
       $schedulable = $configFactory->get($id);
       if ($schedulable) {
-        $contentTypeArr[$id] = $label;
+        array_push($contentTypeArr, $id);
       }
     }
   }
