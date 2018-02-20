@@ -33,6 +33,10 @@ class ScheduleController extends ControllerBase {
       return new JsonResponse(['status' => 'created']);
     }
     else if ($request->request->get('action') == 'delete') {
+      if ($request->request->get('nid') > 0) {
+        $node = Node::load($request->request->get('nid'));
+        $node->delete();
+      }
       return new JsonResponse(['status' => 'deleted']);
     }
     return new JsonResponse(['status' => 'nothing']);

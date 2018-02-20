@@ -40,6 +40,9 @@ $(function() {
       $('#edit-submit').on('click', function(e) {
         submitItem(e);
       });
+      $('#edit-remove').on('click', function(e) {
+        deleteItem($myModal.data('event'));
+      });
       var $selectList = $('#scheduled-item-entity');
       var optionsString = '';
       $.each(drupalSettings.scheduleChoices, function(i, c) {
@@ -80,7 +83,8 @@ $(function() {
         dayClick: function(date, jsEvent, view) {
           var event = {
             start: date,
-            end: moment(date).add(2, 'hours')
+            end: moment(date).add(2, 'hours'),
+            title: ''
           };
           fillModal(event);
           $myModal.data('event', event);
@@ -162,9 +166,19 @@ $(function() {
     $myModal.find('#sTime').val(e.start.format(FORM_TIME_FORMAT_MOMENT));
     $myModal.find('#eDate').val(e.end.format(FORM_DATE_FORMAT_MOMENT));
     $myModal.find('#eTime').val(e.end.format(FORM_TIME_FORMAT_MOMENT));
-    $myModal.find('#scheduled-event-title').val(e.title);
+    $myModal.find('#scheduled-item-title').val(e.title || '');
     if (e.scheduledItem) {
       $myModal.find('#scheduled-item-option-' + e.scheduledItem.id).prop('selected', true);
+    }
+  }
+
+  function deleteItem(e) {
+    var l = Ladda.create($('#edit-remove').get(0));
+    l.start();
+    if (e.nid) {
+      var formData = createFormData(e);
+      formData.action = 'delete';
+      updateEvent(formData, l);
     }
   }
 
