@@ -238,15 +238,17 @@ $(function() {
   }
 
   function updateEventOnCal(id, e) {
-    if (id && id > 0) {
-      $('#calendar').fullCalendar('removeEvents', id);
-      var eventObj = {
-        start: e.start,
-        end: e.end,
-        title: e.title,
-        scheduledItem: e.scheduledItem
-      };
-      $('#calendar').fullCalendar('renderEvent', eventObj, true);
+    if (id) {
+      var eventObj =  $('#calendar').fullCalendar('clientEvents', id);
+      if (eventObj && eventObj.length) {
+        eventObj = eventObj[0];
+        eventObj.start = e.start;
+        eventObj.end = e.end;
+        eventObj.title = e.title;
+        eventObj.scheduledItem = e.scheduledItem;
+        eventObj.nid = e.nid;
+        $('#calendar').fullCalendar('updateEvent', eventObj);
+      }
     }
   }
 
@@ -281,17 +283,17 @@ $(function() {
       if (formData.action === "delete") {
         $('#calendar').fullCalendar('removeEvents', $myModal.data('orig-event-id'));
       } else if (formData.action === "create") {
+        var eventObj = {
+          title: data.title,
+          nid: data.id,
+          start: data.start,
+          end: data.end,
+          scheduledItem: data.scheduled_item
+        }
         if (formData.nid > 0) {
-          updateEventOnCal($myModal.data('orig-event-id'), $myModal.data('event'));
+          updateEventOnCal($myModal.data('orig-event-id'), eventObj);
         } else {
           // new event, add new event to calendar
-          var eventObj = {
-            title: data.title,
-            nid: data.id,
-            start: data.start,
-            end: data.end,
-            scheduledItem: data.scheduled_item
-          }
           $('#calendar').fullCalendar('renderEvent', eventObj, true);
         }
       }

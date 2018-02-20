@@ -9,8 +9,8 @@ scheduled_content:
     lib/datepicker/datepicker.min.js: {}
     lib/fullcalendar/lib/moment.min.js: {}
     lib/fullcalendar/fullcalendar.min.js: {}
-    lib/spin.min.js: {}
-    lib/ladda.min.js: {}
+    lib/ladda/spin.min.js: {}
+    lib/ladda/ladda.min.js: {}
     lib/select2/select2.full.min.js: {}
     js/schedule.js: {}
   css:
@@ -18,7 +18,7 @@ scheduled_content:
       lib/fullcalendar/fullcalendar.min.css: {}
       lib/fullcalendar/fullcalendar.print.css: { media: print }
       lib/datepicker/datepicker.min.css: {}
-      lib/ladda.min.css: {}
+      lib/ladda/ladda.min.css: {}
       lib/select2/select2.min.css: {}
   dependencies:
     - core/jquery
