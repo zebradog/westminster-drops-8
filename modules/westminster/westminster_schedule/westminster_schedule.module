@@ -7,14 +7,12 @@ function westminster_schedule_theme() {
   $contentTypeArr = getAllSchedulableContentTypes();
 
   $theme['scheduling'] = [
-    'render element' => 'build',
     'template' => 'page--scheduled-content',
     'variables' => [
       'content_type' => $route
     ]
   ];
   $theme['schedulingSelect'] = [
-    'render element' => 'build',
     'template' => 'page--select-scheduled-content',
     'variables' => [
       'content_types' => $contentTypeArr
@@ -29,8 +27,7 @@ function westminster_schedule_theme() {
   ];
   return $theme;
 }
-
-function westminster_theme_preprocess_page__scheduling(&$variables) {
+function westminster_schedule_preprocess(&$variables) {
   $route = \Drupal::routeMatch()->getParameter('type');
   if (strlen($route) > 0) {
     $variables['timezone'] = drupal_get_user_timezone();
@@ -75,6 +72,15 @@ function prepareCalendar(&$variables, $type) {
       ];
     }
   }
+  $schedulableContentSerialized = [];
+  foreach ($schedulableContent as $item) {
+    array_push($schedulableContentSerialized, [
+      "title" => $item->getTitle(),
+      "nid" => $item->id()
+    ]);
+  }
+  $variables['typelabel'] = $type == "all" ? "All Schedule Content" : getAllSchedulableContentTypes()[$type];
+  $variables['schedulable_items'] = $schedulableContentSerialized;
   $variables['#attached']['drupalSettings']['scheduleChoices'] = serializeChoices($schedulableContent);
   $variables['#attached']['drupalSettings']['scheduleItems'] = serializeScheduleItems($scheduleItems);
   $variables['#attached']['drupalSettings']['scheduleType'] = $type;
