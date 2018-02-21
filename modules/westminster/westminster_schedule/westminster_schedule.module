@@ -33,11 +33,11 @@ function westminster_schedule_preprocess(&$variables) {
     $variables['timezone'] = drupal_get_user_timezone();
     $variables['basepath'] = base_path();
     prepareCalendar($variables, $route);
-  } else {
+  } else if (\Drupal::routeMatch()->getRouteName() == 'westminster_schedule.scheduled_content') {
     $contentTypes = getAllSchedulableContentTypes(false);
     if (count($contentTypes) == 1) {
       // redirect to only content type page available
-      $response = new RedirectResponse($contentTypes[0]);
+      $response = new RedirectResponse('scheduling/'.$contentTypes[0]);
       $response->send();
       return;
     }
