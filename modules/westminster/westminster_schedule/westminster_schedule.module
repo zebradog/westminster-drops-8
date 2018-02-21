@@ -76,9 +76,11 @@ function prepareCalendar(&$variables, $type) {
   foreach ($schedulableContent as $item) {
     array_push($schedulableContentSerialized, [
       "title" => $item->getTitle(),
-      "nid" => $item->id()
+      "nid" => $item->id(),
+      "changed" => $item->getChangedTime()
     ]);
   }
+  usort($schedulableContentSerialized, 'timestampCmp');
   $variables['typelabel'] = $type == "all" ? "All Schedule Content" : getAllSchedulableContentTypes()[$type];
   $variables['schedulable_items'] = $schedulableContentSerialized;
   $variables['#attached']['drupalSettings']['scheduleChoices'] = serializeChoices($schedulableContent);
@@ -145,4 +147,11 @@ function serializeChoices($schedulableContent) {
     ];
   }
   return $response;
+}
+
+function timestampCmp($a, $b) {
+  if ($a['changed'] == $b['changed']) {
+    return 0;
+  }
+  return ($b['changed'] < $a['changed']) ? -1 : 1;
 }
