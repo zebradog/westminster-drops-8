@@ -71,6 +71,15 @@ $(function() {
           $myModal.data('orig-event-id', event._id);
           $myModal.modal('show');
         },
+        eventDrop: function(event, delta, revertFunc, jsEvent, ui, view) {
+          if (revertFunc) {
+            revertFunc();
+          }
+          fillModal(event);
+          $myModal.data('event', event);
+          $myModal.data('orig-event-id', event._id);
+          $myModal.modal('show');
+        },
         eventResize: function(event, delta, revertFunc, jsEvent, ui, view) {
           if (revertFunc) {
             revertFunc();
