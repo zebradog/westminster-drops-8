@@ -12,6 +12,7 @@ scheduled_content:
     lib/ladda/spin.min.js: {}
     lib/ladda/ladda.min.js: {}
     lib/select2/select2.full.min.js: {}
+    lib/draggable/jquery-ui.min.js: {}
     js/schedule.js: {}
   css:
     theme:

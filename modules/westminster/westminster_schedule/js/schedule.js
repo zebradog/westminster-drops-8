@@ -37,6 +37,8 @@ $(function() {
 
   function populateScheduledContent() {
     if (drupalSettings.scheduleItems) {
+      initDraggable($('.draggable-item'));
+
       $('.datepicker').datepicker({
         zIndex: 9999,
         format: 'yyyy-MM-dd'
@@ -69,6 +71,30 @@ $(function() {
         slotDuration: '00:15:00',
         defaultView: DEFAULT_VIEW,
         editable: true,
+        droppable: true,
+        drop: function(date, jsEvent, ui) {
+          var $this = $(this);
+          var allDay = date._ambigTime ? true : false;
+
+          var originalEventObject = $this.data('eventObject');
+          var copiedEventObject = $.extend({}, originalEventObject);
+
+          copiedEventObject.allDay = allDay;
+          if(allDay) {
+            copiedEventObject.start = moment(date).startOf('day');
+            copiedEventObject.end = moment(date).add(1, 'd').startOf('day');
+          }
+          else {
+            copiedEventObject.start = moment(date);
+            copiedEventObject.end = moment(date).add(2,'h');
+          }
+          copiedEventObject.scheduledItem = $this.data('nid');
+          copiedEventObject.title = $this.data('title');
+
+          fillModal(copiedEventObject);
+          $myModal.data('event', copiedEventObject);
+          $myModal.modal('show');
+        },
         eventClick: function(event, jsEvent, view) {
           fillModal(event);
           $myModal.data('event', event);
@@ -321,6 +347,23 @@ $(function() {
     }).always(function(data) {
       l.stop();
       $myModal.modal('hide');
+    });
+  }
+
+  function initDraggable($items) {
+    $items.each(function() {
+      var $this = $(this);
+      var eventObject = {
+        title: $.trim($this.text()),
+        id: $this.data('nid')
+      };
+      $this.data('eventObject', eventObject);
+      $this.draggable({
+        zIndex: 1070,
+        revert: true,
+        revertDuration: 0
+      });
+
     });
   }
 });
