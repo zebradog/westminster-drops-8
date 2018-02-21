@@ -8,8 +8,12 @@ $(function() {
   var $myModal = $('#myModal');
   var calEvents = [];
   var token = getToken();
+  var revertFunction;
 
   $myModal.on('hidden.bs.modal', function() {
+    if (revertFunction) {
+      revertFunction();
+    }
     //if($('body').hasClass('refresh')) {
       //window.location.reload();
     //}
@@ -73,7 +77,7 @@ $(function() {
         },
         eventDrop: function(event, delta, revertFunc, jsEvent, ui, view) {
           if (revertFunc) {
-            revertFunc();
+            revertFunction = revertFunc;
           }
           fillModal(event);
           $myModal.data('event', event);
@@ -82,7 +86,7 @@ $(function() {
         },
         eventResize: function(event, delta, revertFunc, jsEvent, ui, view) {
           if (revertFunc) {
-            revertFunc();
+            revertFunction = revertFunc;
           }
           fillModal(event);
           $myModal.data('event', event);
@@ -293,8 +297,10 @@ $(function() {
       dataType: 'json',
       error: function(data) {
         alert("Encountered an error while trying to save:\n" + data.status + ": " + data.statusText);
+        $myModal.modal('hide');
       }
     }).done(function(data) {
+      revertFunction = undefined;
       if (formData.action === "delete") {
         $('#calendar').fullCalendar('removeEvents', $myModal.data('orig-event-id'));
       } else if (formData.action === "create") {

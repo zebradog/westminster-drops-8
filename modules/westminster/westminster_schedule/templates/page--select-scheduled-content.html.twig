@@ -51,8 +51,8 @@
 {% if content_types|length == 0 %}
   <p>Sorry, no schedulable content types available.</p>
 {% else %}
-  <div><a href="scheduling/all">All Schedulable Items</a></div>
+  <div><a href="all">All Schedulable Items</a></div>
   {% for key, type in content_types %}
-    <div><a href="scheduling/{{key}}">{{type}}</a></div>
+    <div><a href="{{key}}">{{type}}</a></div>
   {% endfor %}
 {% endif %}
