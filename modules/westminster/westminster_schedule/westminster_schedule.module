@@ -1,5 +1,6 @@
 <?php
 use \Drupal\node\Entity\Node;
+use \Symfony\Component\HttpFoundation\RedirectResponse;
 
 function westminster_schedule_theme() {
   $route = \Drupal::routeMatch()->getParameter('type');
@@ -35,6 +36,14 @@ function westminster_theme_preprocess_page__scheduling(&$variables) {
     $variables['timezone'] = drupal_get_user_timezone();
     $variables['basepath'] = base_path();
     prepareCalendar($variables, $route);
+  } else {
+    $contentTypes = getAllSchedulableContentTypes(false);
+    if (count($contentTypes) == 1) {
+      // redirect to only content type page available
+      $response = new RedirectResponse($contentTypes[0]);
+      $response->send();
+      return;
+    }
   }
 }
 
