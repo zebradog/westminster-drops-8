@@ -54,7 +54,8 @@ $(function() {
       $.each(drupalSettings.scheduleChoices, function(i, c) {
         optionsString += '<option id="scheduled-item-option-' + i + '" value="' + i + '">' + c.title + '</option>';
       });
-      $selectList.append(optionsString).select2({ width: '75%' });
+      $selectList.append(optionsString);
+      //$selectList.select2({ width: '75%' });
       $('#calendar').fullCalendar({
         header: {
           left: 'prev,next today',
@@ -88,7 +89,6 @@ $(function() {
             copiedEventObject.start = moment(date);
             copiedEventObject.end = moment(date).add(2,'h');
           }
-          copiedEventObject.scheduledItem = $this.data('nid');
           copiedEventObject.title = $this.data('title');
 
           fillModal(copiedEventObject);
@@ -355,7 +355,10 @@ $(function() {
       var $this = $(this);
       var eventObject = {
         title: $.trim($this.text()),
-        id: $this.data('nid')
+        scheduledItem: {
+          'id': $this.data('nid'),
+          'title': $this.data('title')
+        }
       };
       $this.data('eventObject', eventObject);
       $this.draggable({
