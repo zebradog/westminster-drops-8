@@ -3,3 +3,7 @@ system.admin_config_westminster_core.schedule_configuration:
   description: 'Decide which content types are schedulable.'
   parent: system.admin_config_westminster_core
   route_name: westminster_schedule.configuration
+westminster_schedule.scheduling_menu:
+  title: "Schedule"
+  route_name: westminster_schedule.scheduled_content
+  menu_name: main
