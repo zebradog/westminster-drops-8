@@ -270,9 +270,15 @@ $(function() {
       return false;
     }
     if (!now.isBefore(edt)) {
-      $('#eDate').focus();
-      $errorMsg.text("End date is in the past.");
-      return false;
+      if (now.format('MM/dd/yyyy') === edt.format('MM/dd/yyyy')) {
+        $('#eTime').focus();
+        $errorMsg.text('End time is in the past.');
+        return false;
+      } else {
+        $('#eDate').focus();
+        $errorMsg.text("End date is in the past.");
+        return false;
+      }
     }
     updateEventValues($myModal.data('event'), function(ev) {
       updateEventOnCal(origEventId, ev);
