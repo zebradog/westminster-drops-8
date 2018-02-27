@@ -263,9 +263,15 @@ $(function() {
     }
     var sdt = moment(sDate + " " + sTime);
     var edt = moment(eDate + " " + eTime);
+    var now = moment();
     if(!sdt.isBefore(edt)){
       $('#sDate').focus();
       $errorMsg.text("Start date/time must be an earlier date/time than end date/time.");
+      return false;
+    }
+    if (!now.isBefore(edt)) {
+      $('#eDate').focus();
+      $errorMsg.text("End date is in the past.");
       return false;
     }
     updateEventValues($myModal.data('event'), function(ev) {
