@@ -35,7 +35,7 @@ function westminster_schedule_preprocess(&$variables) {
     $variables['basepath'] = base_path();
     prepareCalendar($variables, $route);
   } else if (\Drupal::routeMatch()->getRouteName() == 'westminster_schedule.scheduled_content') {
-    $contentTypes = getAllSchedulableContentTypes(false);
+    /*$contentTypes = getAllSchedulableContentTypes(false);
     if (count($contentTypes) == 1) {
       $newPath = Url::fromRoute('westminster_schedule.scheduled_content.content_type', [
         'type' => $contentTypes[0],
@@ -43,7 +43,7 @@ function westminster_schedule_preprocess(&$variables) {
       // redirect to only content type page available
       $response = new RedirectResponse($newPath->toString());
       $response->send();
-      return;
+      return;*/
     }
   }
 }
