@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_ws_media
+    - node.type.ws_slideshow_media
+  module:
+    - flysystem_s3
+id: node.ws_slideshow_media.field_ws_media
+field_name: field_ws_media
+entity_type: node
+bundle: ws_slideshow_media
+label: Media
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  file_directory: '[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'jpg jpeg png gif webm mp4'
+  max_filesize: ''
+  description_field: 0
+  handler: 'default:file'
+  handler_settings: {  }
+field_type: s3file

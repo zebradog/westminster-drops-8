@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_ws_seconds_to_show
+    - node.type.ws_slideshow_media
+id: node.ws_slideshow_media.field_ws_seconds_to_show
+field_name: field_ws_seconds_to_show
+entity_type: node
+bundle: ws_slideshow_media
+label: 'Seconds to Show'
+description: 'This field only applies to images. It determines how long the image will be displayed on screen in seconds (default is 10 seconds). Videos ignore this field and will stay on screen for the duration of the video.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: !!float 1
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: float

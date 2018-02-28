@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_ws_shuffle
+    - node.type.ws_slideshow
+id: node.ws_slideshow.field_ws_shuffle
+field_name: field_ws_shuffle
+entity_type: node
+bundle: ws_slideshow
+label: Shuffle
+description: 'Leave unchecked to maintain order provided, otherwise check to randomize order of slides.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: Shuffle
+  off_label: 'Don''t Shuffle'
+field_type: boolean

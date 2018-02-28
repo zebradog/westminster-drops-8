@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_ws_show_fullscreen
+    - node.type.ws_slideshow_media
+id: node.ws_slideshow_media.field_ws_show_fullscreen
+field_name: field_ws_show_fullscreen
+entity_type: node
+bundle: ws_slideshow_media
+label: 'Show Fullscreen'
+description: 'Leave this unchecked to letterbox the content in the center of the screen. If checked, the content will be scaled and cropped at the center to fill the screen.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: Fullscreen
+  off_label: Letterbox
+field_type: boolean

@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+    - flysystem_s3
+    - node
+id: node.field_ws_media
+field_name: field_ws_media
+entity_type: node
+type: s3file
+settings:
+  display_field: 0
+  display_default: 0
+  uri_scheme: s3
+  target_type: file
+module: flysystem_s3
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

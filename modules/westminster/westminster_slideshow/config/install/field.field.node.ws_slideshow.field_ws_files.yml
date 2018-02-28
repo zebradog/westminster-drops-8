@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_ws_files
+    - node.type.ws_slideshow
+    - node.type.ws_slideshow_media
+id: node.ws_slideshow.field_ws_files
+field_name: field_ws_files
+entity_type: node
+bundle: ws_slideshow
+label: Files
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      ws_slideshow_media: ws_slideshow_media
+    sort:
+      field: title
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

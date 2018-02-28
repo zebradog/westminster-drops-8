@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_ws_active_slideshow
+    - node.type.ws_active_slideshow
+    - node.type.ws_slideshow
+id: node.ws_active_slideshow.field_ws_active_slideshow
+field_name: field_ws_active_slideshow
+entity_type: node
+bundle: ws_active_slideshow
+label: 'Active Slideshow'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      ws_slideshow: ws_slideshow
+    sort:
+      field: title
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ws_slideshow
+field_type: entity_reference
