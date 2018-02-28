@@ -1,0 +1,19 @@
+<?php
+
+use Drupal\node\Entity\Node;
+use Drupal\menu_link_content\Entity\MenuLinkContent;
+
+function westminster_slideshow_install() {
+  // have to create a single active slideshow
+  $node = Node::create([
+    'type' => 'ws_active_slideshow'
+  ]);
+  $node->setTitle('Active Slideshow');
+  $node->save();
+
+  $menu_link = MenuLinkContent::create([
+    'title' => 'Change Active Slideshow',
+    'link' => ['uri' => 'internal:/node/' . $node->id() . '/edit'],
+    'parent' => 'westminster_slideshow.slideshows_menu'
+  ]);
+}

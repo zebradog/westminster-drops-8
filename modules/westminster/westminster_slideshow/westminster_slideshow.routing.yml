@@ -1,0 +1,37 @@
+westminster_slideshow.slides_menu:
+  path: '/westminster/slideshow/slides'
+  defaults:
+    _title: 'Slides'
+  requirements:
+    _permission: 'access content'
+westminster_slideshow.slides_manage:
+  path: '/westminster/slideshow/manage/slides'
+  defaults:
+    _title: 'Manage Slides'
+  requirements:
+    _permission: 'access content'
+westminster_slideshow.slides_create:
+  path: '/node/add/ws_slideshow_media'
+  defaults:
+    _title: 'Create New Slide'
+  requirements:
+    _permission: 'access content'
+
+westminster_slideshow.slideshows_menu:
+  path: '/westminster/slideshow/slideshows'
+  defaults:
+    _title: 'Slideshows'
+  requirements:
+    _permission: 'access content'
+westminster_slideshow.slideshows_manage:
+  path: '/westminster/slideshow/manage/slideshows'
+  defaults:
+    _title: 'Manage Slideshows'
+  requirements:
+    _permission: 'access content'
+westminster_slideshow.slideshows_create:
+  path: 'node/add/ws_slideshow'
+  defaults:
+    _title: 'Create New Slideshow'
+  requirements:
+    _permission: 'access content'

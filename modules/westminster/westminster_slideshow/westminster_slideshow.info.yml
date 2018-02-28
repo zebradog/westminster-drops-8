@@ -1,0 +1,10 @@
+name: Westminster Slideshow
+description: Create default slideshow and slide content types and views.
+package: Westminster
+
+type: module
+core: 8.x
+
+dependencies:
+  - westminster_core
+  - flysystem_s3

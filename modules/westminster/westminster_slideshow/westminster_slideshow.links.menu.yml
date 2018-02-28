@@ -1,0 +1,26 @@
+westminster_slideshow.slides_menu:
+  title: 'Slides'
+  route_name: westminster_slideshow.slides
+  menu_name: main
+  expanded: TRUE
+westminster_slideshow.create_slide_menu:
+  title: 'Create New Slide'
+  route_name: westminster_slideshow.slides_create
+  parent: westminster_slideshow.slides_menu
+westminster_slideshow.manage_slides_menu:
+  title: 'Manage Existing Slides'
+  route_name: westminster_slideshow.slides_manage
+  parent: westminster_slideshow.slides_menu
+westminster_slideshow.slideshows_menu:
+  title: 'Slideshows'
+  route_name: westminster_slideshow.slideshows
+  menu_name: main
+  expanded: TRUE
+westminster_slideshow.slideshows_manage:
+  title: 'Manage Existing Slideshows'
+  route_name: westminster_slideshow.slideshows_manage
+  parent: westminster_slideshow.slideshows_menu
+westminster_slideshow.slideshows_create:
+  title: 'Create New Slideshow'
+  route_name: westminster_slideshow.slideshows_create
+  parent: westminster_slideshow.slideshows_menu
