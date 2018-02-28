@@ -1,6 +1,7 @@
 <?php
 use \Drupal\node\Entity\Node;
 use \Symfony\Component\HttpFoundation\RedirectResponse;
+use \Drupal\Core\Url;
 
 function westminster_schedule_theme() {
   $route = \Drupal::routeMatch()->getParameter('type');
@@ -36,8 +37,11 @@ function westminster_schedule_preprocess(&$variables) {
   } else if (\Drupal::routeMatch()->getRouteName() == 'westminster_schedule.scheduled_content') {
     $contentTypes = getAllSchedulableContentTypes(false);
     if (count($contentTypes) == 1) {
+      $newPath = Url::fromRoute('westminster_schedule.scheduled_content.content_type', [
+        'type' => $contentTypes[0],
+      ]);
       // redirect to only content type page available
-      $response = new RedirectResponse('scheduling/'.$contentTypes[0]);
+      $response = new RedirectResponse($newPath->toString());
       $response->send();
       return;
     }
