@@ -3,8 +3,8 @@ status: true
 dependencies:
   module:
     - node
-id: node.field_ws_shuffle
-field_name: field_ws_shuffle
+id: node.field_ws_show_fullscreen
+field_name: field_ws_show_fullscreen
 entity_type: node
 type: boolean
 settings: {  }

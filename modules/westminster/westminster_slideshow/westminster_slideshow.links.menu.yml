@@ -1,19 +1,20 @@
 westminster_slideshow.slides_menu:
   title: 'Slides'
-  route_name: westminster_slideshow.slides
+  route_name: westminster_slideshow.slides_menu
   menu_name: main
   expanded: TRUE
-westminster_slideshow.create_slide_menu:
+westminster_slideshow.slides_create:
   title: 'Create New Slide'
-  route_name: westminster_slideshow.slides_create
+  route_name: node.add
+  route_parameters: { node_type: 'ws_slideshow_media' }
   parent: westminster_slideshow.slides_menu
-westminster_slideshow.manage_slides_menu:
+westminster_slideshow.slides_manage:
   title: 'Manage Existing Slides'
   route_name: westminster_slideshow.slides_manage
   parent: westminster_slideshow.slides_menu
 westminster_slideshow.slideshows_menu:
   title: 'Slideshows'
-  route_name: westminster_slideshow.slideshows
+  route_name: westminster_slideshow.slideshows_menu
   menu_name: main
   expanded: TRUE
 westminster_slideshow.slideshows_manage:
@@ -22,5 +23,6 @@ westminster_slideshow.slideshows_manage:
   parent: westminster_slideshow.slideshows_menu
 westminster_slideshow.slideshows_create:
   title: 'Create New Slideshow'
-  route_name: westminster_slideshow.slideshows_create
+  route_name: node.add
+  route_parameters: { node_type: 'ws_slideshow' }
   parent: westminster_slideshow.slideshows_menu

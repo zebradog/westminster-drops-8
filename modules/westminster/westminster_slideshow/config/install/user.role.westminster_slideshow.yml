@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies: {  }
+id: westminster_slideshow
+label: 'Westminster Slideshow'
+weight: 5
+is_admin: null
+permissions:
+  - 'create ws_slideshow content'
+  - 'create ws_slideshow_media content'
+  - 'delete any ws_slideshow content'
+  - 'delete any ws_slideshow_media content'
+  - 'delete own ws_slideshow content'
+  - 'delete own ws_slideshow_media content'
+  - 'edit any ws_active_slideshow content'
+  - 'edit any ws_slideshow content'
+  - 'edit any ws_slideshow_media content'
+  - 'edit own ws_active_slideshow content'
+  - 'edit own ws_slideshow content'
+  - 'edit own ws_slideshow_media content'

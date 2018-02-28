@@ -9,6 +9,8 @@ dependencies:
   module:
     - flysystem_s3
     - path
+_core:
+  default_config_hash: 83HHlqXzJIMf9_dyhzD1AcbiNO5JLlK23fDunkVUkXo
 id: node.ws_slideshow_media.default
 targetEntityType: node
 bundle: ws_slideshow_media
@@ -16,26 +18,26 @@ mode: default
 content:
   created:
     type: datetime_timestamp
-    weight: 10
+    weight: 5
     region: content
     settings: {  }
     third_party_settings: {  }
   field_ws_media:
-    weight: 121
+    weight: 1
     settings:
       progress_indicator: throbber
     third_party_settings: {  }
     type: file_generic
     region: content
   field_ws_seconds_to_show:
-    weight: 122
+    weight: 3
     settings:
       placeholder: ''
     third_party_settings: {  }
     type: number
     region: content
   field_ws_show_fullscreen:
-    weight: 123
+    weight: 2
     settings:
       display_label: true
     third_party_settings: {  }
@@ -43,7 +45,7 @@ content:
     region: content
   path:
     type: path
-    weight: 30
+    weight: 8
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -51,26 +53,26 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 15
+    weight: 6
     region: content
     third_party_settings: {  }
   status:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 120
+    weight: 9
     region: content
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 16
+    weight: 7
     region: content
     third_party_settings: {  }
   title:
     type: string_textfield
-    weight: -5
+    weight: 0
     region: content
     settings:
       size: 60
@@ -78,7 +80,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 5
+    weight: 4
     settings:
       match_operator: CONTAINS
       size: 60
