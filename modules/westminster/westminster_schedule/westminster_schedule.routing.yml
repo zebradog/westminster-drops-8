@@ -1,0 +1,37 @@
+westminster_schedule.configuration:
+  path: '/admin/config/westminster/scheduling'
+  defaults:
+    _title: 'Westminster Schedule Configuration'
+    _form: '\Drupal\westminster_schedule\Form\ConfigurationForm'
+  requirements:
+    _permission: 'westminster schedule configuration'
+
+westminster_schedule.scheduled_content:
+  path: '/scheduling'
+  defaults:
+    _title: 'View Schedule For:'
+    _controller: '\Drupal\westminster_schedule\Controller\ScheduleController::scheduleSelectPage'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: 'TRUE'
+
+westminster_schedule.scheduled_content.content_type:
+  path: '/scheduling/{type}'
+  defaults:
+    _title: 'Scheduling'
+    _controller: '\Drupal\westminster_schedule\Controller\ScheduleController::schedulePage'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: 'TRUE'
+
+westminster_schedule.scheduled_content.ajax_request:
+  path: '/scheduling/ajax'
+  defaults:
+    _title: 'Create New Scheduled Content'
+    _controller: '\Drupal\westminster_schedule\Controller\ScheduleController::ajax'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: 'TRUE'

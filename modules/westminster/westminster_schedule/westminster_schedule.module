@@ -1,0 +1,157 @@
+<?php
+use \Drupal\node\Entity\Node;
+use \Symfony\Component\HttpFoundation\RedirectResponse;
+
+function westminster_schedule_theme() {
+  $route = \Drupal::routeMatch()->getParameter('type');
+  $contentTypeArr = getAllSchedulableContentTypes();
+
+  $theme['scheduling'] = [
+    'template' => 'page--scheduled-content',
+    'variables' => [
+      'content_type' => $route
+    ]
+  ];
+  $theme['schedulingSelect'] = [
+    'template' => 'page--select-scheduled-content',
+    'variables' => [
+      'content_types' => $contentTypeArr
+    ]
+  ];
+
+  $theme['page__westminster_schedule__scheduled_content'] = [
+    'template' => 'page--westminster-schedule--scheduled-content'
+  ];
+  $theme['page__westminster_schedule__select_scheduled_content'] = [
+    'template' => 'page--westminster-schedule--select-scheduled-content'
+  ];
+  return $theme;
+}
+function westminster_schedule_preprocess(&$variables) {
+  $route = \Drupal::routeMatch()->getParameter('type');
+  if (strlen($route) > 0) {
+    $variables['timezone'] = drupal_get_user_timezone();
+    $variables['basepath'] = base_path();
+    prepareCalendar($variables, $route);
+  } else if (\Drupal::routeMatch()->getRouteName() == 'westminster_schedule.scheduled_content') {
+    $contentTypes = getAllSchedulableContentTypes(false);
+    if (count($contentTypes) == 1) {
+      // redirect to only content type page available
+      $response = new RedirectResponse('scheduling/'.$contentTypes[0]);
+      $response->send();
+      return;
+    }
+  }
+}
+
+function prepareCalendar(&$variables, $type) {
+  // first, grab all content of content type $type
+  $typesArr = [$type];
+  $schedulableContent = [];
+  if ($type == 'all') {
+    $typesArr = getAllSchedulableContentTypes(false);
+  }
+  foreach ($typesArr as $contentType) {
+    $schedulableContent = $schedulableContent + getNodes($contentType);
+  }
+  // now we have an array of all content types matching our current filter,
+  // keyed by id
+  // next we grab all scheduled content
+  $scheduledContent = getNodes('scheduled_content_2');
+
+  // next step is to loop through scheduled content and only add it to the
+  // calendar if it is of the current filter type
+  $contentToShow = [];
+  $scheduleItems = [];
+  foreach ($scheduledContent as $scheduledItem) {
+    $itemId = $scheduledItem->get('field_scheduled_item')->getValue('id')[0]['target_id'];
+    if (isset($schedulableContent[$itemId])) {
+      $scheduleItems[$scheduledItem->id()] = [
+        '#info' => $scheduledItem,
+        '#referencedItem' => $schedulableContent[$itemId]
+      ];
+    }
+  }
+  $schedulableContentSerialized = [];
+  foreach ($schedulableContent as $item) {
+    array_push($schedulableContentSerialized, [
+      "title" => $item->getTitle(),
+      "nid" => $item->id(),
+      "changed" => $item->getChangedTime()
+    ]);
+  }
+  usort($schedulableContentSerialized, 'timestampCmp');
+  $variables['typelabel'] = $type == "all" ? "All Schedule Content" : getAllSchedulableContentTypes()[$type];
+  $variables['schedulable_items'] = $schedulableContentSerialized;
+  $variables['#attached']['drupalSettings']['scheduleChoices'] = serializeChoices($schedulableContent);
+  $variables['#attached']['drupalSettings']['scheduleItems'] = serializeScheduleItems($scheduleItems);
+  $variables['#attached']['drupalSettings']['scheduleType'] = $type;
+}
+
+function getAllSchedulableContentTypes($keyed = true) {
+  $configFactory = \Drupal::config('westminster_schedule.configuration');
+  $contentTypes = \Drupal::service('entity.manager')->getStorage('node_type')->loadMultiple();
+  $contentTypeArr = [];
+  foreach($contentTypes as $contentType) {
+    $id = $contentType->id();
+    $label = $contentType->label();
+    if ($id != 'scheduled_content_2') {
+      $schedulable = $configFactory->get($id);
+      if ($schedulable) {
+        if ($keyed) {
+          $contentTypeArr[$id] = $label;
+        } else {
+          array_push($contentTypeArr, $id);
+        }
+      }
+    }
+  }
+  return $contentTypeArr;
+}
+
+function getNodes($contentType) {
+  $nodes = [];
+  $query = \Drupal::entityQuery('node');
+  $query->condition('type', $contentType);
+  $entity_ids = $query->execute();
+  $entities = Node::loadMultiple($entity_ids);
+  foreach($entities as $entity) {
+    $nodes[$entity->id()] = $entity;
+  }
+  return $nodes;
+}
+
+function serializeScheduleItems($scheduleItems) {
+  $response = [];
+  foreach($scheduleItems as $itemId => $scheduleItem) {
+    $response[$itemId] = [
+      "title" => $scheduleItem['#info']->getTitle(),
+      "id" => $scheduleItem['#info']->id(),
+      "start" => ($scheduleItem['#info']->get('field_schedule_start_time')->getString()),
+      "end" => ($scheduleItem['#info']->get('field_schedule_end_time')->getString()),
+      "scheduled_item" => [
+        "label" => $scheduleItem['#referencedItem']->getTitle(),
+        "id" => $scheduleItem['#referencedItem']->id()
+      ]
+    ];
+  }
+  return $response;
+}
+
+function serializeChoices($schedulableContent) {
+  $response = [];
+  foreach($schedulableContent as $itemId => $item) {
+    $response[$itemId] = [
+      "title" => $item->getTitle(),
+      "id" => $item->id()
+    ];
+  }
+  return $response;
+}
+
+function timestampCmp($a, $b) {
+  if ($a['changed'] == $b['changed']) {
+    return 0;
+  }
+  return ($b['changed'] < $a['changed']) ? -1 : 1;
+}

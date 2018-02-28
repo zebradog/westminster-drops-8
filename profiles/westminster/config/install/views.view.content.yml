@@ -2,10 +2,6 @@ uuid: 370b7c3b-46d9-442c-b100-d6c48f5dd771
 langcode: en
 status: true
 dependencies:
-  config:
-    - node.type.external_content
-    - node.type.scheduled_content
-    - node.type.slideshow
   module:
     - node
     - user
@@ -251,52 +247,6 @@ display:
           hide_alter_empty: true
           destination: true
           plugin_id: entity_operations
-      filters:
-        type:
-          id: type
-          table: node_field_data
-          field: type
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: in
-          value:
-            all: all
-            external_content: external_content
-            scheduled_content: scheduled_content
-            slideshow: slideshow
-          group: 1
-          exposed: false
-          expose:
-            operator_id: type_op
-            label: Type
-            description: ''
-            use_operator: false
-            operator: type_op
-            identifier: type
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          plugin_id: bundle
-          entity_type: node
-          entity_field: type
       sorts: {  }
       title: Content
       empty:

@@ -1,0 +1,13 @@
+name: Westminster Schedule
+description: Enable schedulable content types.
+package: Westminster
+
+type: module
+core: 8.x
+
+dependencies:
+  - westminster_core
+
+configure:
+  - westminster_schedule.configuration
+  - westminster_schedule.scheduled_content
