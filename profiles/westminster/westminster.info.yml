@@ -41,5 +41,4 @@ dependencies:
   - westminster_core
 themes:
   - westminster_theme
-  - yorkshire
   - classy

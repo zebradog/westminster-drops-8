@@ -108,7 +108,6 @@
 </header>
 
 <!-- =============================================== -->
-
 {% if page.sidebar %}
   <!-- Left side column. contains the sidebar -->
   <aside class="main-sidebar">
@@ -147,7 +146,9 @@
 </div><!-- /.content-wrapper -->
 
 <footer class="main-footer">
-  {{ page.footer }}
+  {% if page.footer %}
+      {{ page.footer }}
+  {% endif %}
   &nbsp;
   <div class="credits pull-right">
     Powered by <a target="_blank" href="https://www.zebradog.com"><img src="{{ base_path ~ directory }}/img/zebradog.png" alt="ZEBRADOG" /></a>

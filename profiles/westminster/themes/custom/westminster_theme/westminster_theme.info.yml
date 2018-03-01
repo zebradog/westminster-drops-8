@@ -1,6 +1,6 @@
 name: Westminster
-description: 'Theme for Westminster Content Management System.'
-base theme: yorkshire
+description: 'Theme for Westminster Content Management System based on AdminLTE by Almaseed Studio.'
+base theme: classy
 package: Custom
 type: theme
 version: 1.0.0

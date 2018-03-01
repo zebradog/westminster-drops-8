@@ -1,4 +1,147 @@
 <?php
+
+use \Drupal\user\Entity\User;
+use \Drupal\field\Entity\FieldConfig;
+use \Symfony\Cmf\Component\Routing\RouteObjectInterface;
+
+function westminster_theme_preprocess_html(&$variables) {
+  $variables['skin'] = theme_get_setting('skin');
+}
+
 function westminster_theme_preprocess_page(&$variables) {
+  $user = User::load(\Drupal::currentUser()->id());
+  $picture = NULL;
+  if ($user->hasField('user_picture')) {
+    $picture = $user->get('user_picture')->entity;
+    if ($picture) {
+      $picture = $picture->url();
+    } else {
+      $field = FieldConfig::loadByName('user', 'user', 'user_picture');
+      $default_image = $field->getSetting('default_image');
+      if ($default_image['uuid']) {
+        $file = \Drupal::entityManager()->loadEntityByUuid('file', $default_image['uuid']);
+        $picture = file_create_url($file->getFileUri());
+      }
+    }
+  }
+  $variables['user'] = [
+    'uid' => $user->id(),
+    'name' => $user->getUsername(),
+    'picture' => $picture,
+    'created' => $user->getCreatedTime()
+  ];
   $variables['timezone'] = drupal_get_user_timezone();
+}
+
+function westminster_theme_preprocess_block(&$variables) {
+  $variables['favicon'] = theme_get_setting('favicon.url');
+}
+
+function westminster_theme_preprocess_menu(&$variables) {
+  $icon_setting = explode("\n", theme_get_setting('menu_icons'));
+  $icons = [];
+  for ($i = 0; $i < sizeof($icon_setting); $i++) {
+    $icon_setting[$i] = explode('|', $icon_setting[$i]);
+    if (array_key_exists($i, $icon_setting) && sizeof($icon_setting[$i]) >= 2) {
+      $icons[$icon_setting[$i]][0] = $icon_setting[$i][1];
+    }
+  }
+  foreach ($variables['items'] as $id => $item) {
+    $title = (string) $item['title'];
+    if (array_key_exists($title, $icons) && $icons[$title]) {
+      $variables['items'][$id]['icon'] = $icons[$title];
+    }
+  }
+}
+
+function westminster_theme_form_system_theme_settings_alter(&$form, $form_state) {
+  $form['skin'] = [
+    '#type'           => 'select',
+    '#title'          => t('Westminster Skin'),
+    '#default_value'  => theme_get_setting('skin'),
+    '#options'        => [
+        'black'         => t('Black'),
+        'black-light'   => t('Black - Light'),
+        'blue'          => t('Blue'),
+        'blue-light'    => t('Blue - Light'),
+        'green'         => t('Green'),
+        'green-light'   => t('Green - Light'),
+        'purple'        => t('Purple'),
+        'purple-light'  => t('Purple - Light'),
+        'red'           => t('Red'),
+        'red-light'     => t('Red - Light'),
+        'yellow'        => t('Yellow'),
+        'yellow-light'  => t('Yellow - Light'),
+    ]
+  ];
+  $form['menu_icons'] = [
+    '#type'           => 'textarea',
+    '#title'          => t('Menu Icons'),
+    '#default_value'  => theme_get_setting('menu_icons'),
+    '#description'    => t("<a href='https://fortawesome.github.io/Font-Awesome/icons/' target='_blank'>Font Awesome</a> icon class with associated menu item. One per line. Format: Menu link title|class")
+  ];
+}
+
+function westminster_theme_preprocess_breadcrumb(&$variables) {
+  if ($variables['breadcrumb']) {
+    $request = \Drupal::request();
+    if ($route = $request->attributes->get(RouteObjectInterface::ROUTE_OBJECT)) {
+      $variables['breadrumb'][] = [
+        'text' => \Drupal::service('title_resolver')->getTitle($request, $route)
+      ];
+    }
+  }
+}
+
+function westminster_theme_preprocess_menu_local_action(&$variables) {
+  $link = $variables['element']['#link'];
+  $link += [
+    'localized_options' => []
+  ];
+  $link['localized_options']['attributes']['class'][] = 'btn';
+  $link['localized_options']['attributes']['class'][] = 'btn-block';
+  $link['localized_options']['attributes']['class'][] = 'btn-primary';
+  $link['localized_options']['attributes']['class'][] = 'fa';
+  $link['localized_options']['attributes']['class'][] = 'fa-plus';
+
+  $variables['link'] = [
+    '#type'     => 'link',
+    '#title'    => ' '.$link['title'],
+    '#options'  => $link['localized_options'],
+    '#url'      => $link['url']
+  ];
+}
+
+function westminster_theme_suggestions_region_alter(&$suggestions, &$variables) {
+  if (in_array('region__content', $suggestions)) {
+    $page_manager_page = \Drupal::routeMatch()->getRouteObject()->getDefault('page_manager_page');
+    if ($page_manager_page) {
+      $suggestions[] = 'block__page_manager_page_system_main';
+      $suggestions[] = 'block__page_'.$page_manager_page.'_system_main';
+    }
+  }
+}
+
+function westminster_theme_suggestions_block_alter(&$suggestions, &$variables) {
+  if (in_array('block__system_main_block', $suggestions)) {
+    $page_manager_page = \Drupal::routeMatch()->getRouteObject()->getDefault('page_manager_page');
+    if ($page_manager_page) {
+      $suggestions[] = 'block__page_manager_page_system_main';
+      $suggestions[] = 'block__page_'.$page_manager_page.'_system_main';
+    }
+  } else if (isset($variables['elements'])
+              && isset($variables['elements']['#cache'])
+              && isset($variables['elements']['#cache']['keys'])
+              && in_array('page_manager_block_display', $variables['elements']['#cache']['keys'])) {
+    $suggestions[] = 'block__page_manager_page_block';
+    $type = $variables['elements']['content']['#block_content'] ?
+              $variables['elements']['content']['#block_content']->bundle() :
+              $variables['elements']['#configuration']['id'];
+    $suggestions[] = 'block__page_manager_page_'.$type;
+  }
+}
+
+function westminster_theme_preprocess_select(&$variables) {
+  // Prepping select2
+  array_push($variables['attributes']['class'], 'select2-init');
 }

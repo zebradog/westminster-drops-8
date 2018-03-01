@@ -25,4 +25,4 @@ scheduled_content:
   dependencies:
     - core/jquery
     - core/drupalSettings
-    - yorkshire/base
+    - westminster_theme/base
