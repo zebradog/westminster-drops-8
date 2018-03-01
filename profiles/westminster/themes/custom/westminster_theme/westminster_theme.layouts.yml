@@ -12,7 +12,7 @@ westminster_theme_2col:
   label: 2 Column (50/50)
   category: Westminster Theme
   template: templates/layout/westminster-theme-2col
-  regions:westmin
+  regions:
     left:
       label: Left region
     right:

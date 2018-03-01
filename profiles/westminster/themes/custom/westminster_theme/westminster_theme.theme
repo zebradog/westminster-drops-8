@@ -43,9 +43,10 @@ function westminster_theme_preprocess_menu(&$variables) {
   for ($i = 0; $i < sizeof($icon_setting); $i++) {
     $icon_setting[$i] = explode('|', $icon_setting[$i]);
     if (array_key_exists($i, $icon_setting) && sizeof($icon_setting[$i]) >= 2) {
-      $icons[$icon_setting[$i]][0] = $icon_setting[$i][1];
+      $icons[$icon_setting[$i][0]] = $icon_setting[$i][1];
     }
   }
+
   foreach ($variables['items'] as $id => $item) {
     $title = (string) $item['title'];
     if (array_key_exists($title, $icons) && $icons[$title]) {
