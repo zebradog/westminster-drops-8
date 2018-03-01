@@ -114,15 +114,14 @@ function westminster_theme_preprocess_menu_local_action(&$variables) {
 }
 
 function westminster_theme_suggestions_region_alter(&$suggestions, &$variables) {
-  if (in_array('region__content', $suggestions)) {
-    $page_manager_page = \Drupal::routeMatch()->getRouteObject()->getDefault('page_manager_page');
-    if ($page_manager_page) {
-      $suggestions[] = 'block__page_manager_page_system_main';
-      $suggestions[] = 'block__page_'.$page_manager_page.'_system_main';
-    }
+  if (in_array("region__content",$suggestions)) {
+  	$page_manager_page = \Drupal::routeMatch()->getRouteObject()->getDefault('page_manager_page');
+  	if ($page_manager_page) {
+  		$suggestions[] = 'region__page_manager_page_content';
+  		$suggestions[] = 'region__page_'.$page_manager_page.'_content';
+  	}
   }
 }
-
 function westminster_theme_suggestions_block_alter(&$suggestions, &$variables) {
   if (in_array('block__system_main_block', $suggestions)) {
     $page_manager_page = \Drupal::routeMatch()->getRouteObject()->getDefault('page_manager_page');
