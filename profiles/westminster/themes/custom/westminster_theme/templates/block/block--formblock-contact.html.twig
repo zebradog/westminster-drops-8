@@ -27,6 +27,11 @@
  */
 #}
 <div class="box">
+  {% if label %}
+  <div class="box-header with-border">
+    <h4>{{ label }}</h4>
+  </div>
+  {% endif %}
   <div class="box-body">
     {% block content %}{{ content }}{% endblock %}
   </div>
