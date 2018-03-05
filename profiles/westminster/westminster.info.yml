@@ -35,7 +35,8 @@ dependencies:
   - focal_point
   - contact
   - formblock
-  - block_page_layout
+  - page_manager_ui
+  - panels_ipe
   - prepopulate
   - crop
   - westminster_core
