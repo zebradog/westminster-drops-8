@@ -54,8 +54,17 @@ a.tabledrag-handle .handle {
 }
 
 .dropbutton > li > input:not(.btn-primary),
+.dropbutton > li > input.button.js-form-submit,
+.dropbutton > li > a,
 .action-list > li > input:not(.btn-primary) {
   color: #428bca;
+}
+
+.dropbutton > li > input:not(.btn-primary):hover,
+.dropbutton > li > input.button.js-form-submit:hover,
+.dropbutton > li > a:hover,
+.action-list > li > input:not(.btn-primary):hover {
+  color: #68B1F0;
 }
 
 .ui-dialog .ui-dialog-title {
