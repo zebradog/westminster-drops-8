@@ -1,0 +1,7 @@
+westminster_colorful.configuration_form:
+  path: '/admin/config/westminster/colorful'
+  defaults:
+    _title: 'Westminster Colorful Configuration'
+    _form: '\Drupal\westminster_colorful\Form\ConfigurationForm'
+  requirements:
+    _permission: 'westminster colorful configuration'

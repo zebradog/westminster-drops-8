@@ -1,0 +1,9 @@
+<?php
+
+  function westminster_colorful_preprocess_html(&$variables) {
+    $variables['#attached']['library'][] = 'westminster_colorful/westminster_colorful';
+  }
+
+  function westminster_colorful_preprocess_page__admin__config__westminster__colorful(&$variables) {
+    $variables['#attached']['library'][] = 'westminster_colorful/westminster_colorful_theme';
+  }

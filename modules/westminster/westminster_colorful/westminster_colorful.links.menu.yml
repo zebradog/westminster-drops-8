@@ -1,0 +1,5 @@
+system.admin_config_westminster_core.colorful_configuration:
+  title: 'Westminster Colorful'
+  description: 'Set new theme colors.'
+  parent: system.admin_config_westminster_core
+  route_name: westminster_colorful.configuration_form

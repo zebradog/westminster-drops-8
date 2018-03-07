@@ -1,0 +1,9 @@
+westminster_colorful:
+  css:
+    theme:
+      css/westminster-colorful.css: {preprocess:false}
+
+westminster_colorful_theme:
+  css:
+    theme:
+      css/westminster-colorful-theme.css: {}

@@ -1,0 +1,31 @@
+top_menu:
+  background:
+    color: '#ffffff'
+  text:
+    color: '#333333'
+  border:
+    color: '#eeeeee'
+  hover:
+    color:
+      background: '#ffffff'
+      text: '#999999'
+left_menu:
+  background:
+    color: '#222d32'
+  text:
+    color: '#ffffff'
+  background_active:
+    color: '#1e282c'
+  border_active:
+    color: '#ffffff'
+  text_active:
+    color: '#ffffff'
+  hover:
+    color:
+      background: '#1e282c'
+      text: '#ffffff'
+      border: '#ffffff'
+left_menu_dropdown:
+  background_color: '#2c3b41'
+  text_color: '#8aa4af'
+  text_color_hover: '#ffffff'

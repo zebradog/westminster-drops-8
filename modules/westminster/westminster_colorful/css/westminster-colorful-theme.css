@@ -1,0 +1,23 @@
+.js-form-item.js-form-type-color {
+  width: 50%;
+  margin-right: 20px;
+}
+.js-form-item .form-control.form-color {
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+.js-form-item.js-form-type-color > label,
+.js-form-item.js-form-type-color > input {
+  display: inline-block;
+}
+
+.js-form-item.js-form-type-color > label {
+  top: -25px;
+  transform: translateY(50%);
+  position: relative;
+  width: 150px;
+}

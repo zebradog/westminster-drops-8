@@ -1,0 +1,12 @@
+name: Westminster Colorful
+description: Set colors for CMS areas.
+package: Westminster
+
+type: module
+core: 8.x
+
+dependencies:
+  - westminster_core
+
+configure:
+  - westminster_colorful.configuration_form
