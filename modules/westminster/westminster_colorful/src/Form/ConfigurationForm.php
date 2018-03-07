@@ -8,6 +8,15 @@
   Class ConfigurationForm extends ConfigFormBase {
 
     const CSS_SELECTORS = [
+      'page' => [
+        'background' => '.content-wrapper',
+        'text' => '.content-wrapper',
+      ],
+      'breadcrumb' => [
+        'text' => '.breadcrumb>li>a',
+        'spacer' => '.breadcrumb>li+li:before',
+        'active' => '.breadcrumb>.active',
+      ],
       'top_menu' => [
         'background' => '.main-header>.navbar,.main-header>.logo',
         'text' => '.main-header>.logo,.main-header>.navbar .navbar-nav>li>a,.main-header>.navbar>.sidebar-toggle',
@@ -22,16 +31,33 @@
         'text_active' => '.sidebar-menu>li.active>a',
         'hover' => '.sidebar-menu>li.active>a:hover,.sidebar-menu>li>a:hover',
       ],
+      'left_menu_dropdown' => [
+        'background' => '.sidebar-menu>li .treeview-menu',
+        'text' => '.treeview-menu.menu-open>li>a',
+      ],
     ];
 
     public function buildForm(array $form, FormStateInterface $form_state) {
       $config = $this->config('westminster_colorful.configuration');
+      $pageColors = $config->get('page');
+      $breadcrumb = $config->get('breadcrumb');
       $topMenu = $config->get('top_menu');
       $leftMenu = $config->get('left_menu');
+      $leftMenuDropdown = $config->get('left_menu_dropdown');
 
       $form['colors'] = [
         '#type' => 'vertical_tabs',
-        '#default_tab' => 'edit-top-menu',
+        '#default_tab' => 'edit-page',
+      ];
+      $form['page_colors'] = [
+        '#type' => 'details',
+        '#title' => t('Page'),
+        '#group' => 'colors',
+      ];
+      $form['breadcrumb'] = [
+        '#type' => 'details',
+        '#title' => t('Breadcrumbs'),
+        '#group' => 'colors',
       ];
       $form['top_menu'] = [
         '#type' => 'details',
@@ -42,6 +68,41 @@
         '#type' => 'details',
         '#title' => t('Left Menu'),
         '#group' => 'colors',
+      ];
+      $form['left_menu_dropdown'] = [
+        '#type' => 'details',
+        '#title' => t('Left Menu - Dropdown'),
+        '#group' => 'colors',
+      ];
+      $form['page_colors']['page_background'] = [
+        '#type' => 'color',
+        '#title' => t('Background Color'),
+        '#required' => TRUE,
+        '#default_value' => $pageColors['background']['color'],
+      ];
+      $form['page_colors']['page_text'] = [
+        '#type' => 'color',
+        '#title' => t('Text Color'),
+        '#required' => TRUE,
+        '#default_value' => $pageColors['text']['color'],
+      ];
+      $form['breadcrumb']['breadcrumb_text'] = [
+        '#type' => 'color',
+        '#title' => t('Text Color'),
+        '#required' => TRUE,
+        '#default_value' => $breadcrumb['text']['color'],
+      ];
+      $form['breadcrumb']['breadcrumb_spacer'] = [
+        '#type' => 'color',
+        '#title' => t('Spacer Color'),
+        '#required' => TRUE,
+        '#default_value' => $breadcrumb['spacer']['color'],
+      ];
+      $form['breadcrumb']['breadcrumb_active_text'] = [
+        '#type' => 'color',
+        '#title' => t('Active Breadcrumb Color'),
+        '#required' => TRUE,
+        '#default_value' => $breadcrumb['active']['text']['color'],
       ];
       $form['top_menu']['top_menu_background_color'] = [
         '#type' => 'color',
@@ -140,6 +201,18 @@
         '#required' => TRUE,
         '#default_value' => $leftMenu['hover']['color']['border'],
       ];
+      $form['left_menu_dropdown']['left_menu_dropdown_background'] = [
+        '#type' => 'color',
+        '#title' => 'Background Color',
+        '#required' => TRUE,
+        '#default_value' => $leftMenuDropdown['background']['color'],
+      ];
+      $form['left_menu_dropdown']['left_menu_dropdown_text'] = [
+        '#type' => 'color',
+        '#title' => 'Text Color',
+        '#required' => TRUE,
+        '#default_value' => $leftMenuDropdown['text']['color'],
+      ];
 
       return parent::buildForm($form, $form_state);
     }
@@ -156,8 +229,16 @@
 
     public function submitForm(array &$form, FormStateInterface $form_state) {
       $configFactory = $this->configFactory->getEditable('westminster_colorful.configuration');
+      $pageColors = $configFactory->get('page_colors');
+      $breadcrumb = $configFactory->get('breadcrumb');
       $topMenu = $configFactory->get('top_menu');
       $leftMenu = $configFactory->get('left_menu');
+      $leftMenuDropdown = $configFactory->get('left_menu_dropdown');
+      $pageColors['background']['color'] = $form_state->getValue('page_background');
+      $pageColors['text']['color'] = $form_state->getValue('page_text');
+      $breadcrumb['text']['color'] = $form_state->getValue('breadcrumb_text');
+      $breadcrumb['spacer']['color'] = $form_state->getValue('breadcrumb_spacer');
+      $breadcrumb['active']['text']['color'] = $form_state->getValue('breadcrumb_active_text');
       $topMenu['background']['color'] = $form_state->getValue('top_menu_background_color');
       $topMenu['text']['color'] = $form_state->getValue('top_menu_text_color');
       $topMenu['border']['color'] = $form_state->getValue('top_menu_border_color');
@@ -171,8 +252,13 @@
       $leftMenu['hover']['color']['background'] = $form_state->getValue('left_menu_background_hover');
       $leftMenu['hover']['color']['text'] = $form_state->getValue('left_menu_text_hover');
       $leftMenu['hover']['color']['border'] = $form_state->getValue('left_menu_border_hover');
+      $leftMenuDropdown['background']['color'] = $form_state->getValue('left_menu_dropdown_background');
+      $leftMenuDropdown['text']['color'] = $form_state->getValue('left_menu_dropdown_text');
+      $configFactory->set('page_colors', $pageColors);
+      $configFactory->set('breadcrumb', $breadcrumb);
       $configFactory->set('top_menu', $topMenu);
       $configFactory->set('left_menu', $leftMenu);
+      $configFactory->set('left_menu_dropdown', $leftMenuDropdown);
       $configFactory->save();
 
       $this->createCSSFile();
@@ -186,9 +272,17 @@
     public function createCSSFile() {
       $filepath = drupal_get_path('module', 'westminster_colorful');
       $configFactory = $this->configFactory->getEditable('westminster_colorful.configuration');
+      $pageColors = $configFactory->get('page_colors');
+      $breadcrumb = $configFactory->get('breadcrumb');
       $topMenu = $configFactory->get('top_menu');
       $leftMenu = $configFactory->get('left_menu');
-      $css = self::CSS_SELECTORS['top_menu']['background'].'{background-color:'.$topMenu['background']['color'].' !important;}'
+      $leftMenuDropdown = $configFactory->get('left_menu_dropdown');
+      $css = self::CSS_SELECTORS['page']['background'].'{background-color:'.$pageColors['background']['color'].' !important;}'
+              .self::CSS_SELECTORS['page']['text'].'{color:'.$pageColors['text']['color'].' !important;}'
+              .self::CSS_SELECTORS['breadcrumb']['text'].'{color:'.$breadcrumb['text']['color'].' !important;}'
+              .self::CSS_SELECTORS['breadcrumb']['spacer'].'{color:'.$breadcrumb['spacer']['color'].' !important;}'
+              .self::CSS_SELECTORS['breadcrumb']['active'].'{color:'.$breadcrumb['active']['text']['color'].' !important;}'
+              .self::CSS_SELECTORS['top_menu']['background'].'{background-color:'.$topMenu['background']['color'].' !important;}'
               .self::CSS_SELECTORS['top_menu']['text'].'{color:'.$topMenu['text']['color'].' !important;}'
               .self::CSS_SELECTORS['top_menu']['border'].'{border-color:'.$topMenu['border']['color'].' !important;}'
               .self::CSS_SELECTORS['top_menu']['hover'].'{color:'.$topMenu['hover']['color']['text'].' !important;background-color:'.$topMenu['hover']['color']['background'].' !important;}'
@@ -197,7 +291,9 @@
               .self::CSS_SELECTORS['left_menu']['background_active'].'{background-color:'.$leftMenu['background_active']['color'].' !important;}'
               .self::CSS_SELECTORS['left_menu']['border_active'].'{border-color:'.$leftMenu['border_active']['color'].' !important;}'
               .self::CSS_SELECTORS['left_menu']['text_active'].'{color:'.$leftMenu['text_active']['color'].' !important;}'
-              .self::CSS_SELECTORS['left_menu']['hover'].'{color:'.$leftMenu['hover']['color']['text'].' !important;background-color:'.$leftMenu['hover']['color']['background'].' !important;border-color:'.$leftMenu['hover']['color']['border'].' !important;}';
+              .self::CSS_SELECTORS['left_menu']['hover'].'{color:'.$leftMenu['hover']['color']['text'].' !important;background-color:'.$leftMenu['hover']['color']['background'].' !important;border-color:'.$leftMenu['hover']['color']['border'].' !important;}'
+              .self::CSS_SELECTORS['left_menu_dropdown']['background'].'{background-color:'.$leftMenuDropdown['background']['color'].' !important;}'
+              .self::CSS_SELECTORS['left_menu_dropdown']['text'].'{color:'.$leftMenuDropdown['text']['color'].' !important;}';
       file_put_contents($filepath.'/css/westminster-colorful.css', $css);
       drupal_flush_all_caches();
     }
