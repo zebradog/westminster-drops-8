@@ -3,6 +3,28 @@ page:
     color: '#ecf0f5'
   text:
     color: '#333333'
+box:
+  background:
+    color: '#ffffff'
+  text:
+    color: '#333333'
+  link:
+    color: '#3c8dbc'
+  link_hover:
+    color: '#72afd2'
+  border:
+    color: '#cccccc'
+vertical_tabs:
+  background:
+    color: '#ffffff'
+  text:
+    color: '#333333'
+  link:
+    color: '#3c8dbc'
+  link_hover:
+    color: '#72afd2'
+  border:
+    color: '#cccccc'
 breadcrumb:
   text:
     color: '#444444'

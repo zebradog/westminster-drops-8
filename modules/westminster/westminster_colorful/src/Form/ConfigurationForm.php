@@ -12,6 +12,20 @@
         'background' => '.content-wrapper',
         'text' => '.content-wrapper',
       ],
+      'box' => [
+        'background' => '.box-body,.tab-content',
+        'text' => '.box-body,.tab-content',
+        'link' => '.box-body a,.tab-content a',
+        'link_hover' => '.box-body a:hover,.box-body a:active,.box-body a:focus,.tab-content a:hover,.tab-content a:active,.tab-content a:focus',
+        'border' => 'details'
+      ],
+      'vertical_tabs' => [
+        'background' => '.vertical-tabs',
+        'text' => '.vertical-tabs',
+        'link' => '.vertical-tabs a',
+        'link_hover' => '.vertical-tabs a:hover,.vertical-tabs a:active,.vertical-tabs a:focus',
+        'border' => '.vertical-tabs,.vertical-tabs__menu,.vertical-tabs__menu-item',
+      ],
       'breadcrumb' => [
         'text' => '.breadcrumb>li>a',
         'spacer' => '.breadcrumb>li+li:before',
@@ -40,6 +54,8 @@
     public function buildForm(array $form, FormStateInterface $form_state) {
       $config = $this->config('westminster_colorful.configuration');
       $pageColors = $config->get('page');
+      $boxColors = $config->get('box');
+      $verticalTab = $config->get('vertical_tabs');
       $breadcrumb = $config->get('breadcrumb');
       $topMenu = $config->get('top_menu');
       $leftMenu = $config->get('left_menu');
@@ -53,6 +69,16 @@
         '#type' => 'details',
         '#title' => t('Page'),
         '#group' => 'colors',
+      ];
+      $form['box_colors'] = [
+        '#type' => 'details',
+        '#title' => t('Box'),
+        '#group' => 'colors',
+      ];
+      $form['vertical_tabs'] = [
+        '#type' => 'details',
+        '#title' => t('Vertical Tabs'),
+        '#group' => 'colors'
       ];
       $form['breadcrumb'] = [
         '#type' => 'details',
@@ -85,6 +111,66 @@
         '#title' => t('Text Color'),
         '#required' => TRUE,
         '#default_value' => $pageColors['text']['color'],
+      ];
+      $form['box_colors']['box_background'] = [
+        '#type' => 'color',
+        '#title' => t('Background Color'),
+        '#required' => TRUE,
+        '#default_value' => $boxColors['background']['color'],
+      ];
+      $form['box_colors']['box_text'] = [
+        '#type' => 'color',
+        '#title' => t('Text Color'),
+        '#required' => TRUE,
+        '#default_value' => $boxColors['text']['color'],
+      ];
+      $form['box_colors']['box_link'] = [
+        '#type' => 'color',
+        '#title' => t('Link Color'),
+        '#required' => TRUE,
+        '#default_value' => $boxColors['link']['color'],
+      ];
+      $form['box_colors']['box_link_hover'] = [
+        '#type' => 'color',
+        '#title' => t('Link Hover Color'),
+        '#required' => TRUE,
+        '#default_value' => $boxColors['link_hover']['color'],
+      ];
+      $form['box_colors']['box_border'] = [
+        '#type' => 'color',
+        '#title' => t('Border Color'),
+        '#required' => TRUE,
+        '#default_value' => $boxColors['border']['color'],
+      ];
+      $form['vertical_tabs']['vertical_tabs_background'] = [
+        '#type' => 'color',
+        '#title' => t('Background Color'),
+        '#required' => TRUE,
+        '#default_value' => $verticalTab['background']['color'],
+      ];
+      $form['vertical_tabs']['vertical_tabs_text'] = [
+        '#type' => 'color',
+        '#title' => t('Text Color'),
+        '#required' => TRUE,
+        '#default_value' => $verticalTab['text']['color'],
+      ];
+      $form['vertical_tabs']['vertical_tabs_link'] = [
+        '#type' => 'color',
+        '#title' => t('Link Color'),
+        '#required' => TRUE,
+        '#default_value' => $verticalTab['link']['color'],
+      ];
+      $form['vertical_tabs']['vertical_tabs_link_hover'] = [
+        '#type' => 'color',
+        '#title' => t('Link Hover Color'),
+        '#required' => TRUE,
+        '#default_value' => $verticalTab['link_hover']['color'],
+      ];
+      $form['vertical_tabs']['vertical_tabs_border'] = [
+        '#type' => 'color',
+        '#title' => t('Border Color'),
+        '#required' => TRUE,
+        '#default_value' => $verticalTab['border']['color'],
       ];
       $form['breadcrumb']['breadcrumb_text'] = [
         '#type' => 'color',
@@ -230,12 +316,24 @@
     public function submitForm(array &$form, FormStateInterface $form_state) {
       $configFactory = $this->configFactory->getEditable('westminster_colorful.configuration');
       $pageColors = $configFactory->get('page_colors');
+      $boxColors = $configFactory->get('box_colors');
+      $verticalTab = $configFactory->get('vertical_tabs');
       $breadcrumb = $configFactory->get('breadcrumb');
       $topMenu = $configFactory->get('top_menu');
       $leftMenu = $configFactory->get('left_menu');
       $leftMenuDropdown = $configFactory->get('left_menu_dropdown');
       $pageColors['background']['color'] = $form_state->getValue('page_background');
       $pageColors['text']['color'] = $form_state->getValue('page_text');
+      $boxColors['background']['color'] = $form_state->getValue('box_background');
+      $boxColors['text']['color'] = $form_state->getValue('box_text');
+      $boxColors['link']['color'] = $form_state->getValue('box_link');
+      $boxColors['link_hover']['color'] = $form_state->getValue('box_link_hover');
+      $boxColors['border']['color'] = $form_state->getValue('box_border');
+      $verticalTab['background']['color'] = $form_state->getValue('vertical_tabs_background');
+      $verticalTab['text']['color'] = $form_state->getValue('vertical_tabs_text');
+      $verticalTab['link']['color'] = $form_state->getValue('vertical_tabs_link');
+      $verticalTab['link_hover']['color'] = $form_state->getValue('vertical_tabs_link_hover');
+      $verticalTab['border']['color'] = $form_state->getValue('vertical_tabs_border');
       $breadcrumb['text']['color'] = $form_state->getValue('breadcrumb_text');
       $breadcrumb['spacer']['color'] = $form_state->getValue('breadcrumb_spacer');
       $breadcrumb['active']['text']['color'] = $form_state->getValue('breadcrumb_active_text');
@@ -255,6 +353,8 @@
       $leftMenuDropdown['background']['color'] = $form_state->getValue('left_menu_dropdown_background');
       $leftMenuDropdown['text']['color'] = $form_state->getValue('left_menu_dropdown_text');
       $configFactory->set('page_colors', $pageColors);
+      $configFactory->set('box_colors', $boxColors);
+      $configFactory->set('vertical_tabs', $verticalTab);
       $configFactory->set('breadcrumb', $breadcrumb);
       $configFactory->set('top_menu', $topMenu);
       $configFactory->set('left_menu', $leftMenu);
@@ -273,12 +373,24 @@
       $filepath = drupal_get_path('module', 'westminster_colorful');
       $configFactory = $this->configFactory->getEditable('westminster_colorful.configuration');
       $pageColors = $configFactory->get('page_colors');
+      $boxColors = $configFactory->get('box_colors');
+      $verticalTab = $configFactory->get('vertical_tabs');
       $breadcrumb = $configFactory->get('breadcrumb');
       $topMenu = $configFactory->get('top_menu');
       $leftMenu = $configFactory->get('left_menu');
       $leftMenuDropdown = $configFactory->get('left_menu_dropdown');
       $css = self::CSS_SELECTORS['page']['background'].'{background-color:'.$pageColors['background']['color'].' !important;}'
               .self::CSS_SELECTORS['page']['text'].'{color:'.$pageColors['text']['color'].' !important;}'
+              .self::CSS_SELECTORS['box']['background'].'{background-color:'.$boxColors['background']['color'].' !important;}'
+              .self::CSS_SELECTORS['box']['text'].'{color:'.$boxColors['text']['color'].' !important;}'
+              .self::CSS_SELECTORS['box']['link'].'{color:'.$boxColors['link']['color'].' !important;}'
+              .self::CSS_SELECTORS['box']['link_hover'].'{color:'.$boxColors['link_hover']['color'].' !important;}'
+              .self::CSS_SELECTORS['box']['border'].'{border-color:'.$boxColors['border']['color'].' !important;}'
+              .self::CSS_SELECTORS['vertical_tabs']['background'].'{background-color:'.$verticalTab['background']['color'].' !important;}'
+              .self::CSS_SELECTORS['vertical_tabs']['text'].'{color:'.$verticalTab['text']['color'].' !important;}'
+              .self::CSS_SELECTORS['vertical_tabs']['link'].'{color:'.$verticalTab['link']['color'].' !important;}'
+              .self::CSS_SELECTORS['vertical_tabs']['link_hover'].'{color:'.$verticalTab['link_hover']['color'].' !important;}'
+              .self::CSS_SELECTORS['vertical_tabs']['border'].'{border-color:'.$verticalTab['border']['color'].' !important;}'
               .self::CSS_SELECTORS['breadcrumb']['text'].'{color:'.$breadcrumb['text']['color'].' !important;}'
               .self::CSS_SELECTORS['breadcrumb']['spacer'].'{color:'.$breadcrumb['spacer']['color'].' !important;}'
               .self::CSS_SELECTORS['breadcrumb']['active'].'{color:'.$breadcrumb['active']['text']['color'].' !important;}'

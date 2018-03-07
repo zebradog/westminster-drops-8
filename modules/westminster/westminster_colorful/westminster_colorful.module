@@ -21,3 +21,27 @@
     $filepath = drupal_get_path('module', 'westminster_colorful');
     unlink($filepath.'/css/westminster-colorful.css');
   }
+
+  function westminster_colorful_update_8001() {
+    $configFactory = \Drupal::configFactory()->getEditable('westminster_colorful.configuration');
+    $boxColors = [
+      'background' => [
+        'color' => '#ffffff',
+      ],
+      'text' => [
+        'color' => '#333333',
+      ],
+      'link' => [
+        'color' => '#3c8dbc',
+      ],
+      'link_hover' => [
+        'color' => '#72afd2',
+      ],
+      'border' => [
+        'color' => '#cccccc',
+      ],
+    ];
+    $configFactory->set('box', $boxColors);
+    $configFactory->set('vertical_tabs', $boxColors);
+    $configFactory->save(TRUE);
+  }
