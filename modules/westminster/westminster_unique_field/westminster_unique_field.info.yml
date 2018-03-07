@@ -1,0 +1,9 @@
+name: Westminster Unique Field
+description: Allows fields to be marked as unique (primary key) to prevent duplicate values within the content type.
+package: Westminster
+
+type: module
+core: 8.x
+
+dependencies:
+  - westminster_core

@@ -1,0 +1,8 @@
+<?php
+
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Entity\ContentEntityType;
+
+function westminster_unique_field_entity_type_build(array &$entity_types) {
+  $entity_types['field_storage_config']->setFormClass('edit', 'Drupal\westminster_unique_field\Form\WestminsterUniqueFieldStorageConfigEditForm');
+}
