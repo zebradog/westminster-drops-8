@@ -71,6 +71,11 @@
         'warning' => '.btn-warning',
         'warning_hover' => '.btn-warning:hover,.btn-warning:active,.btn-warning:focus',
       ],
+      'form_inputs' => [
+        'background' => '.form-control,.select2 span',
+        'text' => '.form-control,.select2 span',
+        'checkbox' => 'input[type="checkbox"]',
+      ],
     ];
 
     public function buildForm(array $form, FormStateInterface $form_state) {
@@ -84,6 +89,7 @@
       $leftMenuDropdown = $config->get('left_menu_dropdown');
       $footer = $config->get('footer');
       $button = $config->get('button');
+      $formInputs = $config->get('form_inputs');
 
       $form['colors'] = [
         '#type' => 'vertical_tabs',
@@ -132,6 +138,11 @@
       $form['button'] = [
         '#type' => 'details',
         '#title' => t('Buttons'),
+        '#group' => 'colors',
+      ];
+      $form['form_inputs'] = [
+        '#type' => 'details',
+        '#title' => t('Form Inputs'),
         '#group' => 'colors',
       ];
       $form['page']['page_background'] = [
@@ -626,6 +637,18 @@
         '#required' => TRUE,
         '#default_value' => $button['warning']['text']['hover'],
       ];
+      $form['form_inputs']['form_inputs_background'] = [
+        '#type' => 'color',
+        '#title' => t('Background Color'),
+        '#required' => TRUE,
+        '#default_value' => $formInputs['background']['color'],
+      ];
+      $form['form_inputs']['form_inputs_text'] = [
+        '#type' => 'color',
+        '#title' => t('Text Color'),
+        '#required' => TRUE,
+        '#default_value' => $formInputs['text']['color'],
+      ];
 
       return parent::buildForm($form, $form_state);
     }
@@ -651,6 +674,7 @@
       $leftMenuDropdown = $configFactory->get('left_menu_dropdown');
       $footer = $configFactory->get('footer');
       $button = $configFactory->get('button');
+      $formInputs = $configFactory->get('form_inputs');
       $pageColors['background']['color'] = $form_state->getValue('page_background');
       $pageColors['text']['color'] = $form_state->getValue('page_text');
       $boxColors['background']['color'] = $form_state->getValue('box_background');
@@ -723,6 +747,8 @@
       $button['warning']['border']['hover'] = $form_state->getValue('button_warning_border_hover');
       $button['warning']['text']['color'] = $form_state->getValue('button_warning_text');
       $button['warning']['text']['hover'] = $form_state->getValue('button_warning_text_hover');
+      $formInputs['background']['color'] = $form_state->getValue('form_inputs_background');
+      $formInputs['text']['color'] = $form_state->getValue('form_inputs_text');
 
       $configFactory->set('page', $pageColors);
       $configFactory->set('box', $boxColors);
@@ -733,6 +759,7 @@
       $configFactory->set('left_menu_dropdown', $leftMenuDropdown);
       $configFactory->set('footer', $footer);
       $configFactory->set('button', $button);
+      $configFactory->set('form_inputs', $formInputs);
       $configFactory->save();
 
       $this->createCSSFile();
@@ -755,6 +782,7 @@
       $leftMenuDropdown = $configFactory->get('left_menu_dropdown');
       $footer = $configFactory->get('footer');
       $button = $configFactory->get('button');
+      $formInputs = $configFactory->get('form_inputs');
       $css = self::CSS_SELECTORS['page']['background'].'{background-color:'.$pageColors['background']['color'].' !important;}'
               .self::CSS_SELECTORS['page']['text'].'{color:'.$pageColors['text']['color'].' !important;}'
               .self::CSS_SELECTORS['box']['background'].'{background-color:'.$boxColors['background']['color'].' !important;}'
@@ -799,7 +827,10 @@
               .self::CSS_SELECTORS['button']['danger'].'{color:'.$button['danger']['text']['color'].'!important;background-color:'.$button['danger']['background']['color'].' !important;border-color:'.$button['danger']['border']['color'].' !important;}'
               .self::CSS_SELECTORS['button']['danger_hover'].'{color:'.$button['danger']['text']['hover'].' !important;background-color:'.$button['danger']['background']['hover'].' !important;border-color:'.$button['danger']['border']['hover'].' !important;}'
               .self::CSS_SELECTORS['button']['warning'].'{color:'.$button['warning']['text']['color'].'!important;background-color:'.$button['warning']['background']['color'].' !important;border-color:'.$button['warning']['border']['color'].' !important;}'
-              .self::CSS_SELECTORS['button']['warning_hover'].'{color:'.$button['warning']['text']['hover'].' !important;background-color:'.$button['warning']['background']['hover'].' !important;border-color:'.$button['warning']['border']['hover'].' !important;}';
+              .self::CSS_SELECTORS['button']['warning_hover'].'{color:'.$button['warning']['text']['hover'].' !important;background-color:'.$button['warning']['background']['hover'].' !important;border-color:'.$button['warning']['border']['hover'].' !important;}'
+              .self::CSS_SELECTORS['form_inputs']['background'].'{background-color:'.$formInputs['background']['color'].' !important;}'
+              .self::CSS_SELECTORS['form_inputs']['text'].'{color:'.$formInputs['text']['color'].' !important;}'
+              .self::CSS_SELECTORS['form_inputs']['checkbox'].'{box-shadow:0 0 2px -1px '.$formInputs['background']['color'].' !important;}';
       file_put_contents($filepath.'/css/westminster-colorful.css', $css);
       drupal_flush_all_caches();
     }

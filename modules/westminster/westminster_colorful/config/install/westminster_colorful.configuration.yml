@@ -139,3 +139,8 @@ button:
     text:
       color: '#ffffff'
       hover: '#ffffff'
+form_inputs:
+  background:
+    color: '#ffffff'
+  text:
+    color: '#555555'
