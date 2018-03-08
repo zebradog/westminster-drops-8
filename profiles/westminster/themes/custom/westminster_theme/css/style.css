@@ -89,11 +89,13 @@ body.path-node .nav-tabs, body.path-user .nav-tabs{
 .credits a{
   margin:0 0 0 3px;
 }
-.credits a img{
+.credits a img,
+.credits a svg{
   margin:-2px 0 0 0;
   opacity:0.85;
 }
-.credits a:hover img{
+.credits a:hover img,
+.credits a:hover svg {
   opacity:1.0;
 }
 .progress {
