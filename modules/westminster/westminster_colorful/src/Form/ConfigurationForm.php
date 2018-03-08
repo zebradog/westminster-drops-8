@@ -9,11 +9,11 @@
 
     const CSS_SELECTORS = [
       'page' => [
-        'background' => '.content-wrapper',
+        'background' => '.content-wrapper, html',
         'text' => '.content-wrapper,.system-modules label,.system-modules-uninstall label',
       ],
       'box' => [
-        'background' => '.box-body,.tab-content',
+        'background' => '.box-body,.tab-content,.login-box-body',
         'text' => '.box-body,.tab-content',
         'link' => '.box-body a:not(.btn),.tab-content a',
         'link_hover' => '.box-body a:hover:not(.btn),.box-body a:active:not(.btn),.box-body a:focus:not(.btn),.tab-content a:hover,.tab-content a:active,.tab-content a:focus',
@@ -55,7 +55,8 @@
       ],
       'footer' => [
         'background' => '.main-footer',
-        'text' => '.main-footer', /* TODO: Add ZD Logo SVG */
+        'text' => '.main-footer',
+        'svg' => '.zd-svg-logo',
         'link' => '.main-footer a',
         'link_hover' => '.main-footer a:active,.main-footer a:focus,.main-footer a:hover',
       ],
@@ -832,6 +833,7 @@
               .self::CSS_SELECTORS['left_menu_dropdown']['text'].'{color:'.$leftMenuDropdown['text']['color'].' !important;}'
               .self::CSS_SELECTORS['footer']['background'].'{background-color:'.$footer['background']['color'].' !important;}'
               .self::CSS_SELECTORS['footer']['text'].'{color:'.$footer['text']['color'].' !important;}'
+              .self::CSS_SELECTORS['footer']['svg'].'{fill:'.$footer['text']['color'].' !important;}'
               .self::CSS_SELECTORS['footer']['link'].'{color:'.$footer['link']['color'].' !important;}'
               .self::CSS_SELECTORS['footer']['link_hover'].'{color:'.$footer['link_hover']['color'].' !important;}'
               .self::CSS_SELECTORS['button']['default'].'{color:'.$button['default']['text']['color'].'!important;background-color:'.$button['default']['background']['color'].' !important;border-color:'.$button['default']['border']['color'].' !important;}'
