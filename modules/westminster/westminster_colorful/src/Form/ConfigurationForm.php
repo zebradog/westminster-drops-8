@@ -10,7 +10,7 @@
     const CSS_SELECTORS = [
       'page' => [
         'background' => '.content-wrapper',
-        'text' => '.content-wrapper',
+        'text' => '.content-wrapper,.system-modules label,.system-modules-uninstall label',
       ],
       'box' => [
         'background' => '.box-body,.tab-content',
@@ -21,10 +21,12 @@
       ],
       'vertical_tabs' => [
         'background' => '.vertical-tabs',
-        'text' => '.vertical-tabs',
+        'text' => '.vertical-tabs,.vertical-tabs__menu-item-title',
         'link' => '.vertical-tabs a',
         'link_hover' => '.vertical-tabs a:hover,.vertical-tabs a:active,.vertical-tabs a:focus',
         'border' => '.vertical-tabs,.vertical-tabs__menu,.vertical-tabs__menu-item',
+        'tab' => '.vertical-tabs__menu-item',
+        'tab_selected' => '.vertical-tabs__menu-item.is-selected',
       ],
       'breadcrumb' => [
         'text' => '.breadcrumb>li>a',
@@ -49,6 +51,26 @@
         'background' => '.sidebar-menu>li .treeview-menu',
         'text' => '.treeview-menu.menu-open>li>a',
       ],
+      'footer' => [
+        'background' => '.main-footer',
+        'text' => '.main-footer', /* TODO: Add ZD Logo SVG */
+        'link' => '.main-footer a',
+        'link_hover' => '.main-footer a:active,.main-footer a:focus,.main-footer a:hover',
+      ],
+      'button' => [
+        'default' => '.btn-default',
+        'default_hover' => '.btn-default:hover,.btn-default:active,.btn-default:focus',
+        'primary' => '.btn-primary',
+        'primary_hover' => '.btn-primary:hover,.btn-primary:active,.btn-primary:focus',
+        'success' => '.btn-success',
+        'success_hover' => '.btn-success:hover,.btn-success:active,.btn-success:focus',
+        'info' => '.btn-info',
+        'info_hover' => '.btn-info:hover,.btn-info:active,.btn-info:focus',
+        'danger' => '.btn-danger',
+        'danger_hover' => '.btn-danger:hover,.btn-danger:active,.btn-danger:focus',
+        'warning' => '.btn-warning',
+        'warning_hover' => '.btn-warning:hover,.btn-warning:active,.btn-warning:focus',
+      ],
     ];
 
     public function buildForm(array $form, FormStateInterface $form_state) {
@@ -60,17 +82,19 @@
       $topMenu = $config->get('top_menu');
       $leftMenu = $config->get('left_menu');
       $leftMenuDropdown = $config->get('left_menu_dropdown');
+      $footer = $config->get('footer');
+      $button = $config->get('button');
 
       $form['colors'] = [
         '#type' => 'vertical_tabs',
         '#default_tab' => 'edit-page',
       ];
-      $form['page_colors'] = [
+      $form['page'] = [
         '#type' => 'details',
         '#title' => t('Page'),
         '#group' => 'colors',
       ];
-      $form['box_colors'] = [
+      $form['box'] = [
         '#type' => 'details',
         '#title' => t('Box'),
         '#group' => 'colors',
@@ -100,43 +124,53 @@
         '#title' => t('Left Menu - Dropdown'),
         '#group' => 'colors',
       ];
-      $form['page_colors']['page_background'] = [
+      $form['footer'] = [
+        '#type' => 'details',
+        '#title' => t('Footer'),
+        '#group' => 'colors',
+      ];
+      $form['button'] = [
+        '#type' => 'details',
+        '#title' => t('Buttons'),
+        '#group' => 'colors',
+      ];
+      $form['page']['page_background'] = [
         '#type' => 'color',
         '#title' => t('Background Color'),
         '#required' => TRUE,
         '#default_value' => $pageColors['background']['color'],
       ];
-      $form['page_colors']['page_text'] = [
+      $form['page']['page_text'] = [
         '#type' => 'color',
         '#title' => t('Text Color'),
         '#required' => TRUE,
         '#default_value' => $pageColors['text']['color'],
       ];
-      $form['box_colors']['box_background'] = [
+      $form['box']['box_background'] = [
         '#type' => 'color',
         '#title' => t('Background Color'),
         '#required' => TRUE,
         '#default_value' => $boxColors['background']['color'],
       ];
-      $form['box_colors']['box_text'] = [
+      $form['box']['box_text'] = [
         '#type' => 'color',
         '#title' => t('Text Color'),
         '#required' => TRUE,
         '#default_value' => $boxColors['text']['color'],
       ];
-      $form['box_colors']['box_link'] = [
+      $form['box']['box_link'] = [
         '#type' => 'color',
         '#title' => t('Link Color'),
         '#required' => TRUE,
         '#default_value' => $boxColors['link']['color'],
       ];
-      $form['box_colors']['box_link_hover'] = [
+      $form['box']['box_link_hover'] = [
         '#type' => 'color',
         '#title' => t('Link Hover Color'),
         '#required' => TRUE,
         '#default_value' => $boxColors['link_hover']['color'],
       ];
-      $form['box_colors']['box_border'] = [
+      $form['box']['box_border'] = [
         '#type' => 'color',
         '#title' => t('Border Color'),
         '#required' => TRUE,
@@ -171,6 +205,18 @@
         '#title' => t('Border Color'),
         '#required' => TRUE,
         '#default_value' => $verticalTab['border']['color'],
+      ];
+      $form['vertical_tabs']['vertical_tabs_tab'] = [
+        '#type' => 'color',
+        '#title' => t('Non-Selected Tab Color'),
+        '#required' => TRUE,
+        '#default_value' => $verticalTab['tab']['color'],
+      ];
+      $form['vertical_tabs']['vertical_tabs_tab_selected'] = [
+        '#type' => 'color',
+        '#title' => t('Selected Tab Color'),
+        '#required' => TRUE,
+        '#default_value' => $verticalTab['tab_selected']['color'],
       ];
       $form['breadcrumb']['breadcrumb_text'] = [
         '#type' => 'color',
@@ -289,15 +335,296 @@
       ];
       $form['left_menu_dropdown']['left_menu_dropdown_background'] = [
         '#type' => 'color',
-        '#title' => 'Background Color',
+        '#title' => t('Background Color'),
         '#required' => TRUE,
         '#default_value' => $leftMenuDropdown['background']['color'],
       ];
       $form['left_menu_dropdown']['left_menu_dropdown_text'] = [
         '#type' => 'color',
-        '#title' => 'Text Color',
+        '#title' => t('Text Color'),
         '#required' => TRUE,
         '#default_value' => $leftMenuDropdown['text']['color'],
+      ];
+      $form['footer']['footer_background'] = [
+        '#type' => 'color',
+        '#title' => t('Background Color'),
+        '#required' => TRUE,
+        '#default_value' => $footer['background']['color'],
+      ];
+      $form['footer']['footer_text'] = [
+        '#type' => 'color',
+        '#title' => t('Text Color'),
+        '#required' => TRUE,
+        '#default_value' => $footer['text']['color'],
+      ];
+      $form['footer']['link'] = [
+        '#type' => 'color',
+        '#title' => t('Link Color'),
+        '#required' => TRUE,
+        '#default_value' => $footer['link']['color'],
+      ];
+      $form['footer']['link_hover'] = [
+        '#type' => 'color',
+        '#title' => t('Link Hover Color'),
+        '#required' => TRUE,
+        '#default_value' => $footer['link_hover']['color'],
+      ];
+      $form['button']['button_default'] = [
+        '#type' => 'details',
+        '#title' => t('Default'),
+        '#group' => 'button',
+        '#collapsible' => TRUE,
+      ];
+      $form['button']['button_primary'] = [
+        '#type' => 'details',
+        '#title' => t('Primary'),
+        '#group' => 'button',
+        '#collapsible' => TRUE,
+      ];
+      $form['button']['button_success'] = [
+        '#type' => 'details',
+        '#title' => t('Success'),
+        '#group' => 'button',
+        '#collapsible' => TRUE,
+      ];
+      $form['button']['button_info'] = [
+        '#type' => 'details',
+        '#title' => t('Info'),
+        '#group' => 'button',
+        '#collapsible' => TRUE,
+      ];
+      $form['button']['button_danger'] = [
+        '#type' => 'details',
+        '#title' => t('Danger'),
+        '#group' => 'button',
+        '#collapsible' => TRUE,
+      ];
+      $form['button']['button_warning'] = [
+        '#type' => 'details',
+        '#title' => t('Warning'),
+        '#group' => 'button',
+        '#collapsible' => TRUE,
+      ];
+      $form['button']['button_default']['button_default_background'] = [
+        '#type' => 'color',
+        '#title' => t('Background'),
+        '#required' => TRUE,
+        '#default_value' => $button['default']['background']['color'],
+      ];
+      $form['button']['button_default']['button_default_background_hover'] = [
+        '#type' => 'color',
+        '#title' => t('Background Hover Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['default']['background']['hover'],
+      ];
+      $form['button']['button_default']['button_default_border'] = [
+        '#type' => 'color',
+        '#title' => t('Border Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['default']['border']['color'],
+      ];
+      $form['button']['button_default']['button_default_border_hover'] = [
+        '#type' => 'color',
+        '#title' => t('Border Hover Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['default']['border']['hover'],
+      ];
+      $form['button']['button_default']['button_default_text'] = [
+        '#type' => 'color',
+        '#title' => t('Text Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['default']['text']['color'],
+      ];
+      $form['button']['button_default']['button_default_text_hover'] = [
+        '#type' => 'color',
+        '#title' => t('Text Hover Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['default']['text']['hover'],
+      ];
+
+      $form['button']['button_primary']['button_primary_background'] = [
+        '#type' => 'color',
+        '#title' => t('Background Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['primary']['background']['color'],
+      ];
+      $form['button']['button_primary']['button_primary_background_hover'] = [
+        '#type' => 'color',
+        '#title' => t('Background Hover Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['primary']['background']['hover'],
+      ];
+      $form['button']['button_primary']['button_primary_border'] = [
+        '#type' => 'color',
+        '#title' => t('Border Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['primary']['border']['color'],
+      ];
+      $form['button']['button_primary']['button_primary_border_hover'] = [
+        '#type' => 'color',
+        '#title' => t('Border Hover Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['primary']['border']['hover'],
+      ];
+      $form['button']['button_primary']['button_primary_text'] = [
+        '#type' => 'color',
+        '#title' => t('Text Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['primary']['text']['color'],
+      ];
+      $form['button']['button_primary']['button_primary_text_hover'] = [
+        '#type' => 'color',
+        '#title' => t('Text Hover Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['primary']['text']['hover'],
+      ];
+
+      $form['button']['button_success']['button_success_background'] = [
+        '#type' => 'color',
+        '#title' => t('Background Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['success']['background']['color'],
+      ];
+      $form['button']['button_success']['button_success_background_hover'] = [
+        '#type' => 'color',
+        '#title' => t('Background Hover Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['success']['background']['hover'],
+      ];
+      $form['button']['button_success']['button_success_border'] = [
+        '#type' => 'color',
+        '#title' => t('Border Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['success']['border']['color'],
+      ];
+      $form['button']['button_success']['button_success_border_hover'] = [
+        '#type' => 'color',
+        '#title' => t('Border Hover Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['success']['border']['hover'],
+      ];
+      $form['button']['button_success']['button_success_text'] = [
+        '#type' => 'color',
+        '#title' => t('Text Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['success']['text']['color'],
+      ];
+      $form['button']['button_success']['button_success_text_hover'] = [
+        '#type' => 'color',
+        '#title' => t('Text Hover Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['success']['text']['hover'],
+      ];
+
+      $form['button']['button_info']['button_info_background'] = [
+        '#type' => 'color',
+        '#title' => t('Background Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['info']['background']['color'],
+      ];
+      $form['button']['button_info']['button_info_background_hover'] = [
+        '#type' => 'color',
+        '#title' => t('Background Hover Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['info']['background']['hover'],
+      ];
+      $form['button']['button_info']['button_info_border'] = [
+        '#type' => 'color',
+        '#title' => t('Border Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['info']['border']['color'],
+      ];
+      $form['button']['button_info']['button_info_border_hover'] = [
+        '#type' => 'color',
+        '#title' => t('Border Hover Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['info']['border']['hover'],
+      ];
+      $form['button']['button_info']['button_info_text'] = [
+        '#type' => 'color',
+        '#title' => t('Text Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['info']['text']['color'],
+      ];
+      $form['button']['button_info']['button_info_text_hover'] = [
+        '#type' => 'color',
+        '#title' => t('Text Hover Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['info']['text']['hover'],
+      ];
+
+      $form['button']['button_danger']['button_danger_background'] = [
+        '#type' => 'color',
+        '#title' => t('Background Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['danger']['background']['color'],
+      ];
+      $form['button']['button_danger']['button_danger_background_hover'] = [
+        '#type' => 'color',
+        '#title' => t('Background Hover Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['danger']['background']['hover'],
+      ];
+      $form['button']['button_danger']['button_danger_border'] = [
+        '#type' => 'color',
+        '#title' => t('Border Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['danger']['border']['color'],
+      ];
+      $form['button']['button_danger']['button_danger_border_hover'] = [
+        '#type' => 'color',
+        '#title' => t('Border Hover Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['danger']['border']['hover'],
+      ];
+      $form['button']['button_danger']['button_danger_text'] = [
+        '#type' => 'color',
+        '#title' => t('Text Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['danger']['text']['color'],
+      ];
+      $form['button']['button_danger']['button_danger_text_hover'] = [
+        '#type' => 'color',
+        '#title' => t('Text Hover Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['danger']['text']['hover'],
+      ];
+
+      $form['button']['button_warning']['button_warning_background'] = [
+        '#type' => 'color',
+        '#title' => t('Background Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['warning']['background']['color'],
+      ];
+      $form['button']['button_warning']['button_warning_background_hover'] = [
+        '#type' => 'color',
+        '#title' => t('Background Hover Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['warning']['background']['hover'],
+      ];
+      $form['button']['button_warning']['button_warning_border'] = [
+        '#type' => 'color',
+        '#title' => t('Border Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['warning']['border']['color'],
+      ];
+      $form['button']['button_warning']['button_warning_border_hover'] = [
+        '#type' => 'color',
+        '#title' => t('Border Hover Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['warning']['border']['hover'],
+      ];
+      $form['button']['button_warning']['button_warning_text'] = [
+        '#type' => 'color',
+        '#title' => t('Text Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['warning']['text']['color'],
+      ];
+      $form['button']['button_warning']['button_warning_text_hover'] = [
+        '#type' => 'color',
+        '#title' => t('Text Hover Color'),
+        '#required' => TRUE,
+        '#default_value' => $button['warning']['text']['hover'],
       ];
 
       return parent::buildForm($form, $form_state);
@@ -315,13 +642,15 @@
 
     public function submitForm(array &$form, FormStateInterface $form_state) {
       $configFactory = $this->configFactory->getEditable('westminster_colorful.configuration');
-      $pageColors = $configFactory->get('page_colors');
-      $boxColors = $configFactory->get('box_colors');
+      $pageColors = $configFactory->get('page');
+      $boxColors = $configFactory->get('box');
       $verticalTab = $configFactory->get('vertical_tabs');
       $breadcrumb = $configFactory->get('breadcrumb');
       $topMenu = $configFactory->get('top_menu');
       $leftMenu = $configFactory->get('left_menu');
       $leftMenuDropdown = $configFactory->get('left_menu_dropdown');
+      $footer = $configFactory->get('footer');
+      $button = $configFactory->get('button');
       $pageColors['background']['color'] = $form_state->getValue('page_background');
       $pageColors['text']['color'] = $form_state->getValue('page_text');
       $boxColors['background']['color'] = $form_state->getValue('box_background');
@@ -334,6 +663,8 @@
       $verticalTab['link']['color'] = $form_state->getValue('vertical_tabs_link');
       $verticalTab['link_hover']['color'] = $form_state->getValue('vertical_tabs_link_hover');
       $verticalTab['border']['color'] = $form_state->getValue('vertical_tabs_border');
+      $verticalTab['tab']['color'] = $form_state->getValue('vertical_tabs_tab');
+      $verticalTab['tab_selected']['color'] = $form_state->getValue('vertical_tabs_tab_selected');
       $breadcrumb['text']['color'] = $form_state->getValue('breadcrumb_text');
       $breadcrumb['spacer']['color'] = $form_state->getValue('breadcrumb_spacer');
       $breadcrumb['active']['text']['color'] = $form_state->getValue('breadcrumb_active_text');
@@ -352,13 +683,56 @@
       $leftMenu['hover']['color']['border'] = $form_state->getValue('left_menu_border_hover');
       $leftMenuDropdown['background']['color'] = $form_state->getValue('left_menu_dropdown_background');
       $leftMenuDropdown['text']['color'] = $form_state->getValue('left_menu_dropdown_text');
-      $configFactory->set('page_colors', $pageColors);
-      $configFactory->set('box_colors', $boxColors);
+      $footer['background']['color'] = $form_state->getValue('footer_background');
+      $footer['text']['color'] = $form_state->getValue('footer_text');
+      $footer['link']['color'] = $form_state->getValue('footer_link');
+      $footer['link_hover']['color'] = $form_state->getValue('footer_link_hover');
+      $button['default']['background']['color'] = $form_state->getValue('button_default_background');
+      $button['default']['background']['hover'] = $form_state->getValue('button_default_background_hover');
+      $button['default']['border']['color'] = $form_state->getValue('button_default_border');
+      $button['default']['border']['hover'] = $form_state->getValue('button_default_border_hover');
+      $button['default']['text']['color'] = $form_state->getValue('button_default_text');
+      $button['default']['text']['hover'] = $form_state->getValue('button_default_text_hover');
+      $button['primary']['background']['color'] = $form_state->getValue('button_primary_background');
+      $button['primary']['background']['hover'] = $form_state->getValue('button_primary_background_hover');
+      $button['primary']['border']['color'] = $form_state->getValue('button_primary_border');
+      $button['primary']['border']['hover'] = $form_state->getValue('button_primary_border_hover');
+      $button['primary']['text']['color'] = $form_state->getValue('button_primary_text');
+      $button['primary']['text']['hover'] = $form_state->getValue('button_primary_text_hover');
+      $button['success']['background']['color'] = $form_state->getValue('button_success_background');
+      $button['success']['background']['hover'] = $form_state->getValue('button_success_background_hover');
+      $button['success']['border']['color'] = $form_state->getValue('button_success_border');
+      $button['success']['border']['hover'] = $form_state->getValue('button_success_border_hover');
+      $button['success']['text']['color'] = $form_state->getValue('button_success_text');
+      $button['success']['text']['hover'] = $form_state->getValue('button_success_text_hover');
+      $button['info']['background']['color'] = $form_state->getValue('button_info_background');
+      $button['info']['background']['hover'] = $form_state->getValue('button_info_background_hover');
+      $button['info']['border']['color'] = $form_state->getValue('button_info_border');
+      $button['info']['border']['hover'] = $form_state->getValue('button_info_border_hover');
+      $button['info']['text']['color'] = $form_state->getValue('button_info_text');
+      $button['info']['text']['hover'] = $form_state->getValue('button_info_text_hover');
+      $button['danger']['background']['color'] = $form_state->getValue('button_danger_background');
+      $button['danger']['background']['hover'] = $form_state->getValue('button_danger_background_hover');
+      $button['danger']['border']['color'] = $form_state->getValue('button_danger_border');
+      $button['danger']['border']['hover'] = $form_state->getValue('button_danger_border_hover');
+      $button['danger']['text']['color'] = $form_state->getValue('button_danger_text');
+      $button['danger']['text']['hover'] = $form_state->getValue('button_danger_text_hover');
+      $button['warning']['background']['color'] = $form_state->getValue('button_warning_background');
+      $button['warning']['background']['hover'] = $form_state->getValue('button_warning_background_hover');
+      $button['warning']['border']['color'] = $form_state->getValue('button_warning_border');
+      $button['warning']['border']['hover'] = $form_state->getValue('button_warning_border_hover');
+      $button['warning']['text']['color'] = $form_state->getValue('button_warning_text');
+      $button['warning']['text']['hover'] = $form_state->getValue('button_warning_text_hover');
+
+      $configFactory->set('page', $pageColors);
+      $configFactory->set('box', $boxColors);
       $configFactory->set('vertical_tabs', $verticalTab);
       $configFactory->set('breadcrumb', $breadcrumb);
       $configFactory->set('top_menu', $topMenu);
       $configFactory->set('left_menu', $leftMenu);
       $configFactory->set('left_menu_dropdown', $leftMenuDropdown);
+      $configFactory->set('footer', $footer);
+      $configFactory->set('button', $button);
       $configFactory->save();
 
       $this->createCSSFile();
@@ -372,13 +746,15 @@
     public function createCSSFile() {
       $filepath = drupal_get_path('module', 'westminster_colorful');
       $configFactory = $this->configFactory->getEditable('westminster_colorful.configuration');
-      $pageColors = $configFactory->get('page_colors');
-      $boxColors = $configFactory->get('box_colors');
+      $pageColors = $configFactory->get('page');
+      $boxColors = $configFactory->get('box');
       $verticalTab = $configFactory->get('vertical_tabs');
       $breadcrumb = $configFactory->get('breadcrumb');
       $topMenu = $configFactory->get('top_menu');
       $leftMenu = $configFactory->get('left_menu');
       $leftMenuDropdown = $configFactory->get('left_menu_dropdown');
+      $footer = $configFactory->get('footer');
+      $button = $configFactory->get('button');
       $css = self::CSS_SELECTORS['page']['background'].'{background-color:'.$pageColors['background']['color'].' !important;}'
               .self::CSS_SELECTORS['page']['text'].'{color:'.$pageColors['text']['color'].' !important;}'
               .self::CSS_SELECTORS['box']['background'].'{background-color:'.$boxColors['background']['color'].' !important;}'
@@ -391,6 +767,8 @@
               .self::CSS_SELECTORS['vertical_tabs']['link'].'{color:'.$verticalTab['link']['color'].' !important;}'
               .self::CSS_SELECTORS['vertical_tabs']['link_hover'].'{color:'.$verticalTab['link_hover']['color'].' !important;}'
               .self::CSS_SELECTORS['vertical_tabs']['border'].'{border-color:'.$verticalTab['border']['color'].' !important;}'
+              .self::CSS_SELECTORS['vertical_tabs']['tab'].'{background-color:'.$verticalTab['tab']['color'].' !important;}'
+              .self::CSS_SELECTORS['vertical_tabs']['tab_selected'].'{background-color:'.$verticalTab['tab_selected']['color'].' !important;}'
               .self::CSS_SELECTORS['breadcrumb']['text'].'{color:'.$breadcrumb['text']['color'].' !important;}'
               .self::CSS_SELECTORS['breadcrumb']['spacer'].'{color:'.$breadcrumb['spacer']['color'].' !important;}'
               .self::CSS_SELECTORS['breadcrumb']['active'].'{color:'.$breadcrumb['active']['text']['color'].' !important;}'
@@ -405,7 +783,23 @@
               .self::CSS_SELECTORS['left_menu']['text_active'].'{color:'.$leftMenu['text_active']['color'].' !important;}'
               .self::CSS_SELECTORS['left_menu']['hover'].'{color:'.$leftMenu['hover']['color']['text'].' !important;background-color:'.$leftMenu['hover']['color']['background'].' !important;border-color:'.$leftMenu['hover']['color']['border'].' !important;}'
               .self::CSS_SELECTORS['left_menu_dropdown']['background'].'{background-color:'.$leftMenuDropdown['background']['color'].' !important;}'
-              .self::CSS_SELECTORS['left_menu_dropdown']['text'].'{color:'.$leftMenuDropdown['text']['color'].' !important;}';
+              .self::CSS_SELECTORS['left_menu_dropdown']['text'].'{color:'.$leftMenuDropdown['text']['color'].' !important;}'
+              .self::CSS_SELECTORS['footer']['background'].'{background-color:'.$footer['background']['color'].' !important;}'
+              .self::CSS_SELECTORS['footer']['text'].'{color:'.$footer['text']['color'].' !important;}'
+              .self::CSS_SELECTORS['footer']['link'].'{color:'.$footer['link']['color'].' !important;}'
+              .self::CSS_SELECTORS['footer']['link_hover'].'{color:'.$footer['link_hover']['color'].' !important;}'
+              .self::CSS_SELECTORS['button']['default'].'{color:'.$button['default']['text']['color'].'!important;background-color:'.$button['default']['background']['color'].' !important;border-color:'.$button['default']['border']['color'].' !important;}'
+              .self::CSS_SELECTORS['button']['default_hover'].'{color:'.$button['default']['text']['hover'].' !important;background-color:'.$button['default']['background']['hover'].' !important;border-color:'.$button['default']['border']['hover'].' !important;}'
+              .self::CSS_SELECTORS['button']['primary'].'{color:'.$button['primary']['text']['color'].'!important;background-color:'.$button['primary']['background']['color'].' !important;border-color:'.$button['primary']['border']['color'].' !important;}'
+              .self::CSS_SELECTORS['button']['primary_hover'].'{color:'.$button['primary']['text']['hover'].' !important;background-color:'.$button['primary']['background']['hover'].' !important;border-color:'.$button['primary']['border']['hover'].' !important;}'
+              .self::CSS_SELECTORS['button']['success'].'{color:'.$button['success']['text']['color'].'!important;background-color:'.$button['success']['background']['color'].' !important;border-color:'.$button['success']['border']['color'].' !important;}'
+              .self::CSS_SELECTORS['button']['success_hover'].'{color:'.$button['success']['text']['hover'].' !important;background-color:'.$button['success']['background']['hover'].' !important;border-color:'.$button['success']['border']['hover'].' !important;}'
+              .self::CSS_SELECTORS['button']['info'].'{color:'.$button['info']['text']['color'].'!important;background-color:'.$button['info']['background']['color'].' !important;border-color:'.$button['info']['border']['color'].' !important;}'
+              .self::CSS_SELECTORS['button']['info_hover'].'{color:'.$button['info']['text']['hover'].' !important;background-color:'.$button['info']['background']['hover'].' !important;border-color:'.$button['info']['border']['hover'].' !important;}'
+              .self::CSS_SELECTORS['button']['danger'].'{color:'.$button['danger']['text']['color'].'!important;background-color:'.$button['danger']['background']['color'].' !important;border-color:'.$button['danger']['border']['color'].' !important;}'
+              .self::CSS_SELECTORS['button']['danger_hover'].'{color:'.$button['danger']['text']['hover'].' !important;background-color:'.$button['danger']['background']['hover'].' !important;border-color:'.$button['danger']['border']['hover'].' !important;}'
+              .self::CSS_SELECTORS['button']['warning'].'{color:'.$button['warning']['text']['color'].'!important;background-color:'.$button['warning']['background']['color'].' !important;border-color:'.$button['warning']['border']['color'].' !important;}'
+              .self::CSS_SELECTORS['button']['warning_hover'].'{color:'.$button['warning']['text']['hover'].' !important;background-color:'.$button['warning']['background']['hover'].' !important;border-color:'.$button['warning']['border']['hover'].' !important;}';
       file_put_contents($filepath.'/css/westminster-colorful.css', $css);
       drupal_flush_all_caches();
     }
