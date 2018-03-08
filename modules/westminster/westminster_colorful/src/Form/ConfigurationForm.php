@@ -15,9 +15,11 @@
       'box' => [
         'background' => '.box-body,.tab-content',
         'text' => '.box-body,.tab-content',
-        'link' => '.box-body a,.tab-content a',
-        'link_hover' => '.box-body a:hover,.box-body a:active,.box-body a:focus,.tab-content a:hover,.tab-content a:active,.tab-content a:focus',
-        'border' => 'details'
+        'link' => '.box-body a:not(.btn),.tab-content a',
+        'link_hover' => '.box-body a:hover:not(.btn),.box-body a:active:not(.btn),.box-body a:focus:not(.btn),.tab-content a:hover,.tab-content a:active,.tab-content a:focus',
+        'border' => 'details,td,th',
+        'table_row_alternate' => '.table-striped>tbody>tr:nth-of-type(odd)',
+        'table_cell_active' => 'td.is-active,.nav-tabs-custom>.nav-tabs>li.active>a',
       ],
       'vertical_tabs' => [
         'background' => '.vertical-tabs',
@@ -162,6 +164,18 @@
         '#title' => t('Background Color'),
         '#required' => TRUE,
         '#default_value' => $boxColors['background']['color'],
+      ];
+      $form['box']['box_table_row_alternate'] = [
+        '#type' => 'color',
+        '#title' => t('Alternating Table Row Color'),
+        '#required' => TRUE,
+        '#default_value' => $boxColors['table_row_alternate']['color'],
+      ];
+      $form['box']['box_table_cell_active'] = [
+        '#type' => 'color',
+        '#title' => t('Active Table Cell Color'),
+        '#required' => TRUE,
+        '#default_value' => $boxColors['table_cell_active']['color'],
       ];
       $form['box']['box_text'] = [
         '#type' => 'color',
@@ -678,6 +692,8 @@
       $pageColors['background']['color'] = $form_state->getValue('page_background');
       $pageColors['text']['color'] = $form_state->getValue('page_text');
       $boxColors['background']['color'] = $form_state->getValue('box_background');
+      $boxColors['table_row_alternate']['color'] = $form_state->getValue('box_table_row_alternate');
+      $boxColors['table_cell_active']['color'] = $form_state->getValue('box_table_cell_active');
       $boxColors['text']['color'] = $form_state->getValue('box_text');
       $boxColors['link']['color'] = $form_state->getValue('box_link');
       $boxColors['link_hover']['color'] = $form_state->getValue('box_link_hover');
@@ -786,6 +802,8 @@
       $css = self::CSS_SELECTORS['page']['background'].'{background-color:'.$pageColors['background']['color'].' !important;}'
               .self::CSS_SELECTORS['page']['text'].'{color:'.$pageColors['text']['color'].' !important;}'
               .self::CSS_SELECTORS['box']['background'].'{background-color:'.$boxColors['background']['color'].' !important;}'
+              .self::CSS_SELECTORS['box']['table_row_alternate'].'{background-color:'.$boxColors['table_row_alternate']['color'].' !important;}'
+              .self::CSS_SELECTORS['box']['table_cell_active'].'{background-color:'.$boxColors['table_cell_active']['color'].' !important;}'
               .self::CSS_SELECTORS['box']['text'].'{color:'.$boxColors['text']['color'].' !important;}'
               .self::CSS_SELECTORS['box']['link'].'{color:'.$boxColors['link']['color'].' !important;}'
               .self::CSS_SELECTORS['box']['link_hover'].'{color:'.$boxColors['link_hover']['color'].' !important;}'
