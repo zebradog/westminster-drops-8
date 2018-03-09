@@ -1,0 +1,7 @@
+westminster_unique_field.westminster_unique:
+  type: config_object
+  label: 'Unique Field'
+  mapping:
+    westminster_unique:
+      type: boolean
+      label: ''
