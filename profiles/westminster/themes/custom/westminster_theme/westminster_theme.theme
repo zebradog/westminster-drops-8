@@ -145,3 +145,7 @@ function westminster_theme_preprocess_select(&$variables) {
   // Prepping select2
   array_push($variables['attributes']['class'], 'select2-init');
 }
+
+function westminster_theme_preprocess_maintenance_page(&$variables) {
+  $variables['#attached']['library'][] = 'westminster_theme/maintenance';
+}

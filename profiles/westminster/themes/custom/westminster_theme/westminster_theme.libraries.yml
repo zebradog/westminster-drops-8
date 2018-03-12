@@ -24,6 +24,12 @@ base:
     - core/drupalSettings
     - core/jquery.once
 
+maintenance:
+  version: 1.x
+  css:
+    theme:
+      css/maintenance.css: {}
+
 schedule:
   version: 1.x
   js:

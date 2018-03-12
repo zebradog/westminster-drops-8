@@ -1,0 +1,104 @@
+.maintenance-page .wrapper {
+  background-color: transparent;
+}
+
+.maintenance-page .layout-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  max-width: 64em;
+  padding: 1em;
+}
+
+.maintenance-page header {
+  border-bottom: 1px solid #72afd2;
+  flex: 0 0 100%;
+  margin: 0 0 1em 0;
+  padding: 1em 0 2em 0;
+}
+.maintenance-page header h1 {
+  margin: 0;
+}
+.maintenance-page header h1:before {
+  content: "Update: ";
+}
+
+.maintenance-page main {
+  flex: 0 0 100%;
+  padding: 1em 0;
+  order: 3;
+}
+.maintenance-page main h1 {
+  margin-top: 0;
+}
+
+.maintenance-page aside {
+  flex: 0 0 100%;
+  padding: 1em 0;
+  order: 2;
+}
+
+.maintenance-page ol,
+.maintenance-page ul {
+  margin: 0 0 0.75em 0;
+  padding: 0;
+}
+.maintenance-page ol:last-child,
+.maintenance-page ul:last-child {
+  margin-bottom: 0;
+}
+.maintenance-page ol li,
+.maintenance-page ul li {
+  margin: 0 0 0.25em 1.5em;
+  padding: 0;
+}
+
+.maintenance-page .button {
+  border: 1px solid transparent;
+  border-radius: 3px;
+  display: inline-block;
+  margin: 0 1em 0 0;
+  padding: 6px 12px;
+}
+.maintenance-page .button.button--primary {
+  background-color: #3c8dbc;
+  border-color: #367fa9;
+  color: #FFFFFF;
+}
+.maintenance-page .button.button--primary:active,
+.maintenance-page .button.button--primary:focus,
+.maintenance-page .button.button--primary:hover {
+  background-color: #367fa9;
+  border-color: #204d74;
+  color: #FFFFFF;
+}
+
+.maintenance-page .messages {
+  margin: 0 0 1em 0;
+}
+
+.maintenance-page .item-list {
+  margin: 0 0 0.75em 0;
+}
+
+.maintenance-page .task-list li {
+  margin-bottom: 0;
+  opacity: 0.5;
+}
+.maintenance-page .task-list li.done {
+  color: #325e1c;
+  opacity: 1;
+}
+.maintenance-page .task-list .done:after {
+  content: " ✓";
+}
+.maintenance-page .task-list li.is-active {
+  font-weight: 700;
+  opacity: 1;
+}
+
+@media (min-width: 40em) {
+  .maintenance-page .layout-container {
+    padding: 1em 2em;
+  }
+}
