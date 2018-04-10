@@ -1,0 +1,6 @@
+services:
+  # Regression fix for 8.5.x, see: https://www.drupal.org/project/drupal/issues/2937942
+  westminster_debug.request_format_route_filter:
+    class: Drupal\westminster_debug\Routing\RequestFormatRouteFilter
+    tags:
+      - { name: route_filter, priority: 1 }
