@@ -36,11 +36,11 @@ class Google_Service_Partners_Resource_Companies extends Google_Service_Resource
    * created by a team which redirected the traffic to us.
    * @opt_param string requestMetadata.userOverrides.ipAddress IP address to use
    * instead of the user's geo-located IP address.
-   * @opt_param string requestMetadata.experimentIds Experiment IDs the current
-   * request belongs to.
    * @opt_param string currencyCode If the company's budget is in a different
    * currency code than this one, then the converted budget is converted to this
    * currency code.
+   * @opt_param string requestMetadata.experimentIds Experiment IDs the current
+   * request belongs to.
    * @opt_param string requestMetadata.trafficSource.trafficSubId Second level
    * identifier to indicate where the traffic comes from. An identifier has
    * multiple letters created by a team which redirected the traffic to us.
@@ -54,11 +54,11 @@ class Google_Service_Partners_Resource_Companies extends Google_Service_Resource
    * impersonate instead of the user's ID.
    * @opt_param string view The view of `Company` resource to be returned. This
    * must not be `COMPANY_VIEW_UNSPECIFIED`.
+   * @opt_param string requestMetadata.locale Locale to use for the current
+   * request.
    * @opt_param string address The address to use for sorting the company's
    * addresses by proximity. If not given, the geo-located address of the request
    * is used. Used when order_by is set.
-   * @opt_param string requestMetadata.locale Locale to use for the current
-   * request.
    * @return Google_Service_Partners_GetCompanyResponse
    */
   public function get($companyId, $optParams = array())
@@ -72,6 +72,12 @@ class Google_Service_Partners_Resource_Companies extends Google_Service_Resource
    *
    * @param array $optParams Optional parameters.
    *
+   * @opt_param string languageCodes List of language codes that company can
+   * support. Only primary language subtags are accepted as defined by BCP 47
+   * (IETF BCP 47, "Tags for Identifying Languages").
+   * @opt_param int pageSize Requested page size. Server may return fewer
+   * companies than requested. If unspecified, server picks an appropriate
+   * default.
    * @opt_param string requestMetadata.userOverrides.ipAddress IP address to use
    * instead of the user's geo-located IP address.
    * @opt_param string requestMetadata.experimentIds Experiment IDs the current
@@ -86,10 +92,10 @@ class Google_Service_Partners_Resource_Companies extends Google_Service_Resource
    * "services" field.
    * @opt_param string maxMonthlyBudget.currencyCode The 3-letter currency code
    * defined in ISO 4217.
-   * @opt_param string requestMetadata.userOverrides.userId Logged-in user ID to
-   * impersonate instead of the user's ID.
    * @opt_param string minMonthlyBudget.currencyCode The 3-letter currency code
    * defined in ISO 4217.
+   * @opt_param string requestMetadata.userOverrides.userId Logged-in user ID to
+   * impersonate instead of the user's ID.
    * @opt_param string view The view of the `Company` resource to be returned.
    * This must not be `COMPANY_VIEW_UNSPECIFIED`.
    * @opt_param string requestMetadata.locale Locale to use for the current
@@ -133,12 +139,6 @@ class Google_Service_Partners_Resource_Companies extends Google_Service_Resource
    * matched company. .
    * @opt_param string gpsMotivations List of reasons for using Google Partner
    * Search to get companies.
-   * @opt_param string languageCodes List of language codes that company can
-   * support. Only primary language subtags are accepted as defined by BCP 47
-   * (IETF BCP 47, "Tags for Identifying Languages").
-   * @opt_param int pageSize Requested page size. Server may return fewer
-   * companies than requested. If unspecified, server picks an appropriate
-   * default.
    * @return Google_Service_Partners_ListCompaniesResponse
    */
   public function listCompanies($optParams = array())

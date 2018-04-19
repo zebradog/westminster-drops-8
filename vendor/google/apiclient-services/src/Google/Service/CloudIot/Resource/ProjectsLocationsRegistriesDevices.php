@@ -63,6 +63,10 @@ class Google_Service_CloudIot_Resource_ProjectsLocationsRegistriesDevices extend
    * `projects/p0/locations/us-central1/registries/registry0/devices/device0` or
    * `projects/p0/locations/us-central1/registries/registry0/devices/{num_id}`.
    * @param array $optParams Optional parameters.
+   *
+   * @opt_param string fieldMask The fields of the `Device` resource to be
+   * returned in the response. If the field mask is unset or empty, all fields are
+   * returned.
    * @return Google_Service_CloudIot_Device
    */
   public function get($name, $optParams = array())
@@ -79,12 +83,12 @@ class Google_Service_CloudIot_Resource_ProjectsLocationsRegistriesDevices extend
    * `projects/my-project/locations/us-central1/registries/my-registry`.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param string fieldMask The fields of the `Device` resource to be
-   * returned in the response. The fields `id`, and `num_id` are always returned
-   * by default, along with any other fields specified.
    * @opt_param string pageToken The value returned by the last
    * `ListDevicesResponse`; indicates that this is a continuation of a prior
    * `ListDevices` call, and that the system should return the next page of data.
+   * @opt_param string fieldMask The fields of the `Device` resource to be
+   * returned in the response. The fields `id`, and `num_id` are always returned
+   * by default, along with any other fields specified.
    * @opt_param int pageSize The maximum number of devices to return in the
    * response. If this value is zero, the service will select a default size. A
    * call may return fewer objects than requested, but if there is a non-empty
@@ -134,7 +138,7 @@ class Google_Service_CloudIot_Resource_ProjectsLocationsRegistriesDevices extend
    * @opt_param string updateMask Only updates the `device` fields indicated by
    * this mask. The field mask must not be empty, and it must not contain fields
    * that are immutable or only set by the server. Mutable top-level fields:
-   * `credentials`, `enabled_state`, and `metadata`
+   * `credentials`, `blocked`, and `metadata`
    * @return Google_Service_CloudIot_Device
    */
   public function patch($name, Google_Service_CloudIot_Device $postBody, $optParams = array())

@@ -69,6 +69,9 @@ class Google_Service_Classroom extends Google_Service
   /** View the profile photos of people in your classes. */
   const CLASSROOM_PROFILE_PHOTOS =
       "https://www.googleapis.com/auth/classroom.profile.photos";
+  /** Receive notifications about your Google Classroom data. */
+  const CLASSROOM_PUSH_NOTIFICATIONS =
+      "https://www.googleapis.com/auth/classroom.push-notifications";
   /** Manage your Google Classroom class rosters. */
   const CLASSROOM_ROSTERS =
       "https://www.googleapis.com/auth/classroom.rosters";
@@ -142,10 +145,6 @@ class Google_Service_Classroom extends Google_Service
               'path' => 'v1/courses',
               'httpMethod' => 'GET',
               'parameters' => array(
-                'studentId' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
@@ -154,12 +153,16 @@ class Google_Service_Classroom extends Google_Service
                   'location' => 'query',
                   'type' => 'integer',
                 ),
+                'teacherId' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'courseStates' => array(
                   'location' => 'query',
                   'type' => 'string',
                   'repeated' => true,
                 ),
-                'teacherId' => array(
+                'studentId' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -300,22 +303,22 @@ class Google_Service_Classroom extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'pageToken' => array(
+                'announcementStates' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                  'repeated' => true,
+                ),
+                'orderBy' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'orderBy' => array(
+                'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
-                ),
-                'announcementStates' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                  'repeated' => true,
                 ),
               ),
             ),'modifyAssignees' => array(
@@ -411,11 +414,11 @@ class Google_Service_Classroom extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'pageToken' => array(
+                'orderBy' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'orderBy' => array(
+                'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -507,24 +510,24 @@ class Google_Service_Classroom extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'pageToken' => array(
+                'late' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'pageSize' => array(
+                'pageToken' => array(
                   'location' => 'query',
-                  'type' => 'integer',
+                  'type' => 'string',
                 ),
                 'states' => array(
                   'location' => 'query',
                   'type' => 'string',
                   'repeated' => true,
                 ),
-                'userId' => array(
+                'pageSize' => array(
                   'location' => 'query',
-                  'type' => 'string',
+                  'type' => 'integer',
                 ),
-                'late' => array(
+                'userId' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -821,7 +824,7 @@ class Google_Service_Classroom extends Google_Service
               'path' => 'v1/invitations',
               'httpMethod' => 'GET',
               'parameters' => array(
-                'courseId' => array(
+                'userId' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -829,13 +832,13 @@ class Google_Service_Classroom extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'userId' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
+                ),
+                'courseId' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
               ),
             ),
@@ -930,18 +933,18 @@ class Google_Service_Classroom extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'pageSize' => array(
+                'invitedEmailAddress' => array(
                   'location' => 'query',
-                  'type' => 'integer',
+                  'type' => 'string',
                 ),
                 'states' => array(
                   'location' => 'query',
                   'type' => 'string',
                   'repeated' => true,
                 ),
-                'invitedEmailAddress' => array(
+                'pageSize' => array(
                   'location' => 'query',
-                  'type' => 'string',
+                  'type' => 'integer',
                 ),
               ),
             ),'patch' => array(
@@ -1016,13 +1019,13 @@ class Google_Service_Classroom extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'pageSize' => array(
-                  'location' => 'query',
-                  'type' => 'integer',
-                ),
                 'invitedEmailAddress' => array(
                   'location' => 'query',
                   'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
                 ),
               ),
             ),

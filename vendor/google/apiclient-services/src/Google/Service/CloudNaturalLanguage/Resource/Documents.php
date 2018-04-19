@@ -98,4 +98,17 @@ class Google_Service_CloudNaturalLanguage_Resource_Documents extends Google_Serv
     $params = array_merge($params, $optParams);
     return $this->call('annotateText', array($params), "Google_Service_CloudNaturalLanguage_AnnotateTextResponse");
   }
+  /**
+   * Classifies a document into categories. (documents.classifyText)
+   *
+   * @param Google_Service_CloudNaturalLanguage_ClassifyTextRequest $postBody
+   * @param array $optParams Optional parameters.
+   * @return Google_Service_CloudNaturalLanguage_ClassifyTextResponse
+   */
+  public function classifyText(Google_Service_CloudNaturalLanguage_ClassifyTextRequest $postBody, $optParams = array())
+  {
+    $params = array('postBody' => $postBody);
+    $params = array_merge($params, $optParams);
+    return $this->call('classifyText', array($params), "Google_Service_CloudNaturalLanguage_ClassifyTextResponse");
+  }
 }

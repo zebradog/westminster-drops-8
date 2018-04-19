@@ -76,8 +76,8 @@ class Google_Service_Dataflow_Resource_ProjectsJobs extends Google_Service_Resou
    * @param string $jobId The job ID.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param string view The level of information requested in response.
    * @opt_param string location The location that contains this job.
+   * @opt_param string view The level of information requested in response.
    * @return Google_Service_Dataflow_Job
    */
   public function get($projectId, $jobId, $optParams = array())

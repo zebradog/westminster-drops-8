@@ -120,7 +120,7 @@ class Google_Service_CloudIot_Resource_ProjectsLocationsRegistries extends Googl
    * @opt_param string updateMask Only updates the `device_registry` fields
    * indicated by this mask. The field mask must not be empty, and it must not
    * contain fields that are immutable or only set by the server. Mutable top-
-   * level fields: `event_notification_config`, `mqtt_config`, and
+   * level fields: `event_notification_config`, `http_config`, `mqtt_config`, and
    * `state_notification_config`.
    * @return Google_Service_CloudIot_DeviceRegistry
    */

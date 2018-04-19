@@ -36,6 +36,7 @@ class Google_Service_Iam extends Google_Service
   const CLOUD_PLATFORM =
       "https://www.googleapis.com/auth/cloud-platform";
 
+  public $iamPolicies;
   public $organizations_roles;
   public $permissions;
   public $projects_roles;
@@ -56,6 +57,20 @@ class Google_Service_Iam extends Google_Service
     $this->version = 'v1';
     $this->serviceName = 'iam';
 
+    $this->iamPolicies = new Google_Service_Iam_Resource_IamPolicies(
+        $this,
+        $this->serviceName,
+        'iamPolicies',
+        array(
+          'methods' => array(
+            'queryAuditableServices' => array(
+              'path' => 'v1/iamPolicies:queryAuditableServices',
+              'httpMethod' => 'POST',
+              'parameters' => array(),
+            ),
+          )
+        )
+    );
     $this->organizations_roles = new Google_Service_Iam_Resource_OrganizationsRoles(
         $this,
         $this->serviceName,
@@ -213,19 +228,19 @@ class Google_Service_Iam extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'showDeleted' => array(
-                  'location' => 'query',
-                  'type' => 'boolean',
-                ),
-                'pageToken' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
                 ),
                 'view' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'showDeleted' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
+                ),
+                'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),

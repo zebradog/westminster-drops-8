@@ -152,13 +152,13 @@ class Google_Service_Proximitybeacon extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'pageSize' => array(
-                  'location' => 'query',
-                  'type' => 'integer',
-                ),
                 'q' => array(
                   'location' => 'query',
                   'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
                 ),
                 'projectId' => array(
                   'location' => 'query',
@@ -285,13 +285,13 @@ class Google_Service_Proximitybeacon extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'alertFilter' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
+                ),
+                'alertFilter' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
                 'projectId' => array(
                   'location' => 'query',

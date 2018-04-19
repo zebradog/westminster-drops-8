@@ -18,9 +18,10 @@
 class Google_Service_ShoppingContent_OrderLineItem extends Google_Collection
 {
   protected $collection_key = 'returns';
+  protected $annotationsType = 'Google_Service_ShoppingContent_OrderMerchantProvidedAnnotation';
+  protected $annotationsDataType = 'array';
   protected $cancellationsType = 'Google_Service_ShoppingContent_OrderCancellation';
   protected $cancellationsDataType = 'array';
-  public $channelType;
   public $id;
   protected $priceType = 'Google_Service_ShoppingContent_Price';
   protected $priceDataType = '';
@@ -42,6 +43,20 @@ class Google_Service_ShoppingContent_OrderLineItem extends Google_Collection
   protected $taxDataType = '';
 
   /**
+   * @param Google_Service_ShoppingContent_OrderMerchantProvidedAnnotation
+   */
+  public function setAnnotations($annotations)
+  {
+    $this->annotations = $annotations;
+  }
+  /**
+   * @return Google_Service_ShoppingContent_OrderMerchantProvidedAnnotation
+   */
+  public function getAnnotations()
+  {
+    return $this->annotations;
+  }
+  /**
    * @param Google_Service_ShoppingContent_OrderCancellation
    */
   public function setCancellations($cancellations)
@@ -54,14 +69,6 @@ class Google_Service_ShoppingContent_OrderLineItem extends Google_Collection
   public function getCancellations()
   {
     return $this->cancellations;
-  }
-  public function setChannelType($channelType)
-  {
-    $this->channelType = $channelType;
-  }
-  public function getChannelType()
-  {
-    return $this->channelType;
   }
   public function setId($id)
   {

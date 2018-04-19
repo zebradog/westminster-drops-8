@@ -20,15 +20,13 @@ class Google_Service_AdExchangeBuyerII_FilterSet extends Google_Collection
   protected $collection_key = 'sellerNetworkIds';
   protected $absoluteDateRangeType = 'Google_Service_AdExchangeBuyerII_AbsoluteDateRange';
   protected $absoluteDateRangeDataType = '';
-  public $buyerAccountId;
   public $creativeId;
   public $dealId;
   public $environment;
-  public $filterSetId;
-  public $format;
+  public $formats;
   public $name;
-  public $ownerAccountId;
   public $platforms;
+  public $publisherIdentifiers;
   protected $realtimeTimeRangeType = 'Google_Service_AdExchangeBuyerII_RealtimeTimeRange';
   protected $realtimeTimeRangeDataType = '';
   protected $relativeDateRangeType = 'Google_Service_AdExchangeBuyerII_RelativeDateRange';
@@ -49,14 +47,6 @@ class Google_Service_AdExchangeBuyerII_FilterSet extends Google_Collection
   public function getAbsoluteDateRange()
   {
     return $this->absoluteDateRange;
-  }
-  public function setBuyerAccountId($buyerAccountId)
-  {
-    $this->buyerAccountId = $buyerAccountId;
-  }
-  public function getBuyerAccountId()
-  {
-    return $this->buyerAccountId;
   }
   public function setCreativeId($creativeId)
   {
@@ -82,21 +72,13 @@ class Google_Service_AdExchangeBuyerII_FilterSet extends Google_Collection
   {
     return $this->environment;
   }
-  public function setFilterSetId($filterSetId)
+  public function setFormats($formats)
   {
-    $this->filterSetId = $filterSetId;
+    $this->formats = $formats;
   }
-  public function getFilterSetId()
+  public function getFormats()
   {
-    return $this->filterSetId;
-  }
-  public function setFormat($format)
-  {
-    $this->format = $format;
-  }
-  public function getFormat()
-  {
-    return $this->format;
+    return $this->formats;
   }
   public function setName($name)
   {
@@ -106,14 +88,6 @@ class Google_Service_AdExchangeBuyerII_FilterSet extends Google_Collection
   {
     return $this->name;
   }
-  public function setOwnerAccountId($ownerAccountId)
-  {
-    $this->ownerAccountId = $ownerAccountId;
-  }
-  public function getOwnerAccountId()
-  {
-    return $this->ownerAccountId;
-  }
   public function setPlatforms($platforms)
   {
     $this->platforms = $platforms;
@@ -121,6 +95,14 @@ class Google_Service_AdExchangeBuyerII_FilterSet extends Google_Collection
   public function getPlatforms()
   {
     return $this->platforms;
+  }
+  public function setPublisherIdentifiers($publisherIdentifiers)
+  {
+    $this->publisherIdentifiers = $publisherIdentifiers;
+  }
+  public function getPublisherIdentifiers()
+  {
+    return $this->publisherIdentifiers;
   }
   /**
    * @param Google_Service_AdExchangeBuyerII_RealtimeTimeRange

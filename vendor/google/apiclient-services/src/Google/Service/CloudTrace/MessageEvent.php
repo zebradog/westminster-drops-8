@@ -17,18 +17,18 @@
 
 class Google_Service_CloudTrace_MessageEvent extends Google_Model
 {
-  public $compressedSize;
+  public $compressedSizeBytes;
   public $id;
   public $type;
-  public $uncompressedSize;
+  public $uncompressedSizeBytes;
 
-  public function setCompressedSize($compressedSize)
+  public function setCompressedSizeBytes($compressedSizeBytes)
   {
-    $this->compressedSize = $compressedSize;
+    $this->compressedSizeBytes = $compressedSizeBytes;
   }
-  public function getCompressedSize()
+  public function getCompressedSizeBytes()
   {
-    return $this->compressedSize;
+    return $this->compressedSizeBytes;
   }
   public function setId($id)
   {
@@ -46,12 +46,12 @@ class Google_Service_CloudTrace_MessageEvent extends Google_Model
   {
     return $this->type;
   }
-  public function setUncompressedSize($uncompressedSize)
+  public function setUncompressedSizeBytes($uncompressedSizeBytes)
   {
-    $this->uncompressedSize = $uncompressedSize;
+    $this->uncompressedSizeBytes = $uncompressedSizeBytes;
   }
-  public function getUncompressedSize()
+  public function getUncompressedSizeBytes()
   {
-    return $this->uncompressedSize;
+    return $this->uncompressedSizeBytes;
   }
 }

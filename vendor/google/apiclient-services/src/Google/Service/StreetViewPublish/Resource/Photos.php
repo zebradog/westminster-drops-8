@@ -95,7 +95,10 @@ class Google_Service_StreetViewPublish_Resource_Photos extends Google_Service_Re
     return $this->call('batchUpdate', array($params), "Google_Service_StreetViewPublish_BatchUpdatePhotosResponse");
   }
   /**
-   * Lists all the Photos that belong to the user. (photos.listPhotos)
+   * Lists all the Photos that belong to the user.
+   *
+   * Note: Recently created photos that are still being indexed are not returned
+   * in the response. (photos.listPhotos)
    *
    * @param array $optParams Optional parameters.
    *

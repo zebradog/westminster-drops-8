@@ -6,8 +6,14 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'phpDocumentor' => array($vendorDir . '/phpdocumentor/reflection-docblock/src'),
+    'org\\bovigo\\vfs\\' => array($vendorDir . '/mikey179/vfsStream/src/main/php'),
+    'WebDriver' => array($vendorDir . '/instaclick/php-webdriver/lib'),
     'Twig_' => array($vendorDir . '/twig/twig/lib'),
     'Stack' => array($vendorDir . '/stack/builder/src'),
+    'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
+    'Google_Service_' => array($vendorDir . '/google/apiclient-services/src'),
+    'Google_' => array($vendorDir . '/google/apiclient/src'),
     'Egulias\\' => array($vendorDir . '/egulias/email-validator/src'),
     'EasyRdf_' => array($vendorDir . '/easyrdf/easyrdf/lib'),
     'Doctrine\\Common\\Lexer\\' => array($vendorDir . '/doctrine/lexer/lib'),
