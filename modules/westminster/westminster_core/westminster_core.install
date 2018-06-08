@@ -1,0 +1,29 @@
+<?php
+
+  use Drupal\node\Entity\Node;
+  use Drupal\node\Entity\NodeType;
+  use Drupal\views\Entity\View;
+
+  /**
+   * Remove legacy nodes, views, and node types associated with the previous scheduling implementation.
+   */
+  function westminster_core_update_8001() {
+    // Delete nodes
+    $nids = \Drupal::entityQuery('node')
+      ->condition('type', 'scheduled_content')
+      ->execute();
+
+    if (!empty($nids)) {
+      foreach ($nids as $nid) {
+        Node::load($nid)->delete();
+      }
+    }
+
+    // Delete view
+    View::load('schedule')->delete();
+
+    // Delete node types
+    NodeType::load('external_content')->delete();
+    NodeType::load('scheduled_content')->delete();
+    NodeType::load('slideshow')->delete();
+  }
