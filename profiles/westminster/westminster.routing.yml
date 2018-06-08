@@ -1,7 +1,3 @@
-westminster.destination_schedule:
-  path: '/schedule'
-  requirements:
-    _permission: 'view content'
 westminster.destination_content:
   path: '/admin/content'
   requirements:
