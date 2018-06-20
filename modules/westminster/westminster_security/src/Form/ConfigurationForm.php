@@ -6,12 +6,26 @@
   use Drupal\Core\Form\ConfigFormBase;
   use Drupal\Core\Form\FormStateInterface;
 
+  /**
+   * Configuration form for the module.
+   */
   Class ConfigurationForm extends ConfigFormBase {
 
+    /**
+     * Name of the module configuration object.
+     */
     const CONFIGURATION_NAME = 'westminster_security.configuration';
 
+    /**
+     * Instance of the module configuration object.
+     * @see _getConfiguration()
+     * @var Config
+     */
     protected $_configuration;
 
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(array $form, FormStateInterface $form_state) {
       $configuration = $this->_getConfiguration();
 
@@ -41,16 +55,25 @@
       return $form;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getEditableConfigNames() {
       return [
         static::CONFIGURATION_NAME,
       ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getFormId() {
       return 'westminster_security_configuration';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function submitForm(array &$form, FormStateInterface $form_state) {
       $configuration = $this->_getConfiguration();
       $shouldRebuildRoutes = $this->_shouldRebuildRoutes($configuration, $form_state);
@@ -60,16 +83,23 @@
       $configuration->save();
 
       if ($shouldRebuildRoutes) {
-        \Drupal::service('router.builder')->rebuild();
+        $this->_rebuildRoutes();
       }
 
       drupal_set_message($this->t('The configuration has been successfully saved.'));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function validateForm(array &$form, FormStateInterface $form_state) {
 
     }
 
+    /**
+     * Returns the module configuration object.
+     * @return Config
+     */
     protected function _getConfiguration() {
       if (!$this->_configuration) {
         $this->_configuration = $this->config(static::CONFIGURATION_NAME);
@@ -78,6 +108,19 @@
       return $this->_configuration;
     }
 
+    /**
+     * Commands the router service to rebuild its routes.
+     */
+    protected function _rebuildRoutes() {
+      \Drupal::service('router.builder')->rebuild();
+    }
+
+    /**
+     * Returns whether any changed values should trigger a route rebuild.
+     * @param Config $config The current configuration values
+     * @param FormStateInterface $form_state The newly submitted values
+     * @return boolean
+     */
     protected function _shouldRebuildRoutes(Config $configuration, FormStateInterface $form_state) {
       if ($configuration->get('prevent_anonymous_node_access') != $form_state->getValue('prevent_anonymous_node_access')) {
         return true;
