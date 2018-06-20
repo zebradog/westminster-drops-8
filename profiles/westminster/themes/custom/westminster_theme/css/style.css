@@ -101,3 +101,31 @@ body.path-node .nav-tabs, body.path-user .nav-tabs{
 .progress {
   overflow: visible;
 }
+
+/* AdminLTE Overrides */
+.content-wrapper,.right-side,.main-footer {
+  z-index: 82; /* 820 */
+}
+.content-wrapper,.right-side {
+  z-index: 80; /* 800 */
+}
+.main-header {
+  z-index: 99; /* 1030 */
+}
+.main-sidebar,.left-side {
+  z-index: 81; /* 810 */
+}
+@media (min-width: 768px) {
+  .sidebar-mini.sidebar-collapse .content-wrapper,.sidebar-mini.sidebar-collapse .right-side,.sidebar-mini.sidebar-collapse .main-footer {
+    z-index: 84; /* 840 */
+  }
+  .sidebar-mini.sidebar-collapse .main-sidebar {
+    z-index: 85; /* 850 */
+  }
+}
+.control-sidebar-bg {
+  z-index: 97; /* 1000 */
+}
+.control-sidebar {
+  z-index: 98; /* 1010 */
+}
