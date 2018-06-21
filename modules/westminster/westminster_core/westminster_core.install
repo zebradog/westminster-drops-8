@@ -33,9 +33,11 @@
     }
 
     // Delete node types
+    /* XXX: Breaks sites with poorly configured views
     foreach ($tids as $tid) {
       if ($type = NodeType::load($tid)) {
         $type->delete();
       }
     }
+    */
   }
