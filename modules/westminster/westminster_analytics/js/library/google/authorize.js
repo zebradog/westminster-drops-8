@@ -3,7 +3,7 @@ if (gapi && gapi.analytics && gapi.analytics.ready) {
 
     if (drupalSettings && drupalSettings.westminster_analytics && drupalSettings.westminster_analytics.serverAuth) {
       gapi.analytics.auth.authorize({
-        'serverAuth': drupalSettings.westminster_analytics.serverAuth
+        serverAuth: drupalSettings.westminster_analytics.serverAuth,
       });
     }
 

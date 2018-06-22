@@ -1,5 +1,5 @@
 name: Westminster Analytics
-description: Optional enhancements related to Google Analytics.
+description: Provides an integration with Google Analytics and tools for creating data visualization.
 package: Westminster
 
 type: module

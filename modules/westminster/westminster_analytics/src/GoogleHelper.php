@@ -2,88 +2,59 @@
 
   namespace Drupal\westminster_analytics;
 
-  use Drupal\westminster_analytics\ConfigurationHelper;
+  use GuzzleHttp\Exception\BadResponseException;
 
+  /**
+   * Provides helpers for initializing, authorizing, and working with Google_Client instances.
+   * @todo Consider converting this to a service.
+   */
   Class GoogleHelper {
 
-    static protected $_configurationHelper;
-
-    public function authorizeGoogleClient(\Google_Client $googleClient, $forceRefresh = false) {
-      $configurationHelper = $this->_getConfigurationHelper();
-
-      try {
-        if (!$configurationHelper->isAccessTokenExpired() && !$forceRefresh) {
-          $googleClient->setAccessToken($configurationHelper->getAccessToken());
-          return true;
-        } elseif ($configurationHelper->hasCredentials()) {
-          $googleClient->fetchAccessTokenWithAssertion();
-
-          if ($accessToken = $googleClient->getAccessToken()) {
-            if ($configurationHelper->isValidAccessToken($accessToken)) {
-              return true;
-            }
-          }
-        }
-      } catch (Exception $e) {}
-
-      return false;
-    }
-
-    public function configureGoogleClient(\Google_Client $googleClient) {
-      $configurationHelper = $this->_getConfigurationHelper();
+    /**
+     * Returns a usable Google_Client instance.
+     * @param mixed[] $credentials
+     * @param mixed[] $accessToken
+     * @return \Google_Client
+     */
+    public function createClient($credentials = [], $accessToken = []) {
+      $googleClient = new \Google_Client([]);
 
       try {
-        $googleClient->setScopes([\Google_Service_Analytics::ANALYTICS_READONLY]);
-
-        if ($configurationHelper->hasCredentials()) {
-          $googleClient->setAuthConfig($configurationHelper->getCredentials());
-          return true;
-        }
+        $googleClient->setAuthConfig($credentials);
+        $googleClient->setAccessToken($accessToken);
       } catch (Exception $e) {}
-
-      return false;
-    }
-
-    public function getAuthorizedGoogleClient($clientConfiguration = array(), $forceRefresh = false) {
-      $googleClient = $this->getConfiguredGoogleClient($clientConfiguration);
-
-      $this->authorizeGoogleClient($googleClient, $forceRefresh);
 
       return $googleClient;
     }
 
-    public function getConfiguredGoogleClient($clientConfiguration = array()) {
-      $googleClient = $this->getGoogleClient($clientConfiguration);
+    /**
+     * Employs a Google_Client instance to fetch an access_token for the configured credentials.
+     * @return mixed[]
+     */
+    public function fetchAccessToken($credentials = []) {
+      $googleClient = $this->_createClient();
 
-      $this->configureGoogleClient($googleClient);
+      try {
+        $googleClient->setAuthConfig($credentials);
+        $googleClient->fetchAccessTokenWithAssertion();
+      } catch (BadResponseException $e) {
+      } catch (Exception $e) {}
+
+      return $googleClient->getAccessToken();
+    }
+
+    /**
+     * Returns a new Google_Client instance.
+     * @return Google_Client
+     */
+    protected function _createClient() {
+      $googleClient = new \Google_Client([]);
+
+      $googleClient->setScopes([
+        \Google_Service_Analytics::ANALYTICS_READONLY,
+      ]);
 
       return $googleClient;
-    }
-
-    public function getGoogleClient($clientConfiguration = array()) {
-      return new \Google_Client($clientConfiguration);
-    }
-
-    public function getInjectableServerAuthorization() {
-      $googleClient = $this->getConfiguredGoogleClient();
-
-      if ($this->authorizeGoogleClient($googleClient)) {
-        $accessToken = $googleClient->getAccessToken();
-
-        return array(
-          'access_token' => $accessToken['access_token'],
-        );
-      }
-
-      return [];
-    }
-
-    protected function _getConfigurationHelper() {
-      if (!static::$_configurationHelper) {
-        static::$_configurationHelper = new ConfigurationHelper();
-      }
-
-      return static::$_configurationHelper;
     }
 
   }

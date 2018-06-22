@@ -4,24 +4,67 @@
 
   use Drupal\westminster_analytics\GoogleHelper;
 
+  /**
+   *
+   * @todo Consider converting this to a service.
+   */
   Class ConfigurationHelper {
 
-    const CONFIGURATION_KEY_CREDENTIALS = 'credentials';
-    const CONFIGURATION_KEY_TOKEN_ACCESS = 'token_access';
+    /**
+     * Key for the stored access token.
+     */
+    const CONFIG_KEY_ACCESSTOKEN = 'access_token';
 
-    const CONFIGURATION_NAME = 'westminster_analytics.configuration';
+    /**
+     * Key for the stored credentials.
+     */
+    const CONFIG_KEY_CREDENTIALS = 'credentials';
 
+    /**
+     * Name of the module configuration object.
+     */
+    const CONFIG_NAME = 'westminster_analytics.configuration';
+
+    /**
+     * Editable configuration instance.
+     * @see _getConfiguration()
+     * @var Config
+     */
     static protected $_configuration;
+
+    /**
+     * Cached instance of GoogleHelper.
+     * @see _getGoogleHelper()
+     * @var GoogleHelper
+     */
     static protected $_googleHelper;
 
+    /**
+     * Clears the access token.
+     * Shortcut for `setAccessToken(NULL, $saveConfiguration)`.
+     * @param boolean $saveConfiguration
+     */
     public function clearAccessToken($saveConfiguration = false) {
       return $this->setAccessToken(NULL, $saveConfiguration);
     }
 
+    /**
+     * Clears the credentials.
+     * Shortcut for `setCredentials(NULL, $saveConfiguration)`.
+     * @param boolean $saveConfiguration
+     */
     public function clearCredentials($saveConfiguration = false) {
       return $this->setCredentials(NULL, $saveConfiguration);
     }
 
+    /**
+     * Returns the stored access token.
+     * If the token is expired, then it will be refreshed via {@link refreshAccessToken()}.
+     * @param boolean $forceRefresh
+     *   Forces the token to refresh regardless of its expiry
+     * @return mixed[]
+     * @see _getAccessToken()
+     */
     public function getAccessToken($forceRefresh = false) {
       if ($forceRefresh || $this->isExpiredAccessToken($this->_getAccessToken())) {
         $this->refreshAccessToken();
@@ -30,18 +73,19 @@
       return $this->_getAccessToken();
     }
 
-    public function getConfiguration() {
-      if (!static::$_configuration) {
-        static::$_configuration = \Drupal::configFactory()->getEditable(static::CONFIGURATION_NAME);
-      }
-
-      return static::$_configuration;
-    }
-
+    /**
+     * Returns the stored credentials from the configuration object.
+     * @return mixed[]
+     */
     public function getCredentials() {
-      return json_decode($this->getConfiguration()->get(static::CONFIGURATION_KEY_CREDENTIALS), true);
+      return $this->_getConfiguration()->get(static::CONFIG_KEY_CREDENTIALS);
     }
 
+    /**
+     * Returns a redacted access token for human eyes.
+     * Never output the raw contents of {@link getAccessToken()}.
+     * @return mixed[]
+     */
     public function getRedactedAccessToken($redactionString = 'REDACTED') {
       return $this->_redactArrayKeys($this->getAccessToken(), [
         'access_token',
@@ -49,6 +93,11 @@
       ]);
     }
 
+    /**
+     * Returns redacted credentials for human eyes.
+     * Never output the raw contents of {@link getCredentials()}.
+     * @return mixed[]
+     */
     public function getRedactedCredentials($redactionString = 'REDACTED') {
       return $this->_redactArrayKeys($this->getCredentials(), [
         'client_secret',
@@ -56,101 +105,95 @@
       ]);
     }
 
-    public function hasAccessToken() {
-      return !!$this->getAccessToken();
-    }
-
-    public function hasCredentials() {
-      return !!$this->getCredentials();
-    }
-
-    public function isAccessTokenExpired($threshold = 30) {
-      return $this->isExpiredAccessToken($this->_getAccessToken(), $threshold);
-    }
-
-    public function isExpiredAccessToken($accessToken, $threshold = 30) {
-      if (is_array($accessToken)) {
-        if (isset($accessToken['created']) && isset($accessToken['expires_in'])) {
-          $tokenExpiry = $accessToken['created'];
-          $tokenExpiry += $accessToken['expires_in'];
-          $tokenExpiry -= $threshold;
-
-          return $tokenExpiry < time();
-        }
-      } elseif ($decodedAccessToken = json_decode($accessToken, true)) {
-        return $this->isExpiredAccessToken($decodedAccessToken);
+    /**
+     * Returns whether the provided access token has expired.
+     * @param mixed[] $accessToken
+     * @param number $threshold
+     *   Time in seconds to offset the expiry to prevent stale tokens on the frontend.
+     * @return boolean
+     */
+    public function isExpiredAccessToken($accessToken = [], $threshold = 60) {
+      if (!is_array($accessToken) || !isset($accessToken['created']) || !isset($accessToken['expires_in'])) {
+        return true;
       }
 
-      return true;
+      $tokenExpiry = $accessToken['created'];
+      $tokenExpiry += $accessToken['expires_in'];
+      $tokenExpiry -= $threshold;
+
+      return $tokenExpiry < time();
     }
 
-    public function isValidAccessToken($accessToken = array()) {
-      if (is_array($accessToken)) {
-        return !array_diff([
-          'access_token',
-        ], array_keys($accessToken));
-      } elseif ($decodedAccessToken = json_decode($accessToken, true)) {
-        return $this->isValidAccessToken($decodedAccessToken);
-      }
-
-      return false;
+    /**
+     * Returns whether the provided access token is valid (enough).
+     * @param mixed[] $accessToken
+     * @return boolean
+     */
+    public function isValidAccessToken($accessToken = []) {
+      return is_array($accessToken) && isset($accessToken['access_token']);
     }
 
-    public function isValidCredentials($credentials = array()) {
-      if (is_array($credentials)) {
-        return !array_diff([
-          'client_id',
-          'type',
-        ], array_keys($credentials));
-      } elseif ($decodedCredentials = json_decode($accessToken, true)) {
-        return $this->isValidCredentials($decodedCredentials);
-      }
-
-      return false;
+    /**
+     * Returns whether the provided credentials are valid.
+     * @param mixed[] $credentials
+     * @return boolean
+     */
+    public function isValidCredentials($credentials = []) {
+      return is_array($credentials) && isset($credentials['client_id']) && isset($credentials['type']);
     }
 
-    public function isValidCredentialsFile($credentialsFilePath = '') {
-      if (file_exists($credentialsFilePath)) {
-        if ($credentialsFileContents = file_get_contents($credentialsFilePath)) {
-          return $this->isValidCredentialsJson($credentialsFileContents);
-        }
-      }
-
-      return false;
+    /**
+     * Returns whether the stored access token is set and valid.
+     * @return boolean
+     */
+    public function hasValidAccessToken() {
+      return $this->isValidAccessToken($this->_getAccessToken());
     }
 
-    public function isValidCredentialsJson($credentialsJson = '') {
-      if ($credentials = json_decode($credentialsJson, true)) {
-        return $this->isValidCredentials($credentials);
-      }
-
-      return false;
+    /**
+     * Returns whether the stored credentials are set and valid.
+     * @return boolean
+     */
+    public function hasValidCredentials($credentials = []) {
+      return $this->isValidCredentials($this->getCredentials());
     }
 
+    /**
+     * Refreshes the stored access token using the stored credentials.
+     * @return ConfigurationHelper $this
+     */
     public function refreshAccessToken() {
-      $googleClient = $this->_getGoogleHelper()->getAuthorizedGoogleClient(array(), true);
+      $accessToken = $this->_getGoogleHelper()->fetchAccessToken($this->getCredentials());
 
-      if ($accessToken = $googleClient->getAccessToken()) {
-        if ($this->isValidAccessToken($accessToken)) {
-          $this->setAccessToken($accessToken, true);
-        }
+      if ($this->isValidAccessToken($accessToken)) {
+        $this->setAccessToken($accessToken, true);
+      } else {
+        $this->clearAccessToken(true);
       }
 
       return $this;
     }
 
+    /**
+     * Saves all changes to the configuration object.
+     * @return ConfigurationHelper $this
+     */
     public function saveConfiguration() {
-      $this->getConfiguration()->save();
+      $this->_getConfiguration()->save();
 
       return $this;
     }
 
+    /**
+     * Sets the stored access token.
+     * @param mixed[] $accessToken
+     *   Pass NULL to clear the stored access token.
+     * @param boolean $saveConfiguration
+     *   Call {@link saveConfiguration()} after setting.
+     * @return ConfigurationHelper $this
+     */
     public function setAccessToken($accessToken = NULL, $saveConfiguration = false) {
-      if (!(is_null($accessToken) || is_string($accessToken))) {
-        $accessToken = json_encode($accessToken);
-      }
-
-      $this->getConfiguration()->set(static::CONFIGURATION_KEY_TOKEN_ACCESS, $accessToken);
+      $this->_getConfiguration()->set(static::CONFIG_KEY_ACCESSTOKEN, $accessToken);
 
       if ($saveConfiguration) {
         $this->saveConfiguration();
@@ -159,12 +202,16 @@
       return $this;
     }
 
+    /**
+     * Sets the stored credentials.
+     * @param mixed[] $credentials
+     *   Pass NULL to clear the stored credentials.
+     * @param boolean $saveConfiguration
+     *   Call {@link saveConfiguration()} after setting.
+     * @return ConfigurationHelper $this
+     */
     public function setCredentials($credentials = NULL, $saveConfiguration = false) {
-      if (!(is_null($credentials) || is_string($credentials))) {
-        $credentials = json_encode($credentials);
-      }
-
-      $this->getConfiguration()->set(static::CONFIGURATION_KEY_CREDENTIALS, $credentials);
+      $this->_getConfiguration()->set(static::CONFIG_KEY_CREDENTIALS, $credentials);
       $this->clearAccessToken();
 
       if ($saveConfiguration) {
@@ -174,26 +221,45 @@
       return $this;
     }
 
-    public function setCredentialsWithFilePath($credentialsPath = '', $saveConfiguration = false) {
-      if ($this->isValidCredentialsFile($credentialsPath)) {
-        $this->setCredentials(file_get_contents($credentialsPath), $saveConfiguration);
-      }
-
-      return $this;
-    }
-
+    /**
+     * Returns the stored access token from the configuration object.
+     * @return mixed[]
+     */
     protected function _getAccessToken() {
-      return json_decode($this->getConfiguration()->get(static::CONFIGURATION_KEY_TOKEN_ACCESS), true);
+      return $this->_getConfiguration()->get(static::CONFIG_KEY_ACCESSTOKEN);
     }
 
-    protected function _getGoogleHelper() {
-      if (!$this->_googleHelper) {
-        $this->_googleHelper = new GoogleHelper();
+    /**
+     * Returns an editable configuration instance.
+     * @return Config
+     */
+    protected function _getConfiguration() {
+      if (!static::$_configuration) {
+        static::$_configuration = \Drupal::configFactory()->getEditable(static::CONFIG_NAME);
       }
 
-      return $this->_googleHelper;
+      return static::$_configuration;
     }
 
+    /**
+     * Returns a cached instance of GoogleHelper.
+     * @return GoogleHelper
+     */
+    protected function _getGoogleHelper() {
+      if (!static::$_googleHelper) {
+        static::$_googleHelper = new GoogleHelper();
+      }
+
+      return static::$_googleHelper;
+    }
+
+    /**
+     * Replaces values with keys `$keys` in `$array` with `$redactionString` if they exist.
+     * @param mixed[] $array
+     * @param mixed[] $keys
+     * @param string $redactionString
+     * @return mixed[]
+     */
     protected function _redactArrayKeys(array $array, array $keys, $redactionString = 'REDACTED') {
       foreach($keys as $key) {
         if (isset($array[$key])) {

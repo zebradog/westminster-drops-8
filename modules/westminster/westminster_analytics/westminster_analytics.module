@@ -3,19 +3,34 @@
   use Drupal\westminster_analytics\ConfigurationHelper;
   use Drupal\westminster_analytics\GoogleHelper;
 
+  /**
+   * Implements HOOK_preprocess_page().
+   * @param array &$variables
+   */
   function westminster_analytics_preprocess_page(&$variables) {
+    $variables['#attached']['drupalSettings']['westminster_analytics'] = [];
+
     if (\Drupal::currentUser()->isAuthenticated()) {
-      westminster_analytics_attachGapiLibrary($variables);
+      _westminster_analytics_attachGapiLibrary($variables);
     }
   }
 
-  function westminster_analytics_attachGapiLibrary(&$variables) {
+  /**
+   * Attaches the GAPI library to the render array if credentials are set.
+   * @param array &$variables
+   */
+  function _westminster_analytics_attachGapiLibrary(&$variables) {
     $configurationHelper = new ConfigurationHelper();
-    $googleHelper = new GoogleHelper();
 
-    if ($configurationHelper->hasCredentials()) {
-      $variables['#attached']['library'][] = 'westminster_analytics/google';
-      $variables['#attached']['library'][] = 'westminster_analytics/main';
-      $variables['#attached']['drupalSettings']['westminster_analytics']['serverAuth'] = $googleHelper->getInjectableServerAuthorization();
+    if ($configurationHelper->hasValidCredentials()) {
+      $accessToken = $configurationHelper->getAccessToken();
+
+      if ($configurationHelper->isValidAccessToken($accessToken)) {
+        $variables['#attached']['library'][] = 'westminster_analytics/google';
+        $variables['#attached']['library'][] = 'westminster_analytics/main';
+        $variables['#attached']['drupalSettings']['westminster_analytics']['serverAuth'] = [
+          'access_token' => $accessToken['access_token'],
+        ];
+      }
     }
   }

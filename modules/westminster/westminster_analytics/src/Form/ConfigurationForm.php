@@ -7,19 +7,26 @@
   use Drupal\westminster_analytics\ConfigurationHelper;
   use Drupal\westminster_analytics\GoogleHelper;
 
+  /**
+   * Configuration form for the module.
+   */
   Class ConfigurationForm extends ConfigFormBase {
 
+    /**
+     * Cached instance of ConfigurationHelper.
+     * @see _getConfigurationHelper()
+     * @var ConfigurationHelper
+     */
     protected $_configurationHelper;
-    protected $_googleHelper;
 
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(array $form, FormStateInterface $form_state) {
-      $googleHelper = $this->_getGoogleHelper();
-      $googleHelper->getAuthorizedGoogleClient();
-
       $configurationHelper = $this->_getConfigurationHelper();
-      $hasCredentials = $configurationHelper->hasCredentials();
+      $hasValidCredentials = $configurationHelper->hasValidCredentials();
 
-      if ($configurationHelper->hasAccessToken()) {
+      if ($configurationHelper->hasValidAccessToken()) {
         $form['fieldset_access_token'] = array(
           '#type' => 'fieldset',
           '#title' => $this->t('Access Token'),
@@ -37,7 +44,7 @@
         '#title' => $this->t('Credentials'),
       );
 
-      if ($hasCredentials) {
+      if ($hasValidCredentials) {
         $form['fieldset_credentials']['redacted_credentials'] = array(
           '#type' => 'html_tag',
           '#tag' => 'pre',
@@ -47,11 +54,11 @@
 
       $form['fieldset_credentials']['credentials_file'] = array(
         '#type' => 'file',
-        '#title' => $hasCredentials ? $this->t('Overwrite Credentials') : $this->t('Upload Credentials'),
+        '#title' => $hasValidCredentials ? $this->t('Overwrite Credentials') : $this->t('Upload Credentials'),
         '#description' => 'Please select the JSON-formatted credentials file for the Google service account associated with this site.',
       );
 
-      if ($hasCredentials) {
+      if ($hasValidCredentials) {
         $form['fieldset_credentials']['clear_credentials'] = array(
           '#type' => 'checkbox',
           '#title' => $this->t('Clear Credentials'),
@@ -66,25 +73,34 @@
       return $form;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getEditableConfigNames() {
       return [
         ConfigurationHelper::CONFIGURATION_NAME,
       ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getFormId() {
       return 'westminster_analytics_configuration';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function submitForm(array &$form, FormStateInterface $form_state) {
       $configurationHelper = $this->_getConfigurationHelper();
 
-      if (!!$form_state->getValue('clear_credentials')) {
+      if ($form_state->getValue('clear_credentials')) {
         $configurationHelper->clearCredentials();
       }
 
-      if ($credentialsPath = $form_state->getValue('credentials_file')) {
-        $configurationHelper->setCredentialsWithFilePath($credentialsPath);
+      if ($credentials = $form_state->getTemporaryValue('credentials')) {
+        $configurationHelper->setCredentials($credentials);
       }
 
       $configurationHelper->saveConfiguration();
@@ -92,6 +108,9 @@
       drupal_set_message($this->t('The configuration has been successfully saved.'));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function validateForm(array &$form, FormStateInterface $form_state) {
       $configurationHelper = $this->_getConfigurationHelper();
 
@@ -107,7 +126,7 @@
 
           if ($decodedCredentials) {
             if ($configurationHelper->isValidCredentials($decodedCredentials)) {
-              $form_state->setValue('credentials_file', $credentialsPath);
+              $form_state->setTemporaryValue('credentials', $decodedCredentials);
             } else {
               $form_state->setErrorByName('credentials_file', $this->t('Please upload a valid credentials file.'));
             }
@@ -124,20 +143,16 @@
       }
     }
 
+    /**
+     * Returns a cached instance of ConfigurationHelper.
+     * @return ConfigurationHelper
+     */
     protected function _getConfigurationHelper() {
       if (!$this->_configurationHelper) {
         $this->_configurationHelper = new ConfigurationHelper();
       }
 
       return $this->_configurationHelper;
-    }
-
-    protected function _getGoogleHelper() {
-      if (!$this->_googleHelper) {
-        $this->_googleHelper = new GoogleHelper();
-      }
-
-      return $this->_googleHelper;
     }
 
   }

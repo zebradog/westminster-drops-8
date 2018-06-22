@@ -1,0 +1,20 @@
+<?php
+
+  use Drupal\westminster_analytics\ConfigurationHelper;
+
+  /**
+   * Port existing configuration values into new formats.
+   */
+  function westminster_analytics_update_8001() {
+    $config = \Drupal::configFactory()->getEditable('westminster_analytics.configuration');
+
+    $accessToken = json_decode($config->get('token_access'), true) ?: NULL;
+    $credentials = json_decode($config->get('credentials'), true) ?: NULL;
+
+    $configurationHelper = new ConfigurationHelper();
+
+    $configurationHelper->setAccessToken($accessToken);
+    $configurationHelper->setCredentials($credentials);
+
+    $configurationHelper->saveConfiguration();
+  }
