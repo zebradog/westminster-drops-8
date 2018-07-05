@@ -4,4 +4,4 @@ westminster_debug.routing:
     _title: 'Westminster Debug: Routing'
     _form: '\Drupal\westminster_debug\Form\RoutingForm'
   requirements:
-    _permission: 'westminster debug'
+    _permission: 'westminster debug routing'
