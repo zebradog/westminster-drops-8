@@ -1,19 +1,14 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\webprofiler\WebprofilerServiceProvider.
- */
-
 namespace Drupal\webprofiler;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ServiceProviderBase;
+use Drupal\webprofiler\Compiler\DecoratorPass;
 use Drupal\webprofiler\Compiler\EventPass;
 use Drupal\webprofiler\Compiler\ProfilerPass;
 use Drupal\webprofiler\Compiler\ServicePass;
 use Drupal\webprofiler\Compiler\StoragePass;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -33,7 +28,7 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
     $container->addCompilerPass(new StoragePass());
 
     $container->addCompilerPass(new ServicePass(), PassConfig::TYPE_AFTER_REMOVING);
-    $container->addCompilerPass(new EventPass(), PassConfig::TYPE_AFTER_REMOVING);
+    $container->addCompilerPass(new DecoratorPass(), PassConfig::TYPE_AFTER_REMOVING);
 
     $modules = $container->getParameter('container.modules');
 
@@ -53,7 +48,7 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
     // Add BlockDataCollector only if Block module is enabled.
     if (isset($modules['block'])) {
       $container->register('webprofiler.blocks', 'Drupal\webprofiler\DataCollector\BlocksDataCollector')
-        ->addArgument(new Reference(('entity.manager')))
+        ->addArgument(new Reference(('entity_type.manager')))
         ->addTag('data_collector', [
           'template' => '@webprofiler/Collector/blocks.html.twig',
           'id' => 'blocks',
@@ -92,11 +87,6 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
     $container->getDefinition('form_builder')
       ->setClass('Drupal\webprofiler\Form\FormBuilderWrapper');
 
-    // Replace the regular plugin.manager.mail service with a traceable one.
-    $container->getDefinition('plugin.manager.mail')
-      ->setClass('Drupal\webprofiler\Mail\MailManagerWrapper')
-      ->addMethodCall('setDataCollector', [new Reference('webprofiler.mail')]);
-
     // Replace the regular access_manager service with a traceable one.
     $container->getDefinition('access_manager')
       ->setClass('Drupal\webprofiler\Access\AccessManagerWrapper')
@@ -114,5 +104,14 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
     // Replace the regular string_translation service with a traceable one.
     $container->getDefinition('string_translation')
       ->setClass('Drupal\webprofiler\StringTranslation\TranslationManagerWrapper');
+
+    // Replace the regular event_dispatcher service with a traceable one.
+    $container->getDefinition('event_dispatcher')
+      ->setClass('Drupal\webprofiler\EventDispatcher\TraceableEventDispatcher')
+      ->addMethodCall('setStopwatch', [new Reference('stopwatch')]);
+
+    $container->getDefinition('http_kernel.basic')
+      ->replaceArgument(1, new Reference('webprofiler.debug.controller_resolver'));
   }
+
 }

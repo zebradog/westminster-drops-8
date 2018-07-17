@@ -18,13 +18,14 @@ Devel Kint
 Provides a dpr() function, which pretty prints variables.
 Useful during development. Also see similar helpers like dpm(), dvm().
 
+Webprofiler
+==============
+Adds a debug bar at bottom of all pages with tons of useful information like a query list,
+cache hit/miss data, memory profiling, page speed, php info, session info, etc.
+
 Devel Generate
 =================
 Bulk creates nodes, users, comment, terms for development. Has Drush integration.
-
-Devel Node Access
-=================
-Prints the node_access records for a given node. Also offers hook_node_access_explain for all node access modules to implement.
 
 Devel Generate Extensions
 =========================

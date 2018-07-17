@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\devel_generate\Plugin\DevelGenerate\TermDevelGenerate.
- */
-
 namespace Drupal\devel_generate\Plugin\DevelGenerate;
 
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -215,15 +210,6 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
 
       $max++;
 
-      if (function_exists('drush_log')) {
-        $feedback = drush_get_option('feedback', 1000);
-        if ($i % $feedback == 0) {
-          $now = time();
-          drush_log(dt('Completed @feedback terms (@rate terms/min)', array('@feedback' => $feedback, '@rate' => $feedback * 60 / ($now - $start))), 'ok');
-          $start = $now;
-        }
-      }
-
       // Limit memory usage. Only report first 20 created terms.
       if ($i < 20) {
         $terms[] = $term->label();
@@ -238,22 +224,33 @@ class TermDevelGenerate extends DevelGenerateBase implements ContainerFactoryPlu
   /**
    * {@inheritdoc}
    */
-  public function validateDrushParams($args) {
-    $vname = array_shift($args);
-    $values = array(
-      'num' => array_shift($args),
-      'kill' => drush_get_option('kill'),
-      'title_length' => 12,
-    );
-    // Try to convert machine name to a vocab ID
-    if (!$vocab = $this->vocabularyStorage->load($vname)) {
-      return drush_set_error('DEVEL_GENERATE_INVALID_INPUT', dt('Invalid vocabulary name: @name', array('@name' => $vname)));
-    }
-    if ($this->isNumber($values['num']) == FALSE) {
-      return drush_set_error('DEVEL_GENERATE_INVALID_INPUT', dt('Invalid number of terms: @num', array('@num' => $values['num'])));
+  public function validateDrushParams($args, $options = []) {
+    $vocabulary_name = array_shift($args);
+    $number = array_shift($args);
+
+    if ($number === NULL) {
+      $number = 10;
     }
 
-    $values['vids'] = array($vocab->id());
+    if (!$vocabulary_name) {
+      throw new \Exception(dt('Please provide a vocabulary machine name.'));
+    }
+
+    if (!$this->isNumber($number)) {
+      throw new \Exception(dt('Invalid number of terms: @num', array('@num' => $number)));
+    }
+
+    // Try to convert machine name to a vocabulary id.
+    if (!$vocabulary = $this->vocabularyStorage->load($vocabulary_name)) {
+      throw new \Exception(dt('Invalid vocabulary name: @name', array('@name' => $vocabulary_name)));
+    }
+
+    $values = [
+      'num' => $number,
+      'kill' => $this->isDrush8() ? drush_get_option('kill') : $options['kill'],
+      'title_length' => 12,
+      'vids' => [$vocabulary->id()],
+    ];
 
     return $values;
   }
