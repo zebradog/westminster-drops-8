@@ -47,6 +47,13 @@
         '#description' => 'Require an authenticated session to access canonical node URLs (e.g. <code>/node/1</code>). Does not affect access via views or REST exports.'
       );
 
+      $form['fieldset_routing']['prevent_anonymous_taxonomy_term_access'] = array(
+        '#type' => 'checkbox',
+        '#title' => $this->t('Prevent Anonymous Taxonomy Term Access'),
+        '#default_value' => !!$configuration->get('prevent_anonymous_taxonomy_term_access'),
+        '#description' => 'Require an authenticated session to access canonical taxonomy term URLs (e.g. <code>/taxonomy/term/1</code>). Does not affect access via views or REST exports.'
+      );
+
       $form['actions']['submit'] = array(
         '#type' => 'submit',
         '#value' => $this->t('Save Configuration'),
@@ -79,6 +86,7 @@
       $shouldRebuildRoutes = $this->_shouldRebuildRoutes($configuration, $form_state);
 
       $configuration->set('prevent_anonymous_node_access', !!$form_state->getValue('prevent_anonymous_node_access'));
+      $configuration->set('prevent_anonymous_taxonomy_term_access', !!$form_state->getValue('prevent_anonymous_taxonomy_term_access'));
 
       $configuration->save();
 
@@ -123,6 +131,10 @@
      */
     protected function _shouldRebuildRoutes(Config $configuration, FormStateInterface $form_state) {
       if ($configuration->get('prevent_anonymous_node_access') != $form_state->getValue('prevent_anonymous_node_access')) {
+        return true;
+      }
+
+      if ($configuration->get('prevent_anonymous_taxonomy_term_access') != $form_state->getValue('prevent_anonymous_taxonomy_term_access')) {
         return true;
       }
 
