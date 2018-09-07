@@ -190,8 +190,8 @@ class Google_Service_Iam_Resource_ProjectsServiceAccounts extends Google_Service
   /**
    * Updates a ServiceAccount.
    *
-   * Currently, only the following fields are updatable: `display_name` . The
-   * `etag` is mandatory. (serviceAccounts.update)
+   * Currently, only the following fields are updatable: `display_name`,
+   * `description`. (serviceAccounts.update)
    *
    * @param string $name The resource name of the service account in the following
    * format: `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`.

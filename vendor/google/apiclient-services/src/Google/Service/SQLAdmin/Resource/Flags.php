@@ -26,8 +26,7 @@
 class Google_Service_SQLAdmin_Resource_Flags extends Google_Service_Resource
 {
   /**
-   * List all available database flags for Google Cloud SQL instances.
-   * (flags.listFlags)
+   * List all available database flags for Cloud SQL instances. (flags.listFlags)
    *
    * @param array $optParams Optional parameters.
    *

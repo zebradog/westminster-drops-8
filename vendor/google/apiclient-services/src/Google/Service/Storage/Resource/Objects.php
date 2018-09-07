@@ -229,8 +229,7 @@ class Google_Service_Storage_Resource_Objects extends Google_Service_Resource
    * @opt_param string kmsKeyName Resource name of the Cloud KMS key, of the form
    * projects/my-project/locations/global/keyRings/my-kr/cryptoKeys/my-key, that
    * will be used to encrypt the object. Overrides the object metadata's
-   * kms_key_name value, if any. Limited availability; usable only by enabled
-   * projects.
+   * kms_key_name value, if any.
    * @opt_param string name Name of the object. Required when the object metadata
    * is not otherwise provided. Overrides the object metadata's name value, if
    * any. For information about how to URL encode object names to be path safe,
@@ -261,6 +260,9 @@ class Google_Service_Storage_Resource_Objects extends Google_Service_Resource
    * delimiter. Objects whose names, aside from the prefix, contain delimiter will
    * have their name, truncated after the delimiter, returned in prefixes.
    * Duplicate prefixes are omitted.
+   * @opt_param bool includeTrailingDelimiter If true, objects that end in exactly
+   * one instance of delimiter will have their metadata included in items in
+   * addition to prefixes.
    * @opt_param string maxResults Maximum number of items plus prefixes to return
    * in a single page of responses. As duplicate prefixes are omitted, fewer total
    * results may be returned than requested. The service will use this parameter
@@ -481,6 +483,9 @@ class Google_Service_Storage_Resource_Objects extends Google_Service_Resource
    * delimiter. Objects whose names, aside from the prefix, contain delimiter will
    * have their name, truncated after the delimiter, returned in prefixes.
    * Duplicate prefixes are omitted.
+   * @opt_param bool includeTrailingDelimiter If true, objects that end in exactly
+   * one instance of delimiter will have their metadata included in items in
+   * addition to prefixes.
    * @opt_param string maxResults Maximum number of items plus prefixes to return
    * in a single page of responses. As duplicate prefixes are omitted, fewer total
    * results may be returned than requested. The service will use this parameter

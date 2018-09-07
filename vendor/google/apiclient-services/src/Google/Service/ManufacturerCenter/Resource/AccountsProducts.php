@@ -99,8 +99,6 @@ class Google_Service_ManufacturerCenter_Resource_AccountsProducts extends Google
    * `account_id` - The ID of the Manufacturer Center account.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int pageSize Maximum number of product statuses to return in the
-   * response, used for paging.
    * @opt_param string include The information to be included in the response.
    * Only sections listed here will be returned.
    *
@@ -108,6 +106,8 @@ class Google_Service_ManufacturerCenter_Resource_AccountsProducts extends Google
    * behavior is temporary and will be removed once all clients are ready or at
    * the latest end of July 2018. After that no sections will be returned.
    * @opt_param string pageToken The token returned by the previous request.
+   * @opt_param int pageSize Maximum number of product statuses to return in the
+   * response, used for paging.
    * @return Google_Service_ManufacturerCenter_ListProductsResponse
    */
   public function listAccountsProducts($parent, $optParams = array())

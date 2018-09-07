@@ -72,7 +72,7 @@ class Google_Service_Compute_Resource_SslPolicies extends Google_Service_Resourc
     return $this->call('get', array($params), "Google_Service_Compute_SslPolicy");
   }
   /**
-   * Returns the specified SSL policy resource. Get a list of available SSL
+   * Returns the specified SSL policy resource. Gets a list of available SSL
    * policies by making a list() request. (sslPolicies.insert)
    *
    * @param string $project Project ID for this request.

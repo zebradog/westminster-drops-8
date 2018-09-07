@@ -21,6 +21,7 @@ class Google_Service_Testing_AndroidModel extends Google_Collection
   public $brand;
   public $codename;
   public $form;
+  public $formFactor;
   public $id;
   public $manufacturer;
   public $name;
@@ -55,6 +56,14 @@ class Google_Service_Testing_AndroidModel extends Google_Collection
   public function getForm()
   {
     return $this->form;
+  }
+  public function setFormFactor($formFactor)
+  {
+    $this->formFactor = $formFactor;
+  }
+  public function getFormFactor()
+  {
+    return $this->formFactor;
   }
   public function setId($id)
   {

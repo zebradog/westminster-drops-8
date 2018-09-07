@@ -96,7 +96,7 @@ class Google_Service_Compute_Resource_Licenses extends Google_Service_Resource
   /**
    * Retrieves the list of licenses available in the specified project. This
    * method does not get any licenses that belong to other projects, including
-   * licenses attached to publicly-available images, like Debian 8. If you want to
+   * licenses attached to publicly-available images, like Debian 9. If you want to
    * get a list of publicly-available licenses, use this method to make a request
    * to the respective image project, such as debian-cloud or windows-cloud.
    * (licenses.listLicenses)

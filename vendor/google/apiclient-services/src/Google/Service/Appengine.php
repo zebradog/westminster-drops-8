@@ -590,13 +590,13 @@ class Google_Service_Appengine extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'migrateTraffic' => array(
-                  'location' => 'query',
-                  'type' => 'boolean',
-                ),
                 'updateMask' => array(
                   'location' => 'query',
                   'type' => 'string',
+                ),
+                'migrateTraffic' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
                 ),
               ),
             ),

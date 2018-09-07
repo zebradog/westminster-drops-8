@@ -27,6 +27,8 @@ class Google_Service_DLP_GooglePrivacyDlpV2CustomInfoType extends Google_Collect
   public $likelihood;
   protected $regexType = 'Google_Service_DLP_GooglePrivacyDlpV2Regex';
   protected $regexDataType = '';
+  protected $storedTypeType = 'Google_Service_DLP_GooglePrivacyDlpV2StoredType';
+  protected $storedTypeDataType = '';
   protected $surrogateTypeType = 'Google_Service_DLP_GooglePrivacyDlpV2SurrogateType';
   protected $surrogateTypeDataType = '';
 
@@ -93,6 +95,20 @@ class Google_Service_DLP_GooglePrivacyDlpV2CustomInfoType extends Google_Collect
   public function getRegex()
   {
     return $this->regex;
+  }
+  /**
+   * @param Google_Service_DLP_GooglePrivacyDlpV2StoredType
+   */
+  public function setStoredType(Google_Service_DLP_GooglePrivacyDlpV2StoredType $storedType)
+  {
+    $this->storedType = $storedType;
+  }
+  /**
+   * @return Google_Service_DLP_GooglePrivacyDlpV2StoredType
+   */
+  public function getStoredType()
+  {
+    return $this->storedType;
   }
   /**
    * @param Google_Service_DLP_GooglePrivacyDlpV2SurrogateType

@@ -39,12 +39,14 @@ class Google_Service_DLP extends Google_Service
   public $infoTypes;
   public $organizations_deidentifyTemplates;
   public $organizations_inspectTemplates;
+  public $organizations_storedInfoTypes;
   public $projects_content;
   public $projects_deidentifyTemplates;
   public $projects_dlpJobs;
   public $projects_image;
   public $projects_inspectTemplates;
   public $projects_jobTriggers;
+  public $projects_storedInfoTypes;
   
   /**
    * Constructs the internal representation of the DLP service.
@@ -131,6 +133,10 @@ class Google_Service_DLP extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
+                'orderBy' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
@@ -199,9 +205,81 @@ class Google_Service_DLP extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
+                'orderBy' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
+                ),
+              ),
+            ),'patch' => array(
+              'path' => 'v2/{+name}',
+              'httpMethod' => 'PATCH',
+              'parameters' => array(
+                'name' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->organizations_storedInfoTypes = new Google_Service_DLP_Resource_OrganizationsStoredInfoTypes(
+        $this,
+        $this->serviceName,
+        'storedInfoTypes',
+        array(
+          'methods' => array(
+            'create' => array(
+              'path' => 'v2/{+parent}/storedInfoTypes',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'delete' => array(
+              'path' => 'v2/{+name}',
+              'httpMethod' => 'DELETE',
+              'parameters' => array(
+                'name' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'get' => array(
+              'path' => 'v2/{+name}',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'name' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'v2/{+parent}/storedInfoTypes',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
               ),
             ),'patch' => array(
@@ -307,6 +385,10 @@ class Google_Service_DLP extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
+                'orderBy' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
@@ -381,6 +463,10 @@ class Google_Service_DLP extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
+                'filter' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
@@ -390,10 +476,6 @@ class Google_Service_DLP extends Google_Service
                   'type' => 'integer',
                 ),
                 'type' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'filter' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -471,6 +553,10 @@ class Google_Service_DLP extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
+                'orderBy' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
@@ -540,6 +626,74 @@ class Google_Service_DLP extends Google_Service
                   'type' => 'string',
                 ),
                 'orderBy' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
+                ),
+              ),
+            ),'patch' => array(
+              'path' => 'v2/{+name}',
+              'httpMethod' => 'PATCH',
+              'parameters' => array(
+                'name' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),
+          )
+        )
+    );
+    $this->projects_storedInfoTypes = new Google_Service_DLP_Resource_ProjectsStoredInfoTypes(
+        $this,
+        $this->serviceName,
+        'storedInfoTypes',
+        array(
+          'methods' => array(
+            'create' => array(
+              'path' => 'v2/{+parent}/storedInfoTypes',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'delete' => array(
+              'path' => 'v2/{+name}',
+              'httpMethod' => 'DELETE',
+              'parameters' => array(
+                'name' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'get' => array(
+              'path' => 'v2/{+name}',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'name' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'list' => array(
+              'path' => 'v2/{+parent}/storedInfoTypes',
+              'httpMethod' => 'GET',
+              'parameters' => array(
+                'parent' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+                'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),

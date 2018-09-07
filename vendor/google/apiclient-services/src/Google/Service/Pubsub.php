@@ -366,6 +366,16 @@ class Google_Service_Pubsub extends Google_Service
                   'type' => 'integer',
                 ),
               ),
+            ),'patch' => array(
+              'path' => 'v1/{+name}',
+              'httpMethod' => 'PATCH',
+              'parameters' => array(
+                'name' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
             ),'publish' => array(
               'path' => 'v1/{+topic}:publish',
               'httpMethod' => 'POST',

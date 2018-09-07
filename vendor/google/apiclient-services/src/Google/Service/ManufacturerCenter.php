@@ -99,10 +99,6 @@ class Google_Service_ManufacturerCenter extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'pageSize' => array(
-                  'location' => 'query',
-                  'type' => 'integer',
-                ),
                 'include' => array(
                   'location' => 'query',
                   'type' => 'string',
@@ -111,6 +107,10 @@ class Google_Service_ManufacturerCenter extends Google_Service
                 'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
                 ),
               ),
             ),'update' => array(

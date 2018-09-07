@@ -39,7 +39,8 @@ class Google_Service_ShoppingContent_Resource_Accountstatuses extends Google_Ser
     return $this->call('custombatch', array($params), "Google_Service_ShoppingContent_AccountstatusesCustomBatchResponse");
   }
   /**
-   * Retrieves the status of a Merchant Center account. (accountstatuses.get)
+   * Retrieves the status of a Merchant Center account. Multi-client accounts can
+   * only call this method for sub-accounts. (accountstatuses.get)
    *
    * @param string $merchantId The ID of the managing account. If this parameter
    * is not the same as accountId, then this account must be a multi-client

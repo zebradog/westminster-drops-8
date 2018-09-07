@@ -49,6 +49,8 @@ class Google_Service_Container_Cluster extends Google_Collection
   public $monitoringService;
   public $name;
   public $network;
+  protected $networkConfigType = 'Google_Service_Container_NetworkConfig';
+  protected $networkConfigDataType = '';
   protected $networkPolicyType = 'Google_Service_Container_NetworkPolicy';
   protected $networkPolicyDataType = '';
   protected $nodeConfigType = 'Google_Service_Container_NodeConfig';
@@ -299,6 +301,20 @@ class Google_Service_Container_Cluster extends Google_Collection
   public function getNetwork()
   {
     return $this->network;
+  }
+  /**
+   * @param Google_Service_Container_NetworkConfig
+   */
+  public function setNetworkConfig(Google_Service_Container_NetworkConfig $networkConfig)
+  {
+    $this->networkConfig = $networkConfig;
+  }
+  /**
+   * @return Google_Service_Container_NetworkConfig
+   */
+  public function getNetworkConfig()
+  {
+    return $this->networkConfig;
   }
   /**
    * @param Google_Service_Container_NetworkPolicy

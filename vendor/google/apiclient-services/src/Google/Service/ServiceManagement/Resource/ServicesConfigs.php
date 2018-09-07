@@ -54,6 +54,9 @@ class Google_Service_ServiceManagement_Resource_ServicesConfigs extends Google_S
    * ](/service-management/overview) for naming requirements.  For example:
    * `example.googleapis.com`.
    * @param string $configId The id of the service configuration resource.
+   *
+   * This field must be specified for the server to return all fields, including
+   * `SourceInfo`.
    * @param array $optParams Optional parameters.
    *
    * @opt_param string view Specifies which parts of the Service Config should be
