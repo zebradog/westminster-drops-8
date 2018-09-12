@@ -1,0 +1,11 @@
+name: Westminster S3
+description: Provides additional functionality for Flysystem and S3 integration.
+package: Westminster
+
+type: module
+core: 8.x
+
+dependencies:
+  - westminster_core
+  - flysystem
+  - flysystem_s3
