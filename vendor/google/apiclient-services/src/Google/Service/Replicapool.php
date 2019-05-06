@@ -63,6 +63,7 @@ class Google_Service_Replicapool extends Google_Service
     parent::__construct($client);
     $this->rootUrl = 'https://www.googleapis.com/';
     $this->servicePath = 'replicapool/v1beta1/projects/';
+    $this->batchPath = 'batch/replicapool/v1beta1';
     $this->version = 'v1beta1';
     $this->serviceName = 'replicapool';
 

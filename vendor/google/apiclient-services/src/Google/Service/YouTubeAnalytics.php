@@ -60,6 +60,7 @@ class Google_Service_YouTubeAnalytics extends Google_Service
     parent::__construct($client);
     $this->rootUrl = 'https://youtubeanalytics.googleapis.com/';
     $this->servicePath = '';
+    $this->batchPath = 'batch';
     $this->version = 'v2';
     $this->serviceName = 'youtubeAnalytics';
 

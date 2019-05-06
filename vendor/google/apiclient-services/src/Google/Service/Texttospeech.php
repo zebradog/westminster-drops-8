@@ -48,6 +48,7 @@ class Google_Service_Texttospeech extends Google_Service
     parent::__construct($client);
     $this->rootUrl = 'https://texttospeech.googleapis.com/';
     $this->servicePath = '';
+    $this->batchPath = 'batch';
     $this->version = 'v1';
     $this->serviceName = 'texttospeech';
 

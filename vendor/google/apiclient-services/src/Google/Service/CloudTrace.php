@@ -54,6 +54,7 @@ class Google_Service_CloudTrace extends Google_Service
     parent::__construct($client);
     $this->rootUrl = 'https://cloudtrace.googleapis.com/';
     $this->servicePath = '';
+    $this->batchPath = 'batch';
     $this->version = 'v2';
     $this->serviceName = 'cloudtrace';
 

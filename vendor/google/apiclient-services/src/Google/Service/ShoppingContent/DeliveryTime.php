@@ -26,6 +26,8 @@ class Google_Service_ShoppingContent_DeliveryTime extends Google_Collection
   public $maxTransitTimeInDays;
   public $minHandlingTimeInDays;
   public $minTransitTimeInDays;
+  protected $transitTimeTableType = 'Google_Service_ShoppingContent_TransitTable';
+  protected $transitTimeTableDataType = '';
 
   /**
    * @param Google_Service_ShoppingContent_CutoffTime
@@ -86,5 +88,19 @@ class Google_Service_ShoppingContent_DeliveryTime extends Google_Collection
   public function getMinTransitTimeInDays()
   {
     return $this->minTransitTimeInDays;
+  }
+  /**
+   * @param Google_Service_ShoppingContent_TransitTable
+   */
+  public function setTransitTimeTable(Google_Service_ShoppingContent_TransitTable $transitTimeTable)
+  {
+    $this->transitTimeTable = $transitTimeTable;
+  }
+  /**
+   * @return Google_Service_ShoppingContent_TransitTable
+   */
+  public function getTransitTimeTable()
+  {
+    return $this->transitTimeTable;
   }
 }

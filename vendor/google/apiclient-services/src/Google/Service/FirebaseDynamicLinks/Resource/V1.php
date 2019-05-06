@@ -35,6 +35,8 @@ class Google_Service_FirebaseDynamicLinks_Resource_V1 extends Google_Service_Res
    * @param array $optParams Optional parameters.
    *
    * @opt_param string durationDays The span of time requested in days.
+   * @opt_param string sdkVersion Google SDK version. Version takes the form
+   * "$major.$minor.$patch"
    * @return Google_Service_FirebaseDynamicLinks_DynamicLinkStats
    */
   public function getLinkStats($dynamicLink, $optParams = array())

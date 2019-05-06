@@ -102,13 +102,13 @@ class Google_Service_Logging_Resource_Sinks extends Google_Service_Resource
    * "billingAccounts/[BILLING_ACCOUNT_ID]" "folders/[FOLDER_ID]"
    * @param array $optParams Optional parameters.
    *
+   * @opt_param int pageSize Optional. The maximum number of results to return
+   * from this request. Non-positive values are ignored. The presence of
+   * nextPageToken in the response indicates that more results might be available.
    * @opt_param string pageToken Optional. If present, then retrieve the next
    * batch of results from the preceding call to this method. pageToken must be
    * the value of nextPageToken from the previous response. The values of other
    * method parameters should be identical to those in the previous call.
-   * @opt_param int pageSize Optional. The maximum number of results to return
-   * from this request. Non-positive values are ignored. The presence of
-   * nextPageToken in the response indicates that more results might be available.
    * @return Google_Service_Logging_ListSinksResponse
    */
   public function listSinks($parent, $optParams = array())
@@ -119,7 +119,7 @@ class Google_Service_Logging_Resource_Sinks extends Google_Service_Resource
   }
   /**
    * Updates a sink. This method replaces the following fields in the existing
-   * sink with values from the new sink: destination, and filter. The updated sink
+   * sink with values from the new sink: destination, and filter.The updated sink
    * might also have a new writer_identity; see the unique_writer_identity field.
    * (sinks.update)
    *
@@ -149,7 +149,8 @@ class Google_Service_Logging_Resource_Sinks extends Google_Service_Resource
    * destination,filter,includeChildren At some point in the future, behavior will
    * be removed and specifying an empty updateMask will be an error.For a detailed
    * FieldMask definition, see https://developers.google.com/protocol-
-   * buffers/docs/reference/google.protobuf#fieldmaskExample: updateMask=filter.
+   * buffers/docs/reference/google.protobuf#google.protobuf.FieldMaskExample:
+   * updateMask=filter.
    * @return Google_Service_Logging_LogSink
    */
   public function update($sinkName, Google_Service_Logging_LogSink $postBody, $optParams = array())

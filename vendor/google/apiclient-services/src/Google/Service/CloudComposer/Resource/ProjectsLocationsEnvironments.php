@@ -157,12 +157,13 @@ class Google_Service_CloudComposer_Resource_ProjectsLocationsEnvironments extend
    * config overrides. If a replacement config  overrides map is not included in
    * `environment`, all config overrides  are cleared.  It is an error to provide
    * both this mask and a mask specifying one or  more individual config
-   * overrides.      config.softwareConfig.properties.section-name    Override the
-   * Apache Airflow property name in the section  named section, preserving other
-   * properties. To delete the  property override, include it in `updateMask` and
-   * omit its mapping  in `environment.config.softwareConfig.properties`.  It is
-   * an error to provide both a mask of this form and the
-   * "config.softwareConfig.properties" mask.
+   * overrides.      config.softwareConfig.airflowConfigOverrides.section-name
+   * Override the Apache Airflow config property name in the  section named
+   * section, preserving other properties. To delete  the property override,
+   * include it in `updateMask` and omit its mapping  in
+   * `environment.config.softwareConfig.airflowConfigOverrides`.  It is an error
+   * to provide both a mask of this form and the
+   * "config.softwareConfig.airflowConfigOverrides" mask.
    * config.softwareConfig.envVariables  Replace all environment variables. If a
    * replacement environment  variable map is not included in `environment`, all
    * custom environment  variables  are cleared.  It is an error to provide both

@@ -19,7 +19,6 @@ class Google_Service_ShoppingContent_TestOrderLineItemProduct extends Google_Col
 {
   protected $collection_key = 'variantAttributes';
   public $brand;
-  public $channel;
   public $condition;
   public $contentLanguage;
   public $gtin;
@@ -41,14 +40,6 @@ class Google_Service_ShoppingContent_TestOrderLineItemProduct extends Google_Col
   public function getBrand()
   {
     return $this->brand;
-  }
-  public function setChannel($channel)
-  {
-    $this->channel = $channel;
-  }
-  public function getChannel()
-  {
-    return $this->channel;
   }
   public function setCondition($condition)
   {

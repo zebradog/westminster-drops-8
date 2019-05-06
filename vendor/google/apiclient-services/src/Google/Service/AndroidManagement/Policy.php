@@ -68,6 +68,8 @@ class Google_Service_AndroidManagement_Policy extends Google_Collection
   public $openNetworkConfiguration;
   public $outgoingBeamDisabled;
   public $outgoingCallsDisabled;
+  protected $passwordPoliciesType = 'Google_Service_AndroidManagement_PasswordRequirements';
+  protected $passwordPoliciesDataType = 'array';
   protected $passwordRequirementsType = 'Google_Service_AndroidManagement_PasswordRequirements';
   protected $passwordRequirementsDataType = '';
   protected $permissionGrantsType = 'Google_Service_AndroidManagement_PermissionGrant';
@@ -85,6 +87,8 @@ class Google_Service_AndroidManagement_Policy extends Google_Collection
   public $screenCaptureDisabled;
   public $setUserIconDisabled;
   public $setWallpaperDisabled;
+  protected $setupActionsType = 'Google_Service_AndroidManagement_SetupAction';
+  protected $setupActionsDataType = 'array';
   public $shareLocationDisabled;
   protected $shortSupportMessageType = 'Google_Service_AndroidManagement_UserFacingMessage';
   protected $shortSupportMessageDataType = '';
@@ -497,6 +501,20 @@ class Google_Service_AndroidManagement_Policy extends Google_Collection
   /**
    * @param Google_Service_AndroidManagement_PasswordRequirements
    */
+  public function setPasswordPolicies($passwordPolicies)
+  {
+    $this->passwordPolicies = $passwordPolicies;
+  }
+  /**
+   * @return Google_Service_AndroidManagement_PasswordRequirements
+   */
+  public function getPasswordPolicies()
+  {
+    return $this->passwordPolicies;
+  }
+  /**
+   * @param Google_Service_AndroidManagement_PasswordRequirements
+   */
   public function setPasswordRequirements(Google_Service_AndroidManagement_PasswordRequirements $passwordRequirements)
   {
     $this->passwordRequirements = $passwordRequirements;
@@ -619,6 +637,20 @@ class Google_Service_AndroidManagement_Policy extends Google_Collection
   public function getSetWallpaperDisabled()
   {
     return $this->setWallpaperDisabled;
+  }
+  /**
+   * @param Google_Service_AndroidManagement_SetupAction
+   */
+  public function setSetupActions($setupActions)
+  {
+    $this->setupActions = $setupActions;
+  }
+  /**
+   * @return Google_Service_AndroidManagement_SetupAction
+   */
+  public function getSetupActions()
+  {
+    return $this->setupActions;
   }
   public function setShareLocationDisabled($shareLocationDisabled)
   {

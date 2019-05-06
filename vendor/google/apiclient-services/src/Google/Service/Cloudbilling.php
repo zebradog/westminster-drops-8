@@ -51,6 +51,7 @@ class Google_Service_Cloudbilling extends Google_Service
     parent::__construct($client);
     $this->rootUrl = 'https://cloudbilling.googleapis.com/';
     $this->servicePath = '';
+    $this->batchPath = 'batch';
     $this->version = 'v1';
     $this->serviceName = 'cloudbilling';
 

@@ -19,8 +19,8 @@
  * Service definition for Digitalassetlinks (v1).
  *
  * <p>
- * API for discovering relationships between online assets such as web sites or
- * mobile apps.</p>
+ * Discovers relationships between online assets such as websites or mobile
+ * apps.</p>
  *
  * <p>
  * For more information about this service, see the API
@@ -46,6 +46,7 @@ class Google_Service_Digitalassetlinks extends Google_Service
     parent::__construct($client);
     $this->rootUrl = 'https://digitalassetlinks.googleapis.com/';
     $this->servicePath = '';
+    $this->batchPath = 'batch';
     $this->version = 'v1';
     $this->serviceName = 'digitalassetlinks';
 
@@ -79,11 +80,11 @@ class Google_Service_Digitalassetlinks extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'source.web.site' => array(
+                'source.androidApp.packageName' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'source.androidApp.packageName' => array(
+                'source.web.site' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),

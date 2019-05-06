@@ -19,8 +19,8 @@
  * Service definition for Dialogflow (v2).
  *
  * <p>
- * An end-to-end development suite for conversational interfaces (e.g.,
- * chatbots, voice-powered apps and devices).</p>
+ * Builds conversational interfaces (for example, chatbots, and voice-powered
+ * apps and devices).</p>
  *
  * <p>
  * For more information about this service, see the API
@@ -34,6 +34,9 @@ class Google_Service_Dialogflow extends Google_Service
   /** View and manage your data across Google Cloud Platform services. */
   const CLOUD_PLATFORM =
       "https://www.googleapis.com/auth/cloud-platform";
+  /** View, manage and query your Dialogflow agents. */
+  const DIALOGFLOW =
+      "https://www.googleapis.com/auth/dialogflow";
 
   public $projects;
   public $projects_agent;
@@ -55,6 +58,7 @@ class Google_Service_Dialogflow extends Google_Service
     parent::__construct($client);
     $this->rootUrl = 'https://dialogflow.googleapis.com/';
     $this->servicePath = '';
+    $this->batchPath = 'batch';
     $this->version = 'v2';
     $this->serviceName = 'dialogflow';
 
@@ -219,15 +223,15 @@ class Google_Service_Dialogflow extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'pageToken' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
                 ),
                 'languageCode' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -357,11 +361,11 @@ class Google_Service_Dialogflow extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'languageCode' => array(
+                'intentView' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'intentView' => array(
+                'languageCode' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -375,10 +379,6 @@ class Google_Service_Dialogflow extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'intentView' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'languageCode' => array(
                   'location' => 'query',
                   'type' => 'string',
@@ -390,6 +390,10 @@ class Google_Service_Dialogflow extends Google_Service
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
+                ),
+                'intentView' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
               ),
             ),'patch' => array(

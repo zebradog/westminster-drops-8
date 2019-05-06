@@ -19,8 +19,8 @@
  * Service definition for SQLAdmin (v1beta4).
  *
  * <p>
- * Cloud SQL provides the Cloud SQL Admin API, a REST API for administering your
- * instances programmatically.</p>
+ * Creates and manages Cloud SQL instances, which provide fully managed MySQL or
+ * PostgreSQL databases.</p>
  *
  * <p>
  * For more information about this service, see the API
@@ -57,6 +57,7 @@ class Google_Service_SQLAdmin extends Google_Service
     parent::__construct($client);
     $this->rootUrl = 'https://www.googleapis.com/';
     $this->servicePath = 'sql/v1beta4/';
+    $this->batchPath = 'batch/sqladmin/v1beta4';
     $this->version = 'v1beta4';
     $this->serviceName = 'sqladmin';
 
@@ -852,15 +853,14 @@ class Google_Service_SQLAdmin extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'host' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                  'required' => true,
-                ),
                 'name' => array(
                   'location' => 'query',
                   'type' => 'string',
                   'required' => true,
+                ),
+                'host' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
               ),
             ),

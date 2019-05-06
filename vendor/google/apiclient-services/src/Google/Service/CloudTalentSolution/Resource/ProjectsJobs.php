@@ -117,14 +117,6 @@ class Google_Service_CloudTalentSolution_Resource_ProjectsJobs extends Google_Se
    * project".
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int pageSize Optional.
-   *
-   * The maximum number of jobs to be returned per page of results.
-   *
-   * If job_view is set to JobView.JOB_VIEW_ID_ONLY, the maximum allowed page size
-   * is 1000. Otherwise, the maximum allowed page size is 100.
-   *
-   * Default is 100 if empty or a number < 1 is specified.
    * @opt_param string filter Required.
    *
    * The filter string specifies the jobs to be enumerated.
@@ -146,6 +138,14 @@ class Google_Service_CloudTalentSolution_Resource_ProjectsJobs extends Google_Se
    * @opt_param string pageToken Optional.
    *
    * The starting point of a query result.
+   * @opt_param int pageSize Optional.
+   *
+   * The maximum number of jobs to be returned per page of results.
+   *
+   * If job_view is set to JobView.JOB_VIEW_ID_ONLY, the maximum allowed page size
+   * is 1000. Otherwise, the maximum allowed page size is 100.
+   *
+   * Default is 100 if empty or a number < 1 is specified.
    * @return Google_Service_CloudTalentSolution_ListJobsResponse
    */
   public function listProjectsJobs($parent, $optParams = array())

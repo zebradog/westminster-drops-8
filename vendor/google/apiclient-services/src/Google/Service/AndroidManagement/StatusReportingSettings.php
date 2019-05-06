@@ -17,6 +17,8 @@
 
 class Google_Service_AndroidManagement_StatusReportingSettings extends Google_Model
 {
+  protected $applicationReportingSettingsType = 'Google_Service_AndroidManagement_ApplicationReportingSettings';
+  protected $applicationReportingSettingsDataType = '';
   public $applicationReportsEnabled;
   public $deviceSettingsEnabled;
   public $displayInfoEnabled;
@@ -26,6 +28,20 @@ class Google_Service_AndroidManagement_StatusReportingSettings extends Google_Mo
   public $powerManagementEventsEnabled;
   public $softwareInfoEnabled;
 
+  /**
+   * @param Google_Service_AndroidManagement_ApplicationReportingSettings
+   */
+  public function setApplicationReportingSettings(Google_Service_AndroidManagement_ApplicationReportingSettings $applicationReportingSettings)
+  {
+    $this->applicationReportingSettings = $applicationReportingSettings;
+  }
+  /**
+   * @return Google_Service_AndroidManagement_ApplicationReportingSettings
+   */
+  public function getApplicationReportingSettings()
+  {
+    return $this->applicationReportingSettings;
+  }
   public function setApplicationReportsEnabled($applicationReportsEnabled)
   {
     $this->applicationReportsEnabled = $applicationReportsEnabled;

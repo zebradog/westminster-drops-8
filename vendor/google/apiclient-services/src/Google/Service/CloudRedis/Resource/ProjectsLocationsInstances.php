@@ -76,6 +76,23 @@ class Google_Service_CloudRedis_Resource_ProjectsLocationsInstances extends Goog
     return $this->call('delete', array($params), "Google_Service_CloudRedis_Operation");
   }
   /**
+   * Failover the master role to current replica node against a specific STANDARD
+   * tier redis instance. (instances.failover)
+   *
+   * @param string $name Required. Redis instance resource name using the form:
+   * `projects/{project_id}/locations/{location_id}/instances/{instance_id}` where
+   * `location_id` refers to a GCP region
+   * @param Google_Service_CloudRedis_FailoverInstanceRequest $postBody
+   * @param array $optParams Optional parameters.
+   * @return Google_Service_CloudRedis_Operation
+   */
+  public function failover($name, Google_Service_CloudRedis_FailoverInstanceRequest $postBody, $optParams = array())
+  {
+    $params = array('name' => $name, 'postBody' => $postBody);
+    $params = array_merge($params, $optParams);
+    return $this->call('failover', array($params), "Google_Service_CloudRedis_Operation");
+  }
+  /**
    * Gets the details of a specific Redis instance. (instances.get)
    *
    * @param string $name Required. Redis instance resource name using the form:

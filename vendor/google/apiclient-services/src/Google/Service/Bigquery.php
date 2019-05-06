@@ -68,6 +68,7 @@ class Google_Service_Bigquery extends Google_Service
     parent::__construct($client);
     $this->rootUrl = 'https://www.googleapis.com/';
     $this->servicePath = 'bigquery/v2/';
+    $this->batchPath = 'batch/bigquery/v2';
     $this->version = 'v2';
     $this->serviceName = 'bigquery';
 

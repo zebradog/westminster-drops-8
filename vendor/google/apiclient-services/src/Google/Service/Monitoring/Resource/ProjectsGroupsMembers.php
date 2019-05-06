@@ -33,6 +33,7 @@ class Google_Service_Monitoring_Resource_ProjectsGroupsMembers extends Google_Se
    * "projects/{project_id_or_number}/groups/{group_id}".
    * @param array $optParams Optional parameters.
    *
+   * @opt_param string interval.endTime Required. The end of the time interval.
    * @opt_param string filter An optional list filter describing the members to be
    * returned. The filter may reference the type, labels, and metadata of
    * monitored resources that comprise the group. For example, to return only
@@ -47,7 +48,6 @@ class Google_Service_Monitoring_Resource_ProjectsGroupsMembers extends Google_Se
    * time must not be later than the end time.
    * @opt_param int pageSize A positive number that is the maximum number of
    * results to return.
-   * @opt_param string interval.endTime Required. The end of the time interval.
    * @return Google_Service_Monitoring_ListGroupMembersResponse
    */
   public function listProjectsGroupsMembers($name, $optParams = array())
