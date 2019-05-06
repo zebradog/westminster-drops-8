@@ -107,12 +107,17 @@ class ComposerStaticInitDrupal8
         array (
             'Firebase\\JWT\\' => 13,
         ),
+        'E' => 
+        array (
+            'Egulias\\EmailValidator\\' => 23,
+        ),
         'D' => 
         array (
             'Drupal\\flysystem\\' => 17,
             'Drupal\\Driver\\' => 14,
             'Drupal\\Core\\Composer\\' => 21,
             'Drupal\\Core\\' => 12,
+            'Drupal\\Component\\Version\\' => 25,
             'Drupal\\Component\\Uuid\\' => 22,
             'Drupal\\Component\\Utility\\' => 25,
             'Drupal\\Component\\Transliteration\\' => 33,
@@ -147,6 +152,7 @@ class ComposerStaticInitDrupal8
         ),
         'B' => 
         array (
+            'Brumann\\Polyfill\\' => 17,
             'Behat\\Mink\\Driver\\' => 18,
             'Behat\\Mink\\' => 11,
         ),
@@ -363,6 +369,10 @@ class ComposerStaticInitDrupal8
         array (
             0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
         ),
+        'Egulias\\EmailValidator\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/egulias/email-validator/EmailValidator',
+        ),
         'Drupal\\flysystem\\' => 
         array (
             0 => __DIR__ . '/../..' . '/modules/contrib/flysystem/src',
@@ -378,6 +388,10 @@ class ComposerStaticInitDrupal8
         'Drupal\\Core\\' => 
         array (
             0 => __DIR__ . '/../..' . '/core/lib/Drupal/Core',
+        ),
+        'Drupal\\Component\\Version\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/core/lib/Drupal/Component/Version',
         ),
         'Drupal\\Component\\Uuid\\' => 
         array (
@@ -491,6 +505,10 @@ class ComposerStaticInitDrupal8
         array (
             0 => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers',
         ),
+        'Brumann\\Polyfill\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/brumann/polyfill-unserialize/src',
+        ),
         'Behat\\Mink\\Driver\\' => 
         array (
             0 => __DIR__ . '/..' . '/behat/mink-browserkit-driver/src',
@@ -552,6 +570,10 @@ class ComposerStaticInitDrupal8
             array (
                 0 => __DIR__ . '/..' . '/phpspec/prophecy/src',
             ),
+            'PEAR' => 
+            array (
+                0 => __DIR__ . '/..' . '/pear/pear_exception',
+            ),
         ),
         'G' => 
         array (
@@ -566,10 +588,6 @@ class ComposerStaticInitDrupal8
         ),
         'E' => 
         array (
-            'Egulias\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/egulias/email-validator/src',
-            ),
             'EasyRdf_' => 
             array (
                 0 => __DIR__ . '/..' . '/easyrdf/easyrdf/lib',
@@ -594,6 +612,24 @@ class ComposerStaticInitDrupal8
                 0 => __DIR__ . '/..' . '/doctrine/annotations/lib',
             ),
         ),
+        'C' => 
+        array (
+            'Console' => 
+            array (
+                0 => __DIR__ . '/..' . '/pear/console_getopt',
+            ),
+        ),
+        'A' => 
+        array (
+            'Archive_Tar' => 
+            array (
+                0 => __DIR__ . '/..' . '/pear/archive_tar',
+            ),
+        ),
+    );
+
+    public static $fallbackDirsPsr0 = array (
+        0 => __DIR__ . '/..' . '/pear/pear-core-minimal/src',
     );
 
     public static $classMap = array (
@@ -1325,6 +1361,7 @@ class ComposerStaticInitDrupal8
             $loader->prefixLengthsPsr4 = ComposerStaticInitDrupal8::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitDrupal8::$prefixDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInitDrupal8::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInitDrupal8::$fallbackDirsPsr0;
             $loader->classMap = ComposerStaticInitDrupal8::$classMap;
 
         }, null, ClassLoader::class);
