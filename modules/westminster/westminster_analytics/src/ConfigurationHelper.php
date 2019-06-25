@@ -2,6 +2,7 @@
 
   namespace Drupal\westminster_analytics;
 
+  use Drupal\Core\Config\Config;
   use Drupal\westminster_analytics\GoogleHelper;
 
   /**

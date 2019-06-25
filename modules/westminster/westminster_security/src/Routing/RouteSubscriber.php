@@ -2,6 +2,7 @@
 
   namespace Drupal\westminster_security\Routing;
 
+  use Drupal\Core\Config\Config;
   use Drupal\Core\Routing\RouteSubscriberBase;
   use Symfony\Component\Routing\Route;
   use Symfony\Component\Routing\RouteCollection;

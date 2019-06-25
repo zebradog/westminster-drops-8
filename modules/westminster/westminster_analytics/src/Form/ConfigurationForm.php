@@ -105,7 +105,8 @@
 
       $configurationHelper->saveConfiguration();
 
-      drupal_set_message($this->t('The configuration has been successfully saved.'));
+      $messenger = \Drupal::messenger();
+      $messenger->addStatus($this->t('The configuration has been successfully saved.'));
     }
 
     /**

@@ -22,7 +22,7 @@
       try {
         $googleClient->setAuthConfig($credentials);
         $googleClient->setAccessToken($accessToken);
-      } catch (Exception $e) {}
+      } catch (\Exception $e) {}
 
       return $googleClient;
     }
@@ -38,14 +38,14 @@
         $googleClient->setAuthConfig($credentials);
         $googleClient->fetchAccessTokenWithAssertion();
       } catch (BadResponseException $e) {
-      } catch (Exception $e) {}
+      } catch (\Exception $e) {}
 
       return $googleClient->getAccessToken();
     }
 
     /**
      * Returns a new Google_Client instance.
-     * @return Google_Client
+     * @return \Google_Client
      */
     protected function _createClient() {
       $googleClient = new \Google_Client([]);

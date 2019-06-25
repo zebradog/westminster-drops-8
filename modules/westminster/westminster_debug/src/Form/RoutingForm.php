@@ -35,7 +35,8 @@
     public function submitForm(array &$form, FormStateInterface $form_state) {
       $this->_rebuildRoutes();
 
-      drupal_set_message($this->t('Routes have been successfully rebuilt.'));
+      $messenger = \Drupal::messenger();
+      $messenger->addStatus($this->t('Routes have been successfully rebuilt.'));
     }
 
     /**

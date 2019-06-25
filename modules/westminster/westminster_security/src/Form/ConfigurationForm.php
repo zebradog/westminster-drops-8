@@ -94,7 +94,8 @@
         $this->_rebuildRoutes();
       }
 
-      drupal_set_message($this->t('The configuration has been successfully saved.'));
+      $messenger = \Drupal::messenger();
+      $messanger->addStatus($this->t('The configuration has been successfully saved.'));
     }
 
     /**
