@@ -1,0 +1,3 @@
+services:
+  westminster_import.importable:
+    class: Drupal\westminster_import\Services\WestminsterImportService

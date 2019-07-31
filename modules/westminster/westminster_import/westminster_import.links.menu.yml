@@ -1,0 +1,9 @@
+system.admin_config_westminster_import.import_configuration:
+  title: 'Westminster Import'
+  description: 'Decide which content types are importable.'
+  parent: system.admin_config_westminster_core
+  route_name: westminster_import.configuration
+westminster_import.import_menu:
+  title: 'Import'
+  route_name: westminster_import.import_content
+  menu_name: main

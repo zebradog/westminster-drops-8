@@ -1,0 +1,47 @@
+westminster_import.configuration:
+  path: '/admin/config/westminster/import'
+  defaults:
+    _title: 'Westminster Import Configuration'
+    _form: '\Drupal\westminster_import\Form\ConfigurationForm'
+  requirements:
+    _permission: 'westminster import configuration'
+
+westminster_import.import_content:
+  path: '/westminster/import'
+  defaults:
+    _title: 'Import Content'
+    _controller: '\Drupal\westminster_import\Controller\ImportController::importSelectPage'
+  requirements:
+    _permission: 'westminster import content'
+  options:
+    no_cache: 'TRUE'
+
+westminster_import.import_content.type:
+  path: '/westminster/import/{type}'
+  defaults:
+    _title: 'Import'
+    _form: '\Drupal\westminster_import\Form\ImportForm'
+  requirements:
+    _permission: 'westminster import content'
+  options:
+    no_cache: 'TRUE'
+
+westminster_import.import_download.type:
+  path: '/westminster/import_download/{type}'
+  defaults:
+    _title: 'Import: Download CSV'
+    _controller: '\Drupal\westminster_import\Controller\DownloadController::downloadCSV'
+  requirements:
+    _permission: 'westminster import content'
+  options:
+    no_cache: 'TRUE'
+
+westminster_import.import_download_template.type:
+  path: '/westminster/import_download_template/{type}'
+  defaults:
+    _title: 'Import: Download CSV Template'
+    _controller: '\Drupal\westminster_import\Controller\DownloadController::downloadCSVTemplate'
+  requirements:
+    _permission: 'wetsminster import content'
+  option:
+    no_cache: 'TRUE'

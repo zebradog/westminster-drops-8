@@ -1,0 +1,12 @@
+name: Westminster Import
+description: Import data into content types from CSV.
+package: Westminster
+
+type: module
+core: 8.x
+
+dependencies:
+  - westminster_core
+
+configure:
+  - westminster_import.configuration

@@ -1,0 +1,47 @@
+<?php
+
+function westminster_import_theme() {
+  $route = \Drupal::routeMatch()->getParameter('type');
+  $importableService = \Drupal::service('westminster_import.importable');
+
+  $importableContentTypes = $importableService->sortImportableContentTypes();
+  $unimportableContentTypes = $importableContentTypes[1];
+  $importableContentTypes = $importableContentTypes[0];
+
+  $contentTypes = [];
+
+  $configFactory = \Drupal::config('westminster_import.configuration');
+
+  foreach($importableContentTypes as $ct) {
+    $id = $ct->id();
+    $label = $ct->label();
+    $importable = $configFactory->get($id);
+    if ($importable) {
+      $contentTypes[$id] = $label;
+    }
+  }
+
+  $theme['westminsterImportSelect'] = [
+    'template' => 'page--select-importable-content',
+    'variables' => [
+      'content_types' => $contentTypes
+    ]
+  ];
+
+  $theme['page__westminster_import__select_importable_content'] = [
+    'template' => 'page--westminster-import--select-importable-content'
+  ];
+
+  $theme['westminsterImport'] = [
+    'template' => 'page--import-content',
+    'variables' => [
+      'content_type' => $route
+    ]
+  ];
+
+  $theme['page__westminster_import__import_content'] = [
+    'template' => 'page--westminster-import--import-content'
+  ];
+
+  return $theme;
+}
