@@ -25,17 +25,23 @@ class ImportForm extends FormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Delete all existing content of type: '.$this->type),
     );
-    $form['actions']['#type'] = 'actions';
-    $form['actions']['download'] = array(
+    $form['actions_download_current'] = array(
+      '#type' => 'actions',
+    );
+    $form['actions_download_current']['download'] = array(
       '#type' => 'link',
       '#title' => $this->t('Download current CSV file.'),
       '#url' => \Drupal\Core\Url::fromRoute('westminster_import.import_download.type', ['type' => $this->type]),
     );
-    $form['actions']['download_template'] = array(
+    $form['actions_download_template'] = array(
+      '#type' => 'actions',
+    );
+    $form['actions_download_template']['download_template'] = array(
       '#type' => 'link',
       '#title' => $this->t('Download template CSV file.'),
       '#url' => \Drupal\Core\Url::fromRoute('westminster_import.import_download_template.type', ['type' => $this->type]),
     );
+    $form['actions']['#type'] = 'actions';
     $form['actions']['submit'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Import'),
