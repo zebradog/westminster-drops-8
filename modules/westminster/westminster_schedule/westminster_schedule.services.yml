@@ -1,0 +1,3 @@
+services:
+  westminster_schedule.schedule:
+    class: Drupal\westminster_schedule\ServiceProvider\Schedule
