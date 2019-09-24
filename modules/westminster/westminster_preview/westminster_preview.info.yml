@@ -1,0 +1,12 @@
+name: Westminster Preview
+description: Preview a scaled version of the node as it would render in the exhibit using iframe.
+package: Westminster
+
+type: module
+core: 8.x
+
+dependencies:
+  - westminster_core
+
+configure:
+  - westminster_preview.configuration

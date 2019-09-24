@@ -1,0 +1,9 @@
+preview_content:
+  version: 1.x
+  css:
+    theme:
+      css/preview.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+    - westminster_theme/base

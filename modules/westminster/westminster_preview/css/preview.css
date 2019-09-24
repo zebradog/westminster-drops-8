@@ -1,0 +1,23 @@
+.westminster-preview-content-wrapper {
+  position: relative;
+}
+  .westminster-preview-content {
+    position: absolute;
+    width: 82%;
+    height: 97%;
+    padding: 0;
+  }
+    .westminster-preview-iframe-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+      .westminster-preview-iframe-container > iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-position: top left;
+        object-fit: contain;
+      }
