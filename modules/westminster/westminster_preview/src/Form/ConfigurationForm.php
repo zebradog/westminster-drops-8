@@ -72,11 +72,13 @@ Class ConfigurationForm extends ConfigFormBase {
     foreach ($this->previewableContentTypes as $ct) {
       $id = $ct->id();
       $label = $ct->label();
+      $queryString = $form_state->getValue($id.'_query_string');
 
       $configFactory->set($id.'_previewable', $form_state->getValue($id.'_previewable'));
       $configFactory->set($id.'_override_url', $form_state->getValue($id.'_override_url'));
-      $configFactory->set($id.'_query_string', $form_state->getValue($id.'_query_string'));
+      $configFactory->set($id.'_query_string', $queryString);
     }
+
     $configFactory->save();
 
     parent::submitForm($form, $form_state);

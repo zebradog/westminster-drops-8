@@ -9,11 +9,13 @@ function westminster_preview_theme() {
 }
 
 function westminster_preview_theme_suggestions_page_alter(array &$suggestions, array $variables) {
-  if ($route = \Drupal::routeMatch()->getParameter('node')) {
-    if ($typeId = $route->type->entity->id()) {
-      if ($config = \Drupal::config('westminster_preview.configuration')) {
-        if ($config->get($typeId.'_previewable')) {
-          $suggestions[] = 'page__node__westminster_preview';
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.node.canonical') {
+    if ($route = \Drupal::routeMatch()->getParameter('node')) {
+      if ($typeId = $route->type->entity->id()) {
+        if ($config = \Drupal::config('westminster_preview.configuration')) {
+          if ($config->get($typeId.'_previewable')) {
+            $suggestions[] = 'page__node__westminster_preview';
+          }
         }
       }
     }
@@ -21,15 +23,22 @@ function westminster_preview_theme_suggestions_page_alter(array &$suggestions, a
 }
 
 function westminster_preview_preprocess_page__node__westminster_preview(&$variables) {
-  if ($route = \Drupal::routeMatch()->getParameter('node')) {
-    if ($typeId = $route->type->entity->id()) {
-      if ($config = \Drupal::config('westminster_preview.configuration')) {
-        if ($config->get($typeId.'_previewable')) {
-          $variables['westminster_preview_previewable'] = true;
-          if (!$variables['westminster_preview_url'] = $config->get($typeId.'_override_url')) {
-            $variables['westminster_preview_url'] = $config->get('westminster_preview_base_url');
+  if (\Drupal::routeMatch()->getRouteName() == 'entity.node.canonical') {
+    if ($route = \Drupal::routeMatch()->getParameter('node')) {
+      if ($typeId = $route->type->entity->id()) {
+        if ($config = \Drupal::config('westminster_preview.configuration')) {
+          if ($config->get($typeId.'_previewable')) {
+            $nid = $route->id();
+            $queryString = $config->get($typeId.'_query_string');
+            $search = '/{{nid}}/'; // '/{{(.*?)}}/';
+            $queryString = preg_replace($search, $nid, $queryString);
+
+            $variables['westminster_preview_previewable'] = true;
+            if (!$variables['westminster_preview_url'] = $config->get($typeId.'_override_url')) {
+              $variables['westminster_preview_url'] = $config->get('westminster_preview_base_url');
+            }
+            $variables['westminster_preview_query_string'] = $queryString;
           }
-          $variables['westminster_preview_query_string'] = $config->get($typeId.'_query_string');
         }
       }
     }
