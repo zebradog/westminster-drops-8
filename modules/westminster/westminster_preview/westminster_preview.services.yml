@@ -1,0 +1,3 @@
+services:
+  westminster_preview.previewable:
+    class: Drupal\westminster_preview\Services\WestminsterPreviewService

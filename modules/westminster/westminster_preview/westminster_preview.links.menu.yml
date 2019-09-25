@@ -1,0 +1,5 @@
+system.admin_config_westminster_preview.preview_configuration:
+  title: 'Westminster Preview'
+  description: 'Decide which content types are previewable.'
+  parent: system.admin_config_westminster_core
+  route_name: westminster_preview.configuration

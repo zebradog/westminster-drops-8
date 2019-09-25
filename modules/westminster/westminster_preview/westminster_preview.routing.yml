@@ -1,0 +1,14 @@
+westminster_preview.configuration:
+  path: '/admin/config/westminster/preview'
+  defaults:
+    _title: 'Westminster Preview Configuration'
+    _form: '\Drupal\westminster_preview\Form\ConfigurationForm'
+  requirements:
+    _permission: 'westminster preview configuration'
+
+westminster_preview.preview:
+  path: '/node/{node}'
+  defaults:
+    _controller: '\Drupal\westminster_preview\Controller\WestminsterPreviewController::previewPage'
+  requirements:
+    _permission: 'access content'
