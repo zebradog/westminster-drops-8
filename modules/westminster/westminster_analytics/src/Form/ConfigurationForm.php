@@ -78,7 +78,7 @@
      */
     protected function getEditableConfigNames() {
       return [
-        ConfigurationHelper::CONFIGURATION_NAME,
+        ConfigurationHelper::CONFIG_NAME,
       ];
     }
 

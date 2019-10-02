@@ -5,6 +5,8 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 Class ConfigurationForm extends ConfigFormBase {
+  protected $importableContentTypes = [];
+
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('westminster_import.configuration');
 

@@ -17,7 +17,6 @@ class ScheduleController extends ControllerBase {
   }
   public function ajax(Request $request) {
     if ($request->request->get('action') == 'create') {
-      $node;
       if ($request->request->get('nid') <= 0) {
         $node = Node::create([
           'type' => 'scheduled_content_2'

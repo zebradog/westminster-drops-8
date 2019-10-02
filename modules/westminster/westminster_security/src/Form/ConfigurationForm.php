@@ -95,14 +95,7 @@
       }
 
       $messenger = \Drupal::messenger();
-      $messanger->addStatus($this->t('The configuration has been successfully saved.'));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function validateForm(array &$form, FormStateInterface $form_state) {
-
+      $messenger->addStatus($this->t('The configuration has been successfully saved.'));
     }
 
     /**

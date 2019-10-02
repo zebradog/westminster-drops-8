@@ -8,6 +8,8 @@ use Drupal\file\Entity\File;
 use Drupal\node\Entity\Node;
 
 class ImportForm extends FormBase {
+  protected $type;
+
   public function buildForm(array $form, FormStateInterface $form_state, $type = NULL) {
     $this->type = $type;
 
