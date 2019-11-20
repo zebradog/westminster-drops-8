@@ -6,5 +6,5 @@ logo:
   use_default: 0
 favicon:
   use_default: 0
-menu_icons: "Administration|fa-gears\r\nHome|fa-home\r\nMy account|fa-user\r\nLog out|fa-sign-out\r\nAdd content|fa-plus\r\nSchedule|fa-calendar\r\nContent|fa-files-o\r\nUsers|fa-users"
+menu_icons: "Administration|fa-gears\r\nHome|fa-home\r\nMy account|fa-user\r\nLog out|fa-sign-out\r\nAdd content|fa-plus\r\nSchedule|fa-calendar\r\nContent|fa-files-o\r\nUsers|fa-users\r\nSupport|fa-life-ring"
 skin: black
