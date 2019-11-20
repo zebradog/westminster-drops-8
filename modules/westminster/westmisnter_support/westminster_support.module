@@ -7,7 +7,9 @@
   function westminster_support_theme() {
     return [
       'westminster-support--default' => [
-        'variables' => [],
+        'variables' => [
+          'config' => \Drupal::config('westminster_support.configuration'),
+        ],
       ],
     ];
   }

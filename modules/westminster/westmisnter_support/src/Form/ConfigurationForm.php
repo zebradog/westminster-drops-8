@@ -29,7 +29,16 @@
     public function buildForm(array $form, FormStateInterface $form_state) {
       $configuration = $this->_getConfiguration();
 
-      // TODO: Form fields
+      $form['fieldset_manual'] = array(
+        '#type' => 'fieldset',
+        '#title' => $this->t('User Manual'),
+      );
+
+      $form['fieldset_manual']['manual_url'] = array(
+        '#default_value' => $configuration->get('manual_url'),
+        '#title' => 'URL',
+        '#type' => 'url',
+      );
 
       $form['actions']['submit'] = array(
         '#type' => 'submit',
@@ -61,6 +70,7 @@
     public function submitForm(array &$form, FormStateInterface $form_state) {
       $configuration = $this->_getConfiguration();
 
+      $configuration->set('manual_url', $form_state->getValue('manual_url'));
       $configuration->save();
 
       $messenger = \Drupal::messenger();

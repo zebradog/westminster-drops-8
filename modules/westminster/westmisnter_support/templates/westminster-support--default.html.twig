@@ -1,0 +1,8 @@
+{% set manual_url = config.get('manual_url') %}
+
+{% if manual_url %}
+  <a class="btn btn-primary btn-lg" href="{{ manual_url|escape('html_attr') }}" target="_blank">
+    <i class="fa fa-file-pdf-o" aria-hidden="true" role="presentation"></i>
+    Download Manual
+  </a>
+{% endif %}
