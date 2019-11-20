@@ -1,0 +1,15 @@
+westminster_support.default:
+  path: '/support'
+  defaults:
+    _controller: '\Drupal\westminster_support\Controller\DefaultController::default'
+    _title: 'Support'
+  requirements:
+    _role: 'authenticated'
+
+westminster_support.configuration:
+  path: '/admin/config/westminster/support'
+  defaults:
+    _title: 'Westminster Support Configuration'
+    _form: '\Drupal\westminster_support\Form\ConfigurationForm'
+  requirements:
+    _permission: 'westminster support configuration'

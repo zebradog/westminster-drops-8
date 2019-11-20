@@ -1,0 +1,13 @@
+<?php
+
+  /**
+   * Implements HOOK_theme().
+   * @see https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Render%21theme.api.php/function/hook_theme/8.5.x
+   */
+  function westminster_support_theme() {
+    return [
+      'westminster-support--default' => [
+        'variables' => [],
+      ],
+    ];
+  }

@@ -1,0 +1,12 @@
+name: Westminster Support
+description: Provides a support page with contact information and a user manual.
+package: Westminster
+
+type: module
+core: 8.x
+core_version_requirement: ^8 || ^9
+
+dependencies:
+  - westminster_core
+
+configure: westminster_support.configuration

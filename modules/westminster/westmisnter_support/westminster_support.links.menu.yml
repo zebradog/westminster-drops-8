@@ -1,0 +1,10 @@
+westminster_support.default:
+  menu_name: main
+  route_name: westminster_support.default
+  title: Support
+
+system.admin_config_westminster_core.support_configuration:
+  title: Westminster Support
+  description: Configure settings related to the Westminster Support module.
+  parent: system.admin_config_westminster_core
+  route_name: westminster_support.configuration
