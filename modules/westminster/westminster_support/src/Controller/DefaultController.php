@@ -7,10 +7,16 @@
   Class DefaultController extends ControllerBase {
 
     public function default() {
-      return [
-        '#config' => \Drupal::config('westminster_support.configuration')->get(),
+      $config = \Drupal::config('westminster_support.configuration');
+
+      $build = [
+        '#config' => $config->get(),
         '#theme' => 'westminster-support--default',
       ];
+
+      \Drupal::service('renderer')->addCacheableDependency($build, $config);
+
+      return $build;
     }
 
   }
