@@ -51,6 +51,20 @@
         ],
       ];
 
+      $form['fieldset_manual']['manual_title'] = [
+        '#default_value' => $configuration->get('manual.title'),
+        '#states' => $visibleWhenManualActive,
+        '#title' => 'Title',
+        '#type' => 'textfield',
+      ];
+
+      $form['fieldset_manual']['manual_description'] = [
+        '#default_value' => $configuration->get('manual.description'),
+        '#states' => $visibleWhenManualActive,
+        '#title' => 'Description',
+        '#type' => 'textarea',
+      ];
+
       $form['fieldset_manual']['manual_url'] = [
         '#default_value' => $configuration->get('manual.url'),
         '#states' => $visibleWhenManualActive,
@@ -89,6 +103,8 @@
       $configuration = $this->_getConfiguration();
 
       $configuration->set('manual.active', $form_state->getValue('manual_active'));
+      $configuration->set('manual.description', $form_state->getValue('manual_description'));
+      $configuration->set('manual.title', $form_state->getValue('manual_title'));
       $configuration->set('manual.url', $form_state->getValue('manual_url'));
 
       $configuration->save();
