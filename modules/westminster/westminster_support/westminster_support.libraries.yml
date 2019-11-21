@@ -2,3 +2,4 @@ base:
   css:
     theme:
       css/base.css: {}
+      css/component/box.css: {}
