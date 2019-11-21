@@ -54,21 +54,21 @@
       $form['fieldset_manual']['manual_title'] = [
         '#default_value' => $configuration->get('manual.title'),
         '#states' => $visibleWhenManualActive,
-        '#title' => 'Title',
+        '#title' => $this->t('Title'),
         '#type' => 'textfield',
       ];
 
       $form['fieldset_manual']['manual_description'] = [
         '#default_value' => $configuration->get('manual.description'),
         '#states' => $visibleWhenManualActive,
-        '#title' => 'Description',
+        '#title' => $this->t('Description'),
         '#type' => 'textarea',
       ];
 
       $form['fieldset_manual']['manual_url'] = [
         '#default_value' => $configuration->get('manual.url'),
         '#states' => $visibleWhenManualActive,
-        '#title' => 'URL',
+        '#title' => $this->t('URL'),
         '#type' => 'url',
       ];
 
@@ -97,28 +97,28 @@
       $form['fieldset_info']['info_title'] = [
         '#default_value' => $configuration->get('info.title'),
         '#states' => $visibleWhenInfoActive,
-        '#title' => 'Title',
+        '#title' => $this->t('Title'),
         '#type' => 'textfield',
       ];
 
       $form['fieldset_info']['info_description'] = [
         '#default_value' => $configuration->get('info.description'),
         '#states' => $visibleWhenInfoActive,
-        '#title' => 'Description',
+        '#title' => $this->t('Description'),
         '#type' => 'textarea',
       ];
 
       $form['fieldset_info']['info_email'] = [
         '#default_value' => $configuration->get('info.email'),
         '#states' => $visibleWhenInfoActive,
-        '#title' => 'Email',
+        '#title' => $this->t('Email'),
         '#type' => 'email',
       ];
 
       $form['fieldset_info']['info_phone'] = [
         '#default_value' => $configuration->get('info.phone'),
         '#states' => $visibleWhenInfoActive,
-        '#title' => 'Phone',
+        '#title' => $this->t('Phone'),
         '#type' => 'tel',
       ];
 
@@ -147,14 +147,14 @@
       $form['fieldset_form']['form_title'] = [
         '#default_value' => $configuration->get('form.title'),
         '#states' => $visibleWhenFormActive,
-        '#title' => 'Title',
+        '#title' => $this->t('Title'),
         '#type' => 'textfield',
       ];
 
       $form['fieldset_form']['form_description'] = [
         '#default_value' => $configuration->get('form.description'),
         '#states' => $visibleWhenFormActive,
-        '#title' => 'Description',
+        '#title' => $this->t('Description'),
         '#type' => 'textarea',
       ];
 
