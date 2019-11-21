@@ -1,68 +1,70 @@
 {{ attach_library('westminster_support/base') }}
 
-<div class="row">
-  {% if config.info.active %}
-    <div class="col-md-6 col-lg-4">
-      <div class="ws-c-box">
-        {% if config.info.title %}
-          <h2 class="ws-c-box--title">
-            {{ config.info.title }}
-          </h2>
-        {% endif %}
-        <div class="ws-c-box--body">
-          {% if config.info.description %}
-            <div class="ws-c-box--description">
-              {{ config.info.description|raw }}
-            </div>
+{% if config.info.active or config.manual.active %}
+  <div class="row">
+    {% if config.info.active %}
+      <div class="col-md-6 col-lg-4">
+        <div class="ws-c-box">
+          {% if config.info.title %}
+            <h2 class="ws-c-box--title">
+              {{ config.info.title }}
+            </h2>
           {% endif %}
-          <table class="ws-c-box--table">
-            {% if config.info.email %}
-              <tr>
-                <th>{{ 'Email'|t }}:</th>
-                <td>
-                  <a href="mailto:{{ config.info.email|escape('html_attr') }}">{{ config.info.email }}</a>
-                </td>
-              </tr>
+          <div class="ws-c-box--body">
+            {% if config.info.description %}
+              <div class="ws-c-box--description">
+                {{ config.info.description|raw }}
+              </div>
             {% endif %}
-            {% if config.info.phone %}
-              <tr>
-                <th>{{ 'Phone'|t }}:</th>
-                <td>
-                  <a href="tel:{{ config.info.phone|escape('html_attr') }}">{{ config.info.phone }}</a>
-                </td>
-              </tr>
-            {% endif %}
-          </table>
+            <table class="ws-c-box--table">
+              {% if config.info.email %}
+                <tr>
+                  <th>{{ 'Email'|t }}:</th>
+                  <td>
+                    <a href="mailto:{{ config.info.email|escape('html_attr') }}">{{ config.info.email }}</a>
+                  </td>
+                </tr>
+              {% endif %}
+              {% if config.info.phone %}
+                <tr>
+                  <th>{{ 'Phone'|t }}:</th>
+                  <td>
+                    <a href="tel:{{ config.info.phone|escape('html_attr') }}">{{ config.info.phone }}</a>
+                  </td>
+                </tr>
+              {% endif %}
+            </table>
+          </div>
         </div>
       </div>
-    </div>
-  {% endif %}
+    {% endif %}
 
-  {% if config.manual.active %}
-    <div class="col-md-6 col-lg-4">
-      <div class="hidden-lg hidden-md">&nbsp;</div>
-      <div class="ws-c-box">
-        {% if config.manual.title %}
-          <h2 class="ws-c-box--title">
-            {{ config.manual.title }}
-          </h2>
-        {% endif %}
-        <div class="ws-c-box--body">
-          {% if config.manual.description %}
-            <div class="ws-c-box--description">
-              {{ config.manual.description|raw }}
-            </div>
+    {% if config.manual.active %}
+      <div class="col-md-6 col-lg-4">
+        <div class="hidden-lg hidden-md">&nbsp;</div>
+        <div class="ws-c-box">
+          {% if config.manual.title %}
+            <h2 class="ws-c-box--title">
+              {{ config.manual.title }}
+            </h2>
           {% endif %}
-          {% if config.manual.url %}
-            <div class="ws-c-box--button">
-              <a class="btn btn-primary btn-lg" href="{{ config.manual.url|escape('html_attr') }}" target="_blank">
-                <i class="fa fa-download" aria-hidden="true" role="presentation"></i>
-                {{ 'Download'|t }}
-              </a>
-            </div>
-          {% endif %}
+          <div class="ws-c-box--body">
+            {% if config.manual.description %}
+              <div class="ws-c-box--description">
+                {{ config.manual.description|raw }}
+              </div>
+            {% endif %}
+            {% if config.manual.url %}
+              <div class="ws-c-box--button">
+                <a class="btn btn-primary btn-lg" href="{{ config.manual.url|escape('html_attr') }}" target="_blank">
+                  <i class="fa fa-download" aria-hidden="true" role="presentation"></i>
+                  {{ 'Download'|t }}
+                </a>
+              </div>
+            {% endif %}
+          </div>
         </div>
       </div>
-    </div>
-  {% endif %}
-</div>
+    {% endif %}
+  </div>
+{% endif %}
