@@ -67,4 +67,32 @@
       </div>
     {% endif %}
   </div>
+
+  {% if config.form.active %}
+    <div>&nbsp;</div>
+  {% endif %}
+{% endif %}
+
+{% if config.form.active %}
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="ws-c-box">
+        {% if config.form.title %}
+          <h2 class="ws-c-box--title">
+            {{ config.form.title }}
+          </h2>
+        {% endif %}
+        <div class="ws-c-box--body">
+          {% if config.form.description %}
+            <div class="ws-c-box--description">
+              {{ config.form.description|raw }}
+            </div>
+          {% endif %}
+          <div class="ws-c-box--form">
+            {{ form }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endif %}

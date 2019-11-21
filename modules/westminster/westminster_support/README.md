@@ -1,4 +1,5 @@
 ## Roadmap
+- Provide meaningful defaults
 - Allow uploading manual directly to (private?) filesystem
 - Add email contact form
 - Pipe contact form into a configurable endpoint (e.g. for submitting issues into an external ticketing system)

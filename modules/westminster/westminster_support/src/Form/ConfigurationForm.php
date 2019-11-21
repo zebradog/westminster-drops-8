@@ -122,6 +122,42 @@
         '#type' => 'tel',
       ];
 
+      $form['fieldset_form'] = [
+        '#type' => 'fieldset',
+        '#title' => $this->t('Contact Form'),
+      ];
+
+      $form['fieldset_form']['form_active'] = [
+        '#attributes' => [
+          'id' => 'westminster_support_info_active',
+        ],
+        '#default_value' => !!$configuration->get('info.active'),
+        '#type' => 'checkbox',
+        '#title' => $this->t('Display Contact Form'),
+      ];
+
+      $visibleWhenFormActive = [
+        'visible' => [
+          '#westminster_support_form_active' => [
+            'checked' => true,
+          ],
+        ],
+      ];
+
+      $form['fieldset_form']['form_title'] = [
+        '#default_value' => $configuration->get('form.title'),
+        '#states' => $visibleWhenFormActive,
+        '#title' => 'Title',
+        '#type' => 'textfield',
+      ];
+
+      $form['fieldset_form']['form_description'] = [
+        '#default_value' => $configuration->get('form.description'),
+        '#states' => $visibleWhenFormActive,
+        '#title' => 'Description',
+        '#type' => 'textarea',
+      ];
+
       $form['actions']['submit'] = [
         '#type' => 'submit',
         '#value' => $this->t('Save Configuration'),
@@ -151,6 +187,10 @@
      */
     public function submitForm(array &$form, FormStateInterface $form_state) {
       $configuration = $this->_getConfiguration();
+
+      $configuration->set('form.active', $form_state->getValue('form_active'));
+      $configuration->set('form.description', $form_state->getValue('form_description'));
+      $configuration->set('form.title', $form_state->getValue('form_title'));
 
       $configuration->set('info.active', $form_state->getValue('info_active'));
       $configuration->set('info.description', $form_state->getValue('info_description'));

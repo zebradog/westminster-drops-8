@@ -7,8 +7,10 @@
   function westminster_support_theme() {
     return [
       'westminster-support--default' => [
+        'render element' => 'form',
         'variables' => [
           'config' => NULL,
+          'form' => NULL,
         ],
       ],
     ];
