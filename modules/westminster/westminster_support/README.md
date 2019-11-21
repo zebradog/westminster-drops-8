@@ -1,7 +1,9 @@
 ## Roadmap
 - Improve layout of support page
+- Provide more customization for the support page
+- Allow uploading manual directly to (private?) filesystem
 - Add contact details to support page
 - Add email contact form
-- Provide more customization for the support page
-- Integrate with [Dogtracks] to submit issues directly into the ticketing system
-  - This could be an agnostic RESTful API that can point to any configurable endpoint
+- Pipe contact form into a configurable endpoint (e.g. for submitting issues into an external ticketing system)
+  - Configurable formats (possibly with a plugin system?) to support Dogtracks or other vendors
+  - Add controller endpoint for submitting issues to dogtracks_issues module
