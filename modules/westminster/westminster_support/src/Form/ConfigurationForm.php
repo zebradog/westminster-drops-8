@@ -29,21 +29,39 @@
     public function buildForm(array $form, FormStateInterface $form_state) {
       $configuration = $this->_getConfiguration();
 
-      $form['fieldset_manual'] = array(
+      $form['fieldset_manual'] = [
         '#type' => 'fieldset',
         '#title' => $this->t('User Manual'),
-      );
+      ];
 
-      $form['fieldset_manual']['manual_url'] = array(
-        '#default_value' => $configuration->get('manual_url'),
+      $form['fieldset_manual']['manual_active'] = [
+        '#attributes' => [
+          'id' => 'westminster_support_manual_active',
+        ],
+        '#default_value' => !!$configuration->get('manual.active'),
+        '#type' => 'checkbox',
+        '#title' => $this->t('Display User Manual'),
+      ];
+
+      $visibleWhenManualActive = [
+        'visible' => [
+          '#westminster_support_manual_active' => [
+            'checked' => true,
+          ],
+        ],
+      ];
+
+      $form['fieldset_manual']['manual_url'] = [
+        '#default_value' => $configuration->get('manual.url'),
+        '#states' => $visibleWhenManualActive,
         '#title' => 'URL',
         '#type' => 'url',
-      );
+      ];
 
-      $form['actions']['submit'] = array(
+      $form['actions']['submit'] = [
         '#type' => 'submit',
         '#value' => $this->t('Save Configuration'),
-      );
+      ];
 
       return $form;
     }
@@ -70,7 +88,9 @@
     public function submitForm(array &$form, FormStateInterface $form_state) {
       $configuration = $this->_getConfiguration();
 
-      $configuration->set('manual_url', $form_state->getValue('manual_url'));
+      $configuration->set('manual.active', $form_state->getValue('manual_active'));
+      $configuration->set('manual.url', $form_state->getValue('manual_url'));
+
       $configuration->save();
 
       $messenger = \Drupal::messenger();

@@ -1,10 +1,12 @@
 {{ attach_library('westminster_support/base') }}
 
-{% set manual_url = config.get('manual_url') %}
+{% set manual = config.get('manual') %}
 
-{% if manual_url %}
-  <a class="btn btn-primary btn-lg" href="{{ manual_url|escape('html_attr') }}" target="_blank">
-    <i class="fa fa-file-pdf-o" aria-hidden="true" role="presentation"></i>
-    Download Manual
-  </a>
+{% if manual.active %}
+  {% if manual.url %}
+    <a class="btn btn-primary btn-lg" href="{{ manual.url|escape('html_attr') }}" target="_blank">
+      <i class="fa fa-file-pdf-o" aria-hidden="true" role="presentation"></i>
+      Download Manual
+    </a>
+  {% endif %}
 {% endif %}
