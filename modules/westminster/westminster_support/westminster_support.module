@@ -8,7 +8,7 @@
     return [
       'westminster-support--default' => [
         'variables' => [
-          'config' => \Drupal::config('westminster_support.configuration'),
+          'config' => NULL,
         ],
       ],
     ];

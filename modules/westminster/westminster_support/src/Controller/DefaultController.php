@@ -8,6 +8,7 @@
 
     public function default() {
       return [
+        '#config' => \Drupal::config('westminster_support.configuration')->get(),
         '#theme' => 'westminster-support--default',
       ];
     }
