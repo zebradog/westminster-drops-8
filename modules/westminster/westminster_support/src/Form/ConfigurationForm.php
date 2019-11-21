@@ -72,6 +72,56 @@
         '#type' => 'url',
       ];
 
+      $form['fieldset_info'] = [
+        '#type' => 'fieldset',
+        '#title' => $this->t('Contact Information'),
+      ];
+
+      $form['fieldset_info']['info_active'] = [
+        '#attributes' => [
+          'id' => 'westminster_support_info_active',
+        ],
+        '#default_value' => !!$configuration->get('info.active'),
+        '#type' => 'checkbox',
+        '#title' => $this->t('Display Contact Information'),
+      ];
+
+      $visibleWhenInfoActive = [
+        'visible' => [
+          '#westminster_support_info_active' => [
+            'checked' => true,
+          ],
+        ],
+      ];
+
+      $form['fieldset_info']['info_title'] = [
+        '#default_value' => $configuration->get('info.title'),
+        '#states' => $visibleWhenInfoActive,
+        '#title' => 'Title',
+        '#type' => 'textfield',
+      ];
+
+      $form['fieldset_info']['info_description'] = [
+        '#default_value' => $configuration->get('info.description'),
+        '#states' => $visibleWhenInfoActive,
+        '#title' => 'Description',
+        '#type' => 'textarea',
+      ];
+
+      $form['fieldset_info']['info_email'] = [
+        '#default_value' => $configuration->get('info.email'),
+        '#states' => $visibleWhenInfoActive,
+        '#title' => 'Email',
+        '#type' => 'email',
+      ];
+
+      $form['fieldset_info']['info_phone'] = [
+        '#default_value' => $configuration->get('info.phone'),
+        '#states' => $visibleWhenInfoActive,
+        '#title' => 'Phone',
+        '#type' => 'tel',
+      ];
+
       $form['actions']['submit'] = [
         '#type' => 'submit',
         '#value' => $this->t('Save Configuration'),
@@ -101,6 +151,12 @@
      */
     public function submitForm(array &$form, FormStateInterface $form_state) {
       $configuration = $this->_getConfiguration();
+
+      $configuration->set('info.active', $form_state->getValue('info_active'));
+      $configuration->set('info.description', $form_state->getValue('info_description'));
+      $configuration->set('info.email', $form_state->getValue('info_email'));
+      $configuration->set('info.phone', $form_state->getValue('info_phone'));
+      $configuration->set('info.title', $form_state->getValue('info_title'));
 
       $configuration->set('manual.active', $form_state->getValue('manual_active'));
       $configuration->set('manual.description', $form_state->getValue('manual_description'));
