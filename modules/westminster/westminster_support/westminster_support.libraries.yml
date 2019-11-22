@@ -3,3 +3,4 @@ base:
     theme:
       css/base.css: {}
       css/component/box.css: {}
+      css/component/spacer.css: {}

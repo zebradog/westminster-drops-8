@@ -41,7 +41,7 @@
 
     {% if config.manual.active %}
       <div class="col-md-6 col-lg-4">
-        <div class="hidden-lg hidden-md">&nbsp;</div>
+        <div class="hidden-lg hidden-md ws-c-spacer"></div>
         <div class="ws-c-box">
           {% if config.manual.title %}
             <h2 class="ws-c-box--title">
@@ -56,7 +56,7 @@
             {% endif %}
             {% if config.manual.url %}
               <div class="ws-c-box--button">
-                <a class="btn btn-primary btn-lg" href="{{ config.manual.url|escape('html_attr') }}" target="_blank">
+                <a class="btn btn-primary" href="{{ config.manual.url|escape('html_attr') }}" target="_blank">
                   <i class="fa fa-download" aria-hidden="true" role="presentation"></i>
                   {{ 'Download'|t }}
                 </a>
@@ -69,7 +69,7 @@
   </div>
 
   {% if config.form.active %}
-    <div>&nbsp;</div>
+    <div class="ws-c-spacer"></div>
   {% endif %}
 {% endif %}
 
