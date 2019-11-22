@@ -129,9 +129,9 @@
 
       $form['fieldset_form']['form_active'] = [
         '#attributes' => [
-          'id' => 'westminster_support_info_active',
+          'id' => 'westminster_support_form_active',
         ],
-        '#default_value' => !!$configuration->get('info.active'),
+        '#default_value' => !!$configuration->get('form.active'),
         '#type' => 'checkbox',
         '#title' => $this->t('Display Contact Form'),
       ];
@@ -156,6 +156,55 @@
         '#states' => $visibleWhenFormActive,
         '#title' => $this->t('Description'),
         '#type' => 'textarea',
+      ];
+
+      $form['fieldset_form']['form_email_active'] = [
+        '#attributes' => [
+          'id' => 'westminster_support_form_email_active',
+        ],
+        '#default_value' => !!$configuration->get('form.email.active'),
+        '#states' => $visibleWhenFormActive,
+        '#type' => 'checkbox',
+        '#title' => $this->t('Send Email'),
+      ];
+
+      $visibleWhenFormEmailActive = [
+        'visible' => [
+          '#westminster_support_form_email_active' => [
+            'checked' => true,
+          ],
+          '#westminster_support_form_email_active' => [
+            'checked' => true,
+          ],
+        ],
+      ];
+
+      $form['fieldset_form']['form_email_recipient'] = [
+        '#default_value' => $configuration->get('form.email.recipient'),
+        '#states' => $visibleWhenFormEmailActive,
+        '#title' => $this->t('Email Recipient'),
+        '#type' => 'email',
+      ];
+
+      $form['fieldset_form']['form_email_subjectPrefix'] = [
+        '#default_value' => $configuration->get('form.email.subjectPrefix'),
+        '#states' => $visibleWhenFormEmailActive,
+        '#title' => $this->t('Subject Prefix'),
+        '#type' => 'textfield',
+      ];
+
+      $form['fieldset_form']['form_success'] = [
+        '#default_value' => $configuration->get('form.success'),
+        '#states' => $visibleWhenFormActive,
+        '#title' => $this->t('Success Message'),
+        '#type' => 'textfield',
+      ];
+
+      $form['fieldset_form']['form_error'] = [
+        '#default_value' => $configuration->get('form.error'),
+        '#states' => $visibleWhenFormActive,
+        '#title' => $this->t('Error Message'),
+        '#type' => 'textfield',
       ];
 
       $form['actions']['submit'] = [
@@ -189,7 +238,12 @@
       $configuration = $this->_getConfiguration();
 
       $configuration->set('form.active', $form_state->getValue('form_active'));
+      $configuration->set('form.email.active', $form_state->getValue('form_email_active'));
+      $configuration->set('form.email.recipient', $form_state->getValue('form_email_recipient'));
+      $configuration->set('form.email.subjectPrefix', $form_state->getValue('form_email_subjectPrefix'));
       $configuration->set('form.description', $form_state->getValue('form_description'));
+      $configuration->set('form.error', $form_state->getValue('form_error'));
+      $configuration->set('form.success', $form_state->getValue('form_success'));
       $configuration->set('form.title', $form_state->getValue('form_title'));
 
       $configuration->set('info.active', $form_state->getValue('info_active'));

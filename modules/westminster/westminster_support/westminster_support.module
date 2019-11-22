@@ -1,8 +1,21 @@
 <?php
 
   /**
+   * Implements HOOK_mail().
+   * @see https://api.drupal.org/api/drupal/core%21core.api.php/function/hook_mail
+   */
+  function westminster_support_mail($key, &$message, $params) {
+    switch ($key) {
+      case 'contact':
+        $message['subject'] = $params['subject'];
+        $message['body'][] = $params['body'];
+        break;
+    }
+  }
+
+  /**
    * Implements HOOK_theme().
-   * @see https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Render%21theme.api.php/function/hook_theme/8.5.x
+   * @see https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Render%21theme.api.php/function/hook_theme
    */
   function westminster_support_theme() {
     return [
