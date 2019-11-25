@@ -2,6 +2,7 @@ westminster_support.default:
   menu_name: main
   route_name: westminster_support.default
   title: Support
+  weight: 100
 
 system.admin_config_westminster_core.support_configuration:
   title: Westminster Support
