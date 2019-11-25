@@ -30,12 +30,13 @@
       $configuration = $this->_getConfiguration();
 
       $form['subject'] = [
+        '#required' => true,
         '#title' => $this->t('Subject'),
         '#type' => 'textfield',
       ];
 
       $form['body'] = [
-        '#title' => $this->t('Body'),
+        '#title' => $this->t('Description'),
         '#type' => 'textarea',
       ];
 
@@ -106,7 +107,7 @@
     /**
      * Sends an email with the provided values.
      * @param mixed[] $values
-     * @return boolean -
+     * @return boolean - Result of MailManager::send()
      * @see https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Mail%21MailManager.php/function/MailManager%3A%3Amail
      */
     protected function _sendEmail(array $values) {
