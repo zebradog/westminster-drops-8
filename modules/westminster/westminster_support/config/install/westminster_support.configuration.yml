@@ -1,0 +1,15 @@
+form:
+  active: true
+  email:
+    active: true
+    subjectPrefix: [Support]
+  error: An error occurred while processing your request. Please call or email us directly.
+  success: Thanks for the report! A support representative will respond as soon as possible.
+  title: Submit an Issue
+info:
+  active: true
+  email: support@zebradog.com
+  phone: (608) 257-8400
+  title: Get In Touch
+manual:
+  title: User Manual
