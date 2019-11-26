@@ -3,7 +3,7 @@
     margin-right: 0.25em;
   }
   .ws-c-box--description + * {
-    margin-bottom: 10px;
+    margin-top: 10px;
   }
   .ws-c-box--table th:first-child {
     padding-right: 5px;
