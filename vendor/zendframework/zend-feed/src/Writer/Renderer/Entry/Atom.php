@@ -56,7 +56,7 @@ class Atom extends Renderer\AbstractRenderer implements Renderer\RendererInterfa
         foreach ($this->extensions as $ext) {
             $ext->setType($this->getType());
             $ext->setRootElement($this->getRootElement());
-            $ext->setDOMDocument($this->getDOMDocument(), $entry);
+            $ext->setDomDocument($this->getDomDocument(), $entry);
             $ext->render();
         }
 
@@ -375,6 +375,9 @@ class Atom extends Renderer\AbstractRenderer implements Renderer\RendererInterfa
 
     /**
      * Load a HTML string and attempt to normalise to XML
+     *
+     * @param string $content
+     * @return \DOMElement
      */
     // @codingStandardsIgnoreStart
     protected function _loadXhtml($content)

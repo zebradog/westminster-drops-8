@@ -13,6 +13,9 @@ use DOMDocument;
 use DOMElement;
 use DOMXPath;
 
+/**
+ * @deprecated This (abstract) class is deprecated. Use Zend\Feed\Reader\Entry\AbstractEntry instead.
+ */
 abstract class AbstractEntry
 {
     /**
@@ -121,7 +124,7 @@ abstract class AbstractEntry
         $dom = new DOMDocument('1.0', $this->getEncoding());
         $entry = $dom->importNode($this->getElement(), true);
         $dom->appendChild($entry);
-        return $dom->saveXml();
+        return $dom->saveXML();
     }
 
     /**

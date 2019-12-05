@@ -55,6 +55,7 @@ class FeedSet extends ArrayObject
                 'rel' => 'alternate',
                 'type' => $link->getAttribute('type'),
                 'href' => $this->absolutiseUri(trim($link->getAttribute('href')), $uri),
+                'title' => $link->getAttribute('title'),
             ]);
         }
     }
@@ -130,6 +131,9 @@ class FeedSet extends ArrayObject
 
     /**
      *  Canonicalize relative path
+     *
+     * @param string $path
+     * @return string
      */
     protected function canonicalizePath($path)
     {

@@ -56,7 +56,7 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\RendererInterfac
         foreach ($this->extensions as $ext) {
             $ext->setType($this->getType());
             $ext->setRootElement($this->getRootElement());
-            $ext->setDOMDocument($this->getDOMDocument(), $entry);
+            $ext->setDomDocument($this->getDomDocument(), $entry);
             $ext->render();
         }
 
@@ -296,7 +296,10 @@ class Rss extends Renderer\AbstractRenderer implements Renderer\RendererInterfac
         }
         $text = $dom->createTextNode($this->getDataContainer()->getId());
         $id->appendChild($text);
-        if (! Uri::factory($this->getDataContainer()->getId())->isValid()) {
+
+        $uri = Uri::factory($this->getDataContainer()->getId());
+        if (! $uri->isValid() || ! $uri->isAbsolute()) {
+            /** @see http://www.rssboard.org/rss-profile#element-channel-item-guid */
             $id->setAttribute('isPermaLink', 'false');
         }
     }

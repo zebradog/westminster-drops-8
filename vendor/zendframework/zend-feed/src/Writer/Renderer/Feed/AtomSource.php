@@ -31,7 +31,7 @@ class AtomSource extends AbstractAtom implements Renderer\RendererInterface
     /**
      * Render Atom Feed Metadata (Source element)
      *
-     * @return \Zend\Feed\Writer\Renderer\Feed\Atom
+     * @return \Zend\Feed\Writer\Renderer\Feed\AbstractAtom
      */
     public function render()
     {
@@ -60,7 +60,7 @@ class AtomSource extends AbstractAtom implements Renderer\RendererInterface
         foreach ($this->extensions as $ext) {
             $ext->setType($this->getType());
             $ext->setRootElement($this->getRootElement());
-            $ext->setDOMDocument($this->getDOMDocument(), $root);
+            $ext->setDomDocument($this->getDomDocument(), $root);
             $ext->render();
         }
         return $this;
