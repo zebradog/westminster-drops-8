@@ -13,7 +13,12 @@
         "drupal/core": "self.version",
         "drupal/core-project-message": "self.version",
         "drupal/core-vendor-hardening": "self.version",
-        "wikimedia/composer-merge-plugin": "^1.4"
+        "wikimedia/composer-merge-plugin": "^1.4",
+        "aws/aws-sdk-php": "^3.93",
+        "drupal/flysystem": "^1.0",
+        "league/flysystem-memory": "^1.0",
+        "league/flysystem-aws-s3-v3": "^1.0",
+        "google/apiclient": "^2.2"
     },
     "require-dev": {
         "behat/mink": "1.7.x-dev",
