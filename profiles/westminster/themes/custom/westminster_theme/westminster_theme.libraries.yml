@@ -3,7 +3,7 @@ base:
   js:
     js/script.js: {}
     lib/bootstrap/js/bootstrap.min.js: {}
-    lib/fontawesome/js/all.min.js: {}
+    # lib/fontawesome/js/all.min.js: {}
     lib/slimScroll/jquery.slimscroll.min.js: {}
     lib/custom-event-polyfill.js: {}
     lib/fastclick/fastclick.min.js: {}
@@ -12,11 +12,11 @@ base:
   css:
     theme:
       lib/bootstrap/css/bootstrap.min.css: {}
-      lib/fontawesome/css/all.min.css: {}
-      https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css: { type: external, minified: true }
       https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css: { type: external, minified: true }
       lib/select2/select2.min.css: {}
       lib/adminlte/css/AdminLTE.min.css: {}
+      lib/fontawesome/css/all.min.css: {}
+      https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css: { type: external, minified: true }
       lib/adminlte/css/skins/_all-skins.min.css: {}
       css/style.css: {}
   dependencies:

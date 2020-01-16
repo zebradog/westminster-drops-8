@@ -129,3 +129,8 @@ body.path-node .nav-tabs, body.path-user .nav-tabs{
 .control-sidebar {
   z-index: 98; /* 1010 */
 }
+
+/* AdminLTE Overwrite */
+.sidebar-menu li > a > .fa-angle-left {
+  height: 1em;
+}
