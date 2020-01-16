@@ -12,7 +12,7 @@ westminster_import.import_content:
     _title: 'Import Content'
     _controller: '\Drupal\westminster_import\Controller\ImportController::importSelectPage'
   requirements:
-    _permission: 'westminster import content'
+    _permission: 'access content'
   options:
     no_cache: 'TRUE'
 
@@ -22,7 +22,7 @@ westminster_import.import_content.type:
     _title: 'Import'
     _form: '\Drupal\westminster_import\Form\ImportForm'
   requirements:
-    _permission: 'westminster import content'
+    _permission: 'access content'
   options:
     no_cache: 'TRUE'
 
@@ -32,7 +32,7 @@ westminster_import.import_download.type:
     _title: 'Import: Download CSV'
     _controller: '\Drupal\westminster_import\Controller\DownloadController::downloadCSV'
   requirements:
-    _permission: 'westminster import content'
+    _permission: 'access content'
   options:
     no_cache: 'TRUE'
 
@@ -42,6 +42,6 @@ westminster_import.import_download_template.type:
     _title: 'Import: Download CSV Template'
     _controller: '\Drupal\westminster_import\Controller\DownloadController::downloadCSVTemplate'
   requirements:
-    _permission: 'wetsminster import content'
+    _permission: 'access content'
   option:
     no_cache: 'TRUE'
