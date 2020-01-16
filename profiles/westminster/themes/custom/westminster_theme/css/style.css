@@ -134,3 +134,8 @@ body.path-node .nav-tabs, body.path-user .nav-tabs{
 .sidebar-menu li > a > .fa-angle-left {
   height: 1em;
 }
+
+/* FontAwesome Overwrite */
+.fa {
+  font: normal normal normal 14px/1 "Font Awesome 5 Pro", "FontAwesome";
+}
