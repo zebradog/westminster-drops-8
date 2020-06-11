@@ -138,4 +138,20 @@ body.path-node .nav-tabs, body.path-user .nav-tabs{
 /* FontAwesome Overwrite */
 .fa {
   font: normal normal normal 14px/1 "Font Awesome 5 Pro", "FontAwesome";
+  font-weight: 900;
+}
+.far {
+  font-weight: 400;
+}
+.fad {
+  position: relative;
+  font-family: 'Font Awesome 5 Duotone';
+  font-weight: 900;
+}
+.fas {
+
+}
+.fal {
+  font-family: 'Font Awesome 5 Pro';
+  font-weight: 300;
 }
