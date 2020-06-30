@@ -1,9 +1,6 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\Tests\simpletest\Unit\SimpletestPhpunitRunCommandTestWillDie.
- */
+// phpcs:ignoreFile
 
 namespace Drupal\Tests\simpletest\Unit;
 

@@ -283,7 +283,7 @@ class SystemTestController extends ControllerBase implements TrustedCallbackInte
   /**
    * A simple page callback that uses a plain Symfony response object.
    */
-  public function respondWithReponse(Request $request) {
+  public function respondWithResponse(Request $request) {
     return new Response('test');
   }
 
@@ -297,7 +297,7 @@ class SystemTestController extends ControllerBase implements TrustedCallbackInte
   /**
    * A simple page callback that uses a CacheableResponse object.
    */
-  public function respondWithCacheableReponse(Request $request) {
+  public function respondWithCacheableResponse(Request $request) {
     return new CacheableResponse('test');
   }
 
@@ -404,6 +404,14 @@ class SystemTestController extends ControllerBase implements TrustedCallbackInte
    */
   public static function trustedCallbacks() {
     return ['preRenderCacheTags'];
+  }
+
+  /**
+   * Use a plain Symfony response object to output the current install_profile.
+   */
+  public function getInstallProfile() {
+    $install_profile = \Drupal::installProfile() ?: 'NONE';
+    return new Response('install_profile: ' . $install_profile);
   }
 
 }
