@@ -4,7 +4,6 @@ namespace Drupal\rest\Plugin\views\display;
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheableResponse;
-use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
@@ -413,20 +412,18 @@ class RestExport extends PathPluginBase implements ResponseDisplayPluginInterfac
    */
   public static function buildResponse($view_id, $display_id, array $args = []) {
     $build = static::buildBasicRenderable($view_id, $display_id, $args);
-    $build['#cache']['contexts'][] = 'url.query_args:callback';
 
-    $renderer = \Drupal::service('renderer');
-    $output = (string) $renderer->renderRoot($build);
-
-    if (!empty($build['#jsonp_callback'])) {
-     $response = new CacheableJsonResponse($output, 200);
-     $response->setCallback($build['#jsonp_callback']);
-    } else {
-     $response = new CacheableResponse($output, 200);
-    }
-
+    // Setup an empty response so headers can be added as needed during views
+    // rendering and processing.
+    $response = new CacheableResponse('', 200);
     $build['#response'] = $response;
 
+    /** @var \Drupal\Core\Render\RendererInterface $renderer */
+    $renderer = \Drupal::service('renderer');
+
+    $output = (string) $renderer->renderRoot($build);
+
+    $response->setContent($output);
     $cache_metadata = CacheableMetadata::createFromRenderArray($build);
     $response->addCacheableDependency($cache_metadata);
 
@@ -453,13 +450,7 @@ class RestExport extends PathPluginBase implements ResponseDisplayPluginInterfac
       return $this->view->style_plugin->render();
     });
 
-    if ($jsonpCallback = $this->view->getRequest()->get('callback')) {
-      $this->view->element['#content_type'] = 'text/javascript';
-      $this->view->element['#jsonp_callback'] = $jsonpCallback;
-    } else {
-      $this->view->element['#content_type'] = $this->getMimeType();
-    }
-
+    $this->view->element['#content_type'] = $this->getMimeType();
     $this->view->element['#cache_properties'][] = '#content_type';
 
     // Encode and wrap the output in a pre tag if this is for a live preview.

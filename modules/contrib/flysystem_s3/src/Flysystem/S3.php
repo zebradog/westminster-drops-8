@@ -2,9 +2,9 @@
 
 namespace Drupal\flysystem_s3\Flysystem;
 
-use Aws\AwsClientInterface;
 use Aws\Credentials\Credentials;
 use Aws\S3\S3Client;
+use Aws\S3\Exception\S3Exception;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -24,7 +24,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class S3 implements FlysystemPluginInterface, ContainerFactoryPluginInterface {
 
   use ImageStyleGenerationTrait;
-  use FlysystemUrlTrait { getExternalUrl as getDownloadlUrl; }
+  use FlysystemUrlTrait {getExternalUrl as getDownloadlUrl;
+  }
 
   /**
    * The S3 bucket.
@@ -36,7 +37,7 @@ class S3 implements FlysystemPluginInterface, ContainerFactoryPluginInterface {
   /**
    * The S3 client.
    *
-   * @var \Aws\AwsClientInterface
+   * @var \Aws\S3\S3Client
    */
   protected $client;
 
@@ -62,17 +63,25 @@ class S3 implements FlysystemPluginInterface, ContainerFactoryPluginInterface {
   protected $urlPrefix;
 
   /**
+   * Whether the stream is set to public.
+   *
+   * @var bool
+   */
+  protected $isPublic;
+
+  /**
    * Constructs an S3 object.
    *
-   * @param \Aws\AwsClientInterface $client
-   *   The AWS client.
+   * @param \Aws\S3\S3Client $client
+   *   The S3 client.
    * @param \League\Flysystem\Config $config
    *   The configuration.
    */
-  public function __construct(AwsClientInterface $client, Config $config) {
+  public function __construct(S3Client $client, Config $config) {
     $this->client = $client;
     $this->bucket = $config->get('bucket', '');
     $this->prefix = $config->get('prefix', '');
+    $this->isPublic = $config->get('public', FALSE);
     $this->options = $config->get('options', []);
 
     $this->urlPrefix = $this->calculateUrlPrefix($config);
@@ -85,7 +94,7 @@ class S3 implements FlysystemPluginInterface, ContainerFactoryPluginInterface {
     $configuration = static::mergeConfiguration($container, $configuration);
     $client_config = static::mergeClientConfiguration($container, $configuration);
 
-    $client = S3Client::factory($client_config);
+    $client = new S3Client($client_config);
 
     unset($configuration['key'], $configuration['secret']);
 
@@ -109,6 +118,19 @@ class S3 implements FlysystemPluginInterface, ContainerFactoryPluginInterface {
       'region' => $configuration['region'],
       'endpoint' => $configuration['endpoint'],
     ];
+    // Add config for S3Client if the exists.
+    if (isset($configuration['bucket_endpoint'])) {
+      $client_config['bucket_endpoint'] = $configuration['bucket_endpoint'];
+    }
+    if (isset($configuration['use_accelerate_endpoint'])) {
+      $client_config['use_accelerate_endpoint'] = $configuration['use_accelerate_endpoint'];
+    }
+    if (isset($configuration['use_dual_stack_endpoint'])) {
+      $client_config['use_dual_stack_endpoint'] = $configuration['use_dual_stack_endpoint'];
+    }
+    if (isset($configuration['use_path_style_endpoint'])) {
+      $client_config['use_path_style_endpoint'] = $configuration['use_path_style_endpoint'];
+    }
 
     // Allow authentication with standard secret/key or IAM roles.
     if (isset($configuration['key']) && isset($configuration['secret'])) {
@@ -152,13 +174,25 @@ class S3 implements FlysystemPluginInterface, ContainerFactoryPluginInterface {
    * {@inheritdoc}
    */
   public function getAdapter() {
-    return new S3Adapter($this->client, $this->bucket, $this->prefix, $this->options);
+    try {
+      $adapter = new S3Adapter($this->client, $this->bucket, $this->prefix, $this->options);
+      return $adapter;
+    }
+    catch (S3Exception $e) {
+      $message = $e->getMessage();
+      \Drupal::logger('flysystem_s3')->error($message);
+    }
   }
 
   /**
    * {@inheritdoc}
    */
   public function getExternalUrl($uri) {
+
+    if ($this->isPublic === FALSE) {
+      return $this->getDownloadlUrl($uri);
+    }
+
     $target = $this->getTarget($uri);
 
     if (strpos($target, 'styles/') === 0 && !file_exists($uri)) {
@@ -172,6 +206,14 @@ class S3 implements FlysystemPluginInterface, ContainerFactoryPluginInterface {
    * {@inheritdoc}
    */
   public function ensure($force = FALSE) {
+    try {
+      $this->getAdapter()->listContents();
+    }
+    catch (S3Exception $e) {
+      $message = $e->getMessage();
+      \Drupal::logger('flysystem_s3')->error($message);
+    }
+
     // @TODO: If the bucket exists, can we write to it? Find a way to test that.
     if (!$this->client->doesBucketExist($this->bucket)) {
       return [[
@@ -180,7 +222,8 @@ class S3 implements FlysystemPluginInterface, ContainerFactoryPluginInterface {
         'context' => [
           '%bucket' => $this->bucket,
         ],
-      ]];
+      ],
+      ];
     }
 
     return [];
@@ -204,8 +247,8 @@ class S3 implements FlysystemPluginInterface, ContainerFactoryPluginInterface {
     $prefix = $prefix === '' ? '' : '/' . UrlHelper::encodePath($prefix);
 
     if ($cname !== '' && $config->get('cname_is_bucket', TRUE)) {
-       return $protocol . '://' . $cname . $prefix;
-     }
+      return $protocol . '://' . $cname . $prefix;
+    }
 
     $bucket = (string) $config->get('bucket', '');
     $bucket = $bucket === '' ? '' : '/' . UrlHelper::encodePath($bucket);

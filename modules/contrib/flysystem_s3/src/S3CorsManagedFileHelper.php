@@ -9,20 +9,20 @@ use Drupal\Core\Session\AccountInterface;
  */
 class S3CorsManagedFileHelper {
 
+  /**
+   * Function alterInfo called by hook_element_info_alter().
+   */
   public static function alterInfo(array &$types) {
     array_unshift($types['managed_file']['#process'], [get_called_class(), 'preProcessCors']);
     $types['managed_file']['#process'][] = [get_called_class(), 'postProcessCors'];
-    $types['managed_file']['#upload_validators'] = [];
   }
 
+  /**
+   * Function preProcessCors prepare the field to use CORS upload.
+   */
   public static function preProcessCors(array &$element) {
     if (isset($element['#s3_cors']) && !$element['#s3_cors']) {
       // S3 CORS support has been specifically disabled for this element.
-      return $element;
-    }
-
-    // Currently only single-value elements are supported.
-    if ($element['#multiple']) {
       return $element;
     }
 
@@ -31,10 +31,9 @@ class S3CorsManagedFileHelper {
     // has permission to upload files using CORS.
     $element['#s3_cors'] = FALSE;
 
-    if (!empty($element['#upload_location']) && $scheme = file_uri_scheme($element['#upload_location'])) {
+    if (!empty($element['#upload_location']) && $scheme = \Drupal::service('file_system')->uriScheme($element['#upload_location'])) {
       if (static::isCorsAvailable($scheme)) {
         // @todo Verify account permission/role respected with cache tags.
-
         // Disable the default progress indicator.
         $element['#progress_indicator'] = 'none';
 
@@ -54,6 +53,9 @@ class S3CorsManagedFileHelper {
     return $element;
   }
 
+  /**
+   * Function postProcessCors add data attributes that are used flysystem_s3.js.
+   */
   public static function postProcessCors(array &$element) {
     if (!empty($element['#s3_cors'])) {
 
@@ -118,7 +120,9 @@ class S3CorsManagedFileHelper {
   public static function getAcl($scheme) {
     $settings = static::getSchemeSettings($scheme);
 
-    if (array_key_exists('ACL', $settings['config']['options']['ACL'])) {
+    // Config options is not required and ACL can be set to NULL to ignore
+    // x-amz-acl header.
+    if (!empty($settings['config']['options']) && array_key_exists('ACL', $settings['config']['options'])) {
       return $settings['config']['options']['ACL'];
     }
 

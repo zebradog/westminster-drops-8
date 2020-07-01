@@ -38,21 +38,28 @@
         return;
       }
 
-      // @todo This only supports the first file uploaded.
-      var file = $fileElement[0].files[0];
+      // Get the filelist and the number of files to be uploaded.
+      var filelist = $fileElement[0].files;
 
-      var $progressBar = Drupal.flysystemS3.addProgressBar($fileElement, file);
+      // Store uploaded files fid values.
+      var uploadedFileFid = [];
 
-      Drupal.flysystemS3.requestSignature($fileElement, file)
+      Object.keys(filelist).forEach(function (file) {
+
+        var file_obj = filelist[file];
+
+        var $progressBar = Drupal.flysystemS3.addProgressBar($fileElement, file_obj);
+
+        Drupal.flysystemS3.requestSignature($fileElement, file_obj)
         .fail(function () {
           Drupal.flysystemS3.setCorsUploadProgress($progressBar, 1, Drupal.t('Signing request failed. Trying secondary upload method...'));
           // Trigger the submit button to let normal AJAX process the upload.
           Drupal.file.triggerUploadButton(event);
         })
         .done(function (signedFormData) {
-          Drupal.flysystemS3.setCorsUploadProgress($progressBar, 1, Drupal.t('Uploading @file', {'@file': file.name}));
+          Drupal.flysystemS3.setCorsUploadProgress($progressBar, 1, Drupal.t('Uploading @file', {'@file': file_obj.name}));
 
-          Drupal.flysystemS3.uploadToAws(file, signedFormData, $progressBar)
+          Drupal.flysystemS3.uploadToAws(file_obj, signedFormData, $progressBar)
             .fail(function () {
               Drupal.flysystemS3.setCorsUploadProgress($progressBar, 1, Drupal.t('Upload failed. Trying secondary upload method...'));
               // Trigger the submit button to let normal AJAX process the upload.
@@ -61,28 +68,45 @@
             .done(function () {
               // Set progress bar to 100% in case the upload was so fast.
               Drupal.flysystemS3.setCorsUploadProgress($progressBar, 100, Drupal.t('Processing upload'));
-              // Set the file upload to an empty value to prevent the file from being uploaded to Drupal.
-              $fileElement.val('');
-              // Set the fid element to our provided fid so that the AJAX response will render our file.
-              var $fidsElement = $fileElement.siblings('input[type="hidden"][name$="[fids]"]');
-              $fidsElement.val(signedFormData.fid);
-              // Trigger the submit button to let normal AJAX process the upload.
-              Drupal.file.triggerUploadButton(event);
+
+              // Add the fid for this file to array.
+              uploadedFileFid.push(signedFormData.fid);
+
+              // Post the results to Drupal if all files have been processed.
+              var num_fids = uploadedFileFid.length;
+
+              if (num_fids == filelist.length) {
+                // Set the file upload to an empty value to prevent the file from being uploaded to Drupal.
+                $fileElement.val('');
+                // Set the fid element to our provided fid so that the AJAX response will render our file.
+                var $fidsElement = $fileElement.siblings('input[type="hidden"][name$="[fids]"]');
+                // List all uploaded files fids to string.
+                var uploadedFileFidString = uploadedFileFid.join(" ");
+
+                $fidsElement.val(uploadedFileFidString);
+
+                // Trigger the submit button to let normal AJAX process the upload.
+                Drupal.file.triggerUploadButton(event);
+              }
             });
         });
+      });
+
     },
 
     /**
      * Adds a progress bar.
      */
-    addProgressBar: function($fileElement, file) {
+    addProgressBar: function($fileElement, file_obj) {
       // Hide the upload field and the description.
       $fileElement.hide();
       $fileElement.siblings('.description').hide();
 
       var field_id = $fileElement.attr('id').replace(/\-upload/, '');
+
       var $progressBar = $(Drupal.theme.progressBar(field_id + '-progress'));
-      Drupal.flysystemS3.setCorsUploadProgress($progressBar, 0, Drupal.t('Signing @file for upload', {'@file': file.name}));
+      Drupal.flysystemS3.setCorsUploadProgress($progressBar, 0, Drupal.t('Signing @file for upload', {'@file': file_obj.name}));
+
       $fileElement.after($progressBar);
 
       return $progressBar;
@@ -165,7 +189,7 @@
         type: signedFormData.attributes.method,
         mimeType: signedFormData.attributes.enctype,
         xhrFields: {
-          withCredentials: false
+          withCredentials: true
         },
         cache: false,
         contentType: false,
@@ -259,3 +283,4 @@
   };
 
 })(jQuery, Drupal, drupalSettings);
+

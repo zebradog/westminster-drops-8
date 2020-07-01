@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit819c91c3a4fd08d4ef12629867852397
+class ComposerStaticInitf89914813a59d28d5e095826559a56d9
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -35,6 +35,8 @@ class ComposerStaticInit819c91c3a4fd08d4ef12629867852397
         '786bf90caabc9e09b6ad4cc5ca8f0e30' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/normalize_uploaded_files.legacy.php',
         '751a5a3f463e4be759be31748b61737c' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/parse_cookie_header.legacy.php',
         'def43f6c87e4f8dfd0c9e1b1bab14fe8' => __DIR__ . '/..' . '/symfony/polyfill-iconv/bootstrap.php',
+        'b067bc7112e384b61c701452d53a14a8' => __DIR__ . '/..' . '/mtdowling/jmespath.php/src/JmesPath.php',
+        '8a9dc1de0ca7e01f3e08231539562f61' => __DIR__ . '/..' . '/aws/aws-sdk-php/src/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -83,12 +85,17 @@ class ComposerStaticInit819c91c3a4fd08d4ef12629867852397
         'L' => 
         array (
             'League\\Flysystem\\Replicate\\' => 27,
+            'League\\Flysystem\\AwsS3v3\\' => 25,
             'League\\Flysystem\\' => 17,
             'Laminas\\ZendFrameworkBridge\\' => 28,
             'Laminas\\Stdlib\\' => 15,
             'Laminas\\Feed\\' => 13,
             'Laminas\\Escaper\\' => 16,
             'Laminas\\Diactoros\\' => 18,
+        ),
+        'J' => 
+        array (
+            'JmesPath\\' => 9,
         ),
         'G' => 
         array (
@@ -122,6 +129,7 @@ class ComposerStaticInit819c91c3a4fd08d4ef12629867852397
         ),
         'A' => 
         array (
+            'Aws\\' => 4,
             'Asm89\\Stack\\' => 12,
         ),
     );
@@ -252,6 +260,10 @@ class ComposerStaticInit819c91c3a4fd08d4ef12629867852397
         array (
             0 => __DIR__ . '/..' . '/league/flysystem-replicate-adapter/src',
         ),
+        'League\\Flysystem\\AwsS3v3\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/flysystem-aws-s3-v3/src',
+        ),
         'League\\Flysystem\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/flysystem/src',
@@ -275,6 +287,10 @@ class ComposerStaticInit819c91c3a4fd08d4ef12629867852397
         'Laminas\\Diactoros\\' => 
         array (
             0 => __DIR__ . '/..' . '/laminas/laminas-diactoros/src',
+        ),
+        'JmesPath\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mtdowling/jmespath.php/src',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
@@ -347,6 +363,10 @@ class ComposerStaticInit819c91c3a4fd08d4ef12629867852397
         'Composer\\Installers\\' => 
         array (
             0 => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers',
+        ),
+        'Aws\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/aws/aws-sdk-php/src',
         ),
         'Asm89\\Stack\\' => 
         array (
@@ -424,11 +444,11 @@ class ComposerStaticInit819c91c3a4fd08d4ef12629867852397
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit819c91c3a4fd08d4ef12629867852397::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit819c91c3a4fd08d4ef12629867852397::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit819c91c3a4fd08d4ef12629867852397::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit819c91c3a4fd08d4ef12629867852397::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInit819c91c3a4fd08d4ef12629867852397::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf89914813a59d28d5e095826559a56d9::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf89914813a59d28d5e095826559a56d9::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitf89914813a59d28d5e095826559a56d9::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInitf89914813a59d28d5e095826559a56d9::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInitf89914813a59d28d5e095826559a56d9::$classMap;
 
         }, null, ClassLoader::class);
     }
