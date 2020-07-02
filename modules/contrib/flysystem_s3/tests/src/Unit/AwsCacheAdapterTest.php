@@ -12,9 +12,6 @@ use Drupal\Core\Cache\MemoryBackend;
  */
 class AwsCacheAdapterTest extends \PHPUnit_Framework_TestCase {
 
-  /**
-   *
-   */
   public function testBasicGetSetDelete() {
     $backend = new MemoryBackend('foo');
     $cache = new AwsCacheAdapter($backend, 'bar_prefix:');
@@ -32,9 +29,6 @@ class AwsCacheAdapterTest extends \PHPUnit_Framework_TestCase {
     $this->assertFalse($backend->get('bar_prefix:key'));
   }
 
-  /**
-   *
-   */
   public function testTtlIsSet() {
     $backend = new MemoryBackend('foo');
     $cache = new AwsCacheAdapter($backend);

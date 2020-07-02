@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains flysystem_s3.module.
- */
-
 use Drupal\flysystem_s3\S3CorsManagedFileHelper;
 
 /**

@@ -18,15 +18,13 @@ class S3Adapter extends AwsS3Adapter {
    */
   public function has($path) {
     $location = $this->applyPathPrefix($path);
-    if ($this->s3Client->doesObjectExist($this->bucket, $location, $this->options)) {
+
+    if ($this->s3Client->doesObjectExist($this->bucket, $location)) {
       return TRUE;
     }
-    if ($this->s3Client->doesObjectExist($this->bucket, $location . '/') === TRUE) {
-      return TRUE;
-    }
-    else {
-      return $this->doesDirectoryExist($location);
-    }
+
+    // Check for directory existance.
+    return $this->s3Client->doesObjectExist($this->bucket, $location . '/');
   }
 
   /**
@@ -39,7 +37,7 @@ class S3Adapter extends AwsS3Adapter {
       return [
         'type' => 'dir',
         'path' => $path,
-        'timestamp' => \Drupal::time()->getRequestTime(),
+        'timestamp' => REQUEST_TIME,
         'visibility' => AdapterInterface::VISIBILITY_PUBLIC,
       ];
     }

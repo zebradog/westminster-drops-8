@@ -10,7 +10,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Aws\S3\PostObjectV4;
-use Drupal\Core\StreamWrapper\StreamWrapperManager;
 
 /**
  * Defines a controller to respond to S3 CORS upload AJAX requests.
@@ -64,15 +63,16 @@ class S3CorsUploadAjaxController extends ControllerBase {
    *   A JsonResponse object.
    */
   public function signRequest(Request $request) {
+    $config = \Drupal::config('flysystem_s3.settings');
     $post = $request->request->all();
 
     /** @var \Drupal\flysystem_s3\Flysystem\Adapter\S3Adapter $adapter */
-    $scheme = \Drupal::service('file_system')->uriScheme($post['destination']);
+    $scheme = $this->fileSystem->uriScheme($post['destination']);
     $adapter = $this->flysystemFactory->getPlugin($scheme)->getAdapter();
 
-    $client = $adapter->getClient();
+    $client = $adapter->getClient() ;
     $bucket = $adapter->getBucket();
-    $destination = $adapter->applyPathPrefix(StreamWrapperManager::getTarget($post['destination']));
+    $destination = $adapter->applyPathPrefix(file_uri_target($post['destination']));
 
     $options = [
       ['acl' => $post['acl']],
@@ -82,13 +82,13 @@ class S3CorsUploadAjaxController extends ControllerBase {
 
     // Retrieve the file name and build the URI.
     // Destination does not contain a prefix as it is applied by the fly system.
-    $uri = \Drupal::service('file_system')->createFilename($post['filename'], $post['destination']);
+    $uri = file_create_filename($post['filename'], $post['destination']);
     // Apply the prefix to the URI and use it as a key in the POST request.
-    $post['key'] = $adapter->applyPathPrefix(StreamWrapperManager::getTarget($uri));
+    $post['key'] = $adapter->applyPathPrefix(file_uri_target($uri));
 
     // Create a temporary file to return with a file ID in the response.
     $file = File::create([
-      'uri' => $post['key'],
+      'uri' => $uri,
       'filesize' => $post['filesize'],
       'filename' => $post['filename'],
       'filemime' => $post['filemime'],

@@ -131,7 +131,7 @@ class S3Test extends UnitTestCase {
       'bucket'   => 'my-bucket',
     ];
 
-    $plugin = new S3($this->createMock(S3ClientInterface::class), new Config($configuration));
+    $plugin = new S3($this->getMock(S3ClientInterface::class), new Config($configuration));
     $this->assertSame('http://s3.amazonaws.com/my-bucket/foo.html', $plugin->getExternalUrl('s3://foo.html'));
   }
 

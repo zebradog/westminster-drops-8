@@ -20,8 +20,12 @@
         "drupal/core-project-message": "^8.8",
         "drupal/core-recommended": "^8.8",
         "drupal/core-vendor-hardening": "^8.8",
+        "wikimedia/composer-merge-plugin": "^1.4",
+        "aws/aws-sdk-php": "^3.93",
         "drupal/flysystem": "^1.0",
-        "drupal/flysystem_s3": "^2.0@RC"
+        "league/flysystem-memory": "^1.0",
+        "league/flysystem-aws-s3-v3": "^1.0",
+        "google/apiclient": "^2.2"
     },
     "conflict": {
         "drupal/drupal": "*"
