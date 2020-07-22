@@ -2,6 +2,7 @@
 
 use \Drupal\user\Entity\User;
 use \Drupal\field\Entity\FieldConfig;
+use \Drupal\Core\Entity\EntityRepository;
 use \Symfony\Cmf\Component\Routing\RouteObjectInterface;
 
 function westminster_theme_preprocess_html(&$variables) {
@@ -19,7 +20,7 @@ function westminster_theme_preprocess_page(&$variables) {
       $field = FieldConfig::loadByName('user', 'user', 'user_picture');
       $default_image = $field->getSetting('default_image');
       if ($default_image['uuid']) {
-        $file = \Drupal::entityManager()->loadEntityByUuid('file', $default_image['uuid']);
+        $file = loadEntityByUuid('file', $default_image['uuid']);
         $picture = file_create_url($file->getFileUri());
       }
     }
@@ -30,7 +31,7 @@ function westminster_theme_preprocess_page(&$variables) {
     'picture' => $picture,
     'created' => $user->getCreatedTime()
   ];
-  $variables['timezone'] = drupal_get_user_timezone();
+  $variables['timezone'] = date_default_timezone_get();
 }
 
 function westminster_theme_preprocess_block(&$variables) {

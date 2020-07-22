@@ -3,6 +3,7 @@
 namespace Drupal\westminster_schedule\ServiceProvider;
 
 use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\Core\DependencyInjection\ServiceProviderBase;
 use Drupal\node\Entity\Node;
 
@@ -20,7 +21,7 @@ class Schedule extends ServiceProviderBase
   public function getCurrentlyScheduled() : array
   {
     $now = new DrupalDateTime('now', $this->getTimezone());
-    $now = $now->format(DATETIME_DATETIME_STORAGE_FORMAT);
+    $now = $now->format(DATETIME_STORAGE_FORMAT);
 
     $query = \Drupal::entityQuery('node')
       ->condition('type', 'scheduled_content_2')

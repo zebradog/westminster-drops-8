@@ -31,7 +31,7 @@ function westminster_schedule_theme() {
 function westminster_schedule_preprocess(&$variables) {
   $route = \Drupal::routeMatch()->getParameter('type');
   if (strlen($route) > 0) {
-    $variables['timezone'] = drupal_get_user_timezone();
+    $variables['timezone'] = date_default_timezone_get();
     $variables['basepath'] = base_path();
     prepareCalendar($variables, $route);
   } else if (\Drupal::routeMatch()->getRouteName() == 'westminster_schedule.scheduled_content') {
