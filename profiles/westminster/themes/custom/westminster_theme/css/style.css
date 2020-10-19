@@ -38,6 +38,12 @@ body .label {
   font-size: 80%;
 }
 
+body .paragraphs-dropdown-actions,
+body .paragraphs-dropdown-actions > input,
+body .paragraphs-dropdown-actions > input.btn-primary {
+  color: rgb(51, 51, 51);
+}
+
 .field--type-entity-reference-revisions h4.label {
   font-size: 100%;
 }
