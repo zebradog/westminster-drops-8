@@ -38,6 +38,10 @@ body .label {
   font-size: 80%;
 }
 
+.field--type-entity-reference-revisions h4.label {
+  font-size: 100%;
+}
+
 a.tabledrag-handle .handle {
   width: 24px;
   height: 24px;
