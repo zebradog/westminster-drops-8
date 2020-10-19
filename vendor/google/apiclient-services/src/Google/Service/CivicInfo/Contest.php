@@ -25,11 +25,11 @@ class Google_Service_CivicInfo_Contest extends Google_Collection
   protected $districtType = 'Google_Service_CivicInfo_ElectoralDistrict';
   protected $districtDataType = '';
   public $electorateSpecifications;
-  public $id;
   public $level;
   public $numberElected;
   public $numberVotingFor;
   public $office;
+  public $primaryParties;
   public $primaryParty;
   public $referendumBallotResponses;
   public $referendumBrief;
@@ -99,14 +99,6 @@ class Google_Service_CivicInfo_Contest extends Google_Collection
   {
     return $this->electorateSpecifications;
   }
-  public function setId($id)
-  {
-    $this->id = $id;
-  }
-  public function getId()
-  {
-    return $this->id;
-  }
   public function setLevel($level)
   {
     $this->level = $level;
@@ -138,6 +130,14 @@ class Google_Service_CivicInfo_Contest extends Google_Collection
   public function getOffice()
   {
     return $this->office;
+  }
+  public function setPrimaryParties($primaryParties)
+  {
+    $this->primaryParties = $primaryParties;
+  }
+  public function getPrimaryParties()
+  {
+    return $this->primaryParties;
   }
   public function setPrimaryParty($primaryParty)
   {

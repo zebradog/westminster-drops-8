@@ -31,10 +31,10 @@ class Google_Service_Books_Resource_MylibraryBookshelves extends Google_Service_
    * @param string $shelf ID of bookshelf to which to add a volume.
    * @param array $optParams Optional parameters.
    *
+   * @opt_param string volumeId ID of volume to add.
+   * @opt_param string source String to identify the originator of this request.
    * @opt_param string reason The reason for which the book is added to the
    * library.
-   * @opt_param string source String to identify the originator of this request.
-   * @opt_param string volumeId ID of volume to add.
    * @return Google_Service_Books_BooksEmpty
    */
   public function addVolume($shelf, $optParams = array())
@@ -114,8 +114,8 @@ class Google_Service_Books_Resource_MylibraryBookshelves extends Google_Service_
    * @param string $shelf ID of bookshelf from which to remove a volume.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param string source String to identify the originator of this request.
    * @opt_param string volumeId ID of volume to remove.
+   * @opt_param string source String to identify the originator of this request.
    * @opt_param string reason The reason for which the book is removed from the
    * library.
    * @return Google_Service_Books_BooksEmpty

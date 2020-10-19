@@ -138,8 +138,8 @@ class Google_Service_Licensing_Resource_LicenseAssignments extends Google_Servic
     return $this->call('listForProductAndSku', array($params), "Google_Service_Licensing_LicenseAssignmentList");
   }
   /**
-   * Reassign a user's product SKU with a different SKU in the same product. This
-   * method supports patch semantics. (licenseAssignments.patch)
+   * Patch a Licensing info via Apiary Patch Orchestration
+   * (licenseAssignments.patch)
    *
    * @param string $productId A product's unique identifier. For more information
    * about products in this version of the API, see Products and SKUs.

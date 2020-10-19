@@ -86,9 +86,9 @@ class Google_Service_ServiceManagement extends Google_Service
               'path' => 'v1/operations',
               'httpMethod' => 'GET',
               'parameters' => array(
-                'name' => array(
+                'pageSize' => array(
                   'location' => 'query',
-                  'type' => 'string',
+                  'type' => 'integer',
                 ),
                 'pageToken' => array(
                   'location' => 'query',
@@ -98,9 +98,9 @@ class Google_Service_ServiceManagement extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'pageSize' => array(
+                'name' => array(
                   'location' => 'query',
-                  'type' => 'integer',
+                  'type' => 'string',
                 ),
               ),
             ),
@@ -120,16 +120,6 @@ class Google_Service_ServiceManagement extends Google_Service
             ),'delete' => array(
               'path' => 'v1/services/{serviceName}',
               'httpMethod' => 'DELETE',
-              'parameters' => array(
-                'serviceName' => array(
-                  'location' => 'path',
-                  'type' => 'string',
-                  'required' => true,
-                ),
-              ),
-            ),'disable' => array(
-              'path' => 'v1/services/{serviceName}:disable',
-              'httpMethod' => 'POST',
               'parameters' => array(
                 'serviceName' => array(
                   'location' => 'path',
@@ -193,6 +183,10 @@ class Google_Service_ServiceManagement extends Google_Service
               'path' => 'v1/services',
               'httpMethod' => 'GET',
               'parameters' => array(
+                'consumerId' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'producerProjectId' => array(
                   'location' => 'query',
                   'type' => 'string',
@@ -200,10 +194,6 @@ class Google_Service_ServiceManagement extends Google_Service
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
-                ),
-                'consumerId' => array(
-                  'location' => 'query',
-                  'type' => 'string',
                 ),
                 'pageToken' => array(
                   'location' => 'query',

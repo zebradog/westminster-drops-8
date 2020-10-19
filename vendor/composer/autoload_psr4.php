@@ -40,6 +40,7 @@ return array(
     'Psr\\Cache\\' => array($vendorDir . '/psr/cache/src'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Masterminds\\' => array($vendorDir . '/masterminds/html5/src'),
+    'League\\MimeTypeDetection\\' => array($vendorDir . '/league/mime-type-detection/src'),
     'League\\Flysystem\\Replicate\\' => array($vendorDir . '/league/flysystem-replicate-adapter/src'),
     'League\\Flysystem\\Memory\\' => array($vendorDir . '/league/flysystem-memory/src'),
     'League\\Flysystem\\AwsS3v3\\' => array($vendorDir . '/league/flysystem-aws-s3-v3/src'),

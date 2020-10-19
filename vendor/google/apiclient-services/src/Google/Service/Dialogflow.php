@@ -313,11 +313,11 @@ class Google_Service_Dialogflow extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'updateMask' => array(
+                'languageCode' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'languageCode' => array(
+                'updateMask' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -381,13 +381,13 @@ class Google_Service_Dialogflow extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'pageSize' => array(
-                  'location' => 'query',
-                  'type' => 'integer',
-                ),
                 'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
+                ),
+                'pageSize' => array(
+                  'location' => 'query',
+                  'type' => 'integer',
                 ),
               ),
             ),
@@ -603,11 +603,11 @@ class Google_Service_Dialogflow extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'intentView' => array(
+                'languageCode' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'languageCode' => array(
+                'intentView' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -631,11 +631,11 @@ class Google_Service_Dialogflow extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'intentView' => array(
+                'languageCode' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'languageCode' => array(
+                'intentView' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -653,11 +653,11 @@ class Google_Service_Dialogflow extends Google_Service
                   'location' => 'query',
                   'type' => 'integer',
                 ),
-                'intentView' => array(
+                'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'pageToken' => array(
+                'intentView' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -679,11 +679,11 @@ class Google_Service_Dialogflow extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'updateMask' => array(
+                'languageCode' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'languageCode' => array(
+                'updateMask' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -839,13 +839,13 @@ class Google_Service_Dialogflow extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'pageToken' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
               ),
             ),'patch' => array(
@@ -901,6 +901,10 @@ class Google_Service_Dialogflow extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'filter' => array(
                   'location' => 'query',
                   'type' => 'string',
@@ -908,10 +912,6 @@ class Google_Service_Dialogflow extends Google_Service
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
-                ),
-                'pageToken' => array(
-                  'location' => 'query',
-                  'type' => 'string',
                 ),
               ),
             ),
@@ -953,17 +953,17 @@ class Google_Service_Dialogflow extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'pageToken' => array(
+                'pageSize' => array(
                   'location' => 'query',
-                  'type' => 'string',
+                  'type' => 'integer',
                 ),
                 'filter' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'pageSize' => array(
+                'pageToken' => array(
                   'location' => 'query',
-                  'type' => 'integer',
+                  'type' => 'string',
                 ),
               ),
             ),

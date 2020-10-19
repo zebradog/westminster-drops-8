@@ -88,10 +88,10 @@ class Google_Service_Analytics_Resource_ManagementProfileFilterLinks extends Goo
    * user has access to.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int max-results The maximum number of profile filter links to
-   * include in this response.
    * @opt_param int start-index An index of the first entity to retrieve. Use this
    * parameter as a pagination mechanism along with the max-results parameter.
+   * @opt_param int max-results The maximum number of profile filter links to
+   * include in this response.
    * @return Google_Service_Analytics_ProfileFilterLinks
    */
   public function listManagementProfileFilterLinks($accountId, $webPropertyId, $profileId, $optParams = array())

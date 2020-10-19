@@ -89,11 +89,11 @@ class Google_Service_Analytics_Resource_ManagementUnsampledReports extends Googl
    * Must be a specific view (profile) ID, ~all is not supported.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int max-results The maximum number of unsampled reports to include
-   * in this response.
    * @opt_param int start-index An index of the first unsampled report to
    * retrieve. Use this parameter as a pagination mechanism along with the max-
    * results parameter.
+   * @opt_param int max-results The maximum number of unsampled reports to include
+   * in this response.
    * @return Google_Service_Analytics_UnsampledReports
    */
   public function listManagementUnsampledReports($accountId, $webPropertyId, $profileId, $optParams = array())

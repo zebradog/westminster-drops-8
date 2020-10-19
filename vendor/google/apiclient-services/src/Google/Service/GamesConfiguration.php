@@ -48,9 +48,9 @@ class Google_Service_GamesConfiguration extends Google_Service
   public function __construct(Google_Client $client, $rootUrl = null)
   {
     parent::__construct($client);
-    $this->rootUrl = $rootUrl ?: 'https://www.googleapis.com/';
+    $this->rootUrl = $rootUrl ?: 'https://gamesconfiguration.googleapis.com/';
     $this->servicePath = '';
-    $this->batchPath = 'batch/games/v1configuration';
+    $this->batchPath = 'batch';
     $this->version = 'v1configuration';
     $this->serviceName = 'gamesConfiguration';
 
@@ -99,13 +99,13 @@ class Google_Service_GamesConfiguration extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'pageToken' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'maxResults' => array(
                   'location' => 'query',
                   'type' => 'integer',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
               ),
             ),'update' => array(

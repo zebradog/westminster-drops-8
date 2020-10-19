@@ -53,8 +53,8 @@ class Google_Service_Books_Resource_Layers extends Google_Service_Resource
    * volume.
    * @opt_param string pageToken The value of the nextToken from the previous
    * page.
-   * @opt_param string source String to identify the originator of this request.
    * @opt_param string maxResults Maximum number of results to return
+   * @opt_param string source String to identify the originator of this request.
    * @return Google_Service_Books_Layersummaries
    */
   public function listLayers($volumeId, $optParams = array())

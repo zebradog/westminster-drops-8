@@ -95,6 +95,7 @@ class ComposerStaticInitf89914813a59d28d5e095826559a56d9
         ),
         'L' => 
         array (
+            'League\\MimeTypeDetection\\' => 25,
             'League\\Flysystem\\Replicate\\' => 27,
             'League\\Flysystem\\Memory\\' => 24,
             'League\\Flysystem\\AwsS3v3\\' => 25,
@@ -288,6 +289,10 @@ class ComposerStaticInitf89914813a59d28d5e095826559a56d9
         'Masterminds\\' => 
         array (
             0 => __DIR__ . '/..' . '/masterminds/html5/src',
+        ),
+        'League\\MimeTypeDetection\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/mime-type-detection/src',
         ),
         'League\\Flysystem\\Replicate\\' => 
         array (

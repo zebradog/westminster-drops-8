@@ -49,9 +49,9 @@ class Google_Service_Tasks extends Google_Service
   public function __construct(Google_Client $client, $rootUrl = null)
   {
     parent::__construct($client);
-    $this->rootUrl = $rootUrl ?: 'https://www.googleapis.com/';
+    $this->rootUrl = $rootUrl ?: 'https://tasks.googleapis.com/';
     $this->servicePath = '';
-    $this->batchPath = 'batch/tasks/v1';
+    $this->batchPath = 'batch';
     $this->version = 'v1';
     $this->serviceName = 'tasks';
 
@@ -177,11 +177,11 @@ class Google_Service_Tasks extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'previous' => array(
+                'parent' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'parent' => array(
+                'previous' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -195,23 +195,11 @@ class Google_Service_Tasks extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'dueMax' => array(
+                'maxResults' => array(
                   'location' => 'query',
-                  'type' => 'string',
+                  'type' => 'integer',
                 ),
-                'pageToken' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'showCompleted' => array(
-                  'location' => 'query',
-                  'type' => 'boolean',
-                ),
-                'updatedMin' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'dueMin' => array(
+                'completedMin' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -219,21 +207,33 @@ class Google_Service_Tasks extends Google_Service
                   'location' => 'query',
                   'type' => 'boolean',
                 ),
-                'maxResults' => array(
+                'pageToken' => array(
                   'location' => 'query',
-                  'type' => 'integer',
+                  'type' => 'string',
                 ),
                 'showHidden' => array(
                   'location' => 'query',
                   'type' => 'boolean',
                 ),
-                'completedMin' => array(
+                'dueMin' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
                 'completedMax' => array(
                   'location' => 'query',
                   'type' => 'string',
+                ),
+                'dueMax' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'updatedMin' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'showCompleted' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
                 ),
               ),
             ),'move' => array(
@@ -250,11 +250,11 @@ class Google_Service_Tasks extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'previous' => array(
+                'parent' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'parent' => array(
+                'previous' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),

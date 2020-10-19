@@ -20,7 +20,7 @@
  *
  * <p>
  * The Google Play Game Management API allows developers to manage resources
- * from the Google      Play Game service.</p>
+ * from the Google Play Game service.</p>
  *
  * <p>
  * For more information about this service, see the API
@@ -50,9 +50,9 @@ class Google_Service_GamesManagement extends Google_Service
   public function __construct(Google_Client $client, $rootUrl = null)
   {
     parent::__construct($client);
-    $this->rootUrl = $rootUrl ?: 'https://www.googleapis.com/';
+    $this->rootUrl = $rootUrl ?: 'https://gamesmanagement.googleapis.com/';
     $this->servicePath = '';
-    $this->batchPath = 'batch/games/v1management';
+    $this->batchPath = 'batch';
     $this->version = 'v1management';
     $this->serviceName = 'gamesManagement';
 
@@ -113,13 +113,13 @@ class Google_Service_GamesManagement extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'pageToken' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'maxResults' => array(
                   'location' => 'query',
                   'type' => 'integer',
+                ),
+                'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
               ),
             ),

@@ -19,8 +19,8 @@
  * The "operations" collection of methods.
  * Typical usage is:
  *  <code>
- *   $sqlService = new Google_Service_SQLAdmin(...);
- *   $operations = $sqlService->operations;
+ *   $sqladminService = new Google_Service_SQLAdmin(...);
+ *   $operations = $sqladminService->operations;
  *  </code>
  */
 class Google_Service_SQLAdmin_Resource_Operations extends Google_Service_Resource

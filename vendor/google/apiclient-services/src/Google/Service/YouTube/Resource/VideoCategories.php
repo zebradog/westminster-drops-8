@@ -29,7 +29,7 @@ class Google_Service_YouTube_Resource_VideoCategories extends Google_Service_Res
    * Retrieves a list of resources, possibly filtered.
    * (videoCategories.listVideoCategories)
    *
-   * @param string|array $part The part parameter specifies the videoCategory
+   * @param string|array $part The *part* parameter specifies the videoCategory
    * resource properties that the API response will include. Set the parameter
    * value to snippet.
    * @param array $optParams Optional parameters.

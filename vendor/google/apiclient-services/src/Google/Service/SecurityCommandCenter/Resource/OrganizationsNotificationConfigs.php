@@ -95,7 +95,9 @@ class Google_Service_SecurityCommandCenter_Resource_OrganizationsNotificationCon
     return $this->call('list', array($params), "Google_Service_SecurityCommandCenter_ListNotificationConfigsResponse");
   }
   /**
-   * Updates a notification config. (notificationConfigs.patch)
+   * Updates a notification config. The following update fields are allowed:
+   * description, pubsub_topic, streaming_config.filter
+   * (notificationConfigs.patch)
    *
    * @param string $name The relative resource name of this notification config.
    * See:
@@ -106,9 +108,7 @@ class Google_Service_SecurityCommandCenter_Resource_OrganizationsNotificationCon
    * @param array $optParams Optional parameters.
    *
    * @opt_param string updateMask The FieldMask to use when updating the
-   * notification config.
-   *
-   * If empty all mutable fields will be updated.
+   * notification config. If empty all mutable fields will be updated.
    * @return Google_Service_SecurityCommandCenter_NotificationConfig
    */
   public function patch($name, Google_Service_SecurityCommandCenter_NotificationConfig $postBody, $optParams = array())

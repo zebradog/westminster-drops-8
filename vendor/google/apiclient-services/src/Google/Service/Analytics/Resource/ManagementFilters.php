@@ -73,10 +73,10 @@ class Google_Service_Analytics_Resource_ManagementFilters extends Google_Service
    * @param string $accountId Account ID to retrieve filters for.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int max-results The maximum number of filters to include in this
-   * response.
    * @opt_param int start-index An index of the first entity to retrieve. Use this
    * parameter as a pagination mechanism along with the max-results parameter.
+   * @opt_param int max-results The maximum number of filters to include in this
+   * response.
    * @return Google_Service_Analytics_Filters
    */
   public function listManagementFilters($accountId, $optParams = array())

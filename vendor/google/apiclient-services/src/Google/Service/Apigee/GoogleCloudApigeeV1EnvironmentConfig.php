@@ -19,6 +19,8 @@ class Google_Service_Apigee_GoogleCloudApigeeV1EnvironmentConfig extends Google_
 {
   protected $collection_key = 'targets';
   public $createTime;
+  protected $dataCollectorsType = 'Google_Service_Apigee_GoogleCloudApigeeV1DataCollectorConfig';
+  protected $dataCollectorsDataType = 'array';
   protected $debugMaskType = 'Google_Service_Apigee_GoogleCloudApigeeV1DebugMask';
   protected $debugMaskDataType = '';
   protected $deploymentsType = 'Google_Service_Apigee_GoogleCloudApigeeV1DeploymentConfig';
@@ -39,6 +41,8 @@ class Google_Service_Apigee_GoogleCloudApigeeV1EnvironmentConfig extends Google_
   public $sequenceNumber;
   protected $targetsType = 'Google_Service_Apigee_GoogleCloudApigeeV1TargetServerConfig';
   protected $targetsDataType = 'array';
+  protected $traceConfigType = 'Google_Service_Apigee_GoogleCloudApigeeV1RuntimeTraceConfig';
+  protected $traceConfigDataType = '';
   public $uid;
 
   public function setCreateTime($createTime)
@@ -48,6 +52,20 @@ class Google_Service_Apigee_GoogleCloudApigeeV1EnvironmentConfig extends Google_
   public function getCreateTime()
   {
     return $this->createTime;
+  }
+  /**
+   * @param Google_Service_Apigee_GoogleCloudApigeeV1DataCollectorConfig
+   */
+  public function setDataCollectors($dataCollectors)
+  {
+    $this->dataCollectors = $dataCollectors;
+  }
+  /**
+   * @return Google_Service_Apigee_GoogleCloudApigeeV1DataCollectorConfig
+   */
+  public function getDataCollectors()
+  {
+    return $this->dataCollectors;
   }
   /**
    * @param Google_Service_Apigee_GoogleCloudApigeeV1DebugMask
@@ -194,6 +212,20 @@ class Google_Service_Apigee_GoogleCloudApigeeV1EnvironmentConfig extends Google_
   public function getTargets()
   {
     return $this->targets;
+  }
+  /**
+   * @param Google_Service_Apigee_GoogleCloudApigeeV1RuntimeTraceConfig
+   */
+  public function setTraceConfig(Google_Service_Apigee_GoogleCloudApigeeV1RuntimeTraceConfig $traceConfig)
+  {
+    $this->traceConfig = $traceConfig;
+  }
+  /**
+   * @return Google_Service_Apigee_GoogleCloudApigeeV1RuntimeTraceConfig
+   */
+  public function getTraceConfig()
+  {
+    return $this->traceConfig;
   }
   public function setUid($uid)
   {

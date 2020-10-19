@@ -72,8 +72,8 @@ class Google_Service_Directory_Resource_Roles extends Google_Service_Resource
    * @param string $customer Immutable ID of the G Suite account.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int maxResults Maximum number of results to return.
    * @opt_param string pageToken Token to specify the next page in the list.
+   * @opt_param int maxResults Maximum number of results to return.
    * @return Google_Service_Directory_Roles
    */
   public function listRoles($customer, $optParams = array())
@@ -83,7 +83,7 @@ class Google_Service_Directory_Resource_Roles extends Google_Service_Resource
     return $this->call('list', array($params), "Google_Service_Directory_Roles");
   }
   /**
-   * Updates a role. This method supports patch semantics. (roles.patch)
+   * Patch role via Apiary Patch Orchestration (roles.patch)
    *
    * @param string $customer Immutable ID of the G Suite account.
    * @param string $roleId Immutable ID of the role.

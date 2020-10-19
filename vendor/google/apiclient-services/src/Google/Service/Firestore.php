@@ -115,10 +115,6 @@ class Google_Service_Firestore extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'filter' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
@@ -126,6 +122,10 @@ class Google_Service_Firestore extends Google_Service
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
+                ),
+                'filter' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
               ),
             ),'patch' => array(
@@ -191,15 +191,15 @@ class Google_Service_Firestore extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'pageToken' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'pageSize' => array(
                   'location' => 'query',
                   'type' => 'integer',
                 ),
                 'filter' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -216,6 +216,16 @@ class Google_Service_Firestore extends Google_Service
           'methods' => array(
             'batchGet' => array(
               'path' => 'v1/{+database}/documents:batchGet',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'database' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'batchWrite' => array(
+              'path' => 'v1/{+database}/documents:batchWrite',
               'httpMethod' => 'POST',
               'parameters' => array(
                 'database' => array(
@@ -258,14 +268,14 @@ class Google_Service_Firestore extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'documentId' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
                 'mask.fieldPaths' => array(
                   'location' => 'query',
                   'type' => 'string',
                   'repeated' => true,
+                ),
+                'documentId' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
               ),
             ),'delete' => array(
@@ -295,11 +305,6 @@ class Google_Service_Firestore extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'mask.fieldPaths' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                  'repeated' => true,
-                ),
                 'readTime' => array(
                   'location' => 'query',
                   'type' => 'string',
@@ -307,6 +312,11 @@ class Google_Service_Firestore extends Google_Service
                 'transaction' => array(
                   'location' => 'query',
                   'type' => 'string',
+                ),
+                'mask.fieldPaths' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                  'repeated' => true,
                 ),
               ),
             ),'list' => array(
@@ -323,11 +333,7 @@ class Google_Service_Firestore extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'showMissing' => array(
-                  'location' => 'query',
-                  'type' => 'boolean',
-                ),
-                'pageToken' => array(
+                'transaction' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -340,11 +346,15 @@ class Google_Service_Firestore extends Google_Service
                   'location' => 'query',
                   'type' => 'integer',
                 ),
-                'transaction' => array(
+                'showMissing' => array(
+                  'location' => 'query',
+                  'type' => 'boolean',
+                ),
+                'readTime' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'readTime' => array(
+                'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -368,6 +378,16 @@ class Google_Service_Firestore extends Google_Service
               'httpMethod' => 'POST',
               'parameters' => array(
                 'database' => array(
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ),
+              ),
+            ),'partitionQuery' => array(
+              'path' => 'v1/{+parent}:partitionQuery',
+              'httpMethod' => 'POST',
+              'parameters' => array(
+                'parent' => array(
                   'location' => 'path',
                   'type' => 'string',
                   'required' => true,
@@ -522,11 +542,11 @@ class Google_Service_Firestore extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'filter' => array(
+                'pageToken' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
-                'pageToken' => array(
+                'filter' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),

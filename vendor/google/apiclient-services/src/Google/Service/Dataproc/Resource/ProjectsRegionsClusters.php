@@ -185,6 +185,21 @@ class Google_Service_Dataproc_Resource_ProjectsRegionsClusters extends Google_Se
    * @param Google_Service_Dataproc_Cluster $postBody
    * @param array $optParams Optional parameters.
    *
+   * @opt_param string updateMask Required. Specifies the path, relative to
+   * Cluster, of the field to update. For example, to change the number of workers
+   * in a cluster to 5, the update_mask parameter would be specified as
+   * config.worker_config.num_instances, and the PATCH request body would specify
+   * the new value, as follows: { "config":{ "workerConfig":{ "numInstances":"5" }
+   * } } Similarly, to change the number of preemptible workers in a cluster to 5,
+   * the update_mask parameter would be
+   * config.secondary_worker_config.num_instances, and the PATCH request body
+   * would be set as follows: { "config":{ "secondaryWorkerConfig":{
+   * "numInstances":"5" } } } *Note:* Currently, only the following fields can be
+   * updated: *Mask* *Purpose* *labels* Update labels
+   * *config.worker_config.num_instances* Resize primary worker group
+   * *config.secondary_worker_config.num_instances* Resize secondary worker group
+   * config.autoscaling_config.policy_uri Use, stop using, or change autoscaling
+   * policies
    * @opt_param string requestId Optional. A unique id used to identify the
    * request. If the server receives two UpdateClusterRequest requests with the
    * same id, then the second request will be ignored and the first
@@ -202,21 +217,6 @@ class Google_Service_Dataproc_Resource_ProjectsRegionsClusters extends Google_Se
    * representation of Duration (https://developers.google.com/protocol-
    * buffers/docs/proto3#json)).Only supported on Dataproc image versions 1.2 and
    * higher.
-   * @opt_param string updateMask Required. Specifies the path, relative to
-   * Cluster, of the field to update. For example, to change the number of workers
-   * in a cluster to 5, the update_mask parameter would be specified as
-   * config.worker_config.num_instances, and the PATCH request body would specify
-   * the new value, as follows: {   "config":{     "workerConfig":{
-   * "numInstances":"5"     }   } } Similarly, to change the number of preemptible
-   * workers in a cluster to 5, the update_mask parameter would be
-   * config.secondary_worker_config.num_instances, and the PATCH request body
-   * would be set as follows: {   "config":{     "secondaryWorkerConfig":{
-   * "numInstances":"5"     }   } } Note: Currently, only the following fields can
-   * be updated:      Mask  Purpose      labels  Update labels
-   * config.worker_config.num_instances  Resize primary worker group
-   * config.secondary_worker_config.num_instances  Resize secondary worker group
-   * config.autoscaling_config.policy_uriUse, stop using, or  change autoscaling
-   * policies
    * @return Google_Service_Dataproc_Operation
    */
   public function patch($projectId, $region, $clusterName, Google_Service_Dataproc_Cluster $postBody, $optParams = array())

@@ -19,8 +19,8 @@
  * The "users" collection of methods.
  * Typical usage is:
  *  <code>
- *   $sqlService = new Google_Service_SQLAdmin(...);
- *   $users = $sqlService->users;
+ *   $sqladminService = new Google_Service_SQLAdmin(...);
+ *   $users = $sqladminService->users;
  *  </code>
  */
 class Google_Service_SQLAdmin_Resource_Users extends Google_Service_Resource
