@@ -1,1 +1,8 @@
 <?php
+use Drupal\media_library\Form\FileUploadForm;
+
+function westminster_s3_media_source_info_alter(array &$sources) {
+  if (empty($sources['s3file']['forms']['media_library_add'])) {
+    $sources['s3file']['forms']['media_library_add'] = FileUploadForm::class;
+  }
+}
