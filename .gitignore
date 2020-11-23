@@ -1,6 +1,7 @@
 # Ignore paths that contain user-generated content.
 sites/*/files
 sites/*/private
+sites/defaults/settings.php
 files/*
 
 # Avoid accidental modification of pantheon.upstream.yml in sites
