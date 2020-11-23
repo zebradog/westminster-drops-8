@@ -31,10 +31,10 @@ $settings['hash_salt'] = 'Q2D3Z3MewEe81U79dQyJ_yz8dQpDN7NLRHc7lFvl7BuQSz4TNAYXfw
   's3' => [
     'driver' => 's3',
     'config' => [
-      'key'     => 'AKIAJBCNWGVBTR3QUG2A',
-      'secret'  => '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',
-      'region'  => 'us-east-1',
-      'bucket'  => 's3test.zebradog.com',
+      'key'     => '',
+      'secret'  => '',
+      'region'  => 'us-west-2',
+      'bucket'  => 'files.zebradog.media',
 
       'cors' => TRUE,                          // Set to TRUE if CORS upload
                                                   // support is enabled for the
