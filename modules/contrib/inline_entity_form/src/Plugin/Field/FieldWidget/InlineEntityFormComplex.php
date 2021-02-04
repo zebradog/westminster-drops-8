@@ -279,7 +279,8 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
 
     $weight_delta = max(ceil($entities_count * 1.2), 50);
     foreach ($entities as $key => $value) {
-      // Data used by theme_inline_entity_form_entity_table().
+      // Data used by inline-entity-form-entity-table.html.twig.
+      // @see template_preprocess_inline_entity_form_entity_table()
       /** @var \Drupal\Core\Entity\EntityInterface $entity */
       $entity = $value['entity'];
       $element['entities'][$key]['#label'] = $this->inlineFormHandler->getEntityLabel($value['entity']);
@@ -573,12 +574,6 @@ class InlineEntityFormComplex extends InlineEntityFormBase implements ContainerF
           $process_element = &$element['form'];
         }
         $process_element['#process'][] = [get_class($this), 'hideCancel'];
-      }
-
-      // No entities have been added. Remove the outer fieldset to reduce
-      // visual noise caused by having two titles.
-      if (empty($entities)) {
-        $element['#type'] = 'container';
       }
     }
 
