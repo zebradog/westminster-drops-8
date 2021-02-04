@@ -42,7 +42,7 @@ class GuzzleHandler
 
         return $this->client->sendAsync($request, $this->parseOptions($options))
             ->otherwise(
-                static function (\Exception $e) {
+                static function ($e) {
                     $error = [
                         'exception'        => $e,
                         'connection_error' => $e instanceof ConnectException,
@@ -51,8 +51,13 @@ class GuzzleHandler
 
                     if ($e instanceof RequestException && $e->getResponse()) {
                         $error['response'] = $e->getResponse();
+                    } else if (
+                        class_exists('Error')
+                        && $e instanceof \Error
+                        && $e ->getResponse()
+                    ) {
+                        $error['response'] = $e->getResponse();
                     }
-
                     return new Promise\RejectedPromise($error);
                 }
             );

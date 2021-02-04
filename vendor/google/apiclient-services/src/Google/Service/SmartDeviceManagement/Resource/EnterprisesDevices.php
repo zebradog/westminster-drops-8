@@ -62,15 +62,12 @@ class Google_Service_SmartDeviceManagement_Resource_EnterprisesDevices extends G
    * "enterprises/XYZ".
    * @param array $optParams Optional parameters.
    *
-   * @opt_param string filter Optional filter to list devices. Filters can match
-   * the exact assignee (could be a structure or a room). E.g.
-   * 'assignee=enterprises/XYZ/structures/abc' Also could filter by parent
-   * (group): 'parent=enterprises/XYZ/groups/jkl' or filter by device custom name
-   * (substring match): 'customName=wing'
-   * @opt_param string pageToken Optional token of the page to retrieve.
+   * @opt_param string filter Optional filter to list devices. Filters can be done
+   * on: Device custom name (substring match): 'customName=wing'
    * @opt_param int pageSize Optional requested page size. Server may return fewer
    * devices than requested. If unspecified, server will pick an appropriate
    * default.
+   * @opt_param string pageToken Optional token of the page to retrieve.
    * @return Google_Service_SmartDeviceManagement_GoogleHomeEnterpriseSdmV1ListDevicesResponse
    */
   public function listEnterprisesDevices($parent, $optParams = array())
