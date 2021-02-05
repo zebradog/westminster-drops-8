@@ -69,6 +69,9 @@ a.tabledrag-handle .handle {
 .action-list > li > input:not(.btn-primary) {
   color: #428bca;
 }
+.dropbutton > li > input.button.btn-primary {
+  color: #ffffff;
+}
 
 .dropbutton > li > input:not(.btn-primary):hover,
 .dropbutton > li > input.button.js-form-submit:hover,
