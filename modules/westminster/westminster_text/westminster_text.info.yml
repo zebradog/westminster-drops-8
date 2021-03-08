@@ -1,0 +1,10 @@
+name: Westminster Text
+description: Provides text field options such as non-database restricted length
+package: Westminster
+
+type: module
+core: 8.x
+core_version_requirement: ^8 || ^9
+
+dependencies:
+  - westminster_core
